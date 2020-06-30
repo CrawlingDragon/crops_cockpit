@@ -1,35 +1,34 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <div>
-      <p>
-        If Element is successfully added to this project, you'll see an
-        <code v-text="'<el-button>'"></code>
-        below
-      </p>
-      <el-button>el-button</el-button>
-    </div>
-
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "app",
-  components: {
-  }
+  components: {}
 }
 </script>
 
 <style>
+@import "../src/common/css/react.styl";
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background: rgba(1, 21, 64, 1);
+}
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  min-width: 1908px;
+  color: #fff;
+  min-height: 1079px;
+  margin: 0 auto;
+  width: 1908px;
 }
 </style>

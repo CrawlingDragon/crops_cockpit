@@ -1,24 +1,21 @@
+/* eslint-disable semi */
 module.exports = {
   env: {
     browser: true,
     es6: true
   },
-  extends: [
-    'plugin:vue/essential',
-    'standard'
-  ],
+  extends: ["plugin:vue/essential", "standard"],
   globals: {
-    Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    Atomics: "readonly",
+    SharedArrayBuffer: "readonly"
   },
   parserOptions: {
     ecmaVersion: 11,
-    sourceType: 'module'
+    sourceType: "module"
   },
-  plugins: [
-    'vue'
-  ],
+  plugins: ["vue"],
   rules: {
-    "quotes": ["error", "double"]
+    quotes: ["error", "double"],
+    "space-before-function-paren": 0
   }
-}
+};

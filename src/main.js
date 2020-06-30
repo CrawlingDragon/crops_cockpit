@@ -5,6 +5,12 @@ import router from "./router"
 import store from "./store"
 import "./plugins/element.js"
 
+import axios from "axios"
+import QS from "qs"
+
+Vue.prototype.$axios = axios
+Vue.prototype.qs = QS
+
 Vue.config.productionTip = false
 
 new Vue({
