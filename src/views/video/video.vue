@@ -12,7 +12,6 @@
 </template>
 <script>
 import Header from "@/components/headers/headers";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 
 export default {
@@ -35,7 +34,7 @@ export default {
   methods: {
     getVideoList() {
       // 获取视频列表
-      axios
+      this.$axios
         .fetchPost("/Home/Video/GetVideoList", { appId: this.appId })
         .then((res) => {
           if (res.data.code == 200) {

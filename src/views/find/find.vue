@@ -28,7 +28,6 @@
 <script>
 import Header from "@/components/headers/headers";
 import Nav from "@/components/nav_list/nav_list";
-import axios from "@/http.js";
 export default {
   name: "find",
   components: {
@@ -54,7 +53,7 @@ export default {
   methods: {
     getNavList(catId) {
       // 获取导航栏目
-      axios.fetchGet("/Home/News/GetPushMessageMenu").then((res) => {
+      this.$axios.fetchGet("/Home/News/GetPushMessageMenu").then((res) => {
         if (res.data.code == 200) {
           this.navList = res.data.data;
           this.initCatid = res.data.data[0].catid;
@@ -66,7 +65,7 @@ export default {
     },
     getList(catid) {
       // 获取列表数据
-      axios
+      this.$axios
         .fetchPost("/Home/News/GetPushMessageList", { catId: catid })
         .then((res) => {
           if (res.data.code == 200) {

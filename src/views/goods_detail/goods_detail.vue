@@ -31,7 +31,6 @@
   </div>
 </template>
 <script>
-import axios from "@/http.js";
 import { mapState } from "vuex";
 
 export default {
@@ -59,7 +58,7 @@ export default {
   methods: {
     getDetail() {
       // 获取商品详情
-      axios
+      this.$axios
         .fetchPost("/Home/Products/GetMpProDetail", {
           appId: this.appId,
           Id: this.$route.query.id,

@@ -11,7 +11,6 @@
   </div>
 </template>
 <script>
-import axios from "@/http.js";
 export default {
   name: "hospital_list",
   components: {},
@@ -33,7 +32,7 @@ export default {
   methods: {
     goTonNextHospital(appid) {
       // 获取医院类型，路由到对应的首页
-      axios
+      this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", { appId: appid })
         .then((res) => {
           if (res.data.code === "200") {

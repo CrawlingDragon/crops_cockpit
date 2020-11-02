@@ -48,7 +48,6 @@
 </template>
 <script>
 import Header from "@/components/headers/headers";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 export default {
   name: "module_detail",
@@ -72,7 +71,7 @@ export default {
   methods: {
     getDetailData() {
       // 获取配方详情
-      axios
+      this.$axios
         .fetchPost("/Home/Treatment/GetRecipetemDetail", {
           appId: this.appId,
           Id: this.id,

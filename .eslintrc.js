@@ -19,6 +19,7 @@ module.exports = {
     "space-before-function-paren": 0,
     semi: ["error", "always"],
     "spaced-comment": ["error", "always", { markers: ["/*", "//"] }],
-    "comma-dangle": "off"
+    "comma-dangle": "off",
+    eqeqeq: "off"
   }
 };

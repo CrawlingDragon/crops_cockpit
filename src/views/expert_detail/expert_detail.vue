@@ -32,7 +32,6 @@
 <script>
 import Hospital from "@/components/hospital_list_item/hospital_list_item";
 import { mapState } from "vuex";
-import axios from "@/http.js";
 export default {
   name: "expert_detail",
   components: {
@@ -50,7 +49,7 @@ export default {
   computed: {
     ...mapState(["appId"]),
     chufangCount() {
-      let r =
+      const r =
         parseFloat(this.detail.cetucount) +
         parseFloat(this.detail.wenzhencount) +
         parseFloat(this.detail.wenzhencount) +
@@ -66,8 +65,8 @@ export default {
   destroyed() {},
   methods: {
     getDetail() {
-      //获取专家的详细数据
-      axios
+      // 获取专家的详细数据
+      this.$axios
         .fetchPost("/Home/Expert/GetMpExpertDetail", {
           appId: this.appId,
           uId: this.uId,
@@ -80,8 +79,8 @@ export default {
         });
     },
     getJoinHospital() {
-      //ta 加入的医院
-      axios
+      // ta 加入的医院
+      this.$axios
         .fetchPost("/Home/Manage/GetManageMpDataList", {
           appId: this.uId,
           type: "expert",

@@ -7,15 +7,15 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "index",
+    name: "indexFirst",
     component: () =>
-      import(/* webpackChunkName: "index" */ "../views/index/index.vue")
+      import(/* webpackChunkName: "index_first" */ "../views/index_first/index_first.vue")
   },
   {
-    path: "/index",
-    name: "index",
+    path: "/indexFirst",
+    name: "indexFirst",
     component: () =>
-      import(/* webpackChunkName: "index" */ "../views/index/index.vue")
+      import(/* webpackChunkName: "index" */ "../views/index_first/index_first.vue")
   },
   {
     path: "/channel",

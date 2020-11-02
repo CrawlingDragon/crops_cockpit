@@ -1,7 +1,7 @@
 <template>
   <!-- 下级医院 -->
   <div class="hospital-container">
-    <Header title="下级医院"></Header>
+    <Header goBackBtn="返回上一页"></Header>
     <div class="nav-top">
       <div class="item" @click="changeNav('default',0)" :class="{'active':showIndex == 0}">默认排序</div>
       <div class="item" @click="changeNav('listorder',1)" :class="{'active':showIndex == 1}">综合排序</div>
@@ -26,10 +26,9 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/default_header/default_header";
 import Nav from "@/components/nav_list/nav_list";
 import Item from "@/components/hospital_list_item/hospital_list_item";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 
 export default {
@@ -38,8 +37,8 @@ export default {
   props: {},
   data() {
     return {
-      storetag: "", //是否实体
-      ordertag: "", //排序方式
+      storetag: "", // 是否实体
+      ordertag: "", // 排序方式
       areatag: "", // 地区
       type: "", // 请求的类型
       showIndex: 0,
@@ -65,8 +64,8 @@ export default {
   destroyed() {},
   methods: {
     getHospital(appId, storetag = "", ordertag = "", areatag = "", type = "") {
-      //获取医院数据列表
-      axios
+      // 获取医院数据列表
+      this.$axios
         .fetchPost("/Home/Manage/GetManageMpDataList", {
           appId,
           storetag,
@@ -133,6 +132,8 @@ export default {
 <style lang="stylus" scoped>
 .hospital-container
   padding-bottom 60px
+  max-width 1900px
+  margin 0 auto
   .nav-top
     border-bottom 1px solid rgba(255, 255, 255, 0.2)
     margin 0 90px

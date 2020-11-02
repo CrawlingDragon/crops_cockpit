@@ -22,7 +22,6 @@
   </ul>
 </template>
 <script>
-import axios from "@/http.js";
 export default {
   name: "component_name",
   components: {},
@@ -49,8 +48,8 @@ export default {
   destroyed() {},
   methods: {
     getHospitalType(appId) {
-      //获取医院的类型
-      axios
+      // 获取医院的类型
+      this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", { appId: appId })
         .then((res) => {
           if (res.data.code == 200) {
@@ -59,6 +58,7 @@ export default {
         });
     },
     goToHospitalIndex(appid, isstore) {
+      // eslint-disable-next-line eqeqeq
       if (isstore == 2) {
         this.$router.push({
           path: "/index_second",

@@ -23,7 +23,6 @@
 <script>
 import Header from "@/components/headers/headers";
 import Nav from "@/components/nav_list/nav_list";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 export default {
   name: "me",
@@ -48,7 +47,7 @@ export default {
   methods: {
     getData() {
       // 获取我的医院
-      axios
+      this.$axios
         .fetchPost("/Home/About/GetMpDesc", { appId: this.appId })
         .then((res) => {
           if (res.data.code === "200") {

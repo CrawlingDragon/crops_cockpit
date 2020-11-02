@@ -94,10 +94,9 @@ import Nav from "@/components/nav_list/nav_list";
 import layerBar from "@/components/layerDate/layerDate";
 import { getUrlQuery } from "@/common/js/util.js";
 import Message from "@/components/message_list/message_list";
-import axios from "@/http.js";
 import { mapMutations } from "vuex";
 export default {
-  name: "index",
+  name: "indexFirst",
   components: {
     Headers,
     Expert: ExpertRankingList,
@@ -141,7 +140,7 @@ export default {
     ...mapMutations(["getAppId", "getPurview"]),
     getIndexDate(query) {
       // 获取首页数据
-      axios
+      this.$axios
         .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: query })
         .then((res) => {
           if (res.data.code === "200") {
@@ -152,7 +151,7 @@ export default {
     },
     getMessageDate(query) {
       // 获取通知数据
-      axios
+      this.$axios
         .fetchPost("/Home/Manage/GetManageMessageData", { appId: query })
         .then((res) => {
           if (res.data.code === "200") {
@@ -162,7 +161,7 @@ export default {
     },
     getPurviewFn() {
       // 获取医院类型
-      axios
+      this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", { appId: this.query })
         .then((res) => {
           if (res.data.code == 200) {

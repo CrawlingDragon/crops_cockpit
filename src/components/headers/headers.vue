@@ -26,7 +26,6 @@
   </div>
 </template>
 <script>
-import axios from "../../http.js";
 import { mapState } from "vuex";
 
 export default {
@@ -74,7 +73,7 @@ export default {
   methods: {
     getWeather() {
       // 获取头部天气
-      axios
+      this.$axios
         .fetchPost("/Home/Index/GetAreaWeather", { appId: this.appId })
         .then(res => {
           if (res.data.code === "200") {

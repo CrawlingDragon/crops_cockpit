@@ -65,7 +65,6 @@
   </div>
 </template>
 <script>
-import axios from "../../http.js";
 import { getUrlQuery } from "@/common/js/util.js";
 import ECharts from "vue-echarts";
 import "echarts/lib/chart/bar";
@@ -89,7 +88,7 @@ export default {
   data() {
     return {
       chart: [],
-      lists: [], //table 数据
+      lists: [], // table 数据
       appid: "",
       polar: {}
     };
@@ -124,8 +123,8 @@ export default {
   destroyed() {},
   methods: {
     getAreaList() {
-      //获取网院区域统计
-      axios
+      // 获取网院区域统计
+      this.$axios
         .fetchPost("/Home/Manage/GetManageMpAreaData", { appId: this.appid })
         .then(res => {
           if (res.data.code === "200") {

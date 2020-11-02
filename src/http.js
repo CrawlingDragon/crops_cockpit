@@ -5,9 +5,7 @@ axios.defaults.timeout = 8000;
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=utf-8";
 axios.defaults.baseURL =
-  process.env.NODE_ENV === "production"
-    ? "http//tv.114nz.com"
-    : "http://demotv.114nz.com/";
+  process.env.VUE_APP_API;
 // 配置接口地址
 // console.log(process.env.VUE_APP_URL)
 
@@ -15,7 +13,6 @@ axios.defaults.baseURL =
 axios.interceptors.request.use(
   config => {
     // 在发送请求之前做什么事
-
     if (config.url === "/member/upload/image") {
       return config;
     }

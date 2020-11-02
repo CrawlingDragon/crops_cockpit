@@ -40,7 +40,6 @@
 </template>
 <script>
 import Header from "@/components/headers/headers";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 
 export default {

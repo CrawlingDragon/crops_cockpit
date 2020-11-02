@@ -21,7 +21,6 @@
 </template>
 <script>
 import Header from "@/components/headers/headers";
-import axios from "@/http.js";
 import { mapState } from "vuex";
 
 export default {
@@ -49,7 +48,7 @@ export default {
   methods: {
     getMenu() {
       // 获取导航栏
-      axios.fetchPost("/Home/Products/GetProductsMenu").then((res) => {
+      this.$axios.fetchPost("/Home/Products/GetProductsMenu").then((res) => {
         if (res.data.code == 200) {
           this.menu = res.data.data;
           setTimeout(() => {
@@ -59,9 +58,9 @@ export default {
       });
     },
     getGoodsList(catid) {
-      //获取商品列表
+      // 获取商品列表
       this.noGoods = false;
-      axios
+      this.$axios
         .fetchPost("/Home/Products/GetMpProList", {
           appId: 63587 || this.appId,
           catid: catid,
