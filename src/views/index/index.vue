@@ -1,122 +1,216 @@
 <template>
-  <div>
-    <Headers
-      logoSrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg
-"
-      title="浙江省网上庄稼医院"
-    ></Headers>
+  <div :style="{overflow:'showTableFlag'?'hidden':''}">
+    <Headers logoSrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg" :title="indexDate.name"></Headers>
     <div class="index-container">
-      <div class="left">
+      <div class="left" @click="showTable">
         <ul>
           <li>
-            <div class="title">
-              庄稼
-              <br />医院
+            <div class="titles">
+              <div>庄稼</div>
+              <div>医院</div>
             </div>
             <div class="text">
               <p>
-                56所
+                {{count.isstore}}所
                 <br />
                 <span class="small">
                   其中
-                  <span class="num">5</span>
+                  <span class="num">{{count.isstore}}</span>
                   所实体店
                 </span>
               </p>
             </div>
-            <div class="up">
+            <div class="up" v-if="count.new_mpublic != 0">
               <span class="icon"></span>
-              <span class="up-num">2</span>
+              <span class="up-num">{{count.new_mpublic}}</span>
             </div>
           </li>
           <li>
             <div class="title">专家</div>
-            <div class="text">804位</div>
-            <div class="up">
+            <div class="text">{{count.expert}}位</div>
+            <div class="up" v-if="count.new_expert != 0">
               <span class="icon"></span>
-              <span class="up-num">2</span>
+              <span class="up-num">{{count.new_expert}}</span>
             </div>
           </li>
           <li>
             <div class="title">会员</div>
-            <div class="text">64825个</div>
-            <div class="up">
+            <div class="text">{{count.user}}个</div>
+            <div class="up" v-if="count.new_user != 0">
               <span class="icon"></span>
-              <span class="up-num">2</span>
+              <span class="up-num">{{count.new_user}}</span>
             </div>
           </li>
           <li>
             <div class="title">三诊</div>
-            <div class="text">258635次</div>
+            <div class="text">{{count.wenzhen}}次</div>
           </li>
           <li>
-            <div class="title">
-              测土
-              <br />配方
+            <div class="titles">
+              <div>测土</div>
+              <div>配方</div>
             </div>
-            <div class="text">100次</div>
+            <div class="text">{{count.cetu}}次</div>
           </li>
         </ul>
       </div>
       <div class="mid">
-        <hospital></hospital>
+        <hospital :list="indexDate.mpublic"></hospital>
       </div>
       <div class="right">
-        <div class="message">
-          <div class="icon"></div>
-          <p class="p1">黄泽黄桃专科医院</p>
-          <p class="p2">5条网诊未回复</p>
-          <div class="times">2017-12-19</div>
-        </div>
+        <Message :list="message"></Message>
         <div class="expert-box">
-          <expert></expert>
+          <expert :list="expertArr"></expert>
         </div>
       </div>
     </div>
     <div class="nav-box">
-      <div class="item i1">
+      <div class="item i1" @click="goToHistory">
         <div class="icon icon01"></div>
         <p>浏览历史</p>
       </div>
-      <div class="item i2">
+      <div class="item i2" @click="goToSearch">
         <div class="icon icon02"></div>
         <p>搜索</p>
       </div>
-      <div class="item i3">
+      <div class="item i3" @click="goToHospital">
         <div class="icon icon03"></div>
         <p>医院本级</p>
       </div>
-      <div class="item i4">
+      <div class="item i4" @click="goToHospitalList">
         <div class="icon icon04"></div>
         <p>医院综合排序</p>
       </div>
     </div>
     <Nav></Nav>
+    <layerBar :showFlag="showTableFlag" :countDate="count" @changeShowFlag="changeLayerFlag"></layerBar>
   </div>
 </template>
 <script>
-import Headers from "@/components/headers/headers"
-import ExpertRankingList from "@/components/expert_ranking_list/expert_ranking_list"
-import HospitalList from "@/components/hospital_list/hospital_list"
-import Nav from "@/components/nav_list/nav_list"
+import Headers from "@/components/headers/headers";
+import ExpertRankingList from "@/components/expert_ranking_list/expert_ranking_list";
+import HospitalList from "@/components/hospital_list/hospital_list";
+import Nav from "@/components/nav_list/nav_list";
+import layerBar from "@/components/layerDate/layerDate";
+import { getUrlQuery } from "@/common/js/util.js";
+import Message from "@/components/message_list/message_list";
+import axios from "@/http.js";
+import { mapMutations } from "vuex";
 export default {
   name: "index",
   components: {
     Headers,
-    expert: ExpertRankingList,
+    Expert: ExpertRankingList,
     hospital: HospitalList,
-    Nav
+    Nav,
+    layerBar,
+    Message,
   },
   props: {},
   data() {
-    return {}
+    return {
+      query: "",
+      indexDate: "",
+      count: {},
+      expertArr: [],
+      message: [],
+      showTableFlag: false,
+    };
   },
   computed: {},
-  watch: {},
-  mounted() {},
+  created() {
+    this.query = getUrlQuery("appid");
+    this.getAppId(getUrlQuery("appid"));
+  },
+  watch: {
+    indexDate(newVal) {
+      this.expertArr = newVal.expert.slice(0, 3);
+    },
+    $route(newVal) {
+      this.getIndexDate(newVal.query.appid);
+      this.getMessageDate(newVal.query.appid);
+    },
+  },
+  mounted() {
+    this.getIndexDate(this.query);
+    this.getMessageDate(this.query);
+    this.getPurviewFn();
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    ...mapMutations(["getAppId", "getPurview"]),
+    getIndexDate(query) {
+      // 获取首页数据
+      axios
+        .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: query })
+        .then((res) => {
+          if (res.data.code === "200") {
+            this.indexDate = res.data.data;
+            this.count = res.data.data.count;
+          }
+        });
+    },
+    getMessageDate(query) {
+      // 获取通知数据
+      axios
+        .fetchPost("/Home/Manage/GetManageMessageData", { appId: query })
+        .then((res) => {
+          if (res.data.code === "200") {
+            this.message = res.data.data;
+          }
+        });
+    },
+    getPurviewFn() {
+      // 获取医院类型
+      axios
+        .fetchPost("/Home/Index/GetIndexMpData", { appId: this.query })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.getPurview(res.data.data.purview);
+            if (res.data.data.isview === 1) {
+              this.$router.push({
+                path: "/index_second",
+              });
+            } else if (res.data.data.isview === 2) {
+              this.$router.push({
+                path: "/index_third",
+              });
+            }
+          }
+        });
+    },
+    showTable() {
+      this.showTableFlag = true;
+    },
+    changeLayerFlag(boolean) {
+      this.showTableFlag = boolean;
+    },
+    goToHistory() {
+      // 去到 浏览历史
+      this.$router.push({
+        path: "/history",
+      });
+    },
+    goToSearch() {
+      // 去到搜索页
+      this.$router.push({
+        path: "/search",
+      });
+    },
+    goToHospital() {
+      // 去到医院本级
+      this.$router.push({
+        path: "/me",
+      });
+    },
+    goToHospitalList() {
+      // 去到医院列表
+      this.$router.push({
+        path: "/hospital",
+      });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .index-container
@@ -134,7 +228,7 @@ export default {
         display flex
         border 2px solid #072F65
         position relative
-        .title
+        .title, .titles
           width 140px
           height 113px
           display flex
@@ -143,6 +237,7 @@ export default {
           background rgba(12, 41, 84, 0.5)
           font-size 32px
           line-height 1.1
+          flex-direction column
         .text
           flex 1
           text-align left
@@ -176,41 +271,8 @@ export default {
     margin-right 30px
   .right
     flex 1
-    .message
-      height 190px
-      background rgba(218, 50, 102, 0.5)
-      position relative
-      padding-left 90px
-      padding-top 44px
-      text-align left
-      .icon
-        width 50px
-        height 42px
-        background url('./7.png') no-repeat
-        background-position center
-        background-size 100%
-        position absolute
-        top 44px
-        left 20px
-      .p1
-        font-size 30px
-        line-height 1.2
-        margin-bottom 25px
-        color #CECECE
-      .p2
-        font-size 30px
-        color #FFFEFE
-        width 100%
-        overflow hidden
-        text-overflow ellipsis
-        word-break break-all
-        white-space nowrap
-      .times
-        position absolute
-        right 21px
-        top 25px
-        font-size 28px
-        color #CECECE
+    min-width 0
+    overflow hidden
 .nav-box
   width 100%
   display flex

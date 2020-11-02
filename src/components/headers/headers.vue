@@ -4,19 +4,21 @@
       <div class="logo" v-show="logoSrc">
         <img :src="logoSrc" alt />
       </div>
-      <h2 class="h2">{{title}}</h2>
+      <slot></slot>
+      <h2 class="h2">{{ title }}</h2>
     </div>
-    <div class="right-bar">
-      <div class="time">18:24</div>
+    <div class="right-bar" v-show="right_show_bar">
+      <div class="time">{{ time }}</div>
       <div class="weather">
-        <span class="icon"></span>
-        <span>19.c</span>
+        <span class="icon"><img :src="weather.picurl" alt=""/></span>
+
+        <span>{{ weather.todaytemperature }}</span>
       </div>
       <div class="reload">
         <span class="icon"></span>
         <span>刷新</span>
       </div>
-      <div class="search">
+      <div class="search" @click="goToSearch">
         <span class="icon"></span>
         <span>搜索</span>
       </div>
@@ -24,6 +26,9 @@
   </div>
 </template>
 <script>
+import axios from "../../http.js";
+import { mapState } from "vuex";
+
 export default {
   name: "headers",
   components: {},
@@ -35,17 +40,55 @@ export default {
     logoSrc: {
       type: String,
       default: ""
+    },
+    right_show_bar: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
-    return {}
+    return {
+      time: "",
+      query: "",
+      weather: ""
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"])
+  },
   watch: {},
-  mounted() {},
+  created() {},
+  mounted() {
+    // 获取时间
+    const time = new Date();
+    setInterval(() => {
+      const h = time.getHours();
+      const m =
+        time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+      this.time = h + ":" + m;
+    }, 1000);
+    this.getWeather();
+    // 获取天气
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getWeather() {
+      // 获取头部天气
+      axios
+        .fetchPost("/Home/Index/GetAreaWeather", { appId: this.appId })
+        .then(res => {
+          if (res.data.code === "200") {
+            this.weather = res.data.data;
+          }
+        });
+    },
+    goToSearch() {
+      this.$router.push({
+        path: "/search"
+      });
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .head-wrap
@@ -54,7 +97,7 @@ export default {
     width 50%
     float left
     display flex
-    align-items top
+    align-items center
     line-height 1.2
     .h2
       flex 1
@@ -78,6 +121,7 @@ export default {
     justify-content flex-end
     .search
       color #000000
+      cursor pointer
       width 160px
       height 50px
       background rgba(255, 255, 255, 1)
@@ -113,10 +157,9 @@ export default {
       margin-right 37px
       .icon
         display inline-block
-        width 34px
-        height 34px
-        background url('./2.png') no-repeat
-        margin-right 8px
+        img
+          display block
+          margin-right 8px
     .time
       color #B5B5B5
       font-size 30px

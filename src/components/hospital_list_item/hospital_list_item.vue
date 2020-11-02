@@ -1,39 +1,78 @@
 <template>
   <ul class="item-wrap">
-    <li v-for="item in 6" :key="item">
-      <div class="title">黄泽黄桃专科医院 拷贝 30</div>
-      <div v-for="item in 3" :key="item" class="num-item">
+    <li v-for="item in items" :key="item.id" :class="{'other':item.isstore==0}" @click="goToHospitalIndex(item.appid,item.isstore)">
+      <div class=" title">{{item.name}}</div>
+      <div class="num-item">
         <p class="p1">专家</p>
-        <p class="p2">999</p>
+        <p class="p2">{{item.expert}}</p>
+      </div>
+      <div class="num-item" v-if="item.isstore == 0">
+        <p class="p1">网诊</p>
+        <p class="p2">{{item.wen}}</p>
+      </div>
+      <div class="num-item" v-if="item.isstore !== 0">
+        <p class="p1">会员</p>
+        <p class="p2">{{item.user}}</p>
+      </div>
+      <div class="num-item" v-if="item.isstore !== 0">
+        <p class="p1">处方</p>
+        <p class="p2">{{item.chufang}}</p>
       </div>
     </li>
   </ul>
 </template>
 <script>
+import axios from "@/http.js";
 export default {
   name: "component_name",
   components: {},
   props: {
     title: {
       type: String,
-      default: ""
+      default: "",
     },
     items: {
-      type: String,
-      default: function() {
-        return []
-      }
-    }
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
   },
   data() {
-    return {}
+    return {
+      purview: 0,
+    };
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getHospitalType(appId) {
+      //获取医院的类型
+      axios
+        .fetchPost("/Home/Index/GetIndexMpData", { appId: appId })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.purview = res.data.data.purview;
+          }
+        });
+    },
+    goToHospitalIndex(appid, isstore) {
+      if (isstore == 2) {
+        this.$router.push({
+          path: "/index_second",
+          query: { appId: appid },
+        });
+      } else {
+        this.$router.push({
+          path: "/index_third",
+          query: { appId: appid },
+        });
+      }
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .item-wrap

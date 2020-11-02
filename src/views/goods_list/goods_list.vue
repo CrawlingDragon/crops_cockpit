@@ -2,46 +2,94 @@
   <div class="goods_list_container">
     <Header title="农资商品"></Header>
     <div class="nav-bar">
-      <div class="item active">农药</div>
-      <div class="item">化肥</div>
-      <div class="item">农膜</div>
-      <div class="item">其他</div>
+      <div class="item" v-for="(item,index) in menu" :key="item.catid" :class="{'active':menuIndex == index}" @click="changeNenu(item.catid,index)">{{item.catname}}</div>
     </div>
     <ul class="list_ul">
-      <li v-for="item in 20" :key="item">
-        <el-image
-          class="img"
-          src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=4081169809,34248161&fm=173&app=25&f=JPEG?w=640&h=427&s=C301F304D0E29CAFA4A0D48A0300E090"
-          fit="cover"
-        >
+      <li v-for="item in list" :key="item.id" @click="goToDetail(item.id)">
+        <el-image class="img" :src="item.thumb_pic" fit="cover">
           <div slot="placeholder" class="image-slot">
             加载中
             <span class="dot">...</span>
           </div>
         </el-image>
-        <p>燕化多禧利香菇多燕化多禧利香菇多</p>
+        <p>{{item.name}}</p>
       </li>
     </ul>
-    <div class="result-bar">共200个结果</div>
+    <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
+    <div class="result-bar" v-show="list.length != 0">共{{list.length == 0 ? 0 : list.length}}个结果</div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import Header from "@/components/headers/headers";
+import axios from "@/http.js";
+import { mapState } from "vuex";
+
 export default {
   name: "goods_list",
   components: {
-    Header
+    Header,
   },
   props: {},
   data() {
-    return {}
+    return {
+      menuIndex: 0, // 显示导航的索引
+      menu: [], // 导航栏栏目
+      list: [],
+      noGoods: false,
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId", "purview"]),
+  },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getMenu();
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getMenu() {
+      // 获取导航栏
+      axios.fetchPost("/Home/Products/GetProductsMenu").then((res) => {
+        if (res.data.code == 200) {
+          this.menu = res.data.data;
+          setTimeout(() => {
+            this.getGoodsList(res.data.data[0].catid);
+          }, 100);
+        }
+      });
+    },
+    getGoodsList(catid) {
+      //获取商品列表
+      this.noGoods = false;
+      axios
+        .fetchPost("/Home/Products/GetMpProList", {
+          appId: 63587 || this.appId,
+          catid: catid,
+          purview: this.purview == 4 || 5 ? 1 : 0,
+        })
+        .then((res) => {
+          if (res.data.count == 0) {
+            this.noGoods = true;
+          }
+          if (res.data.code == 200) {
+            this.list = res.data.data;
+          }
+        });
+    },
+    changeNenu(catid, index) {
+      // 点击导航栏
+      this.menuIndex = index;
+      this.getGoodsList(catid);
+    },
+    goToDetail(id) {
+      // 去到商品详情
+      this.$router.push({
+        path: "/goods_detail",
+        query: { id: id },
+      });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .goods_list_container
@@ -70,12 +118,14 @@ export default {
     padding 10px 3px 0
     & > li
       margin-right 14px
-      width 270px
-      height 270px
+      width 275px
+      height 275px
       margin-bottom 55px
       display inline-block
       position relative
       cursor pointer
+      &:nth-child(6n)
+        margin-right 0
       &:hover
         outline 3px solid #FF6600
         box-sizing border-box
@@ -100,6 +150,12 @@ export default {
         overflow hidden
         text-overflow ellipsis
         white-space nowrap
+  .noGoods
+    font-size 40px
+    min-height 400px
+    line-height 400px
+    text-align center
+    color #B5B5B5
   .result-bar
     margin 50px 0 20px 90px
     text-align left

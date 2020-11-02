@@ -2,76 +2,85 @@
   <div class="find-container">
     <Header title="发现"></Header>
     <div class="nav-bar">
-      <div class="item">
-        <span class="active">资讯</span>
-      </div>
-      <div class="item">
-        <span>蔬菜虫害</span>
-      </div>
-      <div class="item">
-        <span>蔬菜病害</span>
-      </div>
-      <div class="item">
-        <span>果树虫害</span>
-      </div>
-      <div class="item">
-        <span>果树病害</span>
-      </div>
-      <div class="item">
-        <span>经济作物虫害</span>
-      </div>
-      <div class="item">
-        <span>经济作物病害</span>
-      </div>
-      <div class="item">
-        <span>粮食作物虫害</span>
-      </div>
-      <div class="item">
-        <span>粮食作物病害</span>
-      </div>
-      <div class="item">
-        <span>杂草识别</span>
+      <div class="item" v-for="(item,index) in navList" :key="item.catid" :class="{'active':activeIndex == index}" @click="nav(item.catid,index)">
+        <span class="active">{{item.catname}}</span>
       </div>
     </div>
-    <ul class="infinite-list find-ul" v-infinite-scroll="load" style="overflow:auto;height:698px">
-      <li v-for="i in count" class="infinite-list-item" :key="i">
+    <ul class="infinite-list find-ul">
+      <li v-for="item in list" class="infinite-list-item" :key="item.id">
         <div class="bj-wrap">
-          <div class="title-bar">中华全国供销合作总社原副主任、党组副书记李春生 莅临参观杭州市网上庄稼...</div>
+          <el-image :src="item.thumb" class="small-img" fit="cover">
+            <div slot="error" class="image-slot">
+              <div class="icon"></div>
+            </div>
+          </el-image>
+          <div class="title-bar">{{item.title}}</div>
           <div class="text">
-            中国农业新闻网-农民日报
-            <span class="time">2017-8-23 09:08:56</span>
+            {{item.copyfrom}}
+            <span class="time">{{item.inputtime}}</span>
           </div>
         </div>
       </li>
     </ul>
-    <Nav></Nav>
+    <Nav index="5"></Nav>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
-import Nav from "@/components/nav_list/nav_list"
+import Header from "@/components/headers/headers";
+import Nav from "@/components/nav_list/nav_list";
+import axios from "@/http.js";
 export default {
   name: "find",
   components: {
     Header,
-    Nav
+    Nav,
   },
   props: {},
   data() {
     return {
-      count: 0
-    }
+      count: 0,
+      navList: [],
+      activeIndex: 0,
+      initCatid: 0,
+      list: [],
+    };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getNavList();
+  },
   destroyed() {},
   methods: {
-    load() {
-      this.count += 2
-    }
-  }
-}
+    getNavList(catId) {
+      // 获取导航栏目
+      axios.fetchGet("/Home/News/GetPushMessageMenu").then((res) => {
+        if (res.data.code == 200) {
+          this.navList = res.data.data;
+          this.initCatid = res.data.data[0].catid;
+          setTimeout(() => {
+            this.getList(this.initCatid);
+          }, 100);
+        }
+      });
+    },
+    getList(catid) {
+      // 获取列表数据
+      axios
+        .fetchPost("/Home/News/GetPushMessageList", { catId: catid })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.list = res.data.data;
+          }
+        });
+    },
+    nav(catid, index) {
+      // 点击导航栏
+      this.activeIndex = index;
+      this.getList(catid);
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .find-container
@@ -80,7 +89,6 @@ export default {
     display flex
     border-bottom 1px solid rgba(255, 255, 255, 0.2)
     .item
-      flex 1
       line-height 58px
       margin-right 34px
       text-align left
@@ -92,12 +100,14 @@ export default {
         padding 0 12px
         height 100%
         display inline-block
-        &.active
-          border-bottom 4px solid #FF6600
+      &.active
+        border-bottom 4px solid #FF6600
+        &:hover
+          span
+            border 0
   .find-ul
-    height 698px
     margin 42px 0 20px
-    padding 16px 90px 0
+    padding 16px 90px 100px
     & > li
       display inline-block
       width 50%
@@ -112,12 +122,21 @@ export default {
         padding-left 80px
         padding-top 12px
         padding-right 44px
-        background url('./44.png') no-repeat
-        background-size 30px 35px
-        background-position 28px 22px
+        position relative
         &:hover
           outline 3px solid #FF6600
           box-shadow 0px 1px 26px #f60
+        .small-img
+          width 30px
+          height 35px
+          position absolute
+          left 28px
+          top 22px
+          .icon
+            background url('./44.png') no-repeat
+            width 30px
+            height 35px
+            background-size 100% 100%
         .title-bar
           font-size 36px
           color #FFFFFF
@@ -135,8 +154,7 @@ export default {
           text-align left
           color #808080
           font-size 24px
-          span
-            margin-left 34px
+          margin-right 34px
       &:nth-child(odd)
         .bj-wrap
           margin-right 10px

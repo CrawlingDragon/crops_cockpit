@@ -1,17 +1,16 @@
 <template>
-  <!-- 坐诊网诊详情 -->
+  <!-- 坐诊网诊测土详情 -->
   <div class="sit_detail-container">
-    <Header title="坐诊详情">1</Header>
-    <div class="titles">黄桂花的番茄提问</div>
+    <Header title="坐诊详情"></Header>
+    <div class="titles">{{detail.title}}</div>
     <div class="info-box">
       <div class="left">
         <div class="t">作物病情资料</div>
-        <p class="p1">种植模式：露地种植</p>
-        <p class="p1">病发程度：零星发生</p>
-        <p class="p1">坐诊日期：2017-05-27</p>
+        <p class="p1">{{detail.crop_pattern}}</p>
+        <p class="p1">{{detail.crop_position}}</p>
+        <p class="p1">{{detail.showtime}}</p>
         <p class="p1">
-          病情描述：番茄的病情很严重，就医就医，已经持
-          续很久很久了
+          {{detail.content}}
         </p>
         <ul class="left-ul clearfix">
           <div class="ul-t">病情图片（4）</div>
@@ -23,14 +22,9 @@
       <div class="right">
         <div class="right-t">处方信息</div>
         <div class="text">
-          处方专家：沈兵
-          看诊结果：使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种
-          药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。
-          使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。
-          疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。疗效更好。使
-          用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。
-          疗效更好。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使
-          用下面几种药混合使用。疗效更好。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药
+          {{detail.mpublic}} 官方回复<br />
+          处方专家：{{detail.chufang_expert}} <br />
+          看诊结果：{{detail.result}}
         </div>
       </div>
     </div>
@@ -53,20 +47,45 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import Header from "@/components/headers/headers";
+import axios from "@/http.js";
+import { mapState } from "vuex";
 export default {
-  name: "sit_detail",
+  name: "module_detail",
   components: { Header },
   props: {},
   data() {
-    return {}
+    return {
+      detail: "",
+      id: this.$route.query.id,
+      module: this.$route.query.module,
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"]),
+  },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getDetailData();
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getDetailData() {
+      // 获取配方详情
+      axios
+        .fetchPost("/Home/Treatment/GetRecipetemDetail", {
+          appId: this.appId,
+          Id: this.id,
+          module: this.module,
+        })
+        .then((res) => {
+          if (res.data.code === "200") {
+            this.detail = res.data.data;
+          }
+        });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .sit_detail-container

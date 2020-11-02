@@ -2,18 +2,14 @@
   <div class="expert">
     <div class="title">专家回复排行榜 ></div>
     <ul>
-      <li v-for="(item,index) in 3" :key="item">
-        <img
-          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg"
-          alt
-          class="expert-avator"
-        />
-        <div class="icon">{{index}}</div>
+      <li v-for="(item,index) in list" :key="item.uid" @click="goToExpert(item.uid)">
+        <img :src="item.avatar" alt class="expert-avator" />
+        <div class="icon">{{index + 1}}</div>
         <div class="bom-bar">
-          <p class="p1">沈兵</p>
+          <p class="p1">{{item.name}}</p>
           <p class="p2">
             <span>总回复数</span>
-            <span class="number">864</span>
+            <span class="number">{{item.posts}}</span>
           </p>
         </div>
       </li>
@@ -21,19 +17,35 @@
   </div>
 </template>
 <script>
+import axios from "@/http.js";
 export default {
   name: "expert_ranking_list",
   components: {},
-  props: {},
+  props: {
+    list: {
+      type: Array,
+      default: function () {
+        return [];
+      },
+    },
+  },
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    goToExpert(uid) {
+      //去到专家详情页
+      this.$router.push({
+        path: "/expert_detail",
+        query: { uid: uid },
+      });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .expert

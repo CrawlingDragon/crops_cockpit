@@ -25,17 +25,17 @@ export default {
   name: "nav_list",
   components: {},
   props: {
-    index: { type: String, default: "1" }
+    index: { type: String, default: "1" },
   },
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style lang="stylus" scoped>
 .nav
@@ -43,6 +43,10 @@ export default {
   width 75%
   margin 0 auto
   text-align center
+  position fixed
+  left 50%
+  transform translateX(-50%)
+  bottom 0
   & > li
     display inline-block
     font-size 44px

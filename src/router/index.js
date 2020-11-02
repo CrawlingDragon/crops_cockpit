@@ -12,6 +12,12 @@ const routes = [
       import(/* webpackChunkName: "index" */ "../views/index/index.vue")
   },
   {
+    path: "/index",
+    name: "index",
+    component: () =>
+      import(/* webpackChunkName: "index" */ "../views/index/index.vue")
+  },
+  {
     path: "/channel",
     name: "channel",
     component: () =>
@@ -119,11 +125,11 @@ const routes = [
       import(/* webpackChunkName: "search" */ "../views/search/search.vue")
   },
   {
-    path: "/sit_detail",
-    name: "sit_detail",
+    path: "/module_detail",
+    name: "module_detail",
     component: () =>
       import(
-        /* webpackChunkName: "sit_detail" */ "../views/sit_detail/sit_detail.vue"
+        /* webpackChunkName: "module_detail" */ "../views/module_detail/module_detail.vue"
       )
   },
   {
@@ -131,6 +137,14 @@ const routes = [
     name: "video",
     component: () =>
       import(/* webpackChunkName: "video" */ "../views/video/video.vue")
+  },
+  {
+    path: "/video_detail",
+    name: "video_detail",
+    component: () =>
+      import(
+        /* webpackChunkName: "video_detail" */ "../views/video_detail/video_detail.vue"
+      )
   },
   {
     path: "/vip",
@@ -201,7 +215,8 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: "hash"
 });
 
 export default router;

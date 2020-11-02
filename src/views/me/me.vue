@@ -3,48 +3,61 @@
     <Header title="我的"></Header>
     <div class="my-box">
       <div class="left">
-        <el-image
-          class="img"
-          src="https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg"
-          fit="cover"
-        ></el-image>
-        <div class="account">账号:113654789632</div>
+        <el-image class="img" :src="data.logo" fit="cover"></el-image>
+        <div class="account">账号:{{data.acount}}</div>
         <div class="btn1">退出登录</div>
         <div class="btn1">已下载视频11</div>
       </div>
       <div class="right">
         <div class="title">
-          黄泽黄桃庄稼医院
-          <span class="describe-title">实体店</span>
+          {{data.name}}
+          <span class="describe-title">{{data.isstore == 1? '实体店':'网院'}}</span>
         </div>
-        <div class="name">作物科室：黄桃</div>
-        <div
-          class="text"
-        >简介：范冰冰，研究员，长期从事蔬菜、果树等经济作物病害的诊断、防治等研究工作，“七五”计划以来，先后承担了家攻关项目、国家农业成果转化资金项目、国家科技支撑项目、西甜瓜国家现代科技产业项目、省重大科技招标项目、国际合作项目等120余项科研项目。在蔬菜、果树、中药材等经济作物病害的诊断、致病机理、防治技术、无公害生产技术等方面的研究、技术推广成绩显著。在研究过程中研发了克服蔬菜栽培中连作障碍的土壤消毒技术，筛选出了番茄、茄子、西瓜等抗病砧木，完善了番茄、茄子、西瓜等作物的嫁接抗病技术，这些技术获得国家发明专利、并荣获了浙江省科技奖，并得到了国内同行学者的高度重视和认可。</div>
+        <div class="name">作物科室：{{data.zuowu}}</div>
+        <div class="text">简介：{{data.content}}</div>
       </div>
     </div>
     <Nav index="6"></Nav>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
-import Nav from "@/components/nav_list/nav_list"
+import Header from "@/components/headers/headers";
+import Nav from "@/components/nav_list/nav_list";
+import axios from "@/http.js";
+import { mapState } from "vuex";
 export default {
   name: "me",
   components: {
     Header,
-    Nav
+    Nav,
   },
   props: {},
   data() {
-    return {}
+    return {
+      data: "",
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"]),
+  },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getData();
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getData() {
+      // 获取我的医院
+      axios
+        .fetchPost("/Home/About/GetMpDesc", { appId: this.appId })
+        .then((res) => {
+          if (res.data.code === "200") {
+            this.data = res.data.data;
+          }
+        });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .my-container
@@ -106,4 +119,11 @@ export default {
         color #F9FAFA
         font-size 30px
         margin-bottom 15px
+      .text
+        font-size 30px
+        margin-top 40px
+        font-family SimHei
+        font-weight 400
+        color rgba(181, 181, 181, 1)
+        line-height 50px
 </style>

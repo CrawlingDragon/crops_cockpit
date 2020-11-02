@@ -16,6 +16,9 @@ module.exports = {
   plugins: ["vue"],
   rules: {
     quotes: ["error", "double"],
-    "space-before-function-paren": 0
+    "space-before-function-paren": 0,
+    semi: ["error", "always"],
+    "spaced-comment": ["error", "always", { markers: ["/*", "//"] }],
+    "comma-dangle": "off"
   }
 };

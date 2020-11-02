@@ -2,33 +2,56 @@
   <div class="video-container">
     <Header title="培训视频"></Header>
     <ul class="video-ul">
-      <li v-for="item in 9" :key="item">
-        <el-image
-          class="img"
-          fit="cover"
-          src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592385225255&di=818c8674ea3d109b531adbce5ed4cfd3&imgtype=0&src=http%3A%2F%2Ft9.baidu.com%2Fit%2Fu%3D583874135%2C70653437%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D3607%26h%3D2408"
-        ></el-image>
-        <p class="p1">沟金针虫</p>
+      <li v-for="item in list" :key="item.id" @click="goToVideoDetail(item.id,item.catid)">
+        <el-image class="img" fit="cover" :src="item.thumb"></el-image>
+        <p class="p1">{{item.title}}</p>
       </li>
     </ul>
-    <div class="result-num">共200个结果</div>
+    <div class="result-num">共{{list.length}}个结果</div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import Header from "@/components/headers/headers";
+import axios from "@/http.js";
+import { mapState } from "vuex";
+
 export default {
   name: "videos",
   components: { Header },
   props: {},
   data() {
-    return {}
+    return {
+      list: [],
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"]),
+  },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.getVideoList();
+  },
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    getVideoList() {
+      // 获取视频列表
+      axios
+        .fetchPost("/Home/Video/GetVideoList", { appId: this.appId })
+        .then((res) => {
+          if (res.data.code == 200) {
+            this.list = res.data.data;
+          }
+        });
+    },
+    goToVideoDetail(id, catid) {
+      // 点击进入视频详情页
+      this.$router.push({
+        path: "/video_detail",
+        query: { id: id, catid: catid },
+      });
+    },
+  },
+};
 </script>
 <style lang="stylus" scoped>
 .video-container
@@ -42,6 +65,7 @@ export default {
       display inline-block
       position relative
       margin-bottom 20px
+      cursor pointer
       &:nth-child(4n+0)
         margin-right 0
       &:hover
@@ -59,7 +83,7 @@ export default {
         height 60px
         background url('./text-bj.png') no-repeat
         background-position center
-        background-size center
+        background-size 100% 100%
         font-size 32px
         color #FFFFFF
         line-height 75px
