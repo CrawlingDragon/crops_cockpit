@@ -2,12 +2,14 @@
   <div class="online_list-wrap">
     <div class="title">最新网诊 ></div>
     <ul class="online-ul">
-      <li v-for="item in 5" :key="item">
+      <li v-for="item in list" :key="item.tid">
         <div class="top">
-          <span class="item-title">黄桂花的水稻水稻水稻问题</span>
-          <span class="time">05-24 12:00</span>
+          <span class="item-title">{{ item.title }}</span>
+          <span class="time">{{ item.showtime }}</span>
         </div>
-        <div class="text">南瓜开花结果都没问题，但就是长不 大，一般长的约10公分后就从瓜一般长的约10公分后就从瓜一般长的约10公分后就从瓜</div>
+        <div class="text">
+          {{ item.description }}
+        </div>
       </li>
     </ul>
   </div>
@@ -16,7 +18,14 @@
 export default {
   name: "online_list",
   components: {},
-  props: {},
+  props: {
+    list: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
+  },
   data() {
     return {};
   },

@@ -5,7 +5,9 @@
         <div class="icon"></div>
         <div class="text">
           <div class="time">黄泽黄桃专科医院·黄桂花的番茄坐诊</div>
-          <p class="p1">病情描述：番茄的病情很严重，就医就医，已经持续很久很久了。</p>
+          <p class="p1">
+            病情描述：番茄的病情很严重，就医就医，已经持续很久很久了。
+          </p>
           <p class="p1">坐诊日期：2017-05-27</p>
           <p class="p1">处方专家：沈冰</p>
         </div>
@@ -27,14 +29,14 @@ export default {
   components: {},
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .second_zuo-container

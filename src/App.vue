@@ -9,7 +9,7 @@
 <script>
 export default {
   name: "app",
-  components: {},
+  components: {}
 };
 </script>
 
@@ -29,6 +29,6 @@ export default {
     font-size 30px
     .el-loading-spinner
         .el-loading-text
-          font-size 20px !important 
+          font-size 20px !important
           margin-top 10px
 </style>

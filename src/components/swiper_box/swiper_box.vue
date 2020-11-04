@@ -1,9 +1,9 @@
 <template>
   <div class="swiper-box-container">
-    <el-carousel class="swiper" indicator-position="none">
-      <el-carousel-item v-for="item in 4" :key="item">
-        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594900534736&di=0fafef30c253d7ac9441f85cdf23a10e&imgtype=0&src=http%3A%2F%2Fa1.att.hudong.com%2F05%2F00%2F01300000194285122188000535877.jpg" alt="" class="item-img">
-        <div class="text">黄泽黄桃专科医院开业了</div>
+    <el-carousel class="swiper" indicator-position="" trigger="click">
+      <el-carousel-item v-for="item in list" :key="item.id">
+        <img :src="item.thumb" alt="" class="item-img" />
+        <div class="text">{{ item.title }}</div>
       </el-carousel-item>
     </el-carousel>
   </div>
@@ -13,7 +13,14 @@
 export default {
   name: "swiper-box",
   components: {},
-  props: {},
+  props: {
+    list: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
+  },
   data() {
     return {};
   },
@@ -32,6 +39,7 @@ export default {
   /deep/.el-carousel__container
     height 100%
     position relative
+    cursor pointer
     .item-img
       width 100%
       height 100%
@@ -47,4 +55,12 @@ export default {
       line-height 80px
       padding-left 20px
       text-align left
+  /deep/.el-carousel__button
+    width 20px
+    height 20px
+    border-radius: 50%;
+  /deep/.el-carousel__indicators--horizontal
+    right 50px
+    left auto
+    bottom 15px
 </style>

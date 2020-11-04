@@ -1,9 +1,10 @@
 <template>
   <div class="login-wrap">
     <div class="title">
-      <h5>新型庄稼医院管理系统 <h6>www.114nz.com</h6>
+      <h5>
+        新型庄稼医院管理系统
+        <h6>www.114nz.com</h6>
       </h5>
-
     </div>
     <div class="login-box">
       <h4>用户登录</h4>
@@ -12,52 +13,47 @@
         placeholder="用户名"
         class="username"
         v-model="username"
-      >
+      />
       <input
         type="password"
         placeholder="密码"
         class="passworld"
         v-model="password"
-      >
+      />
       <input
         type="button"
         value="登录"
         class="submit"
         v-on:click="login($event)"
         ref="sub"
-      >
+      />
     </div>
-    <Alert
-      :alertTitle="title"
-      :alertText="text"
-      ref="alertBox"
-    ></Alert>
+    <Alert :alertTitle="title" :alertText="text" ref="alertBox"></Alert>
   </div>
-
 </template>
 <script>
 // import Alert from "../../ui-components/alert/alert";
-const Alert = resolve=>require(["../../ui-components/alert/alert"],resolve)
 import md from "../../../common/js/md5.js";
 import { mapMutations } from "vuex";
+const Alert = resolve => require(["../../ui-components/alert/alert"], resolve);
 export default {
   name: "login",
   data() {
     return {
-      username: "", //13094810413
-      password: "", //asdf1234
+      username: "", // 13094810413
+      password: "", // asdf1234
       title: "登录失败",
       text: ""
     };
   },
-  mounted(){
-    let that = this
-    document.onkeydown = function(){
-      let key = window.event.keyCode;
-      if(key == 13){
-        that.login()
+  mounted() {
+    const that = this;
+    document.onkeydown = function() {
+      const key = window.event.keyCode;
+      if (key == 13) {
+        that.login();
       }
-    }
+    };
   },
   methods: {
     isEmpty() {
@@ -89,83 +85,96 @@ export default {
       "getAccountName",
       "getLoginId",
       "getBreadArr",
+      "SetAppId"
     ]),
     login(e) {
       if (this.isEmpty()) {
-        if(e){
-          e.currentTarget.setAttribute('disabled',true)
-          e.currentTarget.className = 'submit disabled'
-        }else{
-          this.$refs.sub.setAttribute('disabled',true)
-          this.$refs.sub.className = 'submit disabled'
+        if (e) {
+          e.currentTarget.setAttribute("disabled", true);
+          e.currentTarget.className = "submit disabled";
+        } else {
+          this.$refs.sub.setAttribute("disabled", true);
+          this.$refs.sub.className = "submit disabled";
         }
-        let password = md(this.password);
+        const password = md(this.password);
         this.$axios
-          .fetchPost(
-            "Home/Login/login",
-            {username:this.username,password:password}
-          )
+          .fetchPost("Home/Login/login", {
+            username: this.username,
+            password: password
+          })
           .then(res => {
-            // console.log(res)
             if (res.data.code == 200) {
-              let userid = res.data.data.userid;
-              let level = res.data.data.level;
-              let secondLevel = 0;
-              if (level >= 3) {
-                secondLevel = level - 1;
+              const purview = res.data.data.purview;
+              const appid = res.data.data.appid;
+              this.SetAppId(appid);
+              if (purview == 1) {
+                this.$router.push({
+                  path: "/index_third"
+                });
+              } else if (purview == 2) {
+                this.$router.push({
+                  path: "/index_second"
+                });
               } else {
-                secondLevel = level;
-              }
-              if (level <= 3) {
-                this.getPicAddress(res.data.data.address);
-              }
-              let arr = res.data.data.area;
-              let areaname = res.data.data.areaname;
-              let isshaoxing = res.data.data.ishaoxing
-              let name = res.data.data.name
-              window.sessionStorage.setItem('name',name)
-              window.sessionStorage.setItem('curcity',areaname)
-              window.sessionStorage.setItem('isshaoxing',isshaoxing)//判断是否是绍兴市或者是绍兴市所属县级管理院
-              // window.sessionStorage.setItem('shaoxingnextbvious',JSON.stringify(res.data.data.area[0].city[5].city))//存储绍兴市所属县级管理院的信息
-              window.sessionStorage.setItem('curlevel',level)//存储当前登录的管理院等级
-              window.sessionStorage.setItem('curuserid',userid)
-              let defaultName = res.data.data.default;
-              let letter = res.data.data.letter;
-              window.sessionStorage.setItem('letter',letter)
-              this.getDefaultProvince(areaname); // 获取全网页地址
-              this.getGlobalLevel(level); //获取全网页等级
-              this.getDefaultCity(defaultName); // 获取二级方块地址
-              this.getSecondGlobalLevel(secondLevel); //获取二级方块等级
-              // this.secondMapIndex(res.data.data)
-              // this.getDefaultCity(city); // 获取默认城市
-              this.getDefaultAddressArr(arr); // 获取默认导航列表
-              this.getGlobalFstusername(res.data.data.Fstusername); //获取益农通账号
-              this.getGlobalFstuserpw(res.data.data.Fstuserpw); //获取益农通密码
-              this.getGlobalFstRoomid(res.data.data.FstRoomid); //获取益农通id
-              this.getSessionUsername(this.username);
-              this.getSessionPassword(password);
-              this.getAccountName(res.data.data.areaname);
-              this.getLoginId(level);
-              this.getBreadArr(res.data.data.nav);
-              this.$router.push({
-                path: "/index",
-                query: {
-                  userid: userid,
-                  areaname: areaname,
-                  level: level,
-                  letter: letter
+                const userid = res.data.data.userid;
+                const level = res.data.data.level;
+                let secondLevel = 0;
+                if (level >= 3) {
+                  secondLevel = level - 1;
+                } else {
+                  secondLevel = level;
                 }
-              });
+                if (level <= 3) {
+                  this.getPicAddress(res.data.data.address);
+                }
+                const arr = res.data.data.area;
+                const areaname = res.data.data.areaname;
+                const isshaoxing = res.data.data.ishaoxing;
+                const name = res.data.data.name;
+                window.sessionStorage.setItem("name", name);
+                window.sessionStorage.setItem("curcity", areaname);
+                window.sessionStorage.setItem("isshaoxing", isshaoxing); // 判断是否是绍兴市或者是绍兴市所属县级管理院
+                // window.sessionStorage.setItem('shaoxingnextbvious',JSON.stringify(res.data.data.area[0].city[5].city))//存储绍兴市所属县级管理院的信息
+                window.sessionStorage.setItem("curlevel", level); // 存储当前登录的管理院等级
+                window.sessionStorage.setItem("curuserid", userid);
+                const defaultName = res.data.data.default;
+                const letter = res.data.data.letter;
+                window.sessionStorage.setItem("letter", letter);
+                this.getDefaultProvince(areaname); // 获取全网页地址
+                this.getGlobalLevel(level); // 获取全网页等级
+                this.getDefaultCity(defaultName); // 获取二级方块地址
+                this.getSecondGlobalLevel(secondLevel); // 获取二级方块等级
+                // this.secondMapIndex(res.data.data)
+                // this.getDefaultCity(city); // 获取默认城市
+                this.getDefaultAddressArr(arr); // 获取默认导航列表
+                this.getGlobalFstusername(res.data.data.Fstusername); // 获取益农通账号
+                this.getGlobalFstuserpw(res.data.data.Fstuserpw); // 获取益农通密码
+                this.getGlobalFstRoomid(res.data.data.FstRoomid); // 获取益农通id
+                this.getSessionUsername(this.username);
+                this.getSessionPassword(password);
+                this.getAccountName(res.data.data.areaname);
+                this.getLoginId(level);
+                this.getBreadArr(res.data.data.nav);
+                this.$router.push({
+                  path: "/index",
+                  query: {
+                    userid: userid,
+                    areaname: areaname,
+                    level: level,
+                    letter: letter
+                  }
+                });
+              }
             } else if (res.data.code == 402) {
               this.$refs.alertBox.showFlag = true;
               this.text = res.data.message;
-              this.$refs.sub.removeAttribute('disabled')
-              this.$refs.sub.className = 'submit'
+              this.$refs.sub.removeAttribute("disabled");
+              this.$refs.sub.className = "submit";
             } else {
               this.$refs.alertBox.showFlag = true;
               this.text = res.data.message;
-              this.$refs.sub.removeAttribute('disabled')
-              this.$refs.sub.className = 'submit'
+              this.$refs.sub.removeAttribute("disabled");
+              this.$refs.sub.className = "submit";
             }
           });
       }
@@ -250,7 +259,7 @@ export default {
       &.disabled
         background #999
         color #7f7f7f
-        &:hover 
+        &:hover
           border none
           cursor wait
       &:hover
