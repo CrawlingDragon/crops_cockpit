@@ -1,42 +1,103 @@
 <template>
   <div class="second_wang-container">
-    <ul class="wang-ul">
-      <li v-for="item in 6" :key="item">
+    <Header></Header>
+    <ul
+      class="wang-ul infinite-list"
+      v-infinite-scroll="load"
+      style="overflow:auto;"
+      infinite-scroll-disabled="disabled"
+    >
+      <li v-for="item in list" :key="item.tid" class="infinite-list-item">
         <div class="icon"></div>
         <div class="text">
-          <div class="time">范冰冰的水稻提问 2017-05-27 12:00</div>
-          <p
-            class="p1"
-          >机插秧田，插秧后7天，追肥尿素15斤/亩，拌除草剂苄-乙，昨天下过大雨，田间水位上升许多，今天发现水深的地方成片心叶滞长，拌除草剂苄-乙，昨天下过大雨，田间水位上升许多，请教各位老师这是不是除草剂的危害，有什么办法缓解？有什么是不是除草剂的危害，有什么办法缓解？有什么是不是除草剂的危害，有什么办法缓解？有什么是不是除草剂的危害，有什么办法缓解？有什么办法缓解？有什</p>
+          <div class="time">
+            {{ item.title }}
+            <span style="margin-left :20px">{{ item.showtime }}</span>
+          </div>
+          <p class="p1">
+            {{ item.content }}
+          </p>
         </div>
         <div class="answer">
-          <div class="p2">回复数：4</div>
-          <el-image fit="cover" src class="img"></el-image>
+          <div class="p2">回复数：{{ item.replies }}</div>
+          <el-image
+            fit="cover"
+            :src="item.thumb_pic"
+            class="img"
+            v-if="item.thumb_pic"
+          ></el-image>
         </div>
       </li>
+      <p v-if="loading">加载中...</p>
+      <p v-if="noMore">没有更多了</p>
     </ul>
+    <Nav :number="count"></Nav>
   </div>
 </template>
 <script>
+import Nav from "@/components/nav_list/nav_list";
+import Header from "@/components/online_hospital_header/online_hospital_header";
+import { mapState } from "vuex";
 export default {
   name: "second_wang",
-  components: {},
+  components: { Nav, Header },
   props: {},
   data() {
-    return {}
+    return {
+      list: [],
+      page: 0,
+      loading: false,
+      noMore: false,
+      count: 0
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"]),
+    disabled() {
+      return this.loading || this.noMore;
+    }
+  },
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    load() {
+      this.page += 1;
+      this.loading = true;
+      setTimeout(() => {
+        this.$axios
+          .fetchPost("/Home/Treatment/GetWenList", {
+            page: this.page,
+            appId: this.appId
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.list = this.list.concat(res.data.data);
+              this.loading = false;
+              this.count = res.data.count;
+              if (res.data.data.length == 0) {
+                this.noMore = true;
+              }
+            } else {
+              this.noMore = true;
+            }
+          });
+      }, 1000);
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .second_wang-container
-  min-height 724px
+  max-width 1900px
+  margin 0 auto
+  height 100%
+  max-height 100%
+  overflow hidden
   .wang-ul
-    margin 48px 90px 0
+    padding-bottom 155px
+    max-height 690px
+    padding 0 40px
     & > li
       background rgba(9, 29, 67, 0.4)
       border 1px solid rgba(255, 255, 255, 0.2)
@@ -44,6 +105,7 @@ export default {
       display flex
       padding 22px
       height 220px
+      cursor pointer
       & > .icon
         width 30px
         height 40px
@@ -55,25 +117,23 @@ export default {
         flex 1
         text-align left
         min-width 0
-        overflow hidden
-        text-overflow ellipsis
-        display -webkit-box
-        -webkit-line-clamp 3
-        -webkit-box-orient vertical
         .time
           color #B5B5B5
           font-size 24px
           margin-bottom 15px
         .p1
           font-size 30px
-          font-family SimHei
           font-weight 400
           line-height 1.4
-          font-family SimHei
+          overflow hidden
+          text-overflow ellipsis
+          display -webkit-box
+          -webkit-line-clamp 3
+          -webkit-box-orient vertical
       .answer
         font-size 24px
         color #B5B5B5
-        margin-left 50px
+        margin-left 100px
         .p2
           margin-bottom 38px
           line-height 1.2

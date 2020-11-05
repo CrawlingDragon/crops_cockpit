@@ -53,12 +53,10 @@
         <div class="icon i4"></div>
         <p>测土配方</p>
       </li>
-
       <li class="li6">
         <div class="icon i6"></div>
         <p>会员</p>
       </li>
-
       <li class="langer li7">
         <div class="icon i7"></div>
         <p>下级医院</p>

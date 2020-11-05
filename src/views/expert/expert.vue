@@ -8,30 +8,34 @@
         </div>
       </li>
     </ul>
-    <div class="result-num">共200个结果</div>
+    <Nav :showNav="false" number="1"></Nav>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
-import Expert from "@/components/expert/expert"
+import Header from "@/components/headers/headers";
+import Expert from "@/components/expert/expert";
+import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "expert",
-  components: { Header, Expert },
+  components: { Header, Expert, Nav },
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .expert-container
+  max-width 1900px
+  margin 0 auto
   .expert-ul
     margin 0 90px
+    width 100%
     display flex
     flex-wrap wrap
     li
