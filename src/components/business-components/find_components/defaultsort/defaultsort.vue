@@ -41,12 +41,18 @@ export default {
         console.log(window.sessionStorage.getItem('isstore'))
     },
     mounted(){
-        this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+        //计算出滚动区域的高度
+        var h = document.documentElement.clientHeight || document.body.clientHeight
+        if(h>1080||h==1080){
+            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025)}px`
+        }else{
+            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+        }
         this.userid = window.sessionStorage.getItem('curuserid')
         const rLoading = this.openLoading();
         this.$axios.fetchPost(
             "/Home/Manage/GetManageMpDataList",
-            `appId=${this.userid}&type=${"default"}&ordertag=${"default"}&storetag=${window.sessionStorage.getItem('isstore')}&areatag=${""}`
+            {appId:this.userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
         ).then(res=>{
             if(res.data.code == "200"){
                 this.hospitalinfo = res.data.data.lists
@@ -66,7 +72,7 @@ export default {
             // 跳转外部连接后获取的数据消失，需要请求一下304缓存
             this.$axios.fetchPost(
                 "/Home/Manage/GetManageMpDataList",
-                `appId=${this.userid}&type=${"default"}&ordertag=${"default"}&storetag=${window.sessionStorage.getItem('isstore')}&areatag=${""}`
+                {appId:this.userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
             ).then(res=>{
                 console.log(res)
                 if(res.data.code == "200"){
@@ -81,6 +87,9 @@ export default {
 .contain
     position relative
     top 70px
+    @media screen and (min-width:1900px){
+        top 210px
+    }
     .hospitalinfo
         padding-left 3%
         overflow scroll

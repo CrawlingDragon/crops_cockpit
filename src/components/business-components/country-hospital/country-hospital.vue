@@ -253,16 +253,29 @@ export default {
   font-size 16px
   line-height 40px
   padding-left 20px
+  @media screen and (min-width:1900px){
+    height 50px
+    font-size 24px
+    line-height 50px
+  }
   text-align left
   border-bottom 1px solid #1b4e79
 .roundness
   height 304px
+  @media screen and (min-width:1900px){
+    height 388px
+  }
   border-bottom 1px solid #1B4E79
   overflow hidden
   .round
     width 214px
     height 214px
     margin 32px auto 0
+    @media screen and (min-width:1900px){
+      height 259px
+      width 259px
+      margin 42px 91px auto
+    }
   .round-ul
     font-size 0
     text-align center
@@ -273,10 +286,19 @@ export default {
       margin-right 12px
       padding-left 17px
       position relative
+      @media screen and (min-width:1900px) {
+        font-size 16px
+        padding-left 22px
+        margin-right 16px
+      }
       .color
         width 10px
         height 10px
         border-radius 50%
+        @media screen and (min-width:1900px) {
+          height 16px
+          width 16px
+        }
         position absolute
         left 0px
         top 2px
@@ -289,16 +311,26 @@ export default {
   margin 0 auto
   font-size 0px
   padding-top 18px
+  @media screen and (min-width:1900px) {
+    padding-top 32px  
+  }
   text-align center
   color #fff
   li
     font-size 14px
     display inline-block
     margin-right 15px
+    @media screen and (min-width:1900px) {
+      font-size 16px 
+    }
     p
       font-size 18px
       font-weight bold
       margin-bottom 14px
+      @media screen and (min-width:1900px) {
+        font-size 24px
+        margin-bottom 19px  
+      }
     h6
       font-weight 400
       color #7FB5F1

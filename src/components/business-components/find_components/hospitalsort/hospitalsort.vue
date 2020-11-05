@@ -1,18 +1,14 @@
 <template>
     <div class="contain">
         <div class="header">
-            <div class="close_btn" style="cursor:pointer" @click="toindex">
-                <span class="text1 jiantou">&lt;</span>
-                <span class="text1 close" >下级医院</span>
-            </div>
-            <div class="option">
-                <router-link to="/defaultsort" replace><span :class='[this.cur_index == 1 ? "text2 text3":"text2"]' @click = "changecolor1" >默认排序</span></router-link>
-                <router-link to="/multiplesort" replace><span :class='[this.cur_index == 2 ? "text2 text3":"text2"]'  @click = "changecolor2" >综合排序</span></router-link>
-                <router-link to="/selectsort" replace><span :class='[this.cur_index == 3 ? "text2 text3":"text2"]'  @click = "changecolor3" >筛选</span></router-link>
-            </div>
-            <div class="time">
-                <Date></Date>
-            </div>
+            <Headnav
+            :lefttitle=this.lefttitle
+            ></Headnav>
+        </div>
+        <div class="option">
+            <router-link to="/defaultsort" replace><span :class='[this.cur_index == 1 ? "text2 text3":"text2"]' @click = "changecolor1" >默认排序</span></router-link>
+            <router-link to="/multiplesort" replace><span :class='[this.cur_index == 2 ? "text2 text3":"text2"]'  @click = "changecolor2" >综合排序</span></router-link>
+            <router-link to="/selectsort" replace><span :class='[this.cur_index == 3 ? "text2 text3":"text2"]'  @click = "changecolor3" >筛选</span></router-link>
         </div>
         <div class="content">
             <keep-alive v-if="$route.meta.keepAlive">
@@ -22,15 +18,16 @@
     </div>
 </template>
 <script>
-import Date from "../../../ui-components/date/date"
+import Headnav from '../../headnav/headnav'
 export default {
     components:{
-        Date
+        Headnav
     },
     
     data(){
         return{
-             cur_index:2
+             cur_index:2,
+             lefttitle:'下级医院'
         }
     },
     
@@ -56,11 +53,13 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .contain
-    width: 100%;
-    height: 100%;
-    @media screen and (max-width:1341px)
+    width 100%
+    height 100%
+    @media screen and (max-width:1341px){
         width 1340px
-    background-color: rgba(3, 5, 57, 1);
+        height 768px
+    }
+    // background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     position relative
     .header
@@ -87,24 +86,32 @@ export default {
             font-size 14px
             right  2%
             top 2px
-        .option
-            margin 0 auto
-            width 500px
-            vertical-align middle
-            position relative
-            top -13px
-            z-index 666
-            .text2
-                font-size 24px
-                font-family SimHei
-                font-weight 400
-                color #C5C5C5
-                line-height 50px
-                margin-right 50px
-            .text3
-                color #FF6600
-                padding-bottom 10px
-                border-bottom 2px solid #FF6600
+    .option
+        margin 0 auto
+        width 500px
+        vertical-align middle
+        position absolute
+        left 0
+        right 0
+        top 10px
+        @media screen and (min-width:1900px) {
+            top 102px
+        }
+        z-index 666
+        .text2
+            font-size 24px
+            font-family SimHei
+            font-weight 400
+            color #C5C5C5
+            line-height 50px
+            margin-right 50px
+            @media screen and (min-width:1900px){
+                font-size 30px
+            }
+        .text3
+            color #FF6600
+            padding-bottom 10px
+            border-bottom 2px solid #FF6600
     ::-webkit-scrollbar 
         display none
     .content 

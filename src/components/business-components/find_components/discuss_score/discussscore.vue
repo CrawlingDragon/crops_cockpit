@@ -1,14 +1,9 @@
 <template>
     <div class="contain">
         <div class="header">
-            <div class="close-btn" style="cursor:pointer" @click = "closefn">
-                <span class="text1 jiantou">&lt;</span>
-                <span class="text1 close">关闭</span>
-            </div>
-            <span class="text1 title">评分</span>
-            <div class="time">
-                <Date2></Date2>
-            </div>
+            <Headnav
+            :lefttitle=this.lefttitle
+            ></Headnav>
         </div>
         <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="ser_standard">
             <el-form-item prop="discuss_name"  class="ser_option1">
@@ -111,11 +106,11 @@
     </div>
 </template>
 <script>
-import Date2 from "../../../ui-components/date/date"
+import Headnav from '../../headnav/headnav'
 import Confim from "../../../ui-components/confim/confim"
 export default {
     components:{
-        Date2,
+        Headnav,
         Confim
     },
     data(){
@@ -163,12 +158,17 @@ export default {
             startDatePicker: this.beginDate(),
             endDatePicker: this.processDate(),
             alldata:0,
+            lefttitle:"评分"
         }
     },
     
     created(){
         var h = document.documentElement.clientHeight || document.body.clientHeight
-        let shengyu = h-168-90-60
+        if(h>1080||h==1080){
+            var shengyu = h-231-60-90
+        }else{
+            var shengyu = h-168-90-60
+        }
         this.pagesize = Math.round(shengyu/160)
         if(this.pagesize == 0){
             // 防止this.pagesize计算错误为0的情况
@@ -181,7 +181,7 @@ export default {
         this.userid = window.sessionStorage.getItem('curuserid')
         this.$axios.fetchPost(
             "Admin/Api/get_appraises_list",
-            `mId=${this.userid}&page=${this.currentPage}&pagesize=${this.pagesize}`
+            {mId:this.userid,page:this.currentPage,pagesize:this.pagesize}
         ).then(res=>{
             if(res.data.code == 200){
                 rLoading.close()
@@ -203,7 +203,7 @@ export default {
         sousuo(userid,currentPage,pagesize,expert_name,discuss_name,question,startTime,endTime){
             this.$axios.fetchPost(
                 "Admin/Api/get_appraises_list",
-                `mId=${userid}&page=${currentPage}&pagesize=${pagesize}&expert=${expert_name}&user=${discuss_name}&ask=${question}&startdate=${startTime}&enddate=${endTime}`
+                {mId:userid,page:currentPage,pagesize:pagesize,expert:expert_name,user:discuss_name,ask:question,startdate:startTime,enddate:endTime}
             ).then(res=>{
                 if(res.data.code == 200){
                     this.openLoading().close()
@@ -313,7 +313,7 @@ export default {
             if(this.isshow==1){
                 this.$axios.fetchPost(
                     "Admin/Api/update_appraises",
-                    `aId=${this.aid}&opt=${"hidden"}`
+                    {aId:this.aid,opt:"hidden"}
                 ).then(res=>{
                     //修改完部分数据后 要进行重新请求当前页的数据
                     // 这里要传入全部参数进行请求 匹配当条件搜索或者全部搜索的时候
@@ -322,7 +322,7 @@ export default {
             }else if(this.isshow==0){
                  this.$axios.fetchPost(
                     "Admin/Api/update_appraises",
-                    `aId=${this.aid}&opt=${"show"}`
+                    {aId:this.aid,opt:"show"}
                 ).then(res=>{
                     this.sousuo(this.userid,this.currentPage,this.pagesize,this.ruleForm.expert_name,this.ruleForm.discuss_name,this.ruleForm.question,this.ruleForm.startTime,this.ruleForm.endTime)
                 })
@@ -475,6 +475,9 @@ export default {
         display flex
         justify-content space-between
         flex-direction row
+        @media screen and (min-width:1900px) {
+            top 132px
+        }
         .ser_option1
             flex 2
             vertical-align top
@@ -509,8 +512,11 @@ export default {
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
         width 85%
+        @media screen and (min-width:1900px){
+            top 231px
+        }
     .page_divide
-        position absolute
+        position fixed
         right 7%
         bottom 20px
     .expert_num

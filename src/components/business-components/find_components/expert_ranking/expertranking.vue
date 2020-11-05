@@ -1,14 +1,9 @@
 <template>
     <div class="contain">
         <div class="header">
-            <div class="close-btn" style="cursor:pointer"  @click = "closefn">
-                <span class="text1 jiantou">&lt;</span>
-                <span class="text1 close">关闭</span>
-            </div>
-            <span class="text1 title">专家网诊榜</span>
-            <div class="time">
-                <Date2></Date2>
-            </div>
+            <Headnav
+            :lefttitle=this.lefttitle
+            ></Headnav>
         </div>
         <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="ser_standard">
             <el-form-item prop="name"  class="ser_option1">
@@ -88,10 +83,10 @@
     </div>
 </template>
 <script>
-import Date2 from "../../../ui-components/date/date"
+import Headnav from '../../headnav/headnav'
 export default {
     components:{
-        Date2
+        Headnav
     },
     data(){
         return{
@@ -130,7 +125,8 @@ export default {
             endDatePicker: this.processDate(),
             total:0,
             prompt: "", //进去页面先让字样为空
-            alldata:0
+            alldata:0,
+            lefttitle:'专家网诊榜'
         }
     },
     
@@ -143,7 +139,11 @@ export default {
     beforeMount(){
         //根据屏幕高度计算出应该放多少行数据
         var h = document.documentElement.clientHeight || document.body.clientHeight
-        let shengyu = h-168-90-40
+        if(h>1080||h==1080){
+            var shengyu = h-231-60-40
+        }else{
+            var shengyu = h-168-90-40
+        }
         this.pagesize = Math.round(shengyu/60)
         if(this.pagesize == 0){
             this.pagesize = 1
@@ -154,7 +154,7 @@ export default {
         // 刚进入页面的时候获取所有的数据
         this.$axios.fetchPost(
             "Admin/Api/get_expert_rank",
-            `mId=${this.userid}&page=${this.currentPage}&pagesize=${this.pagesize}&keyword=${this.ruleForm.name}&order=${this.ruleForm.sorttype}`
+            {mId:this.userid,page:this.currentPage,pagesize:this.pagesize,keyword:this.ruleForm.name,order:this.ruleForm.sorttype}
         ).then(res=>{
             // console.log(res)
             if(res.data.code == 200){
@@ -175,7 +175,7 @@ export default {
         sousuo(userid,currentPage,pagesize,name,startTime,endTime,sorttype){
             this.$axios.fetchPost(
                 "Admin/Api/get_expert_rank",
-                `mId=${userid}&page=${currentPage}&pagesize=${pagesize}&keyword=${name}&startdate=${startTime}&enddate=${endTime}&order=${sorttype}`
+                {mId:userid,page:currentPage,pagesize:pagesize,keyword:name,startdate:startTime,enddate:endTime,order:sorttype}
             ).then(res=>{
                 if(res.data.code == 200){
                     this.openLoading().close()
@@ -451,6 +451,9 @@ export default {
         justify-content space-between
         flex-direction row
         z-index 9999
+        @media screen and (min-width:1900px) {
+            top 132px
+        }
         .ser_option1
             flex 2
             vertical-align top
@@ -487,12 +490,15 @@ export default {
         -webkit-transform: translate(-50%, 0%);
         width 85%
         overflow-x hidden
+        @media screen and (min-width:1900px){
+            top 231px
+        }
     .page_divide
-        position absolute
+        position fixed
         right 7%
         bottom 20px
     .expert_num
-        position absolute
+        position fixed
         bottom 23px
         left 7.5%
         font-size 16px

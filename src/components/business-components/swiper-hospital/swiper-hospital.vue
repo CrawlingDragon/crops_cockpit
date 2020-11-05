@@ -20,7 +20,8 @@
               <span class="sp"><a
                   :href="baseUrl+selfUrl+'?areaname='+name+'&level='+level+'&isstore='+isstore"
                   target="_blank"
-                >&gt;</a></span></div>
+                >&gt;</a></span>
+            </div>
             <ul class="treat-number">
               <li>
                 <div class="swiper-box">
@@ -195,6 +196,12 @@ export default {
     width 100%
     border-bottom 1px solid #1b4e79
     position relative
+    @media screen and (min-width:1900px) {
+      line-height 50px
+      font-size 24px
+      font-weight Regular
+      font-family Microsoft YaHei 
+    }
     & > .detail
       display block
       color #fff
@@ -203,6 +210,10 @@ export default {
       height 40px
       text-overflow ellipsis
       white-space nowrap
+      @media screen and (min-width:1900px) {
+        height 50px
+        width 313px
+      }
     & > .sp
       line-height 40px
       font-size 22px
@@ -210,6 +221,10 @@ export default {
       right 0
       top 1px
       width 43px
+      @media screen and (min-width:1900px) {
+        line-height 50px
+        font-size 24px
+      }
       & > a
         color #7FB5F1
         display block
@@ -217,34 +232,15 @@ export default {
   .treat-number
     height 175px
     width 100%
+    @media screen and (min-width:1900px) {
+      height 208px
+    }
     li
       position relative
       padding-top 10px
-      .ads-label
-        margin-bottom 5px
-        position relative
-        padding-left 60px
-        font-size 12px
-        font-family SimSun
-        font-weight 400
-        color #7FB5F1
-        line-height 24px
-        &>.label
-          position absolute
-          left 0
-          top 0
-          width 60px
-          text-align justify
-          &:after
-            content ''
-            width 100%
-            height 0
-            margin 0
-            display inline-block
-            overflow hidden
-        &>.text
-          width 302px
-          letter-spacing 1px
+      @media screen and (min-width:1900px){
+        padding-top 18px
+      }
       .swiper-box
         width 232.5px
         height 150px
@@ -252,6 +248,10 @@ export default {
         text-align center
         overflow hidden
         font-size 14px
+        @media screen and (min-width:1900px){
+          width 359px
+          height 190px
+        }
         .swiper-container2
           width 100%
           height 100%
@@ -260,10 +260,18 @@ export default {
             width 232.5px
             height 150px
             margin-bottom 7px
+            @media screen and (min-width:1900px){
+              width 359px
+              height 190px
+            }
             img
               display block
               width 232.5px
               height 150px
+              @media screen and (min-width:1900px){
+                width 359px
+                height 190px
+              }
           .title
             font-size 14px
             color #7FB5F1

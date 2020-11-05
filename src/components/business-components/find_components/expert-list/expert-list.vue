@@ -61,7 +61,9 @@ export default {
     created(){
         this.$parent.app_loading=false
         this.userid = window.sessionStorage.getItem('curuserid')
+        console.log(window.sessionStorage.getItem('isstore'))
         this.getexpert_list(this.page)
+        
     },
     methods:{
         closefn(){
@@ -75,8 +77,10 @@ export default {
             const rLoading = this.openLoading();
             this.$axios.fetchPost(
                 "/Home/Expert/GetMpExpertList",
-                `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
+                {appId:this.userid,purview:"1",page:curpage,isstore:window.sessionStorage.getItem('isstore')}
+                // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
             ).then(res=>{
+                console.log(res)
                 rLoading.close()
                 if(res.data.code == "200"){
                     this.total = res.data.maxitem
@@ -105,10 +109,11 @@ export default {
 <style lang="stylus" scoped>
 .contain
     width: 100%;
-    height: 100%;
     @media screen and (max-width:1340px) 
         width:1340px
         height 768px
+    @media screen and (min-width:1341px) 
+        height 1080px
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     position relative

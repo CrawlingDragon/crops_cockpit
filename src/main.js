@@ -8,9 +8,8 @@ import axios from "./http";
 import router from "./router/index";
 import "./common/css/react.styl";
 import VueLazyLoad from "vue-lazyload";
-import "element-ui/lib/theme-chalk/index.css";
+// import "echarts/lib/component/category";
 import "swiper/dist/css/swiper.min.css";
-
 Vue.component("v-chart", ECharts);
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;

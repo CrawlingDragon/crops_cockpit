@@ -96,6 +96,12 @@ export default {
   margin 10px auto
   position relative
   padding-top 10px
+  @media screen and (min-width:1900px) {
+    width 816px
+    height 79px
+    margin 28px auto
+    padding-top 17px
+  }
   &:before
     content ''
     position absolute
@@ -104,6 +110,7 @@ export default {
     right 0
     height 3px
     background url('./border-top.png') no-repeat
+    background-size 100% 
     font-size 14px
   &:after
     content ''
@@ -113,6 +120,7 @@ export default {
     right 0
     height 3px
     background url('./border-bottom.png') no-repeat
+    background-size 100% 
     font-size 14px
   & > li
     display inline-block
@@ -124,8 +132,17 @@ export default {
       color #F79D1D
       font-size 21px
       font-weight 400
+      @media screen and (min-width:1900px) {
+        font-size 28px
+        font-weight Regular 
+      }
     h6
       font-size 12px
       color #7FB5F1
       margin-top 3px
+      @media screen and (min-width:1900px) {
+        font-size 16px
+        font-weight Regular
+        margin-top 5px
+      }
 </style>

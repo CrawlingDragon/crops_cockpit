@@ -12,15 +12,15 @@ export default {
   components: {}
 };
 </script>
-
 <style lang="stylus" scoped>
 
 #app
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-width: 1908px;
+  min-width: 1340px;
   color: #fff;
+  min-height: 768px;
   margin: 0 auto;
   width: 100%
   .create-isLoading

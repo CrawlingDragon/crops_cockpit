@@ -544,6 +544,9 @@ export default {
   position relative
   top 0px
   height 40px
+  @media screen and (min-width:1900px){
+    height 60px
+  }
   background rgba(44, 148, 243, 0.2)
   &:before
     content ''
@@ -571,11 +574,19 @@ export default {
     color #fff
     font-size 18px
     height 40px
+    @media screen and (min-width:1900px){
+      height 60px
+      font-size 19px
+    }
     padding-left 25px
     overflow hidden
     .bread_list
       font-size 14px
       line-height 40px
+      @media screen and (min-width:1900px){
+        line-height 60px
+        font-size 19px
+      }
       &:last-child
         .symbol
           display none
@@ -633,6 +644,9 @@ export default {
     text-align left
     display block
     transition all 0.3s ease-in
+    @media screen and (min-width:1900px) {
+      top 60px
+    }
     & > div
       padding-top 20px
       font-size 14px

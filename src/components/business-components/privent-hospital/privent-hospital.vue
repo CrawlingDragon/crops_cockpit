@@ -229,9 +229,19 @@ export default {
     left 10px
     width 404px
     height 309px
+    @media screen and (min-width:1900px) {
+      width 502px
+      height 385px
+      left 25px
+    }
   .map-hospital-box
     right 10px
     position absolute
     width 280px
     height 304px
+    @media screen and (min-width:1900px) {
+      width 332px
+      height 382px
+      right 25px
+    }
 </style>
