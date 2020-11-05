@@ -100,7 +100,7 @@ const routes = [
     path: "/index",
     name: "Index",
     component: () =>
-      import(/* webpackChunkName: "discussscore" */ "../views/index.vue"),
+      import(/* webpackChunkName: "discussscore" */ "../views/index/index.vue"),
     beforeEnter: (to, from, next) => {
       // console.log('from:', from.name)
       // console.log('to:', to)
@@ -199,6 +199,12 @@ const routes = [
       import(/* webpackChunkName: "channel" */ "../views/channel/channel.vue")
   },
   {
+    path: "/online_hospital_channel",
+    name: "online_hospital_channel",
+    component: () =>
+      import(/* webpackChunkName: "online_hospital_channel" */ "../views/online_hospital_channel/online_hospital_channel.vue")
+  },
+  {
     path: "/expert",
     name: "expert",
     component: () =>
@@ -281,12 +287,6 @@ const routes = [
       )
   },
   {
-
-    path: "/online_hospital_online",
-    name: "online_hospital_online",
-    component: () => import(/* webpackChunkName: "online_hospital_online" */ "../views/online_hospital_online/online_hospital_online.vue")
-  },
-  {
     path: "/me",
     name: "me",
     component: () => import(/* webpackChunkName: "me" */ "../views/me/me.vue")
@@ -297,6 +297,14 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "online_detail" */ "../views/online_detail/online_detail.vue"
+      )
+  },
+  {
+    path: "/find_detail",
+    name: "find_detail",
+    component: () =>
+      import(
+        /* webpackChunkName: "find_detail" */ "../views/find_detail/find_detail.vue"
       )
   },
   {
@@ -347,6 +355,13 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "vip_hospital" */ "../views/vip_hospital/vip_hospital.vue"
+      )
+  },
+  {
+    path: "/second_wang",
+    component: () =>
+      import(
+        /* webpackChunkName: "second_wang" */ "../views/second_wang/second_wang.vue"
       )
   },
   {

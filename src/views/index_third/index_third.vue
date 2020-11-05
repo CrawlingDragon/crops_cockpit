@@ -5,15 +5,15 @@
     </Header> -->
     <div class="container-box">
       <div class="left-bar">
-        <div class="item item1">
+        <div class="item item1" @click="goToOnline">
           <div class="icon"></div>
           <div>网诊</div>
         </div>
-        <div class="item item2">
+        <div class="item item2" @click="goToExpert">
           <div class="icon"></div>
           <div>专家</div>
         </div>
-        <div class="item item3">
+        <div class="item item3" @click="goToVideo">
           <div class="icon"></div>
           <div>培训视频</div>
         </div>
@@ -28,9 +28,10 @@
       </div>
       <div class="right-bar">
         <Online :list="answerlist"></Online>
+        <!-- <Empty></Empty> -->
       </div>
     </div>
-    <Nav :number="20" :index="2"></Nav>
+    <Nav :index="2"></Nav>
   </div>
 </template>
 <script>
@@ -40,9 +41,10 @@ import SwiperBox from "@/components/swiper_box/swiper_box";
 import Expert from "@/components/expert_ranking_list/expert_ranking_list";
 import Online from "@/components/online_list/online_list";
 import { mapState } from "vuex";
+import Empty from "@/components/empty/empty";
 export default {
   name: "index_third",
-  components: { Nav, SwiperBox, Expert, Online },
+  components: { Nav, SwiperBox, Expert, Online, Empty },
   props: {},
   data() {
     return {
@@ -61,6 +63,7 @@ export default {
   destroyed() {},
   methods: {
     getHospitalIndexData() {
+      // 获取首页数据
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", { appId: this.appId })
         .then(res => {
@@ -72,6 +75,21 @@ export default {
             this.answerlist = data.answerlists;
           }
         });
+    },
+    goToOnline() {
+      this.$router.push({
+        path: "/second_wang"
+      });
+    },
+    goToExpert() {
+      this.$router.push({
+        path: "/expert"
+      });
+    },
+    goToVideo() {
+      this.$router.push({
+        path: "/video"
+      });
     }
   }
 };
@@ -102,6 +120,7 @@ export default {
         font-size 36px
         flex-direction column
         justify-content center
+        cursor pointer
       .item1
         height 370px
         background #2494DE

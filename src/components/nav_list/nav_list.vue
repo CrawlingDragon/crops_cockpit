@@ -43,7 +43,7 @@ export default {
       switch (where) {
         case "频道":
           this.$router.push({
-            path: "/channel"
+            path: "/online_hospital_channel"
           });
           break;
         case "首页":
@@ -53,7 +53,7 @@ export default {
           break;
         case "网诊":
           this.$router.push({
-            path: "/online_hospital_online"
+            path: "/second_wang"
           });
           break;
         case "发现":

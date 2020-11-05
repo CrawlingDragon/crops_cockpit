@@ -1,11 +1,41 @@
 <template>
   <div class="channel-container">
     <ul class="channel-ul">
-      <li class="langer li1">
+      <li class="langer li1" @click="channelRoute('网诊')">
         <div class="icon i1"></div>
         <p>网诊</p>
       </li>
-      <li class="li2">
+      <li class="langer li5" @click="channelRoute('专家')">
+        <div class="icon i5"></div>
+        <p>专家</p>
+      </li>
+      <li class="langer video-li" @click="channelRoute('培训视频')">
+        <div class="video-icon icon"></div>
+        <p>培训视频</p>
+      </li>
+      <li class="langer message-li" @click="channelRoute('资讯')">
+        <div class="message-icon icon"></div>
+        <p>资讯</p>
+      </li>
+      <li
+        class="langer bin-li"
+        style="background:#EB942D"
+        @click="channelRoute('病虫害图库')"
+      >
+        <div class="icon bin-icon"></div>
+        <p>病虫害图库</p>
+      </li>
+      <li class="down-li" @click="channelRoute('已下载的视频')">
+        <div>
+          <div class="down-icon"></div>
+          已下载的视频
+        </div>
+      </li>
+      <li class="li9" style="margin-right:0;margin-left:20px;background:#fff">
+        <div class="icon i9">二维码</div>
+      </li>
+
+      <!-- <li class="li2">
         <div class="icon i2"></div>
         <p>坐诊</p>
       </li>
@@ -23,20 +53,12 @@
         <div class="icon i4"></div>
         <p>测土配方</p>
       </li>
-      <li class="li5">
-        <div class="icon i5"></div>
-        <p>专家</p>
-      </li>
+
       <li class="li6">
         <div class="icon i6"></div>
         <p>会员</p>
       </li>
-      <li class="no-icon">
-        <p>资讯</p>
-      </li>
-      <li class="no-icon">
-        <p>病虫害图库</p>
-      </li>
+
       <li class="langer li7">
         <div class="icon i7"></div>
         <p>下级医院</p>
@@ -47,13 +69,7 @@
       </li>
       <li class="li9">
         <div class="icon i9">二维码</div>
-      </li>
-      <li class="no-icon">
-        <p>培训视频</p>
-      </li>
-      <li class="no-icon">
-        <p>已下载的视频</p>
-      </li>
+      </li> -->
     </ul>
     <Nav></Nav>
   </div>
@@ -62,7 +78,7 @@
 // import headers from "@/components/headers/headers";
 import Nav from "@/components/nav_list/nav_list";
 export default {
-  name: "channel",
+  name: "online_hospital_channel",
   components: { Nav },
   props: {},
   data() {
@@ -72,7 +88,42 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    channelRoute(where) {
+      switch (where) {
+        case "网诊":
+          this.$router.push({
+            path: "/second_wang"
+          });
+          break;
+        case "专家":
+          this.$router.push({
+            path: "/online_hospital_online"
+          });
+          break;
+        case "培训视频":
+          this.$router.push({
+            path: "/online_hospital_online"
+          });
+          break;
+        case "资讯":
+          this.$router.push({
+            path: "/online_hospital_online"
+          });
+          break;
+        case "网病虫害图库":
+          this.$router.push({
+            path: "/online_hospital_online"
+          });
+          break;
+        case "已下载的视频":
+          this.$router.push({
+            path: "/online_hospital_online"
+          });
+          break;
+      }
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
@@ -80,40 +131,67 @@ export default {
   width 100%
   max-width 1900px
   margin 0 auto
+  padding 100px 180px
   .channel-ul
-    margin 20px 88px
     text-align left
     display flex
     flex-wrap wrap
     li
-      height 230px
+      height 270px
       margin-bottom 12px
-      margin-right 10px
+      margin-right 20px
       align-items center
-      justify-content space-around
-      width 280px
+      justify-content center
+      width 240px
       box-sizing border-box
       display flex
       font-size 36px
       color #FFFFFF
       cursor pointer
+      &.video-li
+        background #00DBC4
+      &.down-li
+        background #016AD5
+      .icon
+        margin-right 30px
+      .video-icon
+        width 96px
+        height 72px
+        background url('./17.png') no-repeat
+        background-size 100%
+        background-position center
+      .down-icon
+        width 94px
+        height 63px
+        background url('./23.png') no-repeat
+        background-size 100%
+        background-position center
+        margin 0 auto 18px
       &:hover
         outline 3px solid #FF6600
         box-shadow 0px 1px 26px #f60
-      &:nth-child(5n)
+      &:nth-child(3n)
         margin-right 0
       &.langer
-        width 568px
+        width 500px
       &.no-icon
         background #091D43
         border 2px solid rgba(7, 47, 101, 1)
-        color #CDCDCD
+        color #fff
       &.li1
         background #2393DD
         .icon
           width 80px
           height 95px
           background url('./9.png') no-repeat
+          background-size 100%
+          background-position center
+      &.bin-li
+        background #EB942D
+        .bin-icon
+          width 93px
+          height 76px
+          background url('./22.png') no-repeat
           background-size 100%
           background-position center
       &.li2
@@ -132,16 +210,16 @@ export default {
           background url('./11.png') no-repeat
           background-size 100%
           background-position center
-      &.li4
-        background #01D9AD
-        .icon
-          width 80px
-          height 95px
-          background url('./14.png') no-repeat
+      &.message-li
+        background #47C303
+        .message-icon
+          width 71px
+          height 83px
+          background url('./18.png') no-repeat
           background-size 100%
           background-position center
       &.li5
-        background #FF6500
+        background #F2600C
         .icon
           width 96px
           height 96px
@@ -149,7 +227,7 @@ export default {
           background-size 100%
           background-position center
       &.li6
-        background #EBB701
+        background #EB942D
         .icon
           width 80px
           height 95px
@@ -174,5 +252,5 @@ export default {
           background-size 100%
           background-position center
       &.li9
-        width 230px
+        width 240px
 </style>

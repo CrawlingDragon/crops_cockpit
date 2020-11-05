@@ -2,7 +2,7 @@
   <div class="online_list-wrap">
     <div class="title">最新网诊 ></div>
     <ul class="online-ul">
-      <li v-for="item in list" :key="item.tid">
+      <li v-for="item in list" :key="item.tid" @click="goToDetail">
         <div class="top">
           <span class="item-title">{{ item.title }}</span>
           <span class="time">{{ item.showtime }}</span>
@@ -33,7 +33,13 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    goToDetail() {
+      this.$router.push({
+        path: "/online_detail"
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
@@ -41,7 +47,7 @@ export default {
   text-align left
   .title
     font-size 32px
-    margin-bottom 15px
+    margin-bottom 30px
     color #FFFDFD
     line-height 32px
   .online-ul
@@ -49,8 +55,7 @@ export default {
     border-left none
     border-bottom none
     li
-      height 157px
-      // border-bottom 2px solid #072F65
+      height 154px
       background #061F50
       padding 20px
       cursor pointer

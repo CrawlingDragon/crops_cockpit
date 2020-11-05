@@ -1,9 +1,9 @@
 <template>
-  <div>online_hospital_online</div>
+  <div class="online_item-container"></div>
 </template>
 <script>
 export default {
-  name: "online_hospital_online",
+  name: "online_item",
   components: {},
   props: {},
   data() {

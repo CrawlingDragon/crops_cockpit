@@ -1,7 +1,7 @@
 <template>
-  <div class="swiper-box-container">
-    <el-carousel class="swiper" indicator-position="" trigger="click">
-      <el-carousel-item v-for="item in list" :key="item.id">
+  <div class="swiper-box-container" @click="goToMessageDetail">
+    <el-carousel class="swiper" trigger="click" @change="changeItem">
+      <el-carousel-item v-for="item in list" :key="item.id" :name="item.id">
         <img :src="item.thumb" alt="" class="item-img" />
         <div class="text">{{ item.title }}</div>
       </el-carousel-item>
@@ -22,13 +22,31 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      activeTid: 0
+    };
   },
   computed: {},
-  watch: {},
+  watch: {
+    list(newVal) {
+      if (newVal.length != 0) {
+        this.activeTid = this.list[0].catid;
+      }
+    }
+  },
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    changeItem(item, i1) {
+      this.activeTid = this.list[item].catid;
+    },
+    goToMessageDetail() {
+      this.$router.push({
+        path: "/find_detail",
+        query: { tid: this.activeTid }
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
