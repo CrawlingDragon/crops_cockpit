@@ -2,14 +2,12 @@
   <div class="online_list-wrap">
     <div class="title">最新网诊 ></div>
     <ul class="online-ul">
-      <li v-for="item in list" :key="item.tid" @click="goToDetail">
+      <li v-for="item in 5" :key="item">
         <div class="top">
-          <span class="item-title">{{ item.title }}</span>
-          <span class="time">{{ item.showtime }}</span>
+          <span class="item-title">黄桂花的水稻水稻水稻问题</span>
+          <span class="time">05-24 12:00</span>
         </div>
-        <div class="text">
-          {{ item.description }}
-        </div>
+        <div class="text">南瓜开花结果都没问题，但就是长不 大，一般长的约10公分后就从瓜一般长的约10公分后就从瓜一般长的约10公分后就从瓜</div>
       </li>
     </ul>
   </div>
@@ -18,14 +16,7 @@
 export default {
   name: "online_list",
   components: {},
-  props: {
-    list: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    }
-  },
+  props: {},
   data() {
     return {};
   },
@@ -33,13 +24,7 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {
-    goToDetail() {
-      this.$router.push({
-        path: "/online_detail"
-      });
-    }
-  }
+  methods: {}
 };
 </script>
 <style lang="stylus" scoped>
@@ -47,7 +32,7 @@ export default {
   text-align left
   .title
     font-size 32px
-    margin-bottom 30px
+    margin-bottom 15px
     color #FFFDFD
     line-height 32px
   .online-ul
@@ -55,7 +40,8 @@ export default {
     border-left none
     border-bottom none
     li
-      height 154px
+      height 157px
+      // border-bottom 2px solid #072F65
       background #061F50
       padding 20px
       cursor pointer

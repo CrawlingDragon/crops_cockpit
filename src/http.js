@@ -1,7 +1,7 @@
 import axios from "axios";
 import QS from "qs";
 
-axios.defaults.timeout = 18000;
+axios.defaults.timeout = 8000;
 axios.defaults.headers.post["Content-Type"] =
   "application/x-www-form-urlencoded;charset=utf-8";
 axios.defaults.baseURL =

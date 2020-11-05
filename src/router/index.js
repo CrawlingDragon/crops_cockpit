@@ -1,191 +1,111 @@
 /* eslint-disable semi */
 import Vue from "vue";
 import VueRouter from "vue-router";
-import store from "../store/index"
-import axios from "../http"
 
 Vue.use(VueRouter);
-//* 以下是驾驶舱新增的
+//*以下是驾驶舱新增的
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err);
+  return originalPush.call(this, location).catch((err) => err);
 };
 //*
 const routes = [
-  //* 以下是驾驶舱新增的
+  //*以下是驾驶舱新增的
   {
-    path: "/",
+    path: '/',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
   {
-    path: "/findindex",
+    path:'/findindex',
     component: () =>
-      import(/* webpackChunkName: "findindex" */ "../components/business-components/find_components/find-index/find-index")
+      import(/* webpackChunkName: "findindex" */ "../views/find_components/find-index/find-index")
   },
   {
-    path: "/home",
-    name: "home",
+    path: '/home',
+    name: 'home',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
   {
-    path: "/nexthospital",
-    name: "nexthospital",
+    path:'/nexthospital',
+    name:'nexthospital',
     component: () =>
-      import(/* webpackChunkName: "nexthospital" */ "../components/business-components/find_components/nexthospital/nexthospital.vue")
+      import(/* webpackChunkName: "nexthospital" */ "../views/find_components/nexthospital/nexthospital.vue")
   },
   {
-    path: "/expertlist",
-    name: "expertlist",
+    path:'/expertlist',
+    name:'expertlist',
     component: () =>
-      import(/* webpackChunkName: "expertlist" */ "../components/business-components/find_components/expert-list/expert-list.vue")
+      import(/* webpackChunkName: "expertlist" */ "../views/find_components/expert-list/expert-list.vue")
   },
   {
-    path: "/hospitalsort",
-    name: "Hospitalsort",
+    path:'/hospitalsort',
+    name:'Hospitalsort',
     component: () =>
-      import(/* webpackChunkName: "Hospitalsort" */ "../components/business-components/find_components/hospitalsort/hospitalsort"),
-    children: [
+      import(/* webpackChunkName: "Hospitalsort" */ "../views/find_components/hospitalsort/hospitalsort"),
+    'children':[
       {
-        path: "/hospitalsort",
-        component: () =>
-          import(/* webpackChunkName: "WebForCounty" */ "../views/web-for-country.vue"),
-        meta: {
-          keepAlive: true
-        },
+          'path':'/hospitalsort',
+          component: () =>
+            import(/* webpackChunkName: "WebForCounty" */ "../views/find_components/defaultsort/defaultsort.vue"),
+          'meta':{
+            keepAlive:true
+          },
       },
       {
-        path: "/defaultsort",
-        name: "defaultsort",
-        component: () =>
-          import(/* webpackChunkName: "defaultsort" */ "../components/business-components/find_components/defaultsort/defaultsort.vue"),
-        meta: {
-          keepAlive: true
-        },
+          'path':'/defaultsort',
+          'name':'defaultsort',
+          component: () =>
+            import(/* webpackChunkName: "defaultsort" */ "../views/find_components/defaultsort/defaultsort.vue"),
+          'meta':{
+            keepAlive:true
+          },
+     },
+      {
+          'path':'/multiplesort',
+          'name':'multiplesort',
+          component: () =>
+            import(/* webpackChunkName: "multiplesort" */ "../views/find_components/multiplesort/multiplesort.vue"),
+          'meta':{
+            keepAlive:true
+          },
       },
       {
-        path: "/multiplesort",
-        name: "multiplesort",
-        component: () =>
-          import(/* webpackChunkName: "multiplesort" */ "../components/business-components/find_components/multiplesort/multiplesort.vue"),
-        meta: {
-          keepAlive: true
-        },
-      },
-      {
-        path: "/selectsort",
-        name: "selectsort",
-        component: () =>
-          import(/* webpackChunkName: "selectsort" */ "../components/business-components/find_components/selectsort/selectsort.vue"),
-        meta: {
-          keepAlive: true
-        },
+          'path':'/selectsort',
+          'name':'selectsort',
+          component: () =>
+            import(/* webpackChunkName: "selectsort" */ "../views/find_components/selectsort/selectsort.vue"),
+          'meta':{
+            keepAlive:true
+          },
       }
-    ]
+  ]
   },
   {
-    path: "/expertranking",
-    name: "Expertranking",
+    path:'/expertranking',
+    name:'Expertranking',
     component: () =>
-      import(/* webpackChunkName: "expertranking" */ "../components/business-components/find_components/expert_ranking/expertranking.vue")
+      import(/* webpackChunkName: "expertranking" */ "../views/find_components/expert_ranking/expertranking.vue")
   },
   {
-    path: "/discussscore",
-    name: "Discussscore",
+    path:'/discussscore',
+    name:'Discussscore',
     component: () =>
-      import(/* webpackChunkName: "discussscore" */ "../components/business-components/find_components/discuss_score/discussscore.vue")
+      import(/* webpackChunkName: "discussscore" */ "../views/find_components/discuss_score/discussscore.vue")
   },
   {
-    path: "/index",
-    name: "Index",
-    component: () =>
-      import(/* webpackChunkName: "discussscore" */ "../views/index/index.vue"),
-    beforeEnter: (to, from, next) => {
-      // console.log('from:', from.name)
-      // console.log('to:', to)
-      // const userName = store.state.sessionUsername ? store.state.sessionUsername : window.sessionStorage.getItem("userName")
-      // const password = store.state.sessionPassword ? store.state.sessionPassword : window.sessionStorage.getItem("passWord")
-      // if (to.name == "Index" || from.path == "/") {
-      //   axios
-      //     .fetchPost(
-      //       "Home/Login/login",
-      //       { username: userName, password: password }
-      //     ).then(res => {
-      //       if (res.data.code == 200) {
-      //         const userid = res.data.data.userid;
-      //         const level = res.data.data.level;
-      //         let secondLevel = 0;
-      //         if (level >= 3) {
-      //           secondLevel = level - 1;
-      //         } else {
-      //           secondLevel = level;
-      //         }
-      //         if (level <= 3) {
-      //           store.commit("getPicAddress", res.data.data.address);
-      //           window.sessionStorage.setItem("getPicAddress", JSON.stringify(res.data.data.address))
-      //         }
-      //         const arr = res.data.data.area;
-      //         const areaname = res.data.data.areaname;
-      //         const defaultName = res.data.data.default;
-      //         const letter = res.data.data.letter;
-      //         // console.log(arr,areaname,defaultName,letter)
-      //         window.sessionStorage.setItem("letter", letter)
-      //         store.commit("getDefaultProvince", areaname); // 获取全网页地址
-      //         store.commit("getGlobalLevel", level); // 获取全网页等级
-      //         store.commit("getDefaultCity", defaultName); // 获取二级方块地址
-      //         store.commit("getSecondGlobalLevel", secondLevel); // 获取二级方块等级
-      //         store.commit("getDefaultAddressArr", arr); // 获取默认导航列表
-      //         store.commit("getGlobalFstusername", res.data.data.Fstusername); // 获取益农通账号
-      //         store.commit("getGlobalFstuserpw", res.data.data.Fstuserpw); // 获取益农通密码
-      //         store.commit("getGlobalFstRoomid", res.data.data.FstRoomid); // 获取益农通id
-      //         store.commit("getAccountName", res.data.data.areaname);
-      //         store.commit("getLoginId", level);
-      //         store.commit("getBreadArr", res.data.data.nav);
-      //         window.sessionStorage.setItem("getDefaultProvince", areaname)// 获取全网页地址
-      //         window.sessionStorage.setItem("getGlobalLevel", level)// 获取全网页等级
-      //         window.sessionStorage.setItem("getDefaultAddressArr", JSON.stringify(res.data.data.area))// 获取默认导航列表
-      //         window.sessionStorage.setItem("getSecondGlobalLevel", secondLevel)// 获取二级方块等级
-      //         window.sessionStorage.setItem("getDefaultCity", res.data.data.default) // 获取二级方块地址
-      //         window.sessionStorage.setItem("getGlobalFstusername", res.data.data.Fstusername)// 获取益农通账号
-      //         window.sessionStorage.setItem("getGlobalFstuserpw", res.data.data.Fstuserpw)// 获取益农通密码
-      //         window.sessionStorage.setItem("getGlobalFstRoomid", res.data.data.FstRoomid); // 获取益农通id
-      //         next({
-      //           query: {
-      //             userid: userid,
-      //             areaname: areaname,
-      //             level: level,
-      //             letter: letter
-      //           }
-      //         });
-      //       }
-      //     })
-      // } else {
-      //   store.commit("getDefaultAddressArr", JSON.parse(window.sessionStorage.getItem("getDefaultAddressArr"))); // 获取默认导航列表
-      //   store.commit("getGlobalLevel", window.sessionStorage.getItem("getGlobalLevel")); // 获取全网页等级
-      //   store.commit("getDefaultProvince", window.sessionStorage.getItem("getDefaultProvince")); // 获取全网页地址
-      //   store.commit("getLoginId", window.sessionStorage.getItem("getGlobalLevel"));// 获取当前登录者的id
-      //   store.commit("getDefaultCity", window.sessionStorage.getItem("getDefaultCity")); // 获取二级方块地址
-      //   // store.commit('getSecondGlobalLevel', window.sessionStorage.getItem('getSecondGlobalLevel')); // 获取二级方块等级
-      //   store.commit("getGlobalFstusername", window.sessionStorage.getItem("getGlobalFstusername")); // 获取益农通账号
-      //   store.commit("getGlobalFstuserpw", window.sessionStorage.getItem("getGlobalFstuserpw")); // 获取益农通密码
-      //   store.commit("getGlobalFstRoomid", window.sessionStorage.getItem("getGlobalFstRoomid")); // 获取益农通id
-      //   // store.commit('getBreadArr',JSON.parse(window.sessionStorage.getItem('BreadArr')))//获取面包屑导航
-      //   const level = window.sessionStorage.getItem("getGlobalLevel")
-      //   let secondLevel = 0;
-      //   if (level >= 3) {
-      //     secondLevel = level - 1;
-      //   } else {
-      //     secondLevel = level;
-      //   }
-      //   store.commit("getSecondGlobalLevel", secondLevel); // 获取二级方块等级
-      //   if (level <= 3) {
-      //     store.commit("getPicAddress", JSON.parse(window.sessionStorage.getItem("getPicAddress")));
-      //   }
-      //   next()
-      // }
-    }
+    path: '/indexFour',
+    name: 'IndexFour',
+    component: () =>import(/* webpackChunkName: "index */ "../views/index_four/index.vue"),
   },
+  //** */
+  // {
+  //   path: "/",
+  //   name: "indexFirst",
+  //   component: () =>
+  //     import(/* webpackChunkName: "index_first" */ "../views/index_first/index_first.vue")
+  // },
   {
     path: "/indexFirst",
     name: "indexFirst",
@@ -197,12 +117,6 @@ const routes = [
     name: "channel",
     component: () =>
       import(/* webpackChunkName: "channel" */ "../views/channel/channel.vue")
-  },
-  {
-    path: "/online_hospital_channel",
-    name: "online_hospital_channel",
-    component: () =>
-      import(/* webpackChunkName: "online_hospital_channel" */ "../views/online_hospital_channel/online_hospital_channel.vue")
   },
   {
     path: "/expert",
@@ -300,14 +214,6 @@ const routes = [
       )
   },
   {
-    path: "/find_detail",
-    name: "find_detail",
-    component: () =>
-      import(
-        /* webpackChunkName: "find_detail" */ "../views/find_detail/find_detail.vue"
-      )
-  },
-  {
     path: "/search",
     name: "search",
     component: () =>
@@ -355,13 +261,6 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "vip_hospital" */ "../views/vip_hospital/vip_hospital.vue"
-      )
-  },
-  {
-    path: "/second_wang",
-    component: () =>
-      import(
-        /* webpackChunkName: "second_wang" */ "../views/second_wang/second_wang.vue"
       )
   },
   {

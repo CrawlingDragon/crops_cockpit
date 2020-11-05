@@ -1,35 +1,31 @@
 <template>
-  <div class="foot-wrap">
-    <ul class="nav">
-      <div class="number" v-if="number != 0">共 {{ number }} 条数据</div>
-      <li :class="{ active: index == 1 }" @click="changeRouter('频道')">
-        <span>频道</span>
-      </li>
-      <li :class="{ active: index == 2 }" @click="changeRouter('首页')">
-        <span>首页</span>
-      </li>
-      <li :class="{ active: index == 3 }" @click="changeRouter('网诊')">
-        <span>网诊</span>
-      </li>
-      <li :class="{ active: index == 4 }" @click="changeRouter('发现')">
-        <span>发现</span>
-      </li>
-      <li :class="{ active: index == 5 }" @click="changeRouter('我的')">
-        <span>我的</span>
-      </li>
-    </ul>
-  </div>
+  <ul class="nav">
+    <li :class="{'active':index == '1'}">
+      <span>频道</span>
+    </li>
+    <li :class="{'active':index == '2'}">
+      <span>首页</span>
+    </li>
+    <li :class="{'active':index == '3'}">
+      <span>医院</span>
+    </li>
+    <li :class="{'active':index == '4'}">
+      <span>诊疗</span>
+    </li>
+    <li :class="{'active':index == '5'}">
+      <span>发现</span>
+    </li>
+    <li :class="{'active':index == '6'}">
+      <span>我的</span>
+    </li>
+  </ul>
 </template>
 <script>
 export default {
   name: "nav_list",
   components: {},
   props: {
-    index: { type: Number, default: 1 },
-    number: {
-      type: Number,
-      default: 0
-    }
+    index: { type: String, default: "1" },
   },
   data() {
     return {};
@@ -38,75 +34,34 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {
-    changeRouter(where) {
-      switch (where) {
-        case "频道":
-          this.$router.push({
-            path: "/online_hospital_channel"
-          });
-          break;
-        case "首页":
-          this.$router.push({
-            path: "/index_third"
-          });
-          break;
-        case "网诊":
-          this.$router.push({
-            path: "/second_wang"
-          });
-          break;
-        case "发现":
-          this.$router.push({
-            path: "/find"
-          });
-          break;
-        case "我的":
-          this.$router.push({
-            path: "/me"
-          });
-          break;
-      }
-    }
-  }
+  methods: {},
 };
 </script>
 <style lang="stylus" scoped>
-.foot-wrap
+.nav
+  padding 40px 0
+  width 75%
+  margin 0 auto
+  text-align center
   position fixed
-  height 135px
-  background #080f3e
+  left 50%
+  transform translateX(-50%)
   bottom 0
-  left 0
-  right 0
-  z-index 22
-  .nav
-    width 1900px
-    margin 0 auto
-    text-align center
-    position relative
-    height 100%
-    .number
-      position absolute
-      padding-left 40px
-      margin-top 20px
-      font-size 20px
-      text-align left
-      color: #C5C5C5;
-    & > li
-      margin-top 30px
-      display inline-block
-      font-size 44px
-      font-family SimHei
-      font-weight 400
-      color rgba(197, 197, 197, 1)
-      cursor pointer
-      &:hover
-        span
-          color #FF6500
+  & > li
+    display inline-block
+    font-size 44px
+    font-family SimHei
+    font-weight 400
+    color rgba(197, 197, 197, 1)
+    cursor pointer
+    padding-bottom 10px
+    span
+      padding 0 40px 10px
+    &.active
       span
-        padding 0 40px 10px
-      &.active
-        span
-          color #FF6500
+        height 6px
+        background url('./2.png') no-repeat
+        background-position bottom center
+        background-size 100% 6px
+        color #FF6500
 </style>
