@@ -2,7 +2,6 @@
   <div class="map-wrap">
     <div
       id="mapId"
-      :style="{width:'295px',height:'330px'}"
     ></div>
     <div
       class="showMapData"
@@ -242,6 +241,13 @@ export default {
 <style lang="stylus" scoped>
 .map-wrap
   position relative
+  #mapId
+    width 295px
+    height 330px
+    @media screen and (min-width:1900px) {
+      width 503px
+      height 385px
+    }
   .showMapData
     padding 5px
     background rgba(0, 0, 0, 0.5)

@@ -83,6 +83,11 @@ export default {
     line-height 40px
     padding-left 20px
     border-bottom 1px solid #1b4e79
+    @media screen and (min-width:1900px){
+      height 50px
+      line-height 50px
+      font-size 24px
+    }
     &>span
       line-height 40px
       font-size 24px
@@ -96,11 +101,17 @@ export default {
     margin 12px 0 10px 17px
   .nums
     padding-top 13px
+    @media screen and (min-width:1900px) {
+      padding-top 18px
+    }
     & > li
       font-size 0
       padding-left 20px
       margin-bottom 3px
       position relative
+      @media screen and (min-width:1900px){
+        padding-left 28px
+      }
       .num
         width 39px
         font-size 14px
@@ -108,6 +119,10 @@ export default {
         display inline-block
         vertical-align middle
         margin-right 10px
+        @media screen and (min-width:1900px){
+          margin-right 40px
+          font-size 16px
+        }
       .person-img
         display inline-block
         vertical-align middle
@@ -117,6 +132,11 @@ export default {
         background #7FB5F1
         margin 0 5px 0 5px
         overflow hidden
+        @media screen and (min-width:1900px) {
+          width 36px
+          height 36px
+          margin 0 24px auto auto
+        }
         & > img
           width 100%
       .name
@@ -128,6 +148,10 @@ export default {
         width 88px
         overflow hidden
         white-space nowrap
+        @media screen and (min-width:1900px) {
+          font-size 16px
+          margin-left 20px
+        }
       .total-num
         display inline-block
         vertical-align middle
@@ -137,4 +161,10 @@ export default {
         right 13px
         top 50%
         transform translateY(-50%)
+        @media screen and (min-width:1900px) {
+          right 27px
+          font-size 16px
+          color #FFFFFF
+          font-family Microsoft YaHei
+        }
 </style>

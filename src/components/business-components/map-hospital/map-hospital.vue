@@ -98,6 +98,12 @@ export default {
     font-size 18px
     font-weight 400
     margin-bottom 20px
+    @media screen and (min-width:1900px) {
+      font-size 24px
+      margin-top 21px
+      margin-left 24px
+      font-weight Regular 
+    }
   .chart
     width 100%
     height 166px
@@ -108,15 +114,26 @@ export default {
       text-align center
       float left
       margin-bottom 10px
+      @media screen and (min-width:1900px) {
+        margin-bottom 20px
+      }
       .num
         font-size 14px
         font-weight bold
         color rgba(255, 255, 255, 1)
         line-height 16px
         margin-bottom 7px
+        @media screen and (min-width:1900px) {
+          font-size 18px
+          margin-bottom 10px
+        }
       .name
         color #7FB5F1
         font-size 12px
+        @media screen and (min-width:1900px) {
+          font-size 16px
+          font-weight Regular
+        }
 .nodata
   margin-top 50px
 </style>

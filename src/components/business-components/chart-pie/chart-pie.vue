@@ -1,7 +1,6 @@
 <template>
   <div
     id="pie"
-    :style="wh"
   >
   </div>
 </template>
@@ -73,7 +72,7 @@ export default {
           {
             name: "地区",
             type: "pie",
-            radius: "60%",
+            radius: "70%",
             center: ["50%", "50%"],
             color: colors,
             data: that.pieData
@@ -98,4 +97,11 @@ export default {
 <style lang="stylus" scoped>
 div
   color #fff
+#pie
+  width 258px
+  height 166px
+  @media screen and (min-width:1900px) {
+    width 350px
+    height 166px
+  }
 </style>

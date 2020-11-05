@@ -2,7 +2,7 @@
   <div
     class="pie-wrap"
     id="countryPie"
-    style="width:100%;height:100%"
+    style="width:100%;height:100%;"
   >
   </div>
 </template>
@@ -56,4 +56,7 @@ export default {
 .pie-wrap
   width 100%
   height 100%
+  @media screen and (min-width:1900px) {
+    padding-left:15px
+  }
 </style>

@@ -9,10 +9,9 @@
 <script>
 export default {
   name: "app",
-  components: {}
+  components: {},
 };
 </script>
-
 <style lang="stylus" scoped>
 
 #app
@@ -20,15 +19,15 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  min-width: 1908px;
+  min-width: 1340px;
   color: #fff;
-  min-height: 1079px;
+  min-height: 768px;
   margin: 0 auto;
   width: 100%
   .create-isLoading
     font-size 30px
     .el-loading-spinner
         .el-loading-text
-          font-size 20px !important
+          font-size 20px !important 
           margin-top 10px
 </style>

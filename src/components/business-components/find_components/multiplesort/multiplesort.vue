@@ -40,7 +40,7 @@ export default {
         this.userid = window.sessionStorage.getItem('curuserid')
         this.$axios.fetchPost(
             "/Home/Manage/GetManageMpDataList",
-            `appId=${this.userid}&type=${"default"}&ordertag=${"listorder"}&storetag=${window.sessionStorage.getItem('isstore')}&areatag=${""}`
+            {appId:this.userid,type:"default",ordertag:"listorder",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
         ).then(res=>{
             if(res.data.code == "200"){
                 this.hospitalinfo = res.data.data.lists
@@ -49,7 +49,13 @@ export default {
         })
     },
     mounted(){
-        this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+        //计算出滚动区域的高度
+        var h = document.documentElement.clientHeight || document.body.clientHeight
+        if(h>1080||h==1080){
+            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025)}px`
+        }else{
+            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+        }
     },
     methods:{
         //内容高度自适应,获取滚动区域高度
@@ -62,7 +68,7 @@ export default {
             this.$axios.fetchPost(
                 //ordertag代表综合排序
                 "/Home/Manage/GetManageMpDataList",
-                `appId=${this.userid}&type=${"default"}&ordertag=${"listorder"}&storetag=${window.sessionStorage.getItem('isstore')}&areatag=${""}`
+                {appId:this.userid,type:"default",ordertag:"listorder",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
             ).then(res=>{
                 if(res.data.code == "200"){
                     this.hospitalinfo = res.data.data.lists
@@ -76,6 +82,9 @@ export default {
 .contain
     position relative
     top 70px
+    @media screen and (min-width:1900px){
+        top 210px
+    }
     .hospitalinfo
         padding-left 3%
         overflow scroll

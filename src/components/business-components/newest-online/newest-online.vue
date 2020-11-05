@@ -138,6 +138,13 @@ export default {
     padding-left 20px
     text-align left
     border-bottom 1px solid #1b4e79
+    @media screen and (min-width:1900px) {
+      height 50px
+      font-size 24px
+      line-height 50px
+      font-weight Regular
+      font-family MicrosoftYaHei
+    }
     &>span
       line-height 40px
       font-size 24px
@@ -152,6 +159,9 @@ export default {
   .dia-ul
     margin-top 20px
     margin-left 10px
+    @media screen and (min-width:1900px) {
+      margin-left 15px
+    }
     &>li
       padding-left 61px
       position relative
@@ -162,6 +172,9 @@ export default {
       text-align left
       color #ffffff
       line-height 20px
+      @media screen and (min-width:1900px) {
+        margin-bottom 33px
+      }
       .time
         position absolute
         left 0
@@ -172,6 +185,10 @@ export default {
         line-height 20px
         background #0C2C78
         color #7FB5F1
+        @media screen and (min-width:1900px){
+          width 70px
+          height 28px
+        }
       .text
         white-space normal
         display inline-block
@@ -182,9 +199,16 @@ export default {
         height 20px
         min-width 228px
         color #ffffff
+        @media screen and (min-width:1900px){
+          left 26px
+          min-width 266px
+        }
         & > span
           display block
           font-size 12px
+          @media screen and (min-width:1900px){
+            font-size 20px
+          }
         .t1
           animation marquee1 32s linear infinite
           margin-left 100%

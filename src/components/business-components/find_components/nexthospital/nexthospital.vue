@@ -1,14 +1,9 @@
 <template>
     <div class="contain">
         <div class="header">
-            <div class="close-btn" style="cursor:pointer"  @click = "closefn">
-                <span class="text1 jiantou">&lt;</span>
-                <span class="text1 close">{{this.curcity}}网上庄稼医院-下级医院数据统计</span>
-            </div>
-            <!-- <span class="text1 title">{{this.curcity}}网上庄稼医院-下级医院数据统计</span> -->
-            <div class="time">
-                    <Date></Date>
-            </div>
+           <Headnav
+            :lefttitle=this.lefttitle
+            ></Headnav>
         </div>
         <div class="content">
             <table class="hospital_info">
@@ -70,10 +65,10 @@
 </template>
 <script>
 var echarts = require('echarts')
-import Date from "../../../ui-components/date/date"
+import Headnav from '../../headnav/headnav'
 export default {
     components:{
-        Date
+        Headnav
     },
     data(){
         return{
@@ -91,26 +86,36 @@ export default {
             curcity:'',
             curlevel:'',
             isshow:true,
-            chartxianshi:'',//控制右边的柱状图和图表是否显示
+            chartxianshi:'',//控制右边的柱状图和图表是否显示，
+            lefttitle:'下级医院'
         }
     },
     created(){
-        const rLoading = this.openLoading();
+       this.openLoading();
         this.curcity = window.sessionStorage.getItem('curcity')
+        this.lefttitle = this.curcity +'网上庄稼医院-下级医院数据统计'
         this.curlevel = window.sessionStorage.getItem('curlevel')
         this.$parent.app_loading=false
         this.userid = window.sessionStorage.getItem('curuserid')
-        this.axios.all([
-            this.$axios.fetchPost(
+        this.$axios.fetchPost(
+            "/Home/Manage/GetShaoxingMpData",
+            {appId:this.userid,areaname:this.curcity,level:this.curlevel,isstore:window.sessionStorage.getItem('isstore')})
+        .then(res2=>{
+            if(res2.data.code == "200"){
+                this.wenzhen = res2.data.data.wenzhen
+                this.user = res2.data.data.user
+                this.cetu = res2.data.data.cetu
+                this.isstore = res2.data.data.isstore
+                this.mpublic = res2.data.data.mpublic
+                this.expert = res2.data.data.expert
+            }
+        })
+        this.$axios.fetchPost(
                 "/Home/Manage/GetManageMpAreaData",
-                `appId=${this.userid}&isstore=${window.sessionStorage.getItem('isstore')}`),
-            this.$axios.fetchPost(
-                "/Home/Manage/GetShaoxingMpData",
-                `appId=${this.userid}&areaname=${this.curcity}&level=${this.curlevel}&isstore=${window.sessionStorage.getItem('isstore')}`)
-            ])
-        .then(this.axios.spread((res1, res2) => {
-            rLoading.close()
-            if(res1.data.code == "200"){
+                {appId:this.userid,isstore:window.sessionStorage.getItem('isstore')})
+        .then(res1=>{
+             if(res1.data.code == "200"){
+                 console.log(res1)
                 this.chartxianshi = res1.data.data.chart.length
                 this.chartdata = res1.data.data.chart
                 this.chartxianshi = res1.data.data.chart.length
@@ -134,22 +139,13 @@ export default {
                         this.chartname.push("")
                     }
                 }
-            }
-            if(res2.data.code == "200"){
-                this.wenzhen = res2.data.data.wenzhen
-                this.user = res2.data.data.user
-                this.cetu = res2.data.data.cetu
-                this.isstore = res2.data.data.isstore
-                this.mpublic = res2.data.data.mpublic
-                this.expert = res2.data.data.expert
-            }
-        }))
+            }})
     },
     mounted() {
         var myChart = echarts.init(document.getElementById('echartContainer'));
         const self = this
   // 绘制图表
-        setInterval(() => {
+        setTimeout(() => {
             myChart.setOption({
             title: {
                 text: '医院数量',
@@ -231,7 +227,8 @@ export default {
                     },
                 }]
             },true);
-        }, 500);
+            self.openLoading().close()
+        }, 2000);
     },
     methods:{
         rowStyle({row}){
@@ -363,8 +360,8 @@ export default {
             background: hsla(0, 0%, 53%, 0.1);
         }
         
-        @media screen and (min-height:860px)
-            height 85%
+        @media screen and (min-width:1080px)
+            height 930px
             left 439px
     .mychart
         width 88%

@@ -1,8 +1,8 @@
 <template>
   <div class="index_third-container">
-    <!-- <Header title="绍兴市网上庄稼医院">
+    <Header title="绍兴市网上庄稼医院">
       <div class="del"></div>
-    </Header> -->
+    </Header>
     <div class="container-box">
       <div class="left-bar">
         <div class="item item1">
@@ -20,67 +20,43 @@
       </div>
       <div class="mid-bar">
         <div class="swiper-box">
-          <SwiperBox :list="swiper"></SwiperBox>
+          <SwiperBox></SwiperBox>
         </div>
         <div class="expert-box">
-          <Expert :list="experts"></Expert>
+          <Expert></Expert>
         </div>
       </div>
       <div class="right-bar">
-        <Online :list="answerlist"></Online>
+        <Online></Online>
       </div>
     </div>
-    <Nav :number="20" :index="2"></Nav>
+    <div class="nav-box">
+      <Nav></Nav>
+    </div>
   </div>
 </template>
 <script>
-// import Header from "@/components/headers/headers";
+import Header from "@/components/headers/headers";
 import Nav from "@/components/nav_list/nav_list";
 import SwiperBox from "@/components/swiper_box/swiper_box";
 import Expert from "@/components/expert_ranking_list/expert_ranking_list";
 import Online from "@/components/online_list/online_list";
-import { mapState } from "vuex";
 export default {
   name: "index_third",
-  components: { Nav, SwiperBox, Expert, Online },
+  components: { Header, Nav, SwiperBox, Expert, Online },
   props: {},
   data() {
-    return {
-      swiper: [],
-      experts: [],
-      answerlist: []
-    };
+    return {};
   },
-  computed: {
-    ...mapState(["appId"])
-  },
+  computed: {},
   watch: {},
-  mounted() {
-    this.getHospitalIndexData();
-  },
+  mounted() {},
   destroyed() {},
-  methods: {
-    getHospitalIndexData() {
-      this.$axios
-        .fetchPost("/Home/Index/GetIndexMpData", { appId: this.appId })
-        .then(res => {
-          if (res.data.code == 200) {
-            // console.log("res.data.data :>> ", res.data.data);
-            const data = res.data.data;
-            this.swiper = data.adlists;
-            this.experts = data.rank_experts;
-            this.answerlist = data.answerlists;
-          }
-        });
-    }
-  }
+  methods: {}
 };
 </script>
 <style lang="stylus" scoped>
 .index_third-container
-  max-width 1900px
-  margin 0 auto
-  padding-top 100px
   .del
     width 35px
     height 35px
@@ -89,11 +65,10 @@ export default {
     margin-right 10px
     cursor pointer
   .container-box
-    width 100%
-    padding 0 40px
+    margin 0 90px
     display flex
     .left-bar
-      width 285px
+      width 280px
       color #fff
       .item
         margin-bottom 5px
@@ -130,10 +105,11 @@ export default {
           background-size 100% 100%
           margin-bottom 30px
     .mid-bar
-      width 900px
-      margin 0 20px 0 25px
+      width 850px
+      margin 0 25px 0
       .swiper-box
         height 440px
+        border 1px solid #fff
     .right-bar
       flex 1
 </style>

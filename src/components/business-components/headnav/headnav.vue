@@ -1,15 +1,19 @@
 <template>
-    <div>
-        <div class="index" style="cursor:pointer" @click="toindex">
+    <div class="contain">
+        <div class="index" style="cursor:pointer" v-if="this.changemoudle == 'index'||this.changemoudle == 'find'" @click="toindex">
           <div :class='[this.changemoudle == "index" ? "index-icon" :"index-icon index-icon1"]' ></div>
           <span :class='[this.changemoudle == "index" ? "index-text" :"index-text index-text1"]' >首页</span>
         </div>
-        <div class="find"  style="cursor:pointer" @click="tofind">
+        <div class="find"  style="cursor:pointer" v-if="this.changemoudle == 'index'||this.changemoudle == 'find'"  @click="tofind">
           <div :class='[this.changemoudle == "find" ? "find-icon" :"find-icon find-icon1"]' ></div>
           <span :class='[this.changemoudle == "find" ? "find-text" :"find-text find-text1"]' >主题看板</span>
         </div>
+        <div class="close_btn" v-if="this.changemoudle != 'index'&& this.changemoudle != 'find'" style="cursor:pointer" @click="backto">
+            <div class="text1 jiantou">&lt;</div>
+            <span class="text1 lefttitle">{{this.lefttitle}}</span>
+        </div>
         <div class="logo">
-          <span class="h5">新型庄稼医院管理驾驶舱</span>
+          <span class="h5">{{this.middle_title}}</span>
         </div>
         <div class="change-data">
           <div class="change-icon"></div>
@@ -50,11 +54,12 @@
             @btnSure="clickSure"
             :alertText="'注销'+cur_cityname+'账号后，将退出监控平台'"
         ></Confim>
+        <slot></slot>
     </div>
 </template>
 <script>
-const Date = resolve=>require(["../../ui-components/date/date"],resolve)
-import Confim from "../../ui-components/confim/confim"
+const Date = resolve=>require(["../../date/date"],resolve)
+import Confim from "../../confim/confim"
 import { mapMutations, mapState } from "vuex"
 export default {
     props:{
@@ -67,8 +72,21 @@ export default {
         changemoudle:{
             type:String,
             default: function() {
-                return 'index';
+                return ;
             }
+        },
+        middle_title:{
+          type:String,
+          default:function(){
+            return;
+          }
+        },
+        //左边标题
+        lefttitle:{
+          type:String,
+          default:function(){
+            return '下级医院';
+          }
         }
     },   
     data(){
@@ -83,8 +101,6 @@ export default {
         }else{
             this.chooseHospitalRadio = '1'
         }
-    },
-    mounted(){
     },
     components:{
         Date,
@@ -105,7 +121,10 @@ export default {
                 letter: window.sessionStorage.getItem('letter')
             }})
         },
-         refresh() {
+        backto(){
+          this.$router.go(-1)
+        },
+        refresh() {
             location.reload();
         },
         loignOutBtn() {
@@ -135,19 +154,56 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+    .text1
+      position fixed
+      font-size 20px
+      left 26px
+      top 20px
+      @media screen and (min-width:1900px) {
+        font-size 30px
+        left 40px
+        top 40px
+      }
+      color #7FB5F1
+    .jiantou
+      border 2px solid #7FB5F1
+      border-radius 50%
+      width 22px
+      height 22px
+      @media screen and (min-width:1900px) {
+        width 30px
+        height 30px
+      }
+    .lefttitle
+      left 55px
+      @media screen and (min-width:1900px) {
+        left 91px
+      }
     .index,.find
-      position absolute
-      top 15px
-      font-size 13px
+      position fixed
+      top 21px
+      left 26px
+      font-size 20px
       color #ffffff
+      @media screen and (min-width:1900px){
+        font-size 25px
+        top 40px
+      }
     .index
-      left 20px
-      padding-top 1px
       width 60px
+      @media screen and (min-width:1900px){
+        width 120px
+        left 44px
+        top 46px
+      }
       z-index 999
       .index-icon
         height 18px
         width 20px
+        @media screen and (min-width:1900px){
+          height 28px
+          width 28px
+        }
         background url('./index-white-icon.png') no-repeat
         background-size 100%
         bg-image('./index-white-icon') 
@@ -155,21 +211,34 @@ export default {
         background url('./index-icon1.png') no-repeat
         bg-image('./index-icon1') 
         background-size 20px 18px
+        @media screen and (min-width:1900px){
+          background-size 28px 28px
+        }
       .index-text
-        position absolute
-        left 25px
-        top 6px
+        position fixed
+        left 56px
+        top 21px
+        @media screen and (min-width:1900px){
+          top 48px
+          left 86px
+        }
       .index-text1
         color #7FB5F1
     .find
-      left 100px
-      width 80px
-      top 15px
-      border 1px solid transparent
+      left 134px
+      top 21px
+      @media screen and (min-width:1900px){
+        top 46px
+        left 198px
+      }
       z-index 666
       .find-icon
         height 20px
         width 20px
+        @media screen and (min-width:1900px){
+          height 28px
+          width 28px
+        }
         background url('./find-icon1.png') no-repeat
         background-size 100%
         bg-image('./find-icon1')
@@ -177,46 +246,71 @@ export default {
         background url('./find-icon.png') no-repeat
         bg-image('./find-icon')
         background-size 20px 20px
+        @media screen and (min-width:1900px){
+          background-size 28px 28px
+        }
       .find-text
-        position absolute
-        right 0px
-        top 5px
+        position fixed
+        top 21px
+        left 163px
+        @media screen and (min-width:1900px){
+          top 48px
+          left 239px
+        }
       .find-text1
         color #7FB5F1
     .logo
-      position absolute
+      position fixed
       left 0
       right 0
-      top 15px
+      top 18px
+      @media screen and (min-width:1900px) {
+        top 40px
+      }
       .h5
         font-size 24px
         font-family SourceHanSansCN-Medium
         font-weight 500
         color #FFFFFF
+        @media screen and (min-width:1900px){
+          font-size 36px
+        }
       .h6
         font-size 17px
         font-family ArialMT
         font-weight 400
         color rgba(255, 255, 255, 1)
     .time
-      position absolute
-      top 11px
-      right 20px
+      position fixed
+      top 25px
+      right 17px
       font-size 14px
       font-family ArialMT
       font-weight 400
       color rgba(127, 181, 241, 1)
+      @media screen and (min-width:1900px){
+        top 54px
+        right 43px
+        width 141px
+      }
     .change-data
-      position absolute
-      top 0px
-      right 175px
+      position fixed
+      top 21px
+      right 173px
       height 30px
+      @media screen and (min-width:1900px){
+        right 239px
+        top 46px
+      }
       &:hover .change-box
         display block
       .change-icon
         width 20px
         height 18px
-        margin-top 18px
+        @media screen and (min-width:1900px){
+          height 28px
+          width 28px
+        }
         background url('./setting-icon.png') no-repeat
         background-size 100%
         bg-image('./setting-icon')
@@ -226,13 +320,16 @@ export default {
       .change-box
         position absolute
         right 0
-        top 36px
+        top 18px
         width 355px
         height 200px
         background #05113D
         z-index 9999999999
         border 1px solid #1B4E79
         display none
+        @media screen and (min-width:1900px) {
+          top 25px
+        }
         .title
           padding 30px 0px 20px 20px
           font-size 14px
@@ -290,9 +387,15 @@ export default {
       height 20px
       background url('./refresh.png') no-repeat
       background-size 100%
-      position absolute
-      top 17px
+      position fixed
+      top 21px
       right 229px
+      @media screen and (min-width:1900px){
+          height 28px
+          width 28px
+          right 317px
+          top 46px
+      }
       cursor pointer
       z-index 9999
 </style>

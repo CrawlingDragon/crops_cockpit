@@ -56,12 +56,18 @@ export default {
         //刚开始默认获取全部的信息
         this.$axios.fetchPost(
             "/Home/Manage/GetManageMpDataList",
-            `appId=${this.userid}&type=${"default"}&ordertag=${"default"}&storetag=${window.sessionStorage.getItem('isstore')}&areatag=${this.cur_city}`
+             {appId:this.userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:this.cur_city}
         ).then(res=>{
             if(res.data.code == "200"&&res.data.message == "请求成功"){
                 this.hospitalinfo = res.data.data.lists
                 this.areadata = res.data.data.areadata
-                this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025,0.03)}px`
+                //计算出滚动区域的高度
+                var h = document.documentElement.clientHeight || document.body.clientHeight
+                if(h>1080||h==1080){
+                    this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025,0.03)}px`
+                }else{
+                    this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025,0.03)}px`
+                }
                 this.total = res.data.data.lists.length - 0
                 rLoading.close()
             }else if(res.data.message =="暂无符合条件的医院"){
@@ -97,7 +103,7 @@ export default {
         sousuo(userid,cur_type,cur_city){
             this.$axios.fetchPost(
                 "/Home/Manage/GetManageMpDataList",
-                `appId=${userid}&type=${"default"}&ordertag=${"default"}&storetag=${cur_type}&areatag=${cur_city}`
+                {appId:userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:cur_city}
             ).then(res=>{
                 if(res.data.code == "200"&&res.data.message == "请求成功"){
                     this.hospitalinfo = res.data.data.lists
@@ -179,6 +185,9 @@ export default {
 .contain
     position relative
     top 70px
+    @media screen and (min-width:1900px){
+        top 210px
+    }
     .kuang
         width 90px
         height 40px
