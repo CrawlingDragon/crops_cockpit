@@ -8,13 +8,15 @@ const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch((err) => err);
 };
+import store from '../store/index'
+import axios from '../http'
 //*
 const routes = [
   //*以下是驾驶舱新增的
   {
     path: '/',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index/web-for-country.vue")
   },
   {
     path:'/findindex',
@@ -25,7 +27,7 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index/web-for-country.vue")
   },
   {
     path:'/nexthospital',
@@ -43,12 +45,12 @@ const routes = [
     path:'/hospitalsort',
     name:'Hospitalsort',
     component: () =>
-      import(/* webpackChunkName: "Hospitalsort" */ "../views/find_components/hospitalsort/hospitalsort"),
+      import(/* webpackChunkName: "Hospitalsort" */ "../components/business-components/find_components/hospitalsort/hospitalsort"),
     'children':[
       {
           'path':'/hospitalsort',
           component: () =>
-            import(/* webpackChunkName: "WebForCounty" */ "../views/find_components/defaultsort/defaultsort.vue"),
+            import(/* webpackChunkName: "WebForCounty" */ "../components/business-components/find_components/defaultsort/defaultsort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -57,7 +59,7 @@ const routes = [
           'path':'/defaultsort',
           'name':'defaultsort',
           component: () =>
-            import(/* webpackChunkName: "defaultsort" */ "../views/find_components/defaultsort/defaultsort.vue"),
+            import(/* webpackChunkName: "defaultsort" */ "../components/business-components/find_components/defaultsort/defaultsort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -66,7 +68,7 @@ const routes = [
           'path':'/multiplesort',
           'name':'multiplesort',
           component: () =>
-            import(/* webpackChunkName: "multiplesort" */ "../views/find_components/multiplesort/multiplesort.vue"),
+            import(/* webpackChunkName: "multiplesort" */ "../components/business-components/find_components/multiplesort/multiplesort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -75,7 +77,7 @@ const routes = [
           'path':'/selectsort',
           'name':'selectsort',
           component: () =>
-            import(/* webpackChunkName: "selectsort" */ "../views/find_components/selectsort/selectsort.vue"),
+            import(/* webpackChunkName: "selectsort" */ "../components/business-components/find_components/selectsort/selectsort.vue"),
           'meta':{
             keepAlive:true
           },

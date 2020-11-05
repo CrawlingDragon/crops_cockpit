@@ -34,7 +34,45 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
+<<<<<<< HEAD
   methods: {},
+=======
+<<<<<<< HEAD
+  methods: {
+    changeRouter(where) {
+      switch (where) {
+        case "频道":
+          this.$router.push({
+            path: "/online_hospital_channel"
+          });
+          break;
+        case "首页":
+          this.$router.push({
+            path: "/index_third"
+          });
+          break;
+        case "网诊":
+          this.$router.push({
+            path: "/second_wang"
+          });
+          break;
+        case "发现":
+          this.$router.push({
+            path: "/find"
+          });
+          break;
+        case "我的":
+          this.$router.push({
+            path: "/me"
+          });
+          break;
+      }
+    }
+  }
+=======
+  methods: {},
+>>>>>>> origin/dev_xiaobai
+>>>>>>> 03be0d21d1133b733e1313958f7c429b6d53dae7
 };
 </script>
 <style lang="stylus" scoped>

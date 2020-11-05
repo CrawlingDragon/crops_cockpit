@@ -7,7 +7,7 @@ import ECharts from "vue-echarts";
 import axios from "./http";
 import router from "./router/index";
 import "./common/css/react.styl";
-import VueLazyLoad from 'vue-lazyload'
+import VueLazyLoad from "vue-lazyload";
 // import "echarts/lib/component/category";
 import "swiper/dist/css/swiper.min.css";
 Vue.component("v-chart", ECharts);

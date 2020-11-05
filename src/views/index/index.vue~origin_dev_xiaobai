@@ -4,15 +4,16 @@
       class="container"
       v-if="loading !== false"
     >
-      <div class="content">
-        <div>
+      <div class="headnav">
           <Headnav
             :cur_cityname = this.cur_cityname
             :changemoudle = this.changemoudle
+            :middle_title = this.middle_title
           >
           </Headnav>
-        </div>
-        <div v-if="this.changemoudle == 'index'">
+      </div>
+      <div class="content">
+        <div>
           <div class="nav">
           <Navs
             v-bind:PercentArray="navHospitalArray"
@@ -125,20 +126,19 @@
   </div>
 </template>
 <script>
-import CountryHospital from "../components/business-components/country-hospital/country-hospital";
-import PriventHospital from "../components/business-components/privent-hospital/privent-hospital";
-import PriventHead from "../components/business-components/privent-head/privent-head";
-import NewestOnline from "../components/business-components/newest-online/newest-online";
-import SwiperBase from "../components/business-components/swiper-base/swiper-base"
-import SwiperHospital from "../components/business-components/swiper-hospital/swiper-hospital"
-import Navs from "../components/business-components/navs/navs"
-import Headnav from "../components/business-components/headnav/headnav"
-const YiNongTong = resolve=>require(["../components/business-components/yinongtong/yinongtong"],resolve)
-const RankingList = resolve=>require(["../components/business-components/ranking-list/ranking-list"],resolve)
-const vipList = resolve=>require(["../components/business-components/vip-list/vip-list"],resolve)
-const Box = resolve=>require(["../components/ui-components/box/box"],resolve)
-const AlertTip = resolve=>require(["../components/ui-components/alertTip/alertTip"],resolve)
-// const Find = resolve=>require(["../components/business-components/find_components/find-index/find-index"],resolve)
+import CountryHospital from "../../components/business-components/country-hospital/country-hospital";
+import PriventHospital from "../../components/business-components/privent-hospital/privent-hospital";
+import PriventHead from "../../components/business-components/privent-head/privent-head";
+import NewestOnline from "../../components/business-components/newest-online/newest-online";
+import SwiperBase from "../../components/business-components/swiper-base/swiper-base"
+import SwiperHospital from "../../components/business-components/swiper-hospital/swiper-hospital"
+import Navs from "../../components/business-components/navs/navs"
+import Headnav from "../../components/business-components/headnav/headnav"
+const YiNongTong = resolve=>require(["../../components/business-components/yinongtong/yinongtong"],resolve)
+const RankingList = resolve=>require(["../../components/business-components/ranking-list/ranking-list"],resolve)
+const vipList = resolve=>require(["../../components/business-components/vip-list/vip-list"],resolve)
+const Box = resolve=>require(["../../components/box/box"],resolve)
+const AlertTip = resolve=>require(["../../components/alertTip/alertTip"],resolve)
 import { mapMutations, mapState } from "vuex";
 
 export default {
@@ -181,7 +181,8 @@ export default {
       changemoudle : 'index',
       cur_cityname:window.sessionStorage.getItem('name'),
       showvideoflag:false,//控制益农通视频点播
-      curmoudle:'index'//控制头部左侧导航样式
+      curmoudle:'index',//控制头部左侧导航样式,
+      middle_title:'新型庄稼医院管理驾驶舱'//中部标题
     };
   },
   methods: {
@@ -313,17 +314,16 @@ export default {
   //   //   next(vm=>{vm.changemoudle = 'index'})
   //   // }
   // },
-  created() {
-  //   let arr = this.$store.state.defaultAddressArr;
-  //   this.getDefaultAddressArr(arr);
-        let cur_status = window.sessionStorage.getItem("cur_status")
-        if(!cur_status){
-          this.changemoudle ="index"
-        }else{
-          this.changemoudle = window.sessionStorage.getItem("cur_status")
-        }
-  },
+  // created() {
+  //       let cur_status = window.sessionStorage.getItem("cur_status")
+  //       if(!cur_status){
+  //         this.changemoudle ="index"
+  //       }else{
+  //         this.changemoudle = window.sessionStorage.getItem("cur_status")
+  //       }
+  // },
   mounted() {
+    console.log(this.isvideo)
     this.userid = this.$route.query.userid;
     this.letter = this.$route.query.letter;
     this.navList = this.$store.state.defaultAddressArr; // 导航的省市乡县列表
@@ -377,91 +377,137 @@ bg-image($url)
   background-color #080f3e
   position relative
   z-index 222
+  .headnav
+    z-index 9999999
+    position fixed
+    min-width 1340px
   .content
     width 1340px
     height calc(100vh)
     margin 0 auto
     position relative
     padding-top 50px
+    @media screen and (min-width:1900px){
+      width 1900px 
+      padding-top 103px
+    }
     background url('./index-bj.jpg') no-repeat
-  .country-hospital
-    width 315px
-    height 430px
-    float left
-    margin-bottom 10px
-    margin-right 9px
-    margin-left 25px
-    margin-top 14px
-    background: #00002D;
-    border: 1px solid #1B4E79;
-  .privent-hospital
-    width 640px
-    height 430px
-    background: #00002D;
-    border: 1px solid #1B4E79;
-    float left
-    margin-bottom 10px
-    margin-right 9px
-    margin-top 14px
-  .newest-online
-    width 315px
-    height 270px
-    float left
-    margin-bottom 10px
-    margin-top 14px
-  .first-wrap
-    width 315px
-    height 270px
-    .newest-top
+    .country-hospital
+      width 315px
+      height 430px
+      float left
+      margin-bottom 10px
+      margin-right 9px
+      margin-left 25px
+      margin-top 14px
+      @media screen and (min-width:1900px){
+        margin 17px 20px 19px 40px
+        width 440px
+        height 560px
+      }
+      background: #00002D;
+      border: 1px solid #1B4E79;
+    .privent-hospital
+      width 640px
+      height 430px
+      background: #00002D;
+      border: 1px solid #1B4E79;
+      float left
+      margin-bottom 10px
+      margin-right 9px
+      margin-top 14px
+      @media screen and (min-width:1900px){
+        margin 17px 20px 19px 0px
+        width 900px
+        height 560px
+      }
+    .newest-online
+      width 315px
       height 270px
-  .yinongtong
-    margin-top 9px !important
-    height 150px
-  .swiper-hospital
-    width 315px
-    height 215px
-    float left
-    margin-right 9px
-    background: #00002D;
-    border: 1px solid #1B4E79;
-    // opacity: 0.6;
-  .first-swiper
-    margin-left 25px
-  .ranking-list
-    width 315px
-    height 215px
-    float left
-    background: #00002D;
-    border: 1px solid #1B4E79;
-    // opacity: 0.6;
-    margin-right 9px
-    &:last-child
-      margin-right 0
-  .video-wrap
-    width 100%
-    height 100%
-    position absolute
-    left 0
-    right 0
-    top 0
-    bottom 0
-    background rgb(0, 0, 45)
-    z-index 11119999999
-    .close-btn
-      padding-top 15px
-      .text1
-          font-size 20px
-          color #7FB5F1
-          border-radius: 2px
-      .jiantou
-          position absolute
-          left 25px
-      .close
-          position absolute
-          left 45px
-    .liubai
-        padding-bottom 50px
-    .video
-        outline none
-        width 80%
+      float left
+      margin-bottom 10px
+      margin-top 14px
+      @media screen and (min-width:1900px){
+        margin 17px 0px 19px 0px
+        width 440px
+        height 330px
+      }
+    .first-wrap
+      width 315px
+      height 270px
+      @media screen and (min-width:1900px){
+        width 440px
+        height 330px
+      }
+      .newest-top
+        height 270px
+    .yinongtong
+      margin-top 9px !important
+      height 150px
+      @media screen and (min-width:1900px){
+        margin 0px 0px 19px 0px
+        margin-top 19px !important
+        width 440px
+        height 210px
+      }
+    .swiper-hospital
+      width 315px
+      height 215px
+      float left
+      margin-right 9px
+      @media screen and (min-width:1900px){
+        margin 0px 19px 19px 0px
+        width 440px
+        height 270px
+      }
+      background: #00002D;
+      border: 1px solid #1B4E79;
+      // opacity: 0.6;
+    .first-swiper
+      margin-left 25px
+      @media screen and (min-width:1900px){
+        margin-left 40px
+      }
+    .ranking-list
+      width 315px
+      height 215px
+      float left
+      background: #00002D;
+      border: 1px solid #1B4E79;
+      // opacity: 0.6;
+      margin-right 9px
+      @media screen and (min-width:1900px){
+        margin-right 19px
+        width 440px
+        height 270px
+      }
+      &:last-child
+        margin-right 0
+    .video-wrap
+      width 100%
+      height 100%
+      position absolute
+      left 0
+      right 0
+      top 0
+      bottom 0
+      background rgb(0, 0, 45)
+      z-index 11119999999
+      .close-btn
+        padding-top 15px
+        .text1
+            font-size 20px
+            color #7FB5F1
+            border-radius: 2px
+        .jiantou
+            position absolute
+            left 25px
+        .close
+            position absolute
+            left 45px
+      .liubai
+          padding-bottom 50px
+      .video
+          outline none
+          width 80%
 </style>

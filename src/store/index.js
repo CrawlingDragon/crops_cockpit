@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     appId: localStorage.getItem("appId"),
-    purview: localStorage.getItem("purview"), //用户身份判别 1是网院 2是新型网院 3是管理层网院 4是管理层新院
+    purview: localStorage.getItem("purview"),
     //以下是管理驾驶舱加入的
     accountName: '', //登陆账号（其实是地址）
     defaultProvince: '', //全网请求地址

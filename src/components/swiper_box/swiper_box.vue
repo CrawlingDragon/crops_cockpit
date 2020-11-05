@@ -1,4 +1,10 @@
 <template>
+  <div class="swiper-box-container" @click="goToMessageDetail">
+    <el-carousel class="swiper" trigger="click" @change="changeItem">
+      <el-carousel-item v-for="item in list" :key="item.id" :name="item.id">
+        <img :src="item.thumb" alt="" class="item-img" />
+        <div class="text">{{ item.title }}</div>
+
   <div class="swiper-box-container">
     <el-carousel class="swiper" indicator-position="none">
       <el-carousel-item v-for="item in 4" :key="item">
