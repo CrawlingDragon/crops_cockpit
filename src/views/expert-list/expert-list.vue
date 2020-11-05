@@ -39,8 +39,8 @@
     </div>
 </template>
 <script>
-import Date from "../../../components/date/date"
-import Nodata from "../../../components/no-data/no-data"
+import Date from "../../components/date/date"
+import Nodata from "../../components/no-data/no-data"
 import MugenScroll from "vue-mugen-scroll"
 export default {
     components:{

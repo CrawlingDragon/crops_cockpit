@@ -398,5 +398,4 @@ export default {
           top 46px
       }
       cursor pointer
-      z-index 9999
 </style>

@@ -34,10 +34,6 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-<<<<<<< HEAD
-  methods: {},
-=======
-<<<<<<< HEAD
   methods: {
     changeRouter(where) {
       switch (where) {
@@ -69,10 +65,6 @@ export default {
       }
     }
   }
-=======
-  methods: {},
->>>>>>> origin/dev_xiaobai
->>>>>>> 03be0d21d1133b733e1313958f7c429b6d53dae7
 };
 </script>
 <style lang="stylus" scoped>

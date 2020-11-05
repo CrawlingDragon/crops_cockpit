@@ -106,8 +106,8 @@
     </div>
 </template>
 <script>
-import Headnav from '../../../components/headnav/headnav'
-import Confim from "../../../components/confim/confim"
+import Headnav from '../../components/headnav/headnav'
+import Confim from "../../components/confim/confim"
 export default {
     components:{
         Headnav,
