@@ -2,7 +2,15 @@
   <div class="goods_list_container">
     <Header title="农资商品"></Header>
     <div class="nav-bar">
-      <div class="item" v-for="(item,index) in menu" :key="item.catid" :class="{'active':menuIndex == index}" @click="changeNenu(item.catid,index)">{{item.catname}}</div>
+      <div
+        class="item"
+        v-for="(item, index) in menu"
+        :key="item.catid"
+        :class="{ active: menuIndex == index }"
+        @click="changeNenu(item.catid, index)"
+      >
+        {{ item.catname }}
+      </div>
     </div>
     <ul class="list_ul">
       <li v-for="item in list" :key="item.id" @click="goToDetail(item.id)">
@@ -12,21 +20,23 @@
             <span class="dot">...</span>
           </div>
         </el-image>
-        <p>{{item.name}}</p>
+        <p>{{ item.name }}</p>
       </li>
     </ul>
     <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
-    <div class="result-bar" v-show="list.length != 0">共{{list.length == 0 ? 0 : list.length}}个结果</div>
+    <div class="result-bar" v-show="list.length != 0">
+      共{{ list.length == 0 ? 0 : list.length }}个结果
+    </div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 
 export default {
   name: "goods_list",
   components: {
-    Header,
+    Header
   },
   props: {},
   data() {
@@ -34,11 +44,11 @@ export default {
       menuIndex: 0, // 显示导航的索引
       menu: [], // 导航栏栏目
       list: [],
-      noGoods: false,
+      noGoods: false
     };
   },
   computed: {
-    ...mapState(["appId", "purview"]),
+    ...mapState(["appId", "purview"])
   },
   watch: {},
   mounted() {
@@ -48,7 +58,7 @@ export default {
   methods: {
     getMenu() {
       // 获取导航栏
-      this.$axios.fetchPost("/Home/Products/GetProductsMenu").then((res) => {
+      this.$axios.fetchPost("/Home/Products/GetProductsMenu").then(res => {
         if (res.data.code == 200) {
           this.menu = res.data.data;
           setTimeout(() => {
@@ -64,9 +74,9 @@ export default {
         .fetchPost("/Home/Products/GetMpProList", {
           appId: 63587 || this.appId,
           catid: catid,
-          purview: this.purview == 4 || 5 ? 1 : 0,
+          purview: this.purview == 4 || 5 ? 1 : 0
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.count == 0) {
             this.noGoods = true;
           }
@@ -84,10 +94,10 @@ export default {
       // 去到商品详情
       this.$router.push({
         path: "/goods_detail",
-        query: { id: id },
+        query: { id: id }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

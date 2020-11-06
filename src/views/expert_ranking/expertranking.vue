@@ -1,280 +1,351 @@
 <template>
-    <div class="contain">
-        <div class="header">
-            <Headnav
-            :lefttitle=this.lefttitle
-            ></Headnav>
-        </div>
-        <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="ser_standard">
-            <el-form-item prop="name"  class="ser_option1">
-                <el-input class="input" style="background-color:#00002D;border:1px solid #1B4E79;"  v-model="ruleForm.name" placeholder="请输入专家姓名/手机号"></el-input>
-            </el-form-item>
-            <el-form-item label="日期" class="ser_option2">
-                <el-col :span="11">
-                <el-form-item prop="startTime">
-                    <el-date-picker class="input" type="date" placeholder="开始日期" v-model="ruleForm.startTime" style="width: 100%;"
-                         :picker-options="startDatePicker"
-                         value-format="yyyy-MM-dd"
-                         format="yyyy-MM-dd"
-                    ></el-date-picker>
-                </el-form-item>
-                </el-col>
-                <el-col class="line" :span="2">-</el-col>
-                <el-col :span="11">
-                <el-form-item prop="endTime">
-                    <el-date-picker class="input" type="date" placeholder="结束日期" v-model="ruleForm.endTime" style="width: 100%;"
-                        :picker-options="endDatePicker"
-                        value-format="yyyy-MM-dd"
-                        format="yyyy-MM-dd"
-                    ></el-date-picker>
-                </el-form-item>
-                </el-col>
-            </el-form-item>
-            <el-form-item label="排序"  prop="sorttype" class="ser_option3">
-                <el-select v-model="ruleForm.sorttype" placeholder="" popper-class="select-down" 
-  	                :popper-append-to-body="false">
-                <el-option label="累积绍兴市诊数" value="1"></el-option>
-                <el-option label="平均分" value="2"></el-option>
-                <el-option label="综合评分" value="3"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-button type="primary" class="search_btn" @click="tosearch('ruleForm')">搜索</el-button>
-        </el-form>
-          <div >
-            <el-table 
-            class="expert_list"
-            :data="userList" 
-            :row-style = "rowStyle"
-            ref="tabledata"
-            :header-cell-style ="{backgroundColor:'rgb(14,42,106)',color:'#FFFFFF',borderBottom: '1px solid #1B4E79',fontSize:'16px',height:'40px'}"
-             >
-            <template slot="empty">
-                <p>{{this.prompt}}</p>
-            </template>
-                <el-table-column label="专家姓名" prop="realname" >    
-                </el-table-column>
-                <el-table-column label="手机号" prop="mobile" >    
-                </el-table-column>
-                <el-table-column label="累积绍兴市网诊数" prop="tid_count" >    
-                </el-table-column>
-                <el-table-column label="评分次数" prop="score_times" >    
-                </el-table-column>
-                <el-table-column label="平均分数" prop="score_avg" >    
-                </el-table-column>
-                <el-table-column label="综合分数" prop="score_overall" >    
-                </el-table-column>    
-            </el-table>
-        </div>
-        <div class="page_divide">
-        <!-- <span class="demonstration">大于 7 页时的效果</span> -->
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-size="this.pagesize"
-                :page-sizes="[1,2,3,4,5]" 
-                layout="prev, pager, next"
-                :total="this.total">
-            </el-pagination>
-        </div>
-        <div class="expert_num">
-           共{{this.total}}条数据
-        </div>
+  <div class="contain">
+    <div class="header">
+      <Headnav :lefttitle="this.lefttitle"></Headnav>
     </div>
+    <el-form
+      :model="ruleForm"
+      :inline="true"
+      :rules="rules"
+      ref="ruleForm"
+      class="ser_standard"
+    >
+      <el-form-item prop="name" class="ser_option1">
+        <el-input
+          class="input"
+          style="background-color:#00002D;border:1px solid #1B4E79;"
+          v-model="ruleForm.name"
+          placeholder="请输入专家姓名/手机号"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="日期" class="ser_option2">
+        <el-col :span="11">
+          <el-form-item prop="startTime">
+            <el-date-picker
+              class="input"
+              type="date"
+              placeholder="开始日期"
+              v-model="ruleForm.startTime"
+              style="width: 100%;"
+              :picker-options="startDatePicker"
+              value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col class="line" :span="2">-</el-col>
+        <el-col :span="11">
+          <el-form-item prop="endTime">
+            <el-date-picker
+              class="input"
+              type="date"
+              placeholder="结束日期"
+              v-model="ruleForm.endTime"
+              style="width: 100%;"
+              :picker-options="endDatePicker"
+              value-format="yyyy-MM-dd"
+              format="yyyy-MM-dd"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-form-item>
+      <el-form-item label="排序" prop="sorttype" class="ser_option3">
+        <el-select
+          v-model="ruleForm.sorttype"
+          placeholder=""
+          popper-class="select-down"
+          :popper-append-to-body="false"
+        >
+          <el-option label="累积绍兴市诊数" value="1"></el-option>
+          <el-option label="平均分" value="2"></el-option>
+          <el-option label="综合评分" value="3"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-button type="primary" class="search_btn" @click="tosearch('ruleForm')"
+        >搜索</el-button
+      >
+    </el-form>
+    <div>
+      <el-table
+        class="expert_list"
+        :data="userList"
+        :row-style="rowStyle"
+        ref="tabledata"
+        :header-cell-style="{
+          backgroundColor: 'rgb(14,42,106)',
+          color: '#FFFFFF',
+          borderBottom: '1px solid #1B4E79',
+          fontSize: '16px',
+          height: '40px'
+        }"
+      >
+        <template slot="empty">
+          <p>{{ this.prompt }}</p>
+        </template>
+        <el-table-column label="专家姓名" prop="realname"> </el-table-column>
+        <el-table-column label="手机号" prop="mobile"> </el-table-column>
+        <el-table-column label="累积绍兴市网诊数" prop="tid_count">
+        </el-table-column>
+        <el-table-column label="评分次数" prop="score_times"> </el-table-column>
+        <el-table-column label="平均分数" prop="score_avg"> </el-table-column>
+        <el-table-column label="综合分数" prop="score_overall">
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="page_divide">
+      <!-- <span class="demonstration">大于 7 页时的效果</span> -->
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="this.pagesize"
+        :page-sizes="[1, 2, 3, 4, 5]"
+        layout="prev, pager, next"
+        :total="this.total"
+      >
+      </el-pagination>
+    </div>
+    <div class="expert_num">共{{ this.total }}条数据</div>
+  </div>
 </template>
 <script>
-import Headnav from '../../components/headnav/headnav'
+import Headnav from "@/components/head_nav/head_nav";
 export default {
-    components:{
-        Headnav
-    },
-    data(){
-        return{
-            // screenwidth:document.document.body.clientWidth,
-            ruleForm: {
-                name: '',
-                sorttype: '1',
-                startTime: '',
-                endTime: '',
-                delivery: false,
-                type: [],
-            },
-            rules: {
-                name: [
-                    { message: '请输入专家姓名或者手机号', trigger: 'blur' },
-                    { min: 1, max: 11, message: '长度在 1到 11个字符', trigger: 'blur' }
-                ],
-                sorttype: [
-                    {message: '请选择排序方式', trigger: 'change' }
-                ],
-                startTime: [
-                    {message: '请选择日期', trigger: 'change' }
-                ],
-                endTime: [
-                    {message: '请选择日期', trigger: 'change' }
-                ],
-            },
-            currentPage:1, //初始页
-            pagesize:8,    //    每页的数据
-            userList: [],
-            screenwidth:document.body.clientWidth,
-            userid:"",
-            level:"",
-            curcity:"",
-            startDatePicker: this.beginDate(),
-            endDatePicker: this.processDate(),
-            total:0,
-            prompt: "", //进去页面先让字样为空
-            alldata:0,
-            lefttitle:'专家网诊榜'
-        }
-    },
-    
-    created(){
-        this.$parent.app_loading=false
-        this.curcity = window.sessionStorage.getItem('curcity')
-        this.level = window.sessionStorage.getItem('level')
-        this.userid = window.sessionStorage.getItem('curuserid')
-    },
-    beforeMount(){
-        //根据屏幕高度计算出应该放多少行数据
-        var h = document.documentElement.clientHeight || document.body.clientHeight
-        if(h>1080||h==1080){
-            var shengyu = h-231-60-40
-        }else{
-            var shengyu = h-168-90-40
-        }
-        this.pagesize = Math.round(shengyu/60)
-        if(this.pagesize == 0){
-            this.pagesize = 1
-        }
-    },
-    mounted(){
-       const rLoading = this.openLoading();
-        // 刚进入页面的时候获取所有的数据
-        this.$axios.fetchPost(
-            "Admin/Api/get_expert_rank",
-            {mId:this.userid,page:this.currentPage,pagesize:this.pagesize,keyword:this.ruleForm.name,order:this.ruleForm.sorttype}
-        ).then(res=>{
-            // console.log(res)
-            if(res.data.code == 200){
-                this.userList = res.data.data.list
-                this.total = res.data.data.total - 0 
-                this.alldata = res.data.data.total - 0 
-                rLoading.close();
-                if(this.userList.length === 0){
-                    this.prompt = "暂无数据";
-                } 
-            }
-        })
-    },
-    methods:{
-        closefn(){
-            this.$router.go(-1)
-        },
-        sousuo(userid,currentPage,pagesize,name,startTime,endTime,sorttype){
-            this.$axios.fetchPost(
-                "Admin/Api/get_expert_rank",
-                {mId:userid,page:currentPage,pagesize:pagesize,keyword:name,startdate:startTime,enddate:endTime,order:sorttype}
-            ).then(res=>{
-                if(res.data.code == 200){
-                    this.openLoading().close()
-                    this.userList = res.data.data.list
-                }
-            })
-        },
-        rowStyle({row}){
-            if(row){
-                return{
-                    backgroundColor:'transparent',
-                    with:"100%",
-                    color:'#FFFFFF',
-                    fontSize:'14px',
-                    fontFamily: 'Microsoft YaHei',
-                    fontWeight: '400',
-                    lineHeight: '60px',
-                    height:'60px'
-                }
-            }
-        },
-        handleSizeChange: function (size) {
-                this.pagesize = size;
-                console.log(this.pagesize)  //每页下拉显示数据
-        },
-        // 选择第几页
-        handleCurrentChange: function(currentPage){
-            this.currentPage = currentPage;
-            this.openLoading();
-            if((this.ruleForm.name||this.ruleForm.startTime||this.ruleForm.endTime)&&this.total<this.alldata){
-                // 当搜索条件不为空并且点击 搜索以后请求返回的数据长度小于全部数据长度，表示进行了条件搜索，此时携带对应的参数条件进行页码跳转
-                this.sousuo(this.userid,this.currentPage,this.pagesize,this.ruleForm.name,this.ruleForm.startTime,this.ruleForm.endTime,this.ruleForm.sorttype)
-            }else{
-                //在未点击搜索条件的时候进行搜索 默认是搜索全部，搜索条件置空,排序方式按照绍兴市累计网诊数（默认排序）
-                this.sousuo(this.userid,this.currentPage,this.pagesize,'','','',1)
-            }
-        },
-        // 开始时间限制
-        beginDate(){
-            const self = this
-            return {
-                disabledDate:time=>{
-                    let endDateVal = new Date(self.ruleForm.endTime).getTime()
-                    if (self.ruleForm.endTime) {  //如果结束时间不为空，则小于结束时间
-                        return time.getTime()>Date.now(self.ruleForm.endTime)||time.getTime()>new Date(self.ruleForm.endTime).getTime()
-                    }else{
-                        return time.getTime()< new Date(self.ruleForm.endTime).getTime||time.getTime()>Date.now()||time.getTime()>Date.now(self.ruleForm.endTime)
-                    }
-                }
-            }
-        },
-        // 结束时间限制
-        processDate() {
-            const  self = this
-            return {
-                disabledDate:time=> {
-                    if (self.ruleForm.startTime) {  //如果开始时间不为空，则结束时间大于开始时间
-                        return time.getTime()<new Date(self.ruleForm.startTime).getTime()||time.getTime()>Date.now()||time.getTime()>Date.now(self.ruleForm.startTime)
-                    }else{
-                        return time.getTime()< new Date(self.ruleForm.startTime).getTime||time.getTime()>Date.now()||time.getTime()>Date.now(self.ruleForm.startTime) 
-                    }
-                }
-            }
-        },
-        tosearch(formName){
-            this.openLoading();
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    if(this.ruleForm.startTime == null){
-                        this.ruleForm.startTime =''
-                    }
-                    if(this.ruleForm.endTime == null){
-                        this.ruleForm.endTime=''
-                    }
-                    this.currentPage = 1
-                    this.$axios.fetchPost(
-                        "Admin/Api/get_expert_rank",
-                        //搜索的时候要讲当前页码 置换为1 否则当点击大的页码数的时候 可能会搜不到数据 因为搜索到的数据只够放一页
-                        `mId=${this.userid}&page=${this.currentPage}&pagesize=${this.pagesize}&keyword=${this.ruleForm.name}&startdate=${this.ruleForm.startTime}&enddate=${this.ruleForm.endTime}&order=${this.ruleForm.sorttype}`
-                    ).then(res=>{
-                        if(res.data.code == 200){
-                            this.openLoading().close()
-                            this.userList = res.data.data.list
-                            this.total = res.data.data.total - 0
-                            if(this.userList.length === 0){
-                            this.prompt = "暂无数据";
-                        } 
-                        }
-                    })
-                } else {
-                    console.log('你提交的信息有误!!');
-                    this.openLoading().close()
-                    return false;
-                }
-            });
-            
-        }
+  components: {
+    Headnav
+  },
+  data() {
+    return {
+      // screenwidth:document.document.body.clientWidth,
+      ruleForm: {
+        name: "",
+        sorttype: "1",
+        startTime: "",
+        endTime: "",
+        delivery: false,
+        type: []
+      },
+      rules: {
+        name: [
+          { message: "请输入专家姓名或者手机号", trigger: "blur" },
+          { min: 1, max: 11, message: "长度在 1到 11个字符", trigger: "blur" }
+        ],
+        sorttype: [{ message: "请选择排序方式", trigger: "change" }],
+        startTime: [{ message: "请选择日期", trigger: "change" }],
+        endTime: [{ message: "请选择日期", trigger: "change" }]
+      },
+      currentPage: 1, //初始页
+      pagesize: 8, //    每页的数据
+      userList: [],
+      screenwidth: document.body.clientWidth,
+      userid: "",
+      level: "",
+      curcity: "",
+      startDatePicker: this.beginDate(),
+      endDatePicker: this.processDate(),
+      total: 0,
+      prompt: "", //进去页面先让字样为空
+      alldata: 0,
+      lefttitle: "专家网诊榜"
+    };
+  },
+
+  created() {
+    this.$parent.app_loading = false;
+    this.curcity = window.sessionStorage.getItem("curcity");
+    this.level = window.sessionStorage.getItem("level");
+    this.userid = window.sessionStorage.getItem("curuserid");
+  },
+  beforeMount() {
+    //根据屏幕高度计算出应该放多少行数据
+    var h = document.documentElement.clientHeight || document.body.clientHeight;
+    if (h > 1080 || h == 1080) {
+      var shengyu = h - 231 - 60 - 40;
+    } else {
+      var shengyu = h - 168 - 90 - 40;
     }
-}
+    this.pagesize = Math.round(shengyu / 60);
+    if (this.pagesize == 0) {
+      this.pagesize = 1;
+    }
+  },
+  mounted() {
+    const rLoading = this.openLoading();
+    // 刚进入页面的时候获取所有的数据
+    this.$axios
+      .fetchPost("Admin/Api/get_expert_rank", {
+        mId: this.userid,
+        page: this.currentPage,
+        pagesize: this.pagesize,
+        keyword: this.ruleForm.name,
+        order: this.ruleForm.sorttype
+      })
+      .then(res => {
+        // console.log(res)
+        if (res.data.code == 200) {
+          this.userList = res.data.data.list;
+          this.total = res.data.data.total - 0;
+          this.alldata = res.data.data.total - 0;
+          rLoading.close();
+          if (this.userList.length === 0) {
+            this.prompt = "暂无数据";
+          }
+        }
+      });
+  },
+  methods: {
+    closefn() {
+      this.$router.go(-1);
+    },
+    sousuo(userid, currentPage, pagesize, name, startTime, endTime, sorttype) {
+      this.$axios
+        .fetchPost("Admin/Api/get_expert_rank", {
+          mId: userid,
+          page: currentPage,
+          pagesize: pagesize,
+          keyword: name,
+          startdate: startTime,
+          enddate: endTime,
+          order: sorttype
+        })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.openLoading().close();
+            this.userList = res.data.data.list;
+          }
+        });
+    },
+    rowStyle({ row }) {
+      if (row) {
+        return {
+          backgroundColor: "transparent",
+          with: "100%",
+          color: "#FFFFFF",
+          fontSize: "14px",
+          fontFamily: "Microsoft YaHei",
+          fontWeight: "400",
+          lineHeight: "60px",
+          height: "60px"
+        };
+      }
+    },
+    handleSizeChange: function(size) {
+      this.pagesize = size;
+      console.log(this.pagesize); //每页下拉显示数据
+    },
+    // 选择第几页
+    handleCurrentChange: function(currentPage) {
+      this.currentPage = currentPage;
+      this.openLoading();
+      if (
+        (this.ruleForm.name ||
+          this.ruleForm.startTime ||
+          this.ruleForm.endTime) &&
+        this.total < this.alldata
+      ) {
+        // 当搜索条件不为空并且点击 搜索以后请求返回的数据长度小于全部数据长度，表示进行了条件搜索，此时携带对应的参数条件进行页码跳转
+        this.sousuo(
+          this.userid,
+          this.currentPage,
+          this.pagesize,
+          this.ruleForm.name,
+          this.ruleForm.startTime,
+          this.ruleForm.endTime,
+          this.ruleForm.sorttype
+        );
+      } else {
+        //在未点击搜索条件的时候进行搜索 默认是搜索全部，搜索条件置空,排序方式按照绍兴市累计网诊数（默认排序）
+        this.sousuo(
+          this.userid,
+          this.currentPage,
+          this.pagesize,
+          "",
+          "",
+          "",
+          1
+        );
+      }
+    },
+    // 开始时间限制
+    beginDate() {
+      const self = this;
+      return {
+        disabledDate: time => {
+          let endDateVal = new Date(self.ruleForm.endTime).getTime();
+          if (self.ruleForm.endTime) {
+            //如果结束时间不为空，则小于结束时间
+            return (
+              time.getTime() > Date.now(self.ruleForm.endTime) ||
+              time.getTime() > new Date(self.ruleForm.endTime).getTime()
+            );
+          } else {
+            return (
+              time.getTime() < new Date(self.ruleForm.endTime).getTime ||
+              time.getTime() > Date.now() ||
+              time.getTime() > Date.now(self.ruleForm.endTime)
+            );
+          }
+        }
+      };
+    },
+    // 结束时间限制
+    processDate() {
+      const self = this;
+      return {
+        disabledDate: time => {
+          if (self.ruleForm.startTime) {
+            //如果开始时间不为空，则结束时间大于开始时间
+            return (
+              time.getTime() < new Date(self.ruleForm.startTime).getTime() ||
+              time.getTime() > Date.now() ||
+              time.getTime() > Date.now(self.ruleForm.startTime)
+            );
+          } else {
+            return (
+              time.getTime() < new Date(self.ruleForm.startTime).getTime ||
+              time.getTime() > Date.now() ||
+              time.getTime() > Date.now(self.ruleForm.startTime)
+            );
+          }
+        }
+      };
+    },
+    tosearch(formName) {
+      this.openLoading();
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          if (this.ruleForm.startTime == null) {
+            this.ruleForm.startTime = "";
+          }
+          if (this.ruleForm.endTime == null) {
+            this.ruleForm.endTime = "";
+          }
+          this.currentPage = 1;
+          this.$axios
+            .fetchPost(
+              "Admin/Api/get_expert_rank",
+              //搜索的时候要讲当前页码 置换为1 否则当点击大的页码数的时候 可能会搜不到数据 因为搜索到的数据只够放一页
+              `mId=${this.userid}&page=${this.currentPage}&pagesize=${this.pagesize}&keyword=${this.ruleForm.name}&startdate=${this.ruleForm.startTime}&enddate=${this.ruleForm.endTime}&order=${this.ruleForm.sorttype}`
+            )
+            .then(res => {
+              if (res.data.code == 200) {
+                this.openLoading().close();
+                this.userList = res.data.data.list;
+                this.total = res.data.data.total - 0;
+                if (this.userList.length === 0) {
+                  this.prompt = "暂无数据";
+                }
+              }
+            });
+        } else {
+          console.log("你提交的信息有误!!");
+          this.openLoading().close();
+          return false;
+        }
+      });
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 //table表格中的文字居中
@@ -319,7 +390,7 @@ export default {
     color #FFFFFF
 }
 /deep/ .el-pagination .btn-prev{
-    background transparent 
+    background transparent
     color #FFFFFF
 }
 /deep/.input,.el-input{
@@ -329,7 +400,7 @@ export default {
     color #FFFFFF
 }
 /deep/ .el-pagination button:disabled{
-    color #7FB5F1 
+    color #7FB5F1
 }
 // 修改输入框内部的颜色和文字
 /deep/  .el-input__inner{
@@ -407,7 +478,7 @@ export default {
 }
 .contain
     width: 100%;
-    @media screen and (max-width:1340px) 
+    @media screen and (max-width:1340px)
         width:1340px
     height: 100%;
     background-color: rgba(3, 5, 57, 1);
@@ -505,6 +576,6 @@ export default {
         font-family Source Han Sans CN
         font-weight 500
         color #7FB5F1
-    ::-webkit-scrollbar 
+    ::-webkit-scrollbar
         display none
 </style>

@@ -1,39 +1,82 @@
 <template>
   <!-- 下级医院 -->
   <div class="hospital-container">
-    <Header goBackBtn="返回上一页"></Header>
     <div class="nav-top">
-      <div class="item" @click="changeNav('default',0)" :class="{'active':showIndex == 0}">默认排序</div>
-      <div class="item" @click="changeNav('listorder',1)" :class="{'active':showIndex == 1}">综合排序</div>
-      <div class="item" @click="changeNav('filter',2)" :class="{'active':showIndex == 2}">筛选</div>
+      <div
+        class="item"
+        @click="changeNav('default', 0)"
+        :class="{ active: showIndex == 0 }"
+      >
+        默认排序
+      </div>
+      <div
+        class="item"
+        @click="changeNav('listorder', 1)"
+        :class="{ active: showIndex == 1 }"
+      >
+        综合排序
+      </div>
+      <div
+        class="item"
+        @click="changeNav('filter', 2)"
+        :class="{ active: showIndex == 2 }"
+      >
+        筛选
+      </div>
     </div>
     <div class="hospital-box">
       <div class="address-list list1" v-show="showIndex == 2">
-        <div class="item" v-for="(item,index) in areadataList" :key="item.areaid" @click="changeArea(item.name,index)" :class="{'active':areaIndex == index}">{{item.name}}</div>
+        <div
+          class="item"
+          v-for="(item, index) in areadataList"
+          :key="item.areaid"
+          @click="changeArea(item.name, index)"
+          :class="{ active: areaIndex == index }"
+        >
+          {{ item.name }}
+        </div>
       </div>
       <div class="address-list list2" v-show="showIndex == 2">
-        <div class="item" @click="changeStore(99,0)" :class="{'active':storeIndex == 0}">全部</div>
-        <div class="item" @click="changeStore(0,1)" :class="{'active':storeIndex == 1}">网院</div>
-        <div class="item" @click="changeStore(1,2)" :class="{'active':storeIndex == 2}">实体店</div>
+        <div
+          class="item"
+          @click="changeStore(99, 0)"
+          :class="{ active: storeIndex == 0 }"
+        >
+          全部
+        </div>
+        <div
+          class="item"
+          @click="changeStore(0, 1)"
+          :class="{ active: storeIndex == 1 }"
+        >
+          网院
+        </div>
+        <div
+          class="item"
+          @click="changeStore(1, 2)"
+          :class="{ active: storeIndex == 2 }"
+        >
+          实体店
+        </div>
       </div>
       <div class="box">
         <Item :items="hospitalList"></Item>
       </div>
       <p class="noData" v-show="hospitalList.length == 0">暂无符合条件的医院</p>
     </div>
-    <div class="result-bum">共{{hospitalList.length}}个结果</div>
+    <div class="result-bum">共{{ hospitalList.length }}个结果</div>
     <Nav index="3"></Nav>
   </div>
 </template>
 <script>
-import Header from "@/components/default_header/default_header";
+// import Header from "@/components//default_header";
 import Nav from "@/components/nav_list/nav_list";
 import Item from "@/components/hospital_list_item/hospital_list_item";
 import { mapState } from "vuex";
 
 export default {
   name: "hospital",
-  components: { Header, Nav, Item },
+  components: { Nav, Item },
   props: {},
   data() {
     return {
@@ -45,11 +88,11 @@ export default {
       areaIndex: 0,
       storeIndex: 0,
       areadataList: [], // 地址列表
-      hospitalList: [],
+      hospitalList: []
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId"])
   },
   watch: {},
   mounted() {
@@ -71,9 +114,9 @@ export default {
           storetag,
           ordertag,
           areatag,
-          type,
+          type
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.code == 200) {
             if (res.data.data == 0) {
               this.hospitalList = [];
@@ -125,8 +168,8 @@ export default {
         this.areatag,
         this.type
       );
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

@@ -4,40 +4,42 @@
     <div class="my-box">
       <div class="left">
         <el-image class="img" :src="data.logo" fit="cover"></el-image>
-        <div class="account">账号:{{data.acount}}</div>
+        <div class="account">账号:{{ data.acount }}</div>
         <div class="btn1">退出登录</div>
         <div class="btn1">已下载视频11</div>
       </div>
       <div class="right">
         <div class="title">
-          {{data.name}}
-          <span class="describe-title">{{data.isstore == 1? '实体店':'网院'}}</span>
+          {{ data.name }}
+          <span class="describe-title">{{
+            data.isstore == 1 ? "实体店" : "网院"
+          }}</span>
         </div>
-        <div class="name">作物科室：{{data.zuowu}}</div>
-        <div class="text">简介：{{data.content}}</div>
+        <div class="name">作物科室：{{ data.zuowu }}</div>
+        <div class="text">简介：{{ data.content }}</div>
       </div>
     </div>
     <Nav index="6"></Nav>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
 import { mapState } from "vuex";
 export default {
   name: "me",
   components: {
     Header,
-    Nav,
+    Nav
   },
   props: {},
   data() {
     return {
-      data: "",
+      data: ""
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId"])
   },
   watch: {},
   mounted() {
@@ -49,13 +51,13 @@ export default {
       // 获取我的医院
       this.$axios
         .fetchPost("/Home/About/GetMpDesc", { appId: this.appId })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.data = res.data.data;
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

@@ -1,13 +1,18 @@
 <template>
   <div class="header-container">
     <div class="head-wrap cf">
-      <div class="left-bar">
+      <div class="left-bar" @click="goBack">
         <div class="logo" v-show="logoSrc">
           <el-image :src="logoSrc" fit="cover" class="img"></el-image>
         </div>
         <slot></slot>
         <div class="goBack-icon" v-show="!logoSrc"></div>
-        <h2 class="h2">{{ title }}</h2>
+        <h2 class="h2">
+          {{ title }}
+          <span class="title-number" v-show="titleNumber != 0">
+            {{ titleNumber }}
+          </span>
+        </h2>
       </div>
       <div class="right-bar" v-show="right_show_bar">
         <div class="reload" @click="reload">
@@ -44,6 +49,10 @@ export default {
     right_show_bar: {
       type: Boolean,
       default: true
+    },
+    titleNumber: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -78,6 +87,11 @@ export default {
   },
   destroyed() {},
   methods: {
+    goBack() {
+      if (!this.logoSrc) {
+        this.$router.go(-1);
+      }
+    },
     getWeather() {
       // 获取头部天气
       this.$axios
@@ -130,6 +144,8 @@ export default {
         cursor pointer
         color #7FB5F1
         padding-left 30px
+        .title-number
+          margin-left 10px
       .logo
         float left
         width 40px

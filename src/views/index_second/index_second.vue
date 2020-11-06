@@ -58,7 +58,6 @@
             </div>
           </div>
         </div>
-
       </div>
       <div class="right-bar">
         <div class="list-wrap">
@@ -78,7 +77,7 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import IndexSecondImgList from "@/components/index_second_img_list/index_second_img_list";
 import Cetu from "@/components/cetu_list/cetu_list";
 import Online from "@/components/online_list/online_list";

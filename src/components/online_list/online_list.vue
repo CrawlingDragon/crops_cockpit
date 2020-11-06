@@ -1,4 +1,5 @@
 <template>
+  <!-- 网院首页的网诊列表 -->
   <div class="online_list-wrap">
     <div class="title">最新网诊 ></div>
     <ul class="online-ul">

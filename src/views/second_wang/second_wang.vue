@@ -1,6 +1,6 @@
 <template>
   <div class="second_wang-container">
-    <Header></Header>
+    <Header title="网诊" :titleNumber="count"></Header>
     <ul
       class="wang-ul infinite-list"
       v-infinite-scroll="load"
@@ -31,7 +31,7 @@
       <p v-if="loading">加载中...</p>
       <p v-if="noMore">没有更多了</p>
     </ul>
-    <Nav :number="count"></Nav>
+    <Nav></Nav>
   </div>
 </template>
 <script>

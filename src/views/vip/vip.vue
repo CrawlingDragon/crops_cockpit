@@ -15,20 +15,20 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import Header from "@/components/online_hospital_header/online_hospital_header";
 export default {
   name: "vip",
   components: { Header },
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .vip-container

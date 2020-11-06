@@ -2,16 +2,20 @@
   <div class="video-container">
     <Header title="培训视频"></Header>
     <ul class="video-ul">
-      <li v-for="item in list" :key="item.id" @click="goToVideoDetail(item.id,item.catid)">
+      <li
+        v-for="item in list"
+        :key="item.id"
+        @click="goToVideoDetail(item.id, item.catid)"
+      >
         <el-image class="img" fit="cover" :src="item.thumb"></el-image>
-        <p class="p1">{{item.title}}</p>
+        <p class="p1">{{ item.title }}</p>
       </li>
     </ul>
-    <div class="result-num">共{{list.length}}个结果</div>
+    <div class="result-num">共{{ list.length }}个结果</div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 
 export default {
@@ -20,11 +24,11 @@ export default {
   props: {},
   data() {
     return {
-      list: [],
+      list: []
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId"])
   },
   watch: {},
   mounted() {
@@ -36,7 +40,7 @@ export default {
       // 获取视频列表
       this.$axios
         .fetchPost("/Home/Video/GetVideoList", { appId: this.appId })
-        .then((res) => {
+        .then(res => {
           if (res.data.code == 200) {
             this.list = res.data.data;
           }
@@ -46,10 +50,10 @@ export default {
       // 点击进入视频详情页
       this.$router.push({
         path: "/video_detail",
-        query: { id: id, catid: catid },
+        query: { id: id, catid: catid }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

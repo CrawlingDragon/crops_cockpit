@@ -1,6 +1,9 @@
 <template>
-  <div :style="{overflow:'showTableFlag'?'hidden':''}">
-    <Headers logoSrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg" :title="indexDate.name"></Headers>
+  <div :style="{ overflow: 'showTableFlag' ? 'hidden' : '' }">
+    <Headers
+      logoSrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg"
+      :title="indexDate.name"
+    ></Headers>
     <div class="index-container">
       <div class="left" @click="showTable">
         <ul>
@@ -11,46 +14,46 @@
             </div>
             <div class="text">
               <p>
-                {{count.isstore}}所
+                {{ count.isstore }}所
                 <br />
                 <span class="small">
                   其中
-                  <span class="num">{{count.isstore}}</span>
+                  <span class="num">{{ count.isstore }}</span>
                   所实体店
                 </span>
               </p>
             </div>
             <div class="up" v-if="count.new_mpublic != 0">
               <span class="icon"></span>
-              <span class="up-num">{{count.new_mpublic}}</span>
+              <span class="up-num">{{ count.new_mpublic }}</span>
             </div>
           </li>
           <li>
             <div class="title">专家</div>
-            <div class="text">{{count.expert}}位</div>
+            <div class="text">{{ count.expert }}位</div>
             <div class="up" v-if="count.new_expert != 0">
               <span class="icon"></span>
-              <span class="up-num">{{count.new_expert}}</span>
+              <span class="up-num">{{ count.new_expert }}</span>
             </div>
           </li>
           <li>
             <div class="title">会员</div>
-            <div class="text">{{count.user}}个</div>
+            <div class="text">{{ count.user }}个</div>
             <div class="up" v-if="count.new_user != 0">
               <span class="icon"></span>
-              <span class="up-num">{{count.new_user}}</span>
+              <span class="up-num">{{ count.new_user }}</span>
             </div>
           </li>
           <li>
             <div class="title">三诊</div>
-            <div class="text">{{count.wenzhen}}次</div>
+            <div class="text">{{ count.wenzhen }}次</div>
           </li>
           <li>
             <div class="titles">
               <div>测土</div>
               <div>配方</div>
             </div>
-            <div class="text">{{count.cetu}}次</div>
+            <div class="text">{{ count.cetu }}次</div>
           </li>
         </ul>
       </div>
@@ -83,11 +86,15 @@
       </div>
     </div>
     <Nav></Nav>
-    <layerBar :showFlag="showTableFlag" :countDate="count" @changeShowFlag="changeLayerFlag"></layerBar>
+    <layerBar
+      :showFlag="showTableFlag"
+      :countDate="count"
+      @changeShowFlag="changeLayerFlag"
+    ></layerBar>
   </div>
 </template>
 <script>
-import Headers from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import ExpertRankingList from "@/components/expert_ranking_list/expert_ranking_list";
 import HospitalList from "@/components/hospital_list/hospital_list";
 import Nav from "@/components/nav_list/nav_list";
@@ -103,7 +110,7 @@ export default {
     hospital: HospitalList,
     Nav,
     layerBar,
-    Message,
+    Message
   },
   props: {},
   data() {
@@ -113,7 +120,7 @@ export default {
       count: {},
       expertArr: [],
       message: [],
-      showTableFlag: false,
+      showTableFlag: false
     };
   },
   computed: {},
@@ -128,7 +135,7 @@ export default {
     $route(newVal) {
       this.getIndexDate(newVal.query.appid);
       this.getMessageDate(newVal.query.appid);
-    },
+    }
   },
   mounted() {
     this.getIndexDate(this.query);
@@ -142,7 +149,7 @@ export default {
       // 获取首页数据
       this.$axios
         .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: query })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.indexDate = res.data.data;
             this.count = res.data.data.count;
@@ -153,7 +160,7 @@ export default {
       // 获取通知数据
       this.$axios
         .fetchPost("/Home/Manage/GetManageMessageData", { appId: query })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.message = res.data.data;
           }
@@ -163,16 +170,16 @@ export default {
       // 获取医院类型
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", { appId: this.query })
-        .then((res) => {
+        .then(res => {
           if (res.data.code == 200) {
             this.getPurview(res.data.data.purview);
             if (res.data.data.isview === 1) {
               this.$router.push({
-                path: "/index_second",
+                path: "/index_second"
               });
             } else if (res.data.data.isview === 2) {
               this.$router.push({
-                path: "/index_third",
+                path: "/index_third"
               });
             }
           }
@@ -187,28 +194,28 @@ export default {
     goToHistory() {
       // 去到 浏览历史
       this.$router.push({
-        path: "/history",
+        path: "/history"
       });
     },
     goToSearch() {
       // 去到搜索页
       this.$router.push({
-        path: "/search",
+        path: "/search"
       });
     },
     goToHospital() {
       // 去到医院本级
       this.$router.push({
-        path: "/me",
+        path: "/me"
       });
     },
     goToHospitalList() {
       // 去到医院列表
       this.$router.push({
-        path: "/hospital",
+        path: "/hospital"
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

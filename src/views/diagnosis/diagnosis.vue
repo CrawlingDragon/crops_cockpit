@@ -1,6 +1,5 @@
 <template>
   <div class="diagnosis-container">
-    <Header title="诊疗"></Header>
     <div class="nav-top">
       <div class="item active">
         测土配方
@@ -24,21 +23,20 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
-import Nav from "@/components/nav_list/nav_list"
+import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "diagnosis",
-  components: { Header, Nav },
+  components: { Nav },
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .diagnosis-container

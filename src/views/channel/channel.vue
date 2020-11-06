@@ -1,9 +1,5 @@
 <template>
   <div class="channel-container">
-    <headers
-      title="浙江省网上庄稼医院"
-      logoSrc="https://t7.baidu.com/it/u=3204887199,3790688592&fm=79&app=86&size=h300&n=0&g=4n&f=jpeg?sec=1592979933&t=aba69622567ff8b287355bc1e1e4c037"
-    ></headers>
     <ul class="channel-ul">
       <li class="langer li1">
         <div class="icon i1"></div>
@@ -63,21 +59,20 @@
   </div>
 </template>
 <script>
-import headers from "@/components/headers/headers"
-import Nav from "@/components/nav_list/nav_list"
+import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "channel",
-  components: { headers, Nav },
+  components: { Nav },
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .channel-container

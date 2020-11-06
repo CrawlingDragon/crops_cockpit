@@ -11,7 +11,9 @@
           <p class="p1">黄泽黄桃专科医院</p>
           <p class="small-p2">课程讲师：浙江大学果树科学研究所教授 贾惠娟</p>
           <p class="time-p3">时长：50分钟</p>
-          <p class="p4">视频简介：近日，市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。二是充分全面抓好贯彻落实。全面抓好贯彻落实。</p>
+          <p class="p4">
+            视频简介：近日，市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。二是充分全面抓好贯彻落实。全面抓好贯彻落实。
+          </p>
           <div class="btns">
             <div class="btn">
               <span class="info-btn"></span>
@@ -32,14 +34,14 @@
       <ul class="relation-ul">
         <li v-for="item in 3" :key="item">
           <el-image class="img" fit="cover" src="item"></el-image>
-          <p class="p1">{{item}}123li1y2i37y12p;io37y41yu</p>
+          <p class="p1">{{ item }}123li1y2i37y12p;io37y41yu</p>
         </li>
       </ul>
     </div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 
 export default {
@@ -48,16 +50,16 @@ export default {
   props: {},
   data() {
     return {
-      list: [],
+      list: []
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId"])
   },
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {},
+  methods: {}
 };
 </script>
 <style lang="stylus" scoped>

@@ -2,15 +2,15 @@
   <!-- 坐诊网诊测土详情 -->
   <div class="sit_detail-container">
     <Header title="坐诊详情"></Header>
-    <div class="titles">{{detail.title}}</div>
+    <div class="titles">{{ detail.title }}</div>
     <div class="info-box">
       <div class="left">
         <div class="t">作物病情资料</div>
-        <p class="p1">{{detail.crop_pattern}}</p>
-        <p class="p1">{{detail.crop_position}}</p>
-        <p class="p1">{{detail.showtime}}</p>
+        <p class="p1">{{ detail.crop_pattern }}</p>
+        <p class="p1">{{ detail.crop_position }}</p>
+        <p class="p1">{{ detail.showtime }}</p>
         <p class="p1">
-          {{detail.content}}
+          {{ detail.content }}
         </p>
         <ul class="left-ul clearfix">
           <div class="ul-t">病情图片（4）</div>
@@ -22,9 +22,9 @@
       <div class="right">
         <div class="right-t">处方信息</div>
         <div class="text">
-          {{detail.mpublic}} 官方回复<br />
-          处方专家：{{detail.chufang_expert}} <br />
-          看诊结果：{{detail.result}}
+          {{ detail.mpublic }} 官方回复<br />
+          处方专家：{{ detail.chufang_expert }} <br />
+          看诊结果：{{ detail.result }}
         </div>
       </div>
     </div>
@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 export default {
   name: "module_detail",
@@ -57,11 +57,11 @@ export default {
     return {
       detail: "",
       id: this.$route.query.id,
-      module: this.$route.query.module,
+      module: this.$route.query.module
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId"])
   },
   watch: {},
   mounted() {
@@ -75,15 +75,15 @@ export default {
         .fetchPost("/Home/Treatment/GetRecipetemDetail", {
           appId: this.appId,
           Id: this.id,
-          module: this.module,
+          module: this.module
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.detail = res.data.data;
           }
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

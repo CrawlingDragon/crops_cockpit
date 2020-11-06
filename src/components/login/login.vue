@@ -30,7 +30,6 @@
     </div>
     <Alert :alertTitle="title" :alertText="text" ref="alertBox"></Alert>
   </div>
-
 </template>
 <script>
 // import Alert from "../../ui-components/alert/alert";
@@ -41,8 +40,8 @@ export default {
   name: "login",
   data() {
     return {
-      username: "", //13094810413
-      password: "", //asdf1234
+      username: "", // 13094810413
+      password: "", // asdf1234
       title: "登录失败",
       text: ""
     };
@@ -86,7 +85,7 @@ export default {
       "getAccountName",
       "getLoginId",
       "getBreadArr",
-      "SetAppId"
+      "setAppId"
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -104,11 +103,11 @@ export default {
             password: password
           })
           .then(res => {
-            console.log(res)
+            console.log(res);
             if (res.data.code == 200) {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
-              this.SetAppId(appid);
+              this.setAppId(appid);
               if (purview == 1) {
                 this.$router.push({
                   path: "/index_third"
@@ -261,7 +260,7 @@ export default {
       &.disabled
         background #999
         color #7f7f7f
-        &:hover 
+        &:hover
           border none
           cursor wait
       &:hover

@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-// import headers from "@/components/headers/headers";
+// import headers from "@/components/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "online_hospital_channel",

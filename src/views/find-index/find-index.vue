@@ -1,96 +1,102 @@
 <template>
-    <div class="container">
-        <div class="head">
-            <Headnav
-                :cur_cityname = this.cur_cityname
-                :changemoudle = this.changemoudle
-                :middle_title = this.middle_title
-            ></Headnav>
-        </div>
-        <div class="contain">
-            <div class="next-hospital-data" @click = "tonexthospital">
-                <span class="text1" >下级医院数据</span>
-            </div>
-            <div class="hospital-sort" @click="tohospitalsort">
-                <span class="text1" >医院综合排序</span>
-            </div>
-            <div class="expert" @click="toexpertlist">
-                <span class="text1"  >专家</span>
-            </div>
-            <div class="expert-net-sort" v-if="shaoxingprivate == true" @click="toexpertranking">
-                <span class="text1" >专家网诊榜</span>
-            </div>
-            <div class="score" v-if="shaoxingprivate == true" @click="todiscussscore">
-                <span class="text1" >评分</span>
-            </div>
-            <div class="shaoxing-serve" v-if="shaoxingprivate == true">
-                <div class="text2" >{{this.title}}</div>
-                <img class="sao-ma" :src="this.imgurl" alt="站点正在维护升级中，请稍后！"/>
-            </div>
-            <div class="bottom-text">{{cur_cityname}}</div>
-        </div>
+  <div class="container">
+    <div class="head">
+      <Headnav
+        :cur_cityname="this.cur_cityname"
+        :changemoudle="this.changemoudle"
+        :middle_title="this.middle_title"
+      ></Headnav>
     </div>
+    <div class="contain">
+      <div class="next-hospital-data" @click="tonexthospital">
+        <span class="text1">下级医院数据</span>
+      </div>
+      <div class="hospital-sort" @click="tohospitalsort">
+        <span class="text1">医院综合排序</span>
+      </div>
+      <div class="expert" @click="toexpertlist">
+        <span class="text1">专家</span>
+      </div>
+      <div
+        class="expert-net-sort"
+        v-if="shaoxingprivate == true"
+        @click="toexpertranking"
+      >
+        <span class="text1">专家网诊榜</span>
+      </div>
+      <div class="score" v-if="shaoxingprivate == true" @click="todiscussscore">
+        <span class="text1">评分</span>
+      </div>
+      <div class="shaoxing-serve" v-if="shaoxingprivate == true">
+        <div class="text2">{{ this.title }}</div>
+        <img
+          class="sao-ma"
+          :src="this.imgurl"
+          alt="站点正在维护升级中，请稍后！"
+        />
+      </div>
+      <div class="bottom-text">{{ cur_cityname }}</div>
+    </div>
+  </div>
 </template>
 <script>
-import Headnav from "../../components/headnav/headnav"
+import Headnav from "@/components/head_nav/head_nav";
 export default {
-    'name':'Find',
-    data(){
-        return{
-           shaoxingprivate:false,
-           curcity:window.sessionStorage.getItem('curcity'),
-           imgurl:"",
-           title:"",
-           cur_cityname:window.sessionStorage.getItem('name'),
-           tmp_alert_satus:'',
-           changemoudle:'find',//控制头部左侧导航样式
-           middle_title:'新型庄稼医院管理驾驶舱'//中部标题
-        }
+  name: "Find",
+  data() {
+    return {
+      shaoxingprivate: false,
+      curcity: window.sessionStorage.getItem("curcity"),
+      imgurl: "",
+      title: "",
+      cur_cityname: window.sessionStorage.getItem("name"),
+      tmp_alert_satus: "",
+      changemoudle: "find", //控制头部左侧导航样式
+      middle_title: "新型庄稼医院管理驾驶舱" //中部标题
+    };
+  },
+  components: {
+    Headnav
+  },
+  created() {
+    let isshaoxing = window.sessionStorage.getItem("isshaoxing");
+    if (isshaoxing == 1) {
+      this.shaoxingprivate = true;
+    }
+    //获取绍兴市为民服务平台的二维码
+    this.$axios.fetchGet("/Admin/Api/get_qr_code").then(res => {
+      this.imgurl = res.data.data.qrcode;
+      this.title = res.data.data.title;
+    });
+  },
+  methods: {
+    tonexthospital() {
+      this.$router.push({
+        path: "/nexthospital"
+      });
     },
-    components:{
-        Headnav
+    tohospitalsort() {
+      this.$router.push({
+        path: "/hospitalsort"
+      });
     },
-    created(){
-        let isshaoxing = window.sessionStorage.getItem('isshaoxing')
-        if(isshaoxing == 1){
-            this.shaoxingprivate = true
-        }
-       //获取绍兴市为民服务平台的二维码
-       this.$axios.fetchGet(
-           "/Admin/Api/get_qr_code"
-       ).then(res=>{
-            this.imgurl = res.data.data.qrcode
-            this.title = res.data.data.title
-       })
-   },
-   methods:{
-       tonexthospital(){
-           this.$router.push({
-                'path':'/nexthospital'
-            })
-       },
-       tohospitalsort(){
-           this.$router.push({
-               'path':'/hospitalsort'
-           })
-       },
-       toexpertlist(){
-           this.$router.push({
-               'path':'/expertlist'
-           })
-       },
-       toexpertranking(){
-           this.$router.push({
-               'path':'/expertranking'
-           })
-       },
-       todiscussscore(){
-           this.$router.push({
-               'path':'/discussscore'
-           })
-       }
-   }
-}
+    toexpertlist() {
+      this.$router.push({
+        path: "/expertlist"
+      });
+    },
+    toexpertranking() {
+      this.$router.push({
+        path: "/expertranking"
+      });
+    },
+    todiscussscore() {
+      this.$router.push({
+        path: "/discussscore"
+      });
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .container
@@ -129,7 +135,7 @@ export default {
             }
         .text1
             line-height 270px
-            text-align center         
+            text-align center
             font-size 36px;
             font-family SimHei
             font-weight 400

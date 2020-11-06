@@ -1,9 +1,14 @@
 <template>
   <div class="find-container">
-    <Header title="发现"></Header>
     <div class="nav-bar">
-      <div class="item" v-for="(item,index) in navList" :key="item.catid" :class="{'active':activeIndex == index}" @click="nav(item.catid,index)">
-        <span class="active">{{item.catname}}</span>
+      <div
+        class="item"
+        v-for="(item, index) in navList"
+        :key="item.catid"
+        :class="{ active: activeIndex == index }"
+        @click="nav(item.catid, index)"
+      >
+        <span class="active">{{ item.catname }}</span>
       </div>
     </div>
     <ul class="infinite-list find-ul">
@@ -14,10 +19,10 @@
               <div class="icon"></div>
             </div>
           </el-image>
-          <div class="title-bar">{{item.title}}</div>
+          <div class="title-bar">{{ item.title }}</div>
           <div class="text">
-            {{item.copyfrom}}
-            <span class="time">{{item.inputtime}}</span>
+            {{ item.copyfrom }}
+            <span class="time">{{ item.inputtime }}</span>
           </div>
         </div>
       </li>
@@ -26,13 +31,11 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
 import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "find",
   components: {
-    Header,
-    Nav,
+    Nav
   },
   props: {},
   data() {
@@ -41,7 +44,7 @@ export default {
       navList: [],
       activeIndex: 0,
       initCatid: 0,
-      list: [],
+      list: []
     };
   },
   computed: {},
@@ -53,7 +56,7 @@ export default {
   methods: {
     getNavList(catId) {
       // 获取导航栏目
-      this.$axios.fetchGet("/Home/News/GetPushMessageMenu").then((res) => {
+      this.$axios.fetchGet("/Home/News/GetPushMessageMenu").then(res => {
         if (res.data.code == 200) {
           this.navList = res.data.data;
           this.initCatid = res.data.data[0].catid;
@@ -67,7 +70,7 @@ export default {
       // 获取列表数据
       this.$axios
         .fetchPost("/Home/News/GetPushMessageList", { catId: catid })
-        .then((res) => {
+        .then(res => {
           if (res.data.code == 200) {
             this.list = res.data.data;
           }
@@ -77,8 +80,8 @@ export default {
       // 点击导航栏
       this.activeIndex = index;
       this.getList(catid);
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="ranking-container">
-    <Head title="专家回复排行榜" :right_show_bar="false"></Head>
+    <header></header>
     <div class="swiper-container">
       <div class="swiper-wrapper">
         <div class="swiper-slide">
@@ -104,10 +104,10 @@
   </div>
 </template>
 <script>
-import Head from "../../components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 export default {
   name: "expert_ranking",
-  components: { Head },
+  components: { Header },
   props: {},
   data() {
     return {};

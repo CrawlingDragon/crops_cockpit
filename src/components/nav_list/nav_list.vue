@@ -2,19 +2,39 @@
   <div class="foot-wrap">
     <ul class="nav">
       <div class="number" v-if="number != 0">共 {{ number }} 条数据</div>
-      <li :class="{ active: index == 1 }" @click="changeRouter('频道')">
+      <li
+        :class="{ active: index == 1 }"
+        @click="changeRouter('频道')"
+        v-show="showNav"
+      >
         <span>频道</span>
       </li>
-      <li :class="{ active: index == 2 }" @click="changeRouter('首页')">
+      <li
+        :class="{ active: index == 2 }"
+        @click="changeRouter('首页')"
+        v-show="showNav"
+      >
         <span>首页</span>
       </li>
-      <li :class="{ active: index == 3 }" @click="changeRouter('网诊')">
+      <li
+        :class="{ active: index == 3 }"
+        @click="changeRouter('网诊')"
+        v-show="showNav"
+      >
         <span>网诊</span>
       </li>
-      <li :class="{ active: index == 4 }" @click="changeRouter('发现')">
+      <li
+        :class="{ active: index == 4 }"
+        @click="changeRouter('发现')"
+        v-show="showNav"
+      >
         <span>发现</span>
       </li>
-      <li :class="{ active: index == 5 }" @click="changeRouter('我的')">
+      <li
+        :class="{ active: index == 5 }"
+        @click="changeRouter('我的')"
+        v-show="showNav"
+      >
         <span>我的</span>
       </li>
     </ul>
@@ -29,6 +49,10 @@ export default {
     number: {
       type: Number,
       default: 0
+    },
+    showNav: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
