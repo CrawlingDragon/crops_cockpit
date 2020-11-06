@@ -6,7 +6,7 @@
       <div class="item" @click="content_show = 1" :class="{active:content_show == 1}">简介</div>
       <div class="item" @click="content_show = 2" :class="{active:content_show == 2}">TA加入的医院</div>
     </div>
-    <div class="content1 content" v-if="content_show == 1">
+    <div class="content1 content" v-show="content_show == 1">
       <div class="left">
         <el-image class="img" fit="cover" :src="detail.avatar"></el-image>
         <p class="p1">开处方次数：{{detail.chufangcount}}</p>
@@ -25,7 +25,7 @@
         <div class="info">简介：{{detail.description}}</div>
       </div>
     </div>
-    <div class="content2 content" v-if="content_show == 2">
+    <div class="content2 content" v-show="content_show == 2">
       <Hospital :items="hospitalList"></Hospital>
     </div>
   </div>

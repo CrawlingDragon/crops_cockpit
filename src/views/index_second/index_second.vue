@@ -6,7 +6,7 @@
     <div class="second-container">
       <div class="left-bar">
         <div class="swiper-box">
-          <SwiperBox></SwiperBox>
+          <!-- <SwiperBox></SwiperBox> -->
         </div>
         <div class="mid-nav">
           <div class="item1"></div>
@@ -117,7 +117,7 @@ export default {
     bottom 0
     right 0
   .second-container
-    margin 0 90px
+    margin 0 40px
     display flex
     .left-bar
       flex 1

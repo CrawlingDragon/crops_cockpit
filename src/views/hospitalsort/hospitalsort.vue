@@ -23,14 +23,12 @@ export default {
     components:{
         Headnav
     },
-    
     data(){
         return{
              cur_index:2,
              lefttitle:'下级医院'
         }
     },
-    
     created(){
         this.$parent.app_loading=false
     },

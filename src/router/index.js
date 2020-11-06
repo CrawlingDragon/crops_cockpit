@@ -207,6 +207,14 @@ const routes = [
       )
   },
   {
+    path:"/online_hospital_channel",
+    name:"online_hospital_channel",
+    component:()=>
+      import(
+         /* webpackChunkName: "online_hospital_channel" */ "../views/online_hospital_channel/online_hospital_channel.vue"
+      )
+  },
+  {
     path: "/search",
     name: "search",
     component: () =>
@@ -299,6 +307,58 @@ const routes = [
           )
       }
     ]
+  },
+  {
+    path:'/second_huiyuan',
+    component:()=>
+    import(/* webpackChunkName: "second_huiyuan" */"../views/second_huiyuan/second_huiyuan.vue")
+  },
+  {
+    path:'/second_huiyuan_itro',
+    component:()=>
+    import(/* webpackChunkName: "second_huiyuan_itro" */ "../views/second_huiyuan_itro/second_huiyuan_itro.vue"),
+    children: [
+      {
+        path: "",
+        component: () =>
+          import(
+            /* webpackChunkName: "huiyuan_wang" */ "../views/second_huiyuan_itro/huiyuan_wang.vue"
+          )
+      },
+      {
+        path: "/second_huiyuan_itro/huiyuan_wang",
+        component: () =>
+          import(
+            /* webpackChunkName: "huiyun_wang" */ "../views/second_huiyuan_itro/huiyuan_wang.vue"
+          )
+      },
+      {
+        path: "/second_huiyuan_itro/huiyuan_tu",
+        component: () =>
+          import(
+            /* webpackChunkName: "huiyuan_tu" */ "../views/second_huiyuan_itro/huiyuan_tu.vue"
+          )
+      },
+      {
+        path: "/second_huiyuan_itro/huiyuan_intro",
+        component: () =>
+          import(
+            /* webpackChunkName: "huiyuan_intro" */ "../views/second_huiyuan_itro/huiyuan_intro.vue"
+          )
+      },
+      {
+        path: "/second_huiyuan_itro/huiyuan_dingdan",
+        component: () =>
+          import(
+            /* webpackChunkName: "huiyuan_dingdan" */ "../views/second_huiyuan_itro/huiyuan_dingdan.vue"
+          )
+      },
+    ]
+  },
+  {
+    path:'/huiyuan_dingdan/second_order_detail',
+    component:()=>
+    import(/* webpackChunkName: "second_order_detail" */"../views/second_order_detail/second_order_detail.vue")
   }
 ];
 
