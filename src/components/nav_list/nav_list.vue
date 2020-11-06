@@ -34,7 +34,37 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {},
+  methods: {
+    changeRouter(where) {
+      switch (where) {
+        case "频道":
+          this.$router.push({
+            path: "/online_hospital_channel"
+          });
+          break;
+        case "首页":
+          this.$router.push({
+            path: "/index_third"
+          });
+          break;
+        case "网诊":
+          this.$router.push({
+            path: "/second_wang"
+          });
+          break;
+        case "发现":
+          this.$router.push({
+            path: "/find"
+          });
+          break;
+        case "我的":
+          this.$router.push({
+            path: "/me"
+          });
+          break;
+      }
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

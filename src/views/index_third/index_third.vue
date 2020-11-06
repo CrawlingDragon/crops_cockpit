@@ -33,7 +33,6 @@
     <div class="nav-box">
       <Nav></Nav>
     </div>
-  </div>
 </template>
 <script>
 import Header from "@/components/headers/headers";
@@ -41,9 +40,11 @@ import Nav from "@/components/nav_list/nav_list";
 import SwiperBox from "@/components/swiper_box/swiper_box";
 import Expert from "@/components/expert_ranking_list/expert_ranking_list";
 import Online from "@/components/online_list/online_list";
+import { mapState } from "vuex";
+import Empty from "@/components/empty/empty";
 export default {
   name: "index_third",
-  components: { Header, Nav, SwiperBox, Expert, Online },
+  components: { Nav, SwiperBox, Expert, Online, Empty },
   props: {},
   data() {
     return {};
@@ -52,7 +53,37 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    getHospitalIndexData() {
+      // 获取首页数据
+      this.$axios
+        .fetchPost("/Home/Index/GetIndexMpData", { appId: this.appId })
+        .then(res => {
+          if (res.data.code == 200) {
+            // console.log("res.data.data :>> ", res.data.data);
+            const data = res.data.data;
+            this.swiper = data.adlists;
+            this.experts = data.rank_experts;
+            this.answerlist = data.answerlists;
+          }
+        });
+    },
+    goToOnline() {
+      this.$router.push({
+        path: "/second_wang"
+      });
+    },
+    goToExpert() {
+      this.$router.push({
+        path: "/expert"
+      });
+    },
+    goToVideo() {
+      this.$router.push({
+        path: "/video"
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

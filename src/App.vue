@@ -15,7 +15,6 @@ export default {
 <style lang="stylus" scoped>
 
 #app
-  font-family: SimHei;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

@@ -2,6 +2,7 @@
   <div class="online_list-wrap">
     <div class="title">最新网诊 ></div>
     <ul class="online-ul">
+      <li v-for="item in list" :key="item.tid" @click="goToDetail">
       <li v-for="item in 5" :key="item">
         <div class="top">
           <span class="item-title">黄桂花的水稻水稻水稻问题</span>

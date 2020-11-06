@@ -46,6 +46,10 @@ export default {
   position absolute
   top 90px
   left 0
+  @media screen and (min-width:1900px){
+    height 930px
+    top 170px
+  }
   background #080f3e
   z-index 9999
   .alertTip-box

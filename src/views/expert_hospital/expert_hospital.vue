@@ -13,7 +13,6 @@
 </template>
 <script>
 import Header from "../../components/headers/headers"
-
 export default {
   name: "expert_hospital",
   components: { Header },

@@ -8,49 +8,47 @@ const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch((err) => err);
 };
-import store from '../store/index'
-import axios from '../http'
 //*
 const routes = [
   //*以下是驾驶舱新增的
   {
     path: '/',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
   {
     path:'/findindex',
     component: () =>
-      import(/* webpackChunkName: "findindex" */ "../components/business-components/find_components/find-index/find-index")
+      import(/* webpackChunkName: "findindex" */ "../views/find-index/find-index")
   },
   {
     path: '/home',
     name: 'home',
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
   {
     path:'/nexthospital',
     name:'nexthospital',
     component: () =>
-      import(/* webpackChunkName: "nexthospital" */ "../components/business-components/find_components/nexthospital/nexthospital.vue")
+      import(/* webpackChunkName: "nexthospital" */ "../views/nexthospital/nexthospital.vue")
   },
   {
     path:'/expertlist',
     name:'expertlist',
     component: () =>
-      import(/* webpackChunkName: "expertlist" */ "../components/business-components/find_components/expert-list/expert-list.vue")
+      import(/* webpackChunkName: "expertlist" */ "../views/expert_list/expert_list.vue")
   },
   {
     path:'/hospitalsort',
     name:'Hospitalsort',
     component: () =>
-      import(/* webpackChunkName: "Hospitalsort" */ "../components/business-components/find_components/hospitalsort/hospitalsort"),
+      import(/* webpackChunkName: "Hospitalsort" */ "../views/hospitalsort/hospitalsort"),
     'children':[
       {
           'path':'/hospitalsort',
           component: () =>
-            import(/* webpackChunkName: "WebForCounty" */ "../components/business-components/find_components/defaultsort/defaultsort.vue"),
+            import(/* webpackChunkName: "Hospitalsort" */ "../views/defaultsort/defaultsort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -59,7 +57,7 @@ const routes = [
           'path':'/defaultsort',
           'name':'defaultsort',
           component: () =>
-            import(/* webpackChunkName: "defaultsort" */ "../components/business-components/find_components/defaultsort/defaultsort.vue"),
+            import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -68,7 +66,7 @@ const routes = [
           'path':'/multiplesort',
           'name':'multiplesort',
           component: () =>
-            import(/* webpackChunkName: "multiplesort" */ "../components/business-components/find_components/multiplesort/multiplesort.vue"),
+            import(/* webpackChunkName: "multiplesort" */ "../views/multiplesort/multiplesort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -77,7 +75,7 @@ const routes = [
           'path':'/selectsort',
           'name':'selectsort',
           component: () =>
-            import(/* webpackChunkName: "selectsort" */ "../components/business-components/find_components/selectsort/selectsort.vue"),
+            import(/* webpackChunkName: "selectsort" */ "../views/selectsort/selectsort.vue"),
           'meta':{
             keepAlive:true
           },
@@ -88,108 +86,19 @@ const routes = [
     path:'/expertranking',
     name:'Expertranking',
     component: () =>
-      import(/* webpackChunkName: "expertranking" */ "../components/business-components/find_components/expert_ranking/expertranking.vue")
+      import(/* webpackChunkName: "expertranking" */ "../views/expert_ranking/expertranking.vue")
   },
   {
     path:'/discussscore',
     name:'Discussscore',
     component: () =>
-      import(/* webpackChunkName: "discussscore" */ "../components/business-components/find_components/discuss_score/discussscore.vue")
+      import(/* webpackChunkName: "discussscore" */ "../views/discuss_score/discussscore.vue")
   },
   {
-    path: '/index',
-    name: 'Index',
-    component: () =>import(/* webpackChunkName: "index */ "../views/index/index.vue"),
-    beforeEnter: (to, from, next) => {
-      // console.log('from:', from.name)
-      // console.log('to:', to)
-      let userName = store.state.sessionUsername ? store.state.sessionUsername : window.sessionStorage.getItem('userName')
-      let password = store.state.sessionPassword ? store.state.sessionPassword : window.sessionStorage.getItem('passWord')
-      if (to.name == 'Index' || from.path == '/') {
-        axios
-          .fetchPost(
-            "Home/Login/login",
-            {username:userName,password:password}
-          ).then(res => {
-            if (res.data.code == 200) {
-              let userid = res.data.data.userid;
-              let level = res.data.data.level;
-              let secondLevel = 0;
-              if (level >= 3) {
-                secondLevel = level - 1;
-              } else {
-                secondLevel = level;
-              }
-              if (level <= 3) {
-                store.commit('getPicAddress', res.data.data.address);
-                window.sessionStorage.setItem('getPicAddress', JSON.stringify(res.data.data.address))
-              }
-              let arr = res.data.data.area;
-              let areaname = res.data.data.areaname;
-              let defaultName = res.data.data.default;
-              let letter = res.data.data.letter;
-              window.sessionStorage.setItem('letter',letter)
-              store.commit('getDefaultProvince', areaname); // 获取全网页地址
-              store.commit('getGlobalLevel', level); //获取全网页等级
-              store.commit('getDefaultCity', defaultName); // 获取二级方块地址
-              store.commit('getSecondGlobalLevel', secondLevel); //获取二级方块等级
-              store.commit('getDefaultAddressArr', arr); // 获取默认导航列表
-              store.commit('getGlobalFstusername', res.data.data.Fstusername); //获取益农通账号
-              store.commit('getGlobalFstuserpw', res.data.data.Fstuserpw); //获取益农通密码
-              store.commit('getGlobalFstRoomid', res.data.data.FstRoomid); //获取益农通id
-              store.commit('getAccountName', res.data.data.areaname);
-              store.commit('getLoginId', level);
-              store.commit('getBreadArr', res.data.data.nav);
-              window.sessionStorage.setItem('getDefaultProvince', areaname)// 获取全网页地址
-              window.sessionStorage.setItem('getGlobalLevel', level)//获取全网页等级
-              window.sessionStorage.setItem('getDefaultAddressArr',JSON.stringify(res.data.data.area))//获取默认导航列表
-              window.sessionStorage.setItem('getSecondGlobalLevel',secondLevel)//获取二级方块等级
-              window.sessionStorage.setItem('getDefaultCity', res.data.data.default) // 获取二级方块地址
-              window.sessionStorage.setItem('getGlobalFstusername', res.data.data.Fstusername)//获取益农通账号
-              window.sessionStorage.setItem('getGlobalFstuserpw', res.data.data.Fstuserpw)//获取益农通密码
-              window.sessionStorage.setItem('getGlobalFstRoomid', res.data.data.FstRoomid); //获取益农通id
-              next({
-                query: {
-                  userid: userid,
-                  areaname: areaname,
-                  level: level,
-                  letter: letter
-                }
-              });
-            }
-          })
-      } else {
-        store.commit('getDefaultAddressArr', JSON.parse(window.sessionStorage.getItem('getDefaultAddressArr'))); //获取默认导航列表
-        store.commit('getGlobalLevel', window.sessionStorage.getItem('getGlobalLevel')); //获取全网页等级
-        store.commit('getDefaultProvince', window.sessionStorage.getItem('getDefaultProvince')); // 获取全网页地址
-        store.commit('getLoginId', window.sessionStorage.getItem('getGlobalLevel'));//获取当前登录者的id
-        store.commit('getDefaultCity', window.sessionStorage.getItem('getDefaultCity')); // 获取二级方块地址
-        store.commit('getGlobalFstusername',window.sessionStorage.getItem('getGlobalFstusername')); //获取益农通账号
-        store.commit('getGlobalFstuserpw',window.sessionStorage.getItem('getGlobalFstuserpw')); //获取益农通密码
-        store.commit('getGlobalFstRoomid', window.sessionStorage.getItem('getGlobalFstRoomid')); //获取益农通id
-        let level = window.sessionStorage.getItem('getGlobalLevel')
-        let secondLevel = 0;
-        if (level >= 3) {
-          secondLevel = level - 1;
-        } else {
-          secondLevel = level;
-        }
-        store.commit('getSecondGlobalLevel', secondLevel); //获取二级方块等级
-        if(level<= 3){
-          store.commit('getPicAddress', JSON.parse(window.sessionStorage.getItem('getPicAddress')));
-        }
-        next()
-      }
-
-    }
+    path: '/indexFour',
+    name: 'IndexFour',
+    component: () =>import(/* webpackChunkName: "index */ "../views/index_four/index.vue"),
   },
-  //** */
-  // {
-  //   path: "/",
-  //   name: "indexFirst",
-  //   component: () =>
-  //     import(/* webpackChunkName: "index_first" */ "../views/index_first/index_first.vue")
-  // },
   {
     path: "/indexFirst",
     name: "indexFirst",
