@@ -98,11 +98,5 @@ export default {
 <style lang="stylus" scoped>
 div
   color #fff
-#pie
-  width 258px
-  height 166px
-  @media screen and (min-width:1900px) {
-    width 350px
-    height 166px
-  }
+
 </style>

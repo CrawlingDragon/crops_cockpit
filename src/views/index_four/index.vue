@@ -133,7 +133,7 @@ import NewestOnline from "../../components/newest-online/newest-online";
 import SwiperBase from "../../components/swiper-base/swiper-base"
 import SwiperHospital from "../../components/swiper-hospital/swiper-hospital"
 import Navs from "../../components/navs/navs"
-import Headnav from "../../components/headnav/headnav"
+import Headnav from "../../components/head_nav/head_nav"
 const YiNongTong = resolve=>require(["../../components/yinongtong/yinongtong"],resolve)
 const RankingList = resolve=>require(["../../components/ranking-list/ranking-list"],resolve)
 const vipList = resolve=>require(["../../components/vip-list/vip-list"],resolve)
@@ -359,8 +359,8 @@ bg-image($url)
   position relative
   z-index 222
   .headnav
-    z-index 9999999
     position fixed
+    z-index 9999999
     min-width 1340px
   .content
     width 1340px

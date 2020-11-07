@@ -97,7 +97,7 @@ export default {
   name: "city-hospital",
   data() {
     return {
-      wh: "width:390px;height:247px",
+      wh: "width:390px;height:166px",
       pieIndex: 1,
       colorArr: []
     };
@@ -187,6 +187,13 @@ export default {
       arr = arr.splice(0, length, newArr);
       arr = arr.concat(newArr);
       this.colorArr = arr;
+    }
+  },
+  created(){
+    console.log()
+    var w = document.documentElement.clientWidth || document.body.clientWidth
+    if(w>1900||w==1900){
+      this.wh = 'width:350px;height:247px'
     }
   },
   mounted() {

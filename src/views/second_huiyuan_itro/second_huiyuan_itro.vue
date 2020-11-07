@@ -1,7 +1,9 @@
 <template>
   <div class="expert_detail-container">
-    <div class="closefn" @click="topre()">&lt;</div>
-    <div class="head-title">会员：{{detail.realname}}</div>
+    <div @click="go_huiyuan()">
+      <div class="closefn"></div>
+      <div class="head-title">会员：{{this.$store.state.huiyuanName}}</div>
+    </div>
     <div class="top-nav">
       <router-link to='/second_huiyuan_itro/huiyuan_wang' ><span  class="item" @click="content_show = 1" :class="{active:content_show == 1}">网诊</span></router-link>
       <router-link to="/second_huiyuan_itro/huiyuan_intro" ><span  class="item" @click="content_show = 2" :class="{active:content_show == 2}">简介</span></router-link>
@@ -10,55 +12,40 @@
     </div>
     <div class="intro_content">
         <router-view></router-view>
-    </div>      
-    <!-- <div class="content2 content" v-show="content_show == 2">
-      <Hospital :items="hospitalList"></Hospital>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
 import Hospital from "@/components/hospital_list_item/hospital_list_item";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "expert_detail",
   components: {
     Hospital,
   },
-  props: {},
+  props: {
+  },
   data() {
     return {
       content_show: 2,
-      uId: this.$route.query.uid,
-      detail: "",
-      hospitalList: [],
-      appid:this.$route.query.appId
+      huiyuan_name:""
     };
   },
+  created(){
+  },
+  mounted(){
+    console.log(this.$store.state.huiyuanName)
+  },
   computed: {
-    ...mapState(["appId"]),
-    chufangCount() {
-      const r =
-        parseFloat(this.detail.cetucount) +
-        parseFloat(this.detail.wenzhencount) +
-        parseFloat(this.detail.wenzhencount) +
-        parseFloat(this.detail.answercount);
-      return r;
-    },
+    ...mapState([
+      "appId",
+      "huiyuanName",
+      "huiyuanId"
+      ]),
   },
-  watch: {
-  },
-  created() {
-    // console.log('999')
-    // this.getDetail();
-    // this.getJoinHospital();
-  },
-  destroyed() {},
   methods: {
-    topre(){
-      this.$router.push({path:'/expertlist'})
-    },
-    xxx(){
-        console.log('666')
+    go_huiyuan(){
+      this.$router.push({path:'/second_huiyuan'})
     },
     getDetail() {
       // 获取专家的详细数据
@@ -96,19 +83,18 @@ export default {
 .expert_detail-container
   .closefn
     position absolute
-    width 26px
-    height 26px
-    border 2px solid #7FB5F1
-    border-radius 50%
-    font-size 24px
-    color #7FB5F1
+    width 30px
+    height 30px
+    background url("../../assets/61.png")
+    background-size 100%
     left 41px
     top 41px
     display inline-block
   .head-title
+    font-family  MicrosoftYaHei
     font-size 30px
-    font-weight 400
-    color rgba(181, 181, 181, 1)
+    font-weight Regular
+    color #7FB5F1
     padding 42px 0 10px 90px
     text-align left
   .top-nav

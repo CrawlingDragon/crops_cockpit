@@ -22,8 +22,8 @@ export default new Vuex.Store({
     globalFstuserpw: '', //益农通密码
     globalFstRoomid: '', //益农通房间id
     noData: false, //没数据时
-    picAddress: {},
-    loginId: {}, //登陆时，保存地图参数id
+    // picAddress: {},//记录当前登录账号管理院的位置信息
+    // loginId: {}, //登陆时，保存地图参数id
     sessionUsername: '', //账号
     sessionPassword: '', //密码
     breadArr: [], //面包屑导航数组
@@ -31,6 +31,8 @@ export default new Vuex.Store({
     bviousLevel: 0, //县级等级
     isnav: 1,
     isstore: window.sessionStorage.getItem('isstore') ,//null为全国数据，1为新院数据
+    huiyuanName:"",//新院我的会员名字
+    huiyuanId:""//新院我的会员id
   },
   mutations: {
     getAppId(state, data) {
@@ -99,19 +101,19 @@ export default new Vuex.Store({
     getNoData(state, data) {
       state.noData = data
     },
-    getPicAddress(state, data) { //获取县级地址的
-      state.picAddress = data
-    },
+    // getPicAddress(state, data) { //获取县级地址的
+    //   state.picAddress = data
+    // },
     getAccountName(state, data) {
       state.accountName = data
     },
     getSecondMapIndex(state, data) {
       state.secondMapIndex = data
     },
-    getLoginId(state, data) {
-      //登陆时，保存地图参数id
-      state.loginId = data
-    },
+    // getLoginId(state, data) {
+    //   //登陆时，保存地图参数id
+    //   state.loginId = data
+    // },
     getBreadArr(state, data) {  //获取面包屑导航
       state.breadArr = data
     },
@@ -127,6 +129,12 @@ export default new Vuex.Store({
       state.isstore = data
       window.sessionStorage.setItem('isstore', data)
     },
+    getHuiyuanName(state,data){//新院 获取我的会员的名字
+      state.huiyuanName = data
+    },
+    getHuiyuanId(state,data){// 新院 获取我的会员的ID
+      state.huiyuanId = data
+    }
   },
   actions: {},
   modules: {}

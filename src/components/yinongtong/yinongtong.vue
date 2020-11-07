@@ -246,14 +246,13 @@ bg-image($url)
     width 210px
     height 40px
     background url('./yinongtong.png') no-repeat 100%
-    margin-top 15px
     @media screen and (min-width:1900px) {
       margin-top 40px
       height 60px
       width 290px
       background-size 100%
     }
-    margin 0 auto
+    margin 20px auto 0px
   .yinongtong-buttom
     width 195px
     height 55px

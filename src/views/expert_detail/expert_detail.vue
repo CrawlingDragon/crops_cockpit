@@ -1,7 +1,9 @@
 <template>
   <div class="expert_detail-container">
-    <div class="closefn" @click="topre()">&lt;</div>
-    <div class="head-title">专家：{{detail.realname}}</div>
+    <div @click="topre">
+      <div class="closefn"></div>
+     <div class="head-title">专家：{{detail.realname}}</div>
+    </div>
     <div class="top-nav">
       <div class="item" @click="content_show = 1" :class="{active:content_show == 1}">简介</div>
       <div class="item" @click="content_show = 2" :class="{active:content_show == 2}">TA加入的医院</div>
@@ -41,12 +43,16 @@ export default {
   props: {},
   data() {
     return {
-      content_show: 1,
-      uId: this.$route.query.uid,
+      content_show:1,
       detail: "",
       hospitalList: [],
       appid:this.$route.query.appId
     };
+  },
+  activated(){
+      console.log(this.$route.query.uid)
+      this.getDetail(this.$route.query.uid);
+      this.getJoinHospital();
   },
   computed: {
     ...mapState(["appId"]),
@@ -60,24 +66,22 @@ export default {
     },
   },
   watch: {
-  },
-  created() {
-    console.log('999')
-    this.getDetail();
-    this.getJoinHospital();
+    content_show(newVal){
+      console.log(newVal)
+    }
   },
   destroyed() {},
   methods: {
     topre(){
       this.$router.push({path:'/expertlist'})
     },
-    getDetail() {
+    getDetail(uid) {
       // 获取专家的详细数据
       this.$axios
         .fetchPost("/Home/Expert/GetMpExpertDetail", {
           appId: this.appid,
-          uId: this.uId,
-          purview: 4,
+          uId: uid,
+          purview: 1,
         })
         .then((res) => {
           console.log(res)
@@ -107,11 +111,10 @@ export default {
 .expert_detail-container
   .closefn
     position absolute
-    width 26px
-    height 26px
-    border 2px solid #7FB5F1
-    border-radius 50%
-    font-size 24px
+    width 30px
+    height 30px
+    background url("../../assets/61.png")
+    background-size 100%
     color #7FB5F1
     left 41px
     top 41px
@@ -119,7 +122,7 @@ export default {
   .head-title
     font-size 30px
     font-weight 400
-    color rgba(181, 181, 181, 1)
+    color #B5B5B5
     margin 42px 0 45px 90px
     text-align left
   .top-nav
@@ -130,7 +133,7 @@ export default {
       display inline-block
       font-size 40px
       margin-right 20px
-      color #C5C5C5
+      color #B5B5B5
       cursor pointer
       &.active
         border-bottom 4px solid rgba(255, 102, 0, 1)
@@ -147,11 +150,11 @@ export default {
       .img
         width 320px
         height 320px
-        margin-bottom 80px
+        margin-bottom 35px
       .p1, .p2
         font-size 28px
         color rgba(181, 181, 181, 1)
-        margin-bottom 10px
+        line-height 50px
     .right
       flex 1
       .name
@@ -170,20 +173,23 @@ export default {
           margin-left 10px
           vertical-align middle
       .title
-        font-size 30px
+        font-size 26px
         color #B5B5B5
         margin-bottom 5px
       .goodat
-        font-size 30px
-        color #B5B5B5
+        font-size 26px
+        color #FF6600
         margin-bottom 5px
+        line-height 50px
       .work-num
-        font-size 30px
-        color #FFFFFF
+        font-size 26px
         margin-bottom 5px
+        line-height 50px
+        color #FF6600
       .info
-        font-size 30px
+        font-size 24px
         margin-top 30px
+        line-height 50px
         color #B5B5B5
   .content2
     margin-top 100px

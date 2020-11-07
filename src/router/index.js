@@ -12,7 +12,7 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   //*以下是驾驶舱新增的
   {
-    path: '/',
+    path: "/",
     component: () =>
       import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
@@ -28,76 +28,76 @@ const routes = [
       import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
   },
   {
-    path:'/nexthospital',
-    name:'nexthospital',
+    path: "/nexthospital",
+    name: "nexthospital",
     component: () =>
       import(/* webpackChunkName: "nexthospital" */ "../views/nexthospital/nexthospital.vue")
   },
   {
-    path:'/expertlist',
-    name:'expertlist',
+    path: "/expertlist",
+    name: "expertlist",
     component: () =>
       import(/* webpackChunkName: "expertlist" */ "../views/expert_list/expert_list.vue")
   },
   {
-    path:'/hospitalsort',
-    name:'Hospitalsort',
+    path: "/hospitalsort",
+    name: "Hospitalsort",
     component: () =>
       import(/* webpackChunkName: "Hospitalsort" */ "../views/hospitalsort/hospitalsort"),
-    'children':[
+    children: [
       {
-          'path':'/hospitalsort',
-          component: () =>
-            import(/* webpackChunkName: "Hospitalsort" */ "../views/defaultsort/defaultsort.vue"),
-          'meta':{
-            keepAlive:true
-          },
+        path: "/hospitalsort",
+        component: () =>
+          import(/* webpackChunkName: "WebForCounty" */ "../views/defaultsort/defaultsort.vue"),
+        meta: {
+          keepAlive: true
+        },
       },
       {
-          'path':'/defaultsort',
-          'name':'defaultsort',
-          component: () =>
-            import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
-          'meta':{
-            keepAlive:true
-          },
-     },
-      {
-          'path':'/multiplesort',
-          'name':'multiplesort',
-          component: () =>
-            import(/* webpackChunkName: "multiplesort" */ "../views/multiplesort/multiplesort.vue"),
-          'meta':{
-            keepAlive:true
-          },
+        path: "/defaultsort",
+        name: "defaultsort",
+        component: () =>
+          import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
+        meta: {
+          keepAlive: true
+        },
       },
       {
-          'path':'/selectsort',
-          'name':'selectsort',
-          component: () =>
-            import(/* webpackChunkName: "selectsort" */ "../views/selectsort/selectsort.vue"),
-          'meta':{
-            keepAlive:true
-          },
+        path: "/multiplesort",
+        name: "multiplesort",
+        component: () =>
+          import(/* webpackChunkName: "multiplesort" */ "../views/multiplesort/multiplesort.vue"),
+        meta: {
+          keepAlive: true
+        },
+      },
+      {
+        path: "/selectsort",
+        name: "selectsort",
+        component: () =>
+          import(/* webpackChunkName: "selectsort" */ "../views/selectsort/selectsort.vue"),
+        meta: {
+          keepAlive: true
+        },
       }
-  ]
+    ]
   },
   {
-    path:'/expertranking',
-    name:'Expertranking',
+    path: "/expertranking",
+    name: "Expertranking",
     component: () =>
       import(/* webpackChunkName: "expertranking" */ "../views/expert_ranking/expertranking.vue")
   },
   {
-    path:'/discussscore',
-    name:'Discussscore',
+    path: "/discussscore",
+    name: "Discussscore",
     component: () =>
       import(/* webpackChunkName: "discussscore" */ "../views/discuss_score/discussscore.vue")
   },
   {
-    path: '/indexFour',
-    name: 'IndexFour',
-    component: () =>import(/* webpackChunkName: "index */ "../views/index_four/index.vue"),
+    path: "/indexFour",
+    name: "IndexFour",
+    component: () => import(/* webpackChunkName: "index */ "../views/index_four/index.vue"),
   },
   {
     path: "/indexFirst",

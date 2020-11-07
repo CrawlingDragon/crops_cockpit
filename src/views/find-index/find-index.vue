@@ -32,7 +32,7 @@
     </div>
 </template>
 <script>
-import Headnav from "../../components/headnav/headnav"
+import Headnav from "../../components/head_nav/head_nav"
 export default {
     'name':'Find',
     data(){
@@ -95,10 +95,8 @@ export default {
 <style lang="stylus" scoped>
 .container
     height 768px
-    margin 0 auto
+    position relative
     .head
-        min-width 1340px
-        margin 0 auto
         position fixed
         z-index 99999999
     .contain

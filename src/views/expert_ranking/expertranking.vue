@@ -83,7 +83,7 @@
     </div>
 </template>
 <script>
-import Headnav from '../../components/headnav/headnav'
+import Headnav from '../../components/head_nav/head_nav'
 export default {
     components:{
         Headnav

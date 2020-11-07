@@ -65,7 +65,7 @@
 </template>
 <script>
 var echarts = require('echarts')
-import Headnav from '../../components/headnav/headnav'
+import Headnav from '../../components/head_nav/head_nav'
 export default {
     components:{
         Headnav
@@ -268,12 +268,10 @@ export default {
     @media screen and (max-width:1340px) 
         width:1340px
     height: 100%;
-    background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     position relative
     .header
-        position absolute
-        top 15px
+        position fixed
         width 100%
         .text1
             font-size 20px

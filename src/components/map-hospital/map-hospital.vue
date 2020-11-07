@@ -53,13 +53,15 @@ export default {
   data() {
     return {
       noDataMessga: "该地区暂无医院",
-      wh:''
+      wh:""
     };
   },
   created(){
     var w = document.documentElement.clientWidth || document.body.clientWidth
     if(w>1900||w==1900){
       this.wh = 'width:350px;height:166px'
+    }else{
+      this.wh = 'width:247px;height:166px'
     }
   },
   props: {

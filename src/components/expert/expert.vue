@@ -1,19 +1,19 @@
 <template>
-  <div class="expert-box">
-    <el-image class="img" fit="cover"></el-image>
+  <div class="expert-box" @click="goToExpertDetail(item.uid)">
+    <el-image class="img" fit="cover" :src="item.avatar"></el-image>
     <div class="text">
       <div class="name">
-        黄蓉
+        {{ item.realname }}
         <span>专家</span>
       </div>
       <p class="title">
-        浙江大学昆虫研究所
-        <span style="margin-left:10px">教授</span>
+        {{ item.position }}
       </p>
-      <p class="time">加入时间：2017-05-27</p>
-      <p class="goodat">擅长作物：水蜜桃、无花果、小樱桃</p>
+      <p class="time">加入时间：{{ item.jointime }}</p>
+      <p class="goodat">擅长作物：{{ item.zuowu }}</p>
       <div class="bottom">
-        <span style="margin-right:10px">处方（5）</span>加入医院（1）
+        <span style="margin-right:10px">处方（{{ item.chufangcount }}）</span
+        >加入医院（{{ item.hospitalcount }}）
       </div>
     </div>
   </div>
@@ -22,21 +22,37 @@
 export default {
   name: "expert",
   components: {},
-  props: {},
+  props: {
+    item: {
+      type: Object,
+      default: function() {
+        return {};
+      }
+    }
+  },
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    goToExpertDetail(uid) {
+      // 到专家详情页
+      this.$router.push({
+        path: "/expert_detail",
+        query: {
+          uid: uid
+        }
+      });
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .expert-box
   display flex
-  font-family SimHei
   .img
     width 235px
     height 235px
@@ -71,4 +87,9 @@ export default {
       line-height 1.2
       color #fff
       margin-bottom 5px
+    .goodat
+      overflow hidden
+      text-overflow ellipsis
+      white-space nowrap
+      word-break break-all
 </style>

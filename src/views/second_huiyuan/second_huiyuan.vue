@@ -1,6 +1,12 @@
 <template>
    <div class="contain">
-       <div class="head">这是头部</div>
+       <div class="head">
+           <Headers
+            :title=this.title
+            :returnPath = this.returnPath
+           ></Headers>
+           这是头部
+       </div>
        <div class="my_huiyuan">
            <div class="single_huiyuan" v-for="(item,index) in this.huiyuan_list" :key="index" @click="watch_detail(item)">
                <img class="photo" :src="item.avatar" alt="">
@@ -12,10 +18,13 @@
        </div>
         <mugen-scroll :handler="loadMore" :should-handle="!loading" scroll-container="my_huiyuan">
         </mugen-scroll>
+       <div class="total">共计15个结果</div>
    </div>
 </template>
 <script>
 import MugenScroll from "vue-mugen-scroll"
+import Headers from "../../components/online_hospital_header/online_hospital_header"
+import { mapMutations, mapState } from "vuex";
 export default {
     data(){
         return{
@@ -23,11 +32,14 @@ export default {
             appId:this.$store.state.appId,
             loading:false,//加载状态
             page: 1, // 当前页数
-            total:''//当前会员总数
+            total:'',//当前会员总数
+            title:"我的会员",
+            returnPath:"/online_hospital_channel"
         }
     },
     components:{
-        MugenScroll//滚动条下滑加载组件
+        MugenScroll,//滚动条下滑加载组件
+        Headers
     },
     created(){
         this.gethuiyuan_list(1,14)
@@ -51,10 +63,16 @@ export default {
                 }
             })
         },
+         ...mapMutations([
+            "getHuiyuanName",
+            "getHuiyuanId"
+        ]),
         watch_detail(item){
-            console.log(item.uid)
+            this.getHuiyuanName(item.name)
+            this.getHuiyuanId(item.id)
             this.$router.push({path:"/second_huiyuan_itro",query:{
-                uid:item.uid
+                id:item.id,
+                name:item.name
             }})
         },
         loadMore() {
@@ -128,5 +146,10 @@ export default {
                 overflow hidden
                 text-overflow ellipsis
                 white-space nowrap
-    
+.total
+    position fixed
+    left 40px
+    bottom 79px
+    color #B5B5B5
+    font-size 24px
 </style>

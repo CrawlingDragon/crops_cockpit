@@ -71,8 +71,8 @@ export default {
       }
     },
     ...mapMutations([
-      "getDefaultProvince",
-      "getDefaultCity",
+      // "getDefaultProvince",
+      // "getDefaultCity",
       "getDefaultAddressArr",
       "getGlobalActiveName",
       "getGlobalFstusername",
@@ -84,8 +84,8 @@ export default {
       "getSessionUsername",
       "getPicAddress",
       "getAccountName",
-      "getLoginId",
-      "getBreadArr",
+      // "getLoginId",
+      // "getBreadArr",
       "getAppId"
     ]),
     login(e) {
@@ -126,9 +126,9 @@ export default {
                 } else {
                   secondLevel = level;
                 }
-                if (level <= 3) {
-                  this.getPicAddress(res.data.data.address);
-                }
+                // if (level <= 3) {
+                //   this.getPicAddress(res.data.data.address);
+                // }
                 const arr = res.data.data.area;
                 const areaname = res.data.data.areaname;
                 const isshaoxing = res.data.data.ishaoxing;
@@ -142,21 +142,22 @@ export default {
                 const defaultName = res.data.data.default;
                 const letter = res.data.data.letter;
                 window.sessionStorage.setItem("letter", letter);
-                this.getDefaultProvince(areaname); // 获取全网页地址
-                this.getGlobalLevel(level); // 获取全网页等级
-                this.getDefaultCity(defaultName); // 获取二级方块地址
+                // this.getDefaultProvince(areaname); // 获取全网页地址
+                // this.getGlobalLevel(level); // 获取全网页等级
+                // this.getDefaultCity(defaultName); // 获取二级方块地址
                 this.getSecondGlobalLevel(secondLevel); // 获取二级方块等级
                 // this.secondMapIndex(res.data.data)
                 // this.getDefaultCity(city); // 获取默认城市
-                this.getDefaultAddressArr(arr); // 获取默认导航列表
+                // this.getDefaultAddressArr(arr); // 获取默认导航列表
                 this.getGlobalFstusername(res.data.data.Fstusername); // 获取益农通账号
                 this.getGlobalFstuserpw(res.data.data.Fstuserpw); // 获取益农通密码
                 this.getGlobalFstRoomid(res.data.data.FstRoomid); // 获取益农通id
                 this.getSessionUsername(this.username);
                 this.getSessionPassword(password);
                 this.getAccountName(res.data.data.areaname);
-                this.getLoginId(level);
-                this.getBreadArr(res.data.data.nav);
+                // this.getLoginId(level);
+                window.sessionStorage.setItem("LoginId",level)//记录当前登录账号的等级水平
+                // this.getBreadArr(res.data.data.nav);
                 this.$router.push({
                   path: "/indexFour",
                   query: {

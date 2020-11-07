@@ -84,7 +84,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .contain
-    position relative
+    position absolute
     top 70px
     @media screen and (min-width:1900px){
         top 204px

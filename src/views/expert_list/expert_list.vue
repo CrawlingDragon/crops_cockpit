@@ -2,7 +2,8 @@
     <div class="contain">
         <div class="header">
             <Headnav
-            :lefttitle=this.lefttitle
+            :lefttitle = this.lefttitle
+            :returnpath = this.returnpath
             ></Headnav>
         </div>
         <div class="expert_list" target="_blank" :href="this.outlink" ref="expert_list">
@@ -30,7 +31,7 @@
     </div>
 </template>
 <script>
-import Headnav from "../../components/headnav/headnav"
+import Headnav from "../../components/head_nav/head_nav"
 import Nodata from "../../components/no-data/no-data"
 import MugenScroll from "vue-mugen-scroll"
 export default {
@@ -47,15 +48,14 @@ export default {
             total:0,
             loading:false,//加载状态
             page: 1, // 当前页数
-            lefttitle:'所有专家'
+            lefttitle:'所有专家',
+            returnpath:"/findindex"
         }
     },
     created(){
         this.$parent.app_loading=false
         this.userid = window.sessionStorage.getItem('curuserid')
-        console.log(window.sessionStorage.getItem('isstore'))
         this.getexpert_list(this.page)
-        
     },
     methods:{
         godetail(item,index){
@@ -68,7 +68,6 @@ export default {
                 {appId:this.userid,purview:"1",page:curpage,isstore:window.sessionStorage.getItem('isstore')}
                 // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
             ).then(res=>{
-                console.log(res)
                 rLoading.close()
                 if(res.data.code == "200"){
                     this.total = res.data.maxitem

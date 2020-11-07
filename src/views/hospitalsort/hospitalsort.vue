@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-import Headnav from '../../components/headnav/headnav'
+import Headnav from '../../components/head_nav/head_nav'
 export default {
     components:{
         Headnav
@@ -61,9 +61,9 @@ export default {
     margin 0 auto
     position relative
     .header
-        position absolute
-        top 15px
+        position fixed
         width 100%
+        z-index 9999
         .text1
             font-size 20px
             line-height 20px
@@ -85,7 +85,7 @@ export default {
             right  2%
             top 2px
     .option
-        margin 0 auto
+        margin 40px auto 0px auto
         width 500px
         vertical-align middle
         position absolute
@@ -113,5 +113,7 @@ export default {
     ::-webkit-scrollbar 
         display none
     .content 
+        position relative
         -ms-overflow-style none
+
 </style>

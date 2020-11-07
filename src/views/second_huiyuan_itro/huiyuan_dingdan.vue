@@ -24,18 +24,40 @@
   </div>
 </template>
 <script>
+import {mapState } from "vuex";
 export default {
-  name: "second_tu",
+  name: "second_dingdan",
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+
+    }
   },
-  computed: {},
+  computed: {
+    ...mapState([
+      "appId",
+      "huiyuanName",
+      "huiyuanId"
+      ]),
+  },
   watch: {},
-  mounted() {},
+  created() {
+    this.getDingdan(this.$store.state.appId,this.$store.state.huiyuanId,1,5)
+  },
   destroyed() {},
-  methods: {}
+  methods: {
+    getDingdan(appId,uId,page,pagesize){
+      this.$axios.fetchPost(
+        "/Home/Order/GetMpMemberOrder",
+        {appId:appId,uId:uId,page:page,pagesize:pagesize}
+      ).then(res=>{
+        if(res.data.code=200){
+          console.log(res)
+        }
+      })
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
