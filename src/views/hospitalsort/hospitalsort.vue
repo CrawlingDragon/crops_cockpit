@@ -62,28 +62,12 @@ export default {
     position relative
     .header
         position fixed
+        height 50px
+        z-index 99
         width 100%
-        z-index 9999
-        .text1
-            font-size 20px
-            line-height 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 26px
-        .close
-            position absolute
-            left 45px
-            z-index 666
-        .title
-            margin 0 auto
-        .time
-            position absolute
-            width 130px
-            font-size 14px
-            right  2%
-            top 2px
+        @media screen and (min-width:1900px){
+            padding-top 40px
+        }
     .option
         margin 40px auto 0px auto
         width 500px
@@ -93,7 +77,7 @@ export default {
         right 0
         top 10px
         @media screen and (min-width:1900px) {
-            top 102px
+            margin 87px auto 0px auto
         }
         z-index 666
         .text2
@@ -115,5 +99,8 @@ export default {
     .content 
         position relative
         -ms-overflow-style none
+        @media screen and (min-width:1340px) {
+            padding-top 80px
+        }
 
 </style>

@@ -23,11 +23,11 @@
           {{detail.position}}
         </p>
         <p class="goodat">擅长作物：{{detail.zuowu}}</p>
-        <div class="work-num">处方（{{chufangCount}}）：测土配方（{{detail.cetucount}}）、巡诊（{{detail.wenzhencount}}）、问珍（{{detail.wenzhencount}}）、回答（{{detail.answercount}}）</div>
+        <div class="work-num">处方（{{detail.chufangcount}}）：测土配方（{{detail.cetucount}}）、巡诊（{{detail.wenzhencount}}）、问珍（{{detail.wenzhencount}}）、回答（{{detail.answercount}}）</div>
         <div class="info">简介：{{detail.description}}</div>
       </div>
     </div>
-    <div class="content2 content" v-show="content_show == 2">
+    <div class="content2 " v-show="content_show == 2">
       <Hospital :items="hospitalList"></Hospital>
     </div>
   </div>
@@ -52,18 +52,9 @@ export default {
   activated(){
       console.log(this.$route.query.uid)
       this.getDetail(this.$route.query.uid);
-      this.getJoinHospital();
   },
   computed: {
     ...mapState(["appId"]),
-    chufangCount() {
-      const r =
-        parseFloat(this.detail.cetucount) +
-        parseFloat(this.detail.wenzhencount) +
-        parseFloat(this.detail.wenzhencount) +
-        parseFloat(this.detail.answercount);
-      return r;
-    },
   },
   watch: {
     content_show(newVal){
@@ -89,21 +80,7 @@ export default {
             this.detail = res.data.data;
           }
         });
-    },
-    getJoinHospital() {
-      // ta 加入的医院
-      this.$axios
-        .fetchPost("/Home/Manage/GetManageMpDataList", {
-          appId: this.appid,
-          type: "expert",
-        })
-        .then((res) => {
-          console.log(res)
-          if (res.data.code === "200") {
-            this.hospitalList = res.data.data.lists;
-          }
-        });
-    },
+    }
   },
 };
 </script>
@@ -123,7 +100,7 @@ export default {
     font-size 30px
     font-weight 400
     color #B5B5B5
-    margin 42px 0 45px 90px
+    padding  42px 0 45px 90px
     text-align left
   .top-nav
     margin 0 90px
@@ -192,5 +169,5 @@ export default {
         line-height 50px
         color #B5B5B5
   .content2
-    margin-top 100px
+    padding 100px 40px 0px 40px
 </style>

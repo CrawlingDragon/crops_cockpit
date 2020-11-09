@@ -31,7 +31,8 @@ export default {
         return{
             hospitalinfo:[],
             userid:"" ,
-            outlink:""
+            outlink:"",
+            isstore:window.sessionStorage.getItem('isstore')//判断是新型庄稼医院还是所有医院
         }
     },
     created(){
@@ -79,6 +80,21 @@ export default {
                 }
             })
         }
+    },
+    watch:{
+        isstore(newVal){
+        const rLoading = this.openLoading();
+        console.log(newVal)
+        this.$axios.fetchPost(
+            "/Home/Manage/GetManageMpDataList",
+            {appId:this.userid,type:"default",ordertag:"default",storetag:newVal,areatag:""}
+            ).then(res=>{
+                if(res.data.code == "200"){
+                    this.hospitalinfo = res.data.data.lists
+                    rLoading.close();
+                }
+            })
+        }
     }
 }
 </script>
@@ -87,7 +103,7 @@ export default {
     position absolute
     top 70px
     @media screen and (min-width:1900px){
-        top 204px
+        top 130px
     }
     .hospitalinfo
         padding-left 3%

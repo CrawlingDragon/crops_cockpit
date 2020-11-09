@@ -359,7 +359,12 @@ const routes = [
     path:'/huiyuan_dingdan/second_order_detail',
     component:()=>
     import(/* webpackChunkName: "second_order_detail" */"../views/second_order_detail/second_order_detail.vue")
-  }
+  },
+  {
+    path:'/sao_yinongbao',
+    component:()=>
+    import(/* webpackChunkName: "sao_yinongbao" */"../views/sao_yinongbao/sao_yinongbao.vue")
+  },
 ];
 
 const router = new VueRouter({

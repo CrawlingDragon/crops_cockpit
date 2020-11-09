@@ -349,6 +349,12 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+/deep/ .change-box {
+  @media screen and (min-width:1900px) {
+    top 80px 
+    right 255px 
+  }
+}
 bg-image($url) 
     @media (-webkit-min-device-pixel-ratio: 2),(min-device-pixel-ratio: 2) 
         background-image: url($url + "@2x.png")
@@ -362,6 +368,7 @@ bg-image($url)
     position fixed
     z-index 9999999
     min-width 1340px
+    width 100%
   .content
     width 1340px
     height calc(100vh)
@@ -369,7 +376,7 @@ bg-image($url)
     position relative
     padding-top 50px
     @media screen and (min-width:1900px){
-      width 1900px 
+      width 1900px
       padding-top 103px
     }
     background url('./index-bj.jpg') no-repeat

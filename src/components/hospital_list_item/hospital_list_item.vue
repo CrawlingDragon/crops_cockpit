@@ -1,20 +1,20 @@
 <template>
   <ul class="item-wrap">
-    <li v-for="item in items" :key="item.id" :class="{'other':item.isstore==0}" @click="goToHospitalIndex(item.appid,item.isstore)">
+    <li v-for="item in this.hospitalList" :key="item.id" :class="{'other':item.isstore==0}" @click="goToHospitalIndex(item.appid,item.isstore)">
       <div class=" title">{{item.name}}</div>
       <div class="num-item">
         <p class="p1">专家</p>
         <p class="p2">{{item.expert}}</p>
       </div>
-      <div class="num-item" v-if="item.isstore == 0">
+      <div class="num-item" v-if="item.isstore == '0'">
         <p class="p1">网诊</p>
         <p class="p2">{{item.wen}}</p>
       </div>
-      <div class="num-item" v-if="item.isstore !== 0">
+      <div class="num-item" v-if="item.isstore !== '0'">
         <p class="p1">会员</p>
         <p class="p2">{{item.user}}</p>
       </div>
-      <div class="num-item" v-if="item.isstore !== 0">
+      <div class="num-item" v-if="item.isstore !== '0'">
         <p class="p1">处方</p>
         <p class="p2">{{item.chufang}}</p>
       </div>
@@ -40,13 +40,38 @@ export default {
   data() {
     return {
       purview: 0,
+      uid:window.sessionStorage.getItem("expert_uid"),//专家的uid
+      hospitalList:""
     };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  activated(){
+    console.log("666")
+    this.getJoinHospital(this.uid)
+  },
+  created() {
+    
+  },
   destroyed() {},
   methods: {
+    getJoinHospital(uid) {
+      // ta 加入的医院
+      this.$axios
+        .fetchPost("/Home/Manage/GetManageMpDataList", {
+          appId:uid,
+          storetag:99,
+          ordertag:"default",
+          areatag:"",
+          type:"expert",
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.data.code === "200") {
+            this.hospitalList = res.data.data.lists;
+          }
+        });
+    },
     getHospitalType(appId) {
       // 获取医院的类型
       this.$axios
@@ -80,8 +105,8 @@ export default {
   li
     display inline-block
     background rgba(35, 147, 221, 0.5)
-    width 420px
-    height 190px
+    width 440px
+    height 204px
     margin-right 15px
     color #fff
     font-family SimHei
@@ -105,4 +130,5 @@ export default {
       & > p
         font-size 30px
         color #CDCDCD
+        text-align center
 </style>

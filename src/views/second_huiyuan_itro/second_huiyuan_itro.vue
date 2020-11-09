@@ -2,7 +2,7 @@
   <div class="expert_detail-container">
     <div @click="go_huiyuan()">
       <div class="closefn"></div>
-      <div class="head-title">会员：{{this.$store.state.huiyuanName}}</div>
+      <div class="head-title">会员：{{this.huiyuanname}}</div>
     </div>
     <div class="top-nav">
       <router-link to='/second_huiyuan_itro/huiyuan_wang' ><span  class="item" @click="content_show = 1" :class="{active:content_show == 1}">网诊</span></router-link>
@@ -27,8 +27,9 @@ export default {
   },
   data() {
     return {
-      content_show: 2,
-      huiyuan_name:""
+      content_show: 1,
+      huiyuan_name:"",
+      huiyuanname:window.sessionStorage.getItem("huiyuan_name")
     };
   },
   created(){

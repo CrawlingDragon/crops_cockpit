@@ -23,6 +23,7 @@ export default {
   min-height: 768px;
   margin: 0 auto;
   width: 100%
+  height 100%
   .create-isLoading
     font-size 30px
     .el-loading-spinner

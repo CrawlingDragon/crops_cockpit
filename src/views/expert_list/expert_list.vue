@@ -46,19 +46,19 @@ export default {
             curuserid:"" ,//当前的用户ID
             outlink:'http://wap.114nz.com/Web/Expert/detail?Id=' ,
             total:0,
-            loading:false,//加载状态
+            loading:true,//加载状态
             page: 1, // 当前页数
             lefttitle:'所有专家',
             returnpath:"/findindex"
         }
     },
     created(){
-        this.$parent.app_loading=false
         this.userid = window.sessionStorage.getItem('curuserid')
         this.getexpert_list(this.page)
     },
     methods:{
         godetail(item,index){
+            window.sessionStorage.setItem("expert_uid",item.uid)
             this.$router.push({path:'/expert_detail',query:{appId:this.userid,uid:item.uid}})
         },
         getexpert_list(curpage){
@@ -71,13 +71,13 @@ export default {
                 rLoading.close()
                 if(res.data.code == "200"){
                     this.total = res.data.maxitem
-                    console.log(res.data.data[0].position.length)
                     if(this.page == 1){
                         this.expert_list = res.data.data
                     }else{
                         this.expert_list.push(...res.data.data)
                     }
                     this.loading=false
+                    console.log(curpage)
                 }
             })
         },
@@ -96,27 +96,26 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .contain
-    width: 100%;
+    width 100%
+    height 100%
     @media screen and (max-width:1340px) 
         width:1340px
         height 768px
-    @media screen and (min-width:1341px) 
-        height 1080px
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
-    position relative
     .header
         width 100%
+        @media screen and (min-width:1900px) {
+            padding-top 40px
+        }
     .expert_list
-        position absolute
+        margin 0 auto
         width 96%
-        top 63px
+        margin-top 133px
         left 2%
         @media screen and (min-width:1900px) {
-            top 203px
             height 741px
         }
-        bottom 75px
         height 630px
         overflow scroll
         overflow-x hidden
@@ -235,9 +234,9 @@ export default {
                     float left
                     color #FFFFFF
     .expert_num
-        position absolute
-        bottom 6%
-        left 2%
+        position fixed
+        left 44px
+        bottom 66px
         font-size 16px
         font-family SimHei
         font-weight Regular

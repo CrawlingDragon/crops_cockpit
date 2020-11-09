@@ -83,7 +83,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 210px
+        top 130px
     }
     .hospitalinfo
         padding-left 3%
@@ -104,8 +104,9 @@ export default {
                 width 379.5px
                 height 187.5px
             @media screen and (min-width:1900px) 
-                width 439.5px
-                height 212.5px
+                width 440px
+                height 203px
+                margin-bottom 20px
              .hospitalname
                 text-align center
                 position relative
@@ -126,9 +127,10 @@ export default {
                 font-weight 400
                 color #FFFFFF
                 .hos_name
-                    margin 0 auto
                     width 89%
+                    margin  0 auto
                     overflow: hidden;
+                    word-break: keep-all;
                     text-overflow:ellipsis;
                     white-space: nowrap;
             .text1

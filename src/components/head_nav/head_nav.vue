@@ -105,10 +105,10 @@ import { mapMutations, mapState } from "vuex";
 const Date = resolve => require(["../date/date"], resolve);
 export default {
   props: {
-    cur_cityname: {
-      type: String,
-      default: function() {}
-    },
+    // cur_cityname: {
+    //   type: String,
+    //   default: function() {}
+    // },
     changemoudle: {
       type: String,
       default: function() {}
@@ -134,7 +134,8 @@ export default {
   },
   data() {
     return {
-      chooseHospitalRadio: "1"
+      chooseHospitalRadio: "1",
+      cur_cityname:window.sessionStorage.getItem("name")
     };
   },
   created() {
@@ -196,6 +197,11 @@ export default {
       }
     },
     ...mapMutations(["getNoData", "getIsstore"])
+  },
+  watch:{
+    chooseHospitalRadio(newVal){
+      console.log(newVal)
+    }
   }
 };
 </script>
@@ -203,6 +209,11 @@ export default {
 .contain
   height 50px
   display flex
+  @media screen and (min-width:1900px) {
+    height 75px
+    margin-top 40px
+  }
+  width 100%
   .left_nav
     flex 3
     margin-left 40px
@@ -211,8 +222,6 @@ export default {
       font-size 20px
       @media screen and (min-width:1900px) {
         font-size 30px
-        left 40px
-        top 40px
       }
       color #7FB5F1
     .jiantou
@@ -230,6 +239,9 @@ export default {
       font-size 20px
       position relative
       bottom 3px
+      @media screen and (min-width:1900px) {
+        font-size 26px
+      }
     .index,.find
       display inline-block
       font-size 20px
@@ -262,10 +274,6 @@ export default {
         margin 0px 0px 0px 14px
         display inline-block
         vertical-align top
-        @media screen and (min-width:1900px){
-          top 48px
-          left 86px
-        }
       .index-text1
         color #7FB5F1
     .find
@@ -294,8 +302,8 @@ export default {
         }
       .find-text
         @media screen and (min-width:1900px){
-          top 48px
-          left 239px
+          position relative
+          bottom 3px
         }
       .find-text1
         color #7FB5F1
@@ -324,8 +332,7 @@ export default {
       @media screen and (min-width:1900px){
           height 28px
           width 28px
-          right 317px
-          top 46px
+          margin-right 50px
       }
     cursor pointer
     .time
@@ -337,6 +344,9 @@ export default {
       color rgba(127, 181, 241, 1)
       position relative
       bottom 1px
+      @media screen and (min-width:1900px) {
+        bottom 3px
+      }
     .change-data
       display inline-block
       margin-right 30px
@@ -371,7 +381,8 @@ export default {
         border 1px solid #1B4E79
         display none
         @media screen and (min-width:1900px) {
-          top 25px
+          top 40px 
+          right 255px 
         }
         .title
           padding 30px 0px 20px 20px

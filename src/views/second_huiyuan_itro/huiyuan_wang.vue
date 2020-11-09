@@ -1,49 +1,75 @@
 <template>
   <div class="vip_diagnosis-container">
     <ul class="diagnosis-ul">
-      <li v-for="item in 3" :key="item">
+      <li v-for="(item,index) in this.wangzhenlist" :key="index">
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
-            范冰冰的水稻提问
-            <span>2017-05-27 12:00</span>
+            {{item.title}}
+            <span>{{item.showtime}}</span>
           </p>
           <p
             class="p2"
-          >机插秧田，插秧后7天，追肥尿素15斤/亩，拌除草剂苄-乙，肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨昨天下过大雨，田间水位上升许多，今天发现水深的地方成片心叶滞长，拌除</p>
+          >{{item.content}}</p>
         </div>
         <div class="answer">
-          <p class="p3">回复数：4</p>
+          <p class="p3">回复数：{{item.replies}}</p>
           <el-image
             class="img"
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592471253187&di=2be437364bafe9496afca32965ee9e22&imgtype=0&src=http%3A%2F%2Ft7.baidu.com%2Fit%2Fu%3D3204887199%2C3790688592%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D4610%26h%3D2968"
+            :src= "item.thumb_pic"
           ></el-image>
         </div>
       </li>
     </ul>
-    <div class="result-num">共200个结果</div>
+    <div class="result-num">共{{this.total}}个结果</div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "vip_diagnosis",
-  components: { Header },
   props: {},
   data() {
-    return {}
+    return {
+      appId:window.localStorage.getItem("appId"),//当前登录账号的Id,
+      wangzhenlist:"",
+      total:""
+    }
   },
-  computed: {},
+  computed: {
+    ...mapState(["huiyuanId"]),
+  },
   watch: {},
+  created(){
+    this.getwanginfo(this.appId,this.$store.state.huiyuanId,1)
+  },
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    getwanginfo(appId,Id,page){
+      this.$axios.fetchPost(
+        "/Home/Treatment/GetWenList",
+        {appId:appId,Id:Id,page:page}
+      ).then(res=>{
+        if(res.data.code == "200"){
+          console.log(res)
+          this.wangzhenlist = res.data.data
+          this.total = res.data.count
+        }
+      })
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
 .vip_diagnosis-container
   .diagnosis-ul
     margin 0px 40px
+    height 429px
+    overflow scroll
+    @media screen and (min-width:1900px) {
+      height 741px
+    }
     li
       border 1px solid rgba(255, 255, 255, 0.2)
       display flex

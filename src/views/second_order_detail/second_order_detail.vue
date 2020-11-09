@@ -5,26 +5,28 @@
             <div class="head-title">订单详情</div>
         </div>
         <div class="left">
-            <div class="name">黄莲蓉的订单</div>
-            <div class="shop_num">5种商品共10件</div>
-            <div class="order_number">订单号：12333333</div>
-            <div class="order_time">2017-05-27 12:00</div>
-            <div class="allprice">总金额：¥<span class="price">2600</span>.00</div>
-            <img src="" alt="">
+            <div class="name">{{this.order_info.name}}</div>
+            <div class="shop_num">{{this.order_info.title}}</div>
+            <div class="order_number">订单号：{{this.order_info.ordernumber}}</div>
+            <div class="order_time">{{this.order_info.showtime}}</div>
+            <div class="allprice">总金额：¥<span class="price">{{this.coastInt}}</span>.{{this.coastFloat}}</div>
+            <!-- <img  src="../../assets/64.png" alt=""> -->
+            <div class="icon1"></div>
         </div>
         <ul class="right">
-            <li v-for="item in 10" :key="item">
-                <img src="../../assets/5.png" alt="">
+            <li v-for="(item,index) in this.order_info.products" :key="index" @click="watchGooddetail(item)">
+                <img :src="item.goods_pic" alt="">
                 <div class="text">
-                    <div class="order_kinds" v-for="item in 1" :key="item">
-                        燕化 多禧利 香菇多糖 杀菌剂：¥6.50*3
+                    <div class="order_kinds">
+                        {{item.name}}
+                        <span>¥{{item.price}}*{{item.spec_sn}}</span>
                     </div>
                     <div class="guige">
-                        商品规格：20g
+                        商品规格：{{item.spec}}
                     </div>
                 </div>
                 <div class="buy_number">
-                  <span class="fuhao">¥</span>56.00<span class="fuhao">*</span>3
+                  <span class="fuhao">¥</span>{{item.price}}<span class="fuhao">*</span>{{item.quantity}}
                 </div>
             </li>
         </ul>
@@ -33,11 +35,38 @@
 <script>
 export default {
     data(){
-
+      return{
+        order_id:window.sessionStorage.getItem("orderid"),//用户的订单id
+        order_info:"",//订单的信息
+        coastInt:"",//订单金额取整
+        coastFloat:""//订单金额取余
+      }
+    },
+    activated(){
+      console.log("666")
+      this.getOrederinfo()
     },
     methods:{
       topre(){
         this.$router.go(-1)
+      },
+      getOrederinfo(){
+        this.$axios.fetchPost(
+          "/Home/Order/GetMpOrderDetail",
+          {Id:this.order_id}
+        ).then(res=>{
+          if(res.data.code == "200"){
+            console.log(res)
+            this.order_info = res.data.data
+            const a = res.data.data.ordercost
+            var b = a.toString().split(".")
+            this.coastInt = b[0]
+            this.coastFloat = b[1]
+          }
+        })
+      },
+      watchGooddetail(item){
+        console.log("去查看商品的详情页面")
       }
     }
 }
@@ -86,6 +115,12 @@ export default {
         font-size 36px
         .price
          font-size 60px
+      .icon1
+        margin-top 51px
+        width 171px
+        height 171px
+        background url("../../assets/64.png")
+        background-size 100%
     .right
       position absolute
       top 160px

@@ -1,40 +1,63 @@
 <template>
   <div class="tu-container">
     <ul class="tu-ul">
-      <li v-for="item in 4" :key="item">
+      <li v-for="(item,index) in cetulist " :key="index">
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
-            番茄地
-            <span>ID:1233456</span>
+            {{item.title}}
+            <span>ID:{{item.idnumber}}</span>
           </p>
-          <p class="p2">青塘村大山脚下那块正方形的地</p>
-          <p class="p3">取样日期：2017-05-27</p>
+          <p class="p2">{{item.address}}</p>
+          <p class="p3">{{item.showtime}}</p>
         </div>
         <div class="test-status">
-          <div class="icon icon-ing"></div>
-          <!-- <div class="icon icon-success"></div>
-          <div class="icon icon-way"></div>-->
-          <p>检测中</p>
+          <div  :class='[item.status == 1?"icon icon-ing":item.status==2?"icon icon-success":"icon icon-way"]'></div>
+          <p>{{item.status == 1?"检测中":item.status==2?"检测完成":"已给处方"}}</p>
         </div>
       </li>
     </ul>
-    <div class="total">共计15个结果</div>
+    <div class="total">共计{{this.total}}个结果</div>
   </div>
 </template>
 <script>
+import { mapMutations, mapState } from "vuex";
 export default {
-  name: "second_tu",
+  name: "huiyuan_tu",
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      page:1,//当前页数，
+      appId:window.localStorage.getItem("appId"),
+      cetulist:"",//测土配方列表
+      pagesize:"",//每页显示的数据
+      status:"",
+      total:""
+    }
   },
-  computed: {},
+  computed: {
+    ...mapState(["huiyuanId"]),
+  },
   watch: {},
+  created(){
+  this.getcetuinfo(this.appId,this.page,this.$store.state.huiyuanId)
+  },
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    getcetuinfo(appId,page,Id){
+      this.$axios.fetchPost(
+        "/Home/Treatment/GetTestingsoilList",
+        {appId:appId,page:page,textstatus:"",Id:Id}
+      ).then(res=>{
+        if(res.data.code == "200"){
+            this.cetulist = res.data.data
+            this.total = res.data.count
+        }
+      })
+    }
+  }
 }
 </script>
 <style lang="stylus" scoped>
@@ -43,6 +66,11 @@ export default {
   height 741px
   .tu-ul
     margin 0px auto
+    height 429px
+    overflow scroll
+    @media screen and (min-width:1900px) {
+      height 741px
+    }
     & > li
       background rgba(9, 29, 67, 0.4)
       border 1px solid rgba(255, 255, 255, 0.2)
@@ -86,11 +114,11 @@ export default {
           margin-right 21px
           vertical-align middle
           &.icon-ing
-            background url('../second_tu/27.png') no-repeat
+            background url('../second_tu/35.png') no-repeat
             background-position center
             background-size 100%
           &.icon-success
-            background url('../second_tu/27.png') no-repeat
+            background url('../second_tu/36.png') no-repeat
             background-position center
             background-size 100%
           &.icon-way

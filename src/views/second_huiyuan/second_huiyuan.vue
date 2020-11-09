@@ -50,7 +50,6 @@ export default {
                 "/Home/Member/GetMpUser",
                 {appId:this.appId,keyword:'',page:page,pagesize:pagesize}
             ).then(res=>{
-                console.log(res)
                 if(res.data.code == '200'){
                     this.huiyuan_list = res.data.data
                     this.total = res.data.count
@@ -70,6 +69,9 @@ export default {
         watch_detail(item){
             this.getHuiyuanName(item.name)
             this.getHuiyuanId(item.id)
+            window.sessionStorage.setItem("huiyuan_id",item.id)
+            window.sessionStorage.setItem("huiyuan_name",item.name)
+            window.sessionStorage.setItem("huiyuan_uid",item.uid)
             this.$router.push({path:"/second_huiyuan_itro",query:{
                 id:item.id,
                 name:item.name

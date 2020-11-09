@@ -99,6 +99,9 @@ export default {
     .head
         position fixed
         z-index 99999999
+        @media screen and (min-width:1900px){
+            padding-top 40px
+        }
     .contain
         width 1340px
         margin 0 auto

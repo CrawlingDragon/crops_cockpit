@@ -186,7 +186,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 210px
+        top 130px
     }
     .kuang
         width 90px
@@ -250,8 +250,9 @@ export default {
                 width 379.5px
                 height 187.5px
             @media screen and (min-width:1900px) 
-                width 439.5px
-                height 212.5px
+                width 440px
+                height 203px
+                margin-bottom 20px
              .hospitalname
                 text-align center
                 position relative
@@ -321,7 +322,7 @@ export default {
         color #B5B5B5
         position fixed
         left 2.8%
-        bottom 8%
+        bottom 88px
     .temporary
         font-size 30px
         line-height 36px
