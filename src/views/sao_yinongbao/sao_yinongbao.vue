@@ -68,8 +68,9 @@ export default {
     .er_wei_ma
         height 500px
         width 500px
+        background url("./sao_yinongbao.png")
+        background-size 100%
         position absolute
-        border 1px solid red
         left: 0;
         right: 0;
         top: 0;

@@ -3,6 +3,7 @@
         <div class="header">
             <Headnav
             :lefttitle=this.lefttitle
+            @datatype="datachange"
             ></Headnav>
         </div>
         <div class="option">
@@ -45,6 +46,11 @@ export default {
         },
         changecolor3(){
             this.cur_index = 3
+        },
+        datachange(value){
+            if(value){
+                location.reload()
+            }
         }
     }
 }
@@ -53,11 +59,7 @@ export default {
 .contain
     width 100%
     height 100%
-    @media screen and (max-width:1341px){
-        width 1340px
-        height 768px
-    }
-    // background-color: rgba(3, 5, 57, 1);
+    background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     position relative
     .header
@@ -65,9 +67,7 @@ export default {
         height 50px
         z-index 99
         width 100%
-        @media screen and (min-width:1900px){
-            padding-top 40px
-        }
+        
     .option
         margin 40px auto 0px auto
         width 500px
@@ -77,7 +77,7 @@ export default {
         right 0
         top 10px
         @media screen and (min-width:1900px) {
-            margin 87px auto 0px auto
+            margin 77px auto 0px auto
         }
         z-index 666
         .text2
@@ -99,8 +99,8 @@ export default {
     .content 
         position relative
         -ms-overflow-style none
-        @media screen and (min-width:1340px) {
-            padding-top 80px
+        @media screen and (max-width:1899px) {
+            padding-top 75px
         }
 
 </style>

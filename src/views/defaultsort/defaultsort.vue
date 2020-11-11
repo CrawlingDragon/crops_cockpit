@@ -101,9 +101,9 @@ export default {
 <style lang="stylus" scoped>
 .contain
     position absolute
-    top 70px
+    top 145px
     @media screen and (min-width:1900px){
-        top 130px
+        top 205px
     }
     .hospitalinfo
         padding-left 3%

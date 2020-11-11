@@ -4,9 +4,10 @@
             <Headnav
             :lefttitle = this.lefttitle
             :returnpath = this.returnpath
+            @datatype="datachange"
             ></Headnav>
         </div>
-        <div class="expert_list" target="_blank" :href="this.outlink" ref="expert_list">
+        <div class="expert_list" ref="expert_list"  v-infinite-scroll="load">
             <div class="expert_info" v-for="(item,index) in expert_list" :key="index" @click="godetail(item,index)">
                 <img class="photo" v-lazy="item.avatar"  alt="图片好像不见了" >
                 <span class="name">{{item.realname}}</span>
@@ -20,8 +21,6 @@
                     <span class="join_hospital">加入医院({{item.hospitalcount}})</span>
                 </div>
             </div>
-            <mugen-scroll :handler="loadMore" :should-handle="!loading" scroll-container="expert_list">
-            </mugen-scroll>
         </div>
         <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
         <div class="expert_num">
@@ -33,20 +32,16 @@
 <script>
 import Headnav from "../../components/head_nav/head_nav"
 import Nodata from "../../components/no-data/no-data"
-import MugenScroll from "vue-mugen-scroll"
 export default {
     components:{
         Headnav,
         Nodata,
-        MugenScroll//滚动条下滑加载组件
     },
     data(){
         return{
             expert_list:[],
             curuserid:"" ,//当前的用户ID
-            outlink:'http://wap.114nz.com/Web/Expert/detail?Id=' ,
             total:0,
-            loading:true,//加载状态
             page: 1, // 当前页数
             lefttitle:'所有专家',
             returnpath:"/findindex"
@@ -66,7 +61,6 @@ export default {
             this.$axios.fetchPost(
                 "/Home/Expert/GetMpExpertList",
                 {appId:this.userid,purview:"1",page:curpage,isstore:window.sessionStorage.getItem('isstore')}
-                // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
             ).then(res=>{
                 rLoading.close()
                 if(res.data.code == "200"){
@@ -75,20 +69,22 @@ export default {
                         this.expert_list = res.data.data
                     }else{
                         this.expert_list.push(...res.data.data)
-                    }
-                    this.loading=false
-                    console.log(curpage)
+                    } 
                 }
             })
         },
-        loadMore() {
+        load() {
+            console.log("触发了")
             // 是否当前page不是最后一页
             if (this.page <= Math.ceil(this.total/12)) {
-                //this.loading 控制滚动条滑到底部的时候是否执行加载操作
-                this.loading = true;
                 // 页码+1
                 this.page++;
                 this.getexpert_list(this.page)
+            }
+        },
+        datachange(value){
+            if(value){
+                location.reload()
             }
         }
     }
@@ -98,25 +94,20 @@ export default {
 .contain
     width 100%
     height 100%
-    @media screen and (max-width:1340px) 
-        width:1340px
-        height 768px
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     .header
         width 100%
-        @media screen and (min-width:1900px) {
-            padding-top 40px
-        }
     .expert_list
         margin 0 auto
-        width 96%
-        margin-top 133px
-        left 2%
+        width 94%
+        margin-top 53px
+        left 3%
+        height 560px
         @media screen and (min-width:1900px) {
             height 741px
+            margin-top 123px
         }
-        height 630px
         overflow scroll
         overflow-x hidden
         scrollbar-arrow-color rgba(3, 5, 57, 1)
@@ -140,7 +131,7 @@ export default {
         }
         .expert_info
             position relative
-            height 154px
+            height 180px
             width 49%
             float left
             margin-right 1.8%
@@ -154,8 +145,8 @@ export default {
             }
             .photo
                 position absolute
-                height 150px
-                width 150px
+                height 176px
+                width 180px
                 top 0px
                 left 0px
                 @media screen and (min-width:1900px) {
@@ -163,7 +154,7 @@ export default {
                     height 231px
                 }
             .name
-                margin 15px 10px auto 30%
+                margin 15px 10px auto 32%
                 font-size 30px
                 float left
                 font-family Source Han Sans CN
@@ -197,12 +188,13 @@ export default {
                 width 70%
                 height 54%
                 top 35%
-                left 30%
+                left 32%
                 font-size 20px
                 font-family SimHei
                 font-weight Regular
-                line-height 24px
+                line-height 28px
                 @media screen and (min-width:1900px) {
+                    left 30%
                     line-height 35px
                 }
                 .company

@@ -1,6 +1,6 @@
 <template>
   <ul class="item-wrap">
-    <li v-for="item in this.hospitalList" :key="item.id" :class="{'other':item.isstore==0}" @click="goToHospitalIndex(item.appid,item.isstore)">
+    <li v-for="item in items" :key="item.id" :class="{'other':item.isstore==0}" @click="goToHospitalIndex(item.appid,item.isstore)">
       <div class=" title">{{item.name}}</div>
       <div class="num-item">
         <p class="p1">专家</p>
@@ -46,32 +46,11 @@ export default {
   },
   computed: {},
   watch: {},
-  activated(){
-    console.log("666")
-    this.getJoinHospital(this.uid)
-  },
   created() {
     
   },
   destroyed() {},
   methods: {
-    getJoinHospital(uid) {
-      // ta 加入的医院
-      this.$axios
-        .fetchPost("/Home/Manage/GetManageMpDataList", {
-          appId:uid,
-          storetag:99,
-          ordertag:"default",
-          areatag:"",
-          type:"expert",
-        })
-        .then((res) => {
-          console.log(res)
-          if (res.data.code === "200") {
-            this.hospitalList = res.data.data.lists;
-          }
-        });
-    },
     getHospitalType(appId) {
       // 获取医院的类型
       this.$axios
@@ -105,9 +84,13 @@ export default {
   li
     display inline-block
     background rgba(35, 147, 221, 0.5)
-    width 440px
-    height 204px
-    margin-right 15px
+    width 307px
+    height 150px
+    margin-right 10px
+    @media screen and (min-width:1900px)
+      width 440px
+      height 204px
+      margin-right 15px
     color #fff
     font-family SimHei
     padding 30px 5px 30px 31px
@@ -117,7 +100,10 @@ export default {
     &:nth-child(4n)
       margin-right 0
     .title
-      font-size 38px
+      font-size 28px
+      text-align center
+      @media screen and (min-width:1900px)
+        font-size 38px
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
@@ -128,7 +114,9 @@ export default {
       width 33.33%
       line-height 1.2
       & > p
-        font-size 30px
+        font-size 20px
+        @media screen and (min-width:1900px)
+          font-size 38px
         color #CDCDCD
         text-align center
 </style>

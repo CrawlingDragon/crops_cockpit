@@ -33,6 +33,7 @@
     <div class="nav-box">
       <Nav></Nav>
     </div>
+  </div>
 </template>
 <script>
 import Header from "@/components/headers/headers";

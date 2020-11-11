@@ -36,7 +36,7 @@ export default {
     data(){
         return{
             // citylist:[],
-            typelist:['全部','网店','实体店'],
+            typelist:['全部','网院','实体店'],
             areadata:[],//获取到的城市的信息和对应城市的id
             cur_city:"",//当前选择的省市或者市区 县区
             cur_type:"",//当前选择的网站类型
@@ -103,7 +103,7 @@ export default {
         sousuo(userid,cur_type,cur_city){
             this.$axios.fetchPost(
                 "/Home/Manage/GetManageMpDataList",
-                {appId:userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:cur_city}
+                {appId:userid,type:"default",ordertag:"default",storetag:cur_type,areatag:cur_city}
             ).then(res=>{
                 if(res.data.code == "200"&&res.data.message == "请求成功"){
                     this.hospitalinfo = res.data.data.lists
@@ -147,29 +147,29 @@ export default {
             //做判断是因为要根据选择的医院类型 进行request
             if(window.sessionStorage.getItem('isstore')== null || window.sessionStorage.getItem('isstore')== 'null'){
                 if(item == "全部"){
-                    this.cur_type = ''
-                }else if(item == "网店"){
-                    this.cur_type = "0"
+                    this.cur_type = 99
+                }else if(item == "网院"){
+                    this.cur_type = 0
                 }else if(item == "实体店"){
-                    this.cur_type = "1"
+                    this.cur_type = 1
                 }
                 this.openLoading()
                 this.sousuo(this.userid,this.cur_type,this.cur_city)
             }
             if(window.sessionStorage.getItem('isstore') == '1' || window.sessionStorage.getItem('isstore') == 1 ){
                 if(item == "全部"){
-                    this.cur_type = "1"
+                    this.cur_type = 1
                     this.wangdian = false
                     this.openLoading()
                     this.sousuo(this.userid,this.cur_type,this.cur_city)
-                }else if(item == "网店"){
-                    this.cur_type = "0"
+                }else if(item == "网院"){
+                    this.cur_type = 0
                     this.wangdian = true
                     this.total = 0
                     this.hospitalinfo = ''
                 }else if(item == "实体店"){
                     this.wangdian = false
-                    this.cur_type = "1"
+                    this.cur_type = 1
                     this.openLoading()
                     this.sousuo(this.userid,this.cur_type,this.cur_city)
                 }
@@ -186,7 +186,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 130px
+        top 205px
     }
     .kuang
         width 90px

@@ -8,7 +8,7 @@
            这是头部
        </div>
        <div class="my_huiyuan">
-           <div class="single_huiyuan" v-for="(item,index) in this.huiyuan_list" :key="index" @click="watch_detail(item)">
+           <div class="single_huiyuan" v-for="(item,index) in this.huiyuan_list"  v-infinite-scroll="load" :key="index" @click="watch_detail(item)">
                <img class="photo" :src="item.avatar" alt="">
                <div class="intro">
                     <div class="name">{{item.name}}</div>
@@ -16,13 +16,10 @@
                </div>
            </div>
        </div>
-        <mugen-scroll :handler="loadMore" :should-handle="!loading" scroll-container="my_huiyuan">
-        </mugen-scroll>
        <div class="total">共计15个结果</div>
    </div>
 </template>
 <script>
-import MugenScroll from "vue-mugen-scroll"
 import Headers from "../../components/online_hospital_header/online_hospital_header"
 import { mapMutations, mapState } from "vuex";
 export default {
@@ -30,7 +27,6 @@ export default {
         return{
             huiyuan_list:[],//会员列表
             appId:this.$store.state.appId,
-            loading:false,//加载状态
             page: 1, // 当前页数
             total:'',//当前会员总数
             title:"我的会员",
@@ -38,7 +34,6 @@ export default {
         }
     },
     components:{
-        MugenScroll,//滚动条下滑加载组件
         Headers
     },
     created(){
@@ -77,11 +72,9 @@ export default {
                 name:item.name
             }})
         },
-        loadMore() {
+        load() {
             // 是否当前page不是最后一页
             if (this.page <= Math.ceil(this.total/14)) {
-                //this.loading 控制滚动条滑到底部的时候是否执行加载操作
-                this.loading = true;
                 // 页码+1
                 this.page++;
                 this.getexpert_list(this.page)
@@ -94,8 +87,11 @@ export default {
 .contain
     .my_huiyuan
         margin 0 37px
-        margin-top 200px
-        height 700px
+        margin-top 141px
+        height 500px
+        @media screen and (min-width:1900px)
+            margin-top 200px
+            height 700px
         overflow scroll
         overflow-x hidden
         scrollbar-arrow-color rgba(3, 5, 57, 1)
@@ -118,18 +114,32 @@ export default {
             background: hsla(0, 0%, 53%, 0.1);
         }
     .single_huiyuan
-        height 334px
-        width 235px
-        margin 0px 29px 29px 0px
+        height 329px
+        width 232px
+        margin 0px 20px 20px 0px
         float left
-        &:nth-child(7n+0)
-            margin-right 0px
+        @media screen and (max-width:1340px)
+            &:nth-child(5n+0)
+                margin-right 0px
+        @media screen and (min-width:1900px) 
+            height 334px
+            width 235px
+            margin 0px 29px 29px 0px
+            float left
+            &:nth-child(7n+0)
+                margin-right 0px
         .photo
-            width 235px
-            height 235px
+            width 232px
+            height 232px
+            @media screen and (min-width:1900px) 
+                width 235px
+                height 235px
         .intro
-            width 235px
+            width 232px
             height 99px
+            @media screen and (min-width:1900px)
+                width 235px
+                height 99px
             border 2px solid rgba(255, 255, 255, 0.15)
             .name
                 margin 21px auto 8px 19px

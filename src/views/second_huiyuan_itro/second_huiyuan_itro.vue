@@ -2,11 +2,11 @@
   <div class="expert_detail-container">
     <div @click="go_huiyuan()">
       <div class="closefn"></div>
-      <div class="head-title">会员：{{this.huiyuanname}}</div>
+      <div class="head-title">会员：{{this.huiyuan_name}}</div>
     </div>
     <div class="top-nav">
       <router-link to='/second_huiyuan_itro/huiyuan_wang' ><span  class="item" @click="content_show = 1" :class="{active:content_show == 1}">网诊</span></router-link>
-      <router-link to="/second_huiyuan_itro/huiyuan_intro" ><span  class="item" @click="content_show = 2" :class="{active:content_show == 2}">简介</span></router-link>
+      <router-link to="/second_huiyuan_itro/huiyuan_jianjie" ><span  class="item" @click="content_show = 2" :class="{active:content_show == 2}">简介</span></router-link>
       <router-link to="/second_huiyuan_itro/huiyuan_tu" ><span  class="item" @click="content_show = 3" :class="{active:content_show == 3}">测土配方</span></router-link>
       <router-link to="/second_huiyuan_itro/huiyuan_dingdan" ><span class="item" @click="content_show = 4" :class="{active:content_show == 4}">订单</span></router-link>
     </div>
@@ -32,10 +32,9 @@ export default {
       huiyuanname:window.sessionStorage.getItem("huiyuan_name")
     };
   },
-  created(){
-  },
-  mounted(){
-    console.log(this.$store.state.huiyuanName)
+  activated(){
+    this.huiyuan_name = window.sessionStorage.getItem("huiyuan_name")
+    this.content_show = 1
   },
   computed: {
     ...mapState([
@@ -46,7 +45,7 @@ export default {
   },
   methods: {
     go_huiyuan(){
-      this.$router.push({path:'/second_huiyuan'})
+      this.$router.push({path:'/second_huiyuan_list'})
     },
     getDetail() {
       // 获取专家的详细数据
@@ -57,7 +56,6 @@ export default {
           purview: 4,
         })
         .then((res) => {
-          console.log(res)
           if (res.data.code === "200") {
             this.detail = res.data.data;
           }
@@ -71,7 +69,6 @@ export default {
           type: "expert",
         })
         .then((res) => {
-          console.log(res)
           if (res.data.code === "200") {
             this.hospitalList = res.data.data.lists;
           }

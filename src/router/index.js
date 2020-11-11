@@ -309,9 +309,9 @@ const routes = [
     ]
   },
   {
-    path:'/second_huiyuan',
+    path:'/second_huiyuan_list',
     component:()=>
-    import(/* webpackChunkName: "second_huiyuan" */"../views/second_huiyuan/second_huiyuan.vue")
+    import(/* webpackChunkName: "second_huiyuan_list" */"../views/second_huiyuan_list/second_huiyuan_list.vue")
   },
   {
     path:'/second_huiyuan_itro',
@@ -322,35 +322,35 @@ const routes = [
         path: "",
         component: () =>
           import(
-            /* webpackChunkName: "huiyuan_wang" */ "../views/second_huiyuan_itro/huiyuan_wang.vue"
+            /* webpackChunkName: "huiyuan_wang" */ "../views/huiyuan_wang/huiyuan_wang.vue"
           )
       },
       {
         path: "/second_huiyuan_itro/huiyuan_wang",
         component: () =>
           import(
-            /* webpackChunkName: "huiyun_wang" */ "../views/second_huiyuan_itro/huiyuan_wang.vue"
+            /* webpackChunkName: "huiyun_wang" */ "../views/huiyuan_wang/huiyuan_wang.vue"
           )
       },
       {
         path: "/second_huiyuan_itro/huiyuan_tu",
         component: () =>
           import(
-            /* webpackChunkName: "huiyuan_tu" */ "../views/second_huiyuan_itro/huiyuan_tu.vue"
+            /* webpackChunkName: "huiyuan_tu" */ "../views/huiyuan_tu/huiyuan_tu.vue"
           )
       },
       {
-        path: "/second_huiyuan_itro/huiyuan_intro",
+        path: "/second_huiyuan_itro/huiyuan_jianjie",
         component: () =>
           import(
-            /* webpackChunkName: "huiyuan_intro" */ "../views/second_huiyuan_itro/huiyuan_intro.vue"
+            /* webpackChunkName: "huiyuan_intro" */ "../views/huiyuan_jianjie/huiyuan_jianjie.vue"
           )
       },
       {
         path: "/second_huiyuan_itro/huiyuan_dingdan",
         component: () =>
           import(
-            /* webpackChunkName: "huiyuan_dingdan" */ "../views/second_huiyuan_itro/huiyuan_dingdan.vue"
+            /* webpackChunkName: "huiyuan_dingdan" */ "../views/huiyuan_dingdan/huiyuan_dingdan.vue"
           )
       },
     ]
@@ -359,6 +359,16 @@ const routes = [
     path:'/huiyuan_dingdan/second_order_detail',
     component:()=>
     import(/* webpackChunkName: "second_order_detail" */"../views/second_order_detail/second_order_detail.vue")
+  },
+  {
+    path:'/wangzhen_detail',
+    component:()=>
+    import(/* webpackChunkName: "wangzhen_detail" */"../views/wangzhen_detail/wangzhen_detail.vue")
+  },
+  {
+    path:'/cetu_detail',
+    component:()=>
+    import(/* webpackChunkName: "cetu_detail" */"../views/cetu_detail/cetu_detail.vue")
   },
   {
     path:'/sao_yinongbao',

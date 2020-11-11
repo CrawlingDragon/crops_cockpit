@@ -13,9 +13,9 @@
             范冰冰的水稻提问
             <span>2017-05-27 12:00</span>
           </p>
-          <p
-            class="p2"
-          >机插秧田，插秧后7天，追肥尿素15斤/亩，拌除草剂苄-乙，肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨昨天下过大雨，田间水位上升许多，今天发现水深的地方成片心叶滞长，拌除</p>
+          <p class="p2">
+            机插秧田，插秧后7天，追肥尿素15斤/亩，拌除草剂苄-乙，肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨昨天下过大雨，田间水位上升许多，今天发现水深的地方成片心叶滞长，拌除
+          </p>
         </div>
         <div class="answer">
           <p class="p3">回复数：4</p>
@@ -30,20 +30,20 @@
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers"
+import Header from "@/components/online_hospital_header/online_hospital_header";
 export default {
   name: "vip_diagnosis",
   components: { Header },
   props: {},
   data() {
-    return {}
+    return {};
   },
   computed: {},
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {}
-}
+};
 </script>
 <style lang="stylus" scoped>
 .vip_diagnosis-container

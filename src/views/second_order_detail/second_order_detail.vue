@@ -9,7 +9,7 @@
             <div class="shop_num">{{this.order_info.title}}</div>
             <div class="order_number">订单号：{{this.order_info.ordernumber}}</div>
             <div class="order_time">{{this.order_info.showtime}}</div>
-            <div class="allprice">总金额：¥<span class="price">{{this.coastInt}}</span>.{{this.coastFloat}}</div>
+            <div class="allprice">总金额：¥<span class="price">{{this.coastInt}}</span>.{{this.coastFloat == null ? "00":this.coastFloat}}</div>
             <!-- <img  src="../../assets/64.png" alt=""> -->
             <div class="icon1"></div>
         </div>
@@ -17,10 +17,10 @@
             <li v-for="(item,index) in this.order_info.products" :key="index" @click="watchGooddetail(item)">
                 <img :src="item.goods_pic" alt="">
                 <div class="text">
-                    <div class="order_kinds">
+                    <p class="order_kinds">
                         {{item.name}}
                         <span>¥{{item.price}}*{{item.spec_sn}}</span>
-                    </div>
+                    </p>
                     <div class="guige">
                         商品规格：{{item.spec}}
                     </div>
@@ -36,27 +36,24 @@
 export default {
     data(){
       return{
-        order_id:window.sessionStorage.getItem("orderid"),//用户的订单id
         order_info:"",//订单的信息
         coastInt:"",//订单金额取整
         coastFloat:""//订单金额取余
       }
     },
     activated(){
-      console.log("666")
-      this.getOrederinfo()
+      this.getOrederinfo(this.$route.query.Id)
     },
     methods:{
       topre(){
         this.$router.go(-1)
       },
-      getOrederinfo(){
+      getOrederinfo(Id){
         this.$axios.fetchPost(
           "/Home/Order/GetMpOrderDetail",
-          {Id:this.order_id}
+          {Id:Id}
         ).then(res=>{
           if(res.data.code == "200"){
-            console.log(res)
             this.order_info = res.data.data
             const a = res.data.data.ordercost
             var b = a.toString().split(".")
@@ -66,7 +63,8 @@ export default {
         })
       },
       watchGooddetail(item){
-        console.log("去查看商品的详情页面")
+        //跳转到 商品详情页面
+        this.$router.push({path:"/goods_detail",query:{id:item.id}})
       }
     }
 }
@@ -126,12 +124,35 @@ export default {
       top 160px
       left 475px
       right 40px
-      height 900px
+      height 600px
+      @media screen and (min-width:1900px) {
+        height 741px
+      }
       font-size 30px
       font-family  MicrosoftYaHei
       color #B5B5B5
-      overflow scroll
       margin 0px auto
+      overflow scroll
+      overflow-x hidden
+      scrollbar-arrow-color rgba(3, 5, 57, 1)
+      scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+      scrollbar-track-color rgba(3, 5, 57, 1)
+      scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+      &::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+          background: transparent;
+      }
+      &::-webkit-scrollbar-thumb {
+          background: transparent;
+          border-radius: 4px;
+      }
+      &:hover::-webkit-scrollbar-thumb {
+          background: hsla(0, 0%, 53%, 0.4);
+      }
+      &:hover::-webkit-scrollbar-track {
+          background: hsla(0, 0%, 53%, 0.1);
+      }
       & > li
        background rgba(9, 29, 67, 0.4)
        border 1px solid rgba(255, 255, 255, 0.2)
@@ -142,7 +163,6 @@ export default {
        img 
         width 110px
         height 110px
-        border 1px solid red
         margin-right 39px
       .text
         flex 1
@@ -153,7 +173,11 @@ export default {
            color #ffffff
            font-size 30px
            line-height 40px
-           width 900px
+           width 55%
+           display: -webkit-box;
+           -webkit-box-orient: vertical;
+           -webkit-line-clamp: 1;
+           overflow: hidden;
            margin-top 18px
         .guige
           color #b5b5b5

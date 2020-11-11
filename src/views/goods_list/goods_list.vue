@@ -2,7 +2,15 @@
   <div class="goods_list_container">
     <Header title="农资商品"></Header>
     <div class="nav-bar">
-      <div class="item" v-for="(item,index) in menu" :key="item.catid" :class="{'active':menuIndex == index}" @click="changeNenu(item.catid,index)">{{item.catname}}</div>
+      <div
+        class="item"
+        v-for="(item, index) in menu"
+        :key="item.catid"
+        :class="{ active: menuIndex == index }"
+        @click="changeNenu(item.catid, index)"
+      >
+        {{ item.catname }}
+      </div>
     </div>
     <ul class="list_ul">
       <li v-for="item in list" :key="item.id" @click="goToDetail(item.id)">
@@ -16,17 +24,19 @@
       </li>
     </ul>
     <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
-    <div class="result-bar" v-show="list.length != 0">共{{list.length == 0 ? 0 : list.length}}个结果</div>
+    <div class="result-bar" v-show="list.length != 0">
+      共{{ list.length == 0 ? 0 : list.length }}个结果
+    </div>
   </div>
 </template>
 <script>
-import Header from "@/components/headers/headers";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 
 export default {
   name: "goods_list",
   components: {
-    Header,
+    Header
   },
   props: {},
   data() {
@@ -34,7 +44,7 @@ export default {
       menuIndex: 0, // 显示导航的索引
       menu: [], // 导航栏栏目
       list: [],
-      noGoods: false,
+      noGoods: false
     };
   },
   computed: {

@@ -1,7 +1,7 @@
 <template>
   <div class="vip_diagnosis-container">
     <ul class="diagnosis-ul">
-      <li v-for="(item,index) in this.wangzhenlist" :key="index">
+      <li v-for="(item,index) in this.wangzhenlist" :key="index" @click="godetail(item)">
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
@@ -22,18 +22,25 @@
       </li>
     </ul>
     <div class="result-num">共{{this.total}}个结果</div>
+    <div class="temporary" v-if="this.total == 0">
+        暂无提问
+    </div>
   </div>
 </template>
 <script>
 import { mapMutations, mapState } from "vuex";
+import Nodata from "../../components/no-data/no-data"
 export default {
   name: "vip_diagnosis",
   props: {},
+  components:{
+    Nodata
+  },
   data() {
     return {
       appId:window.localStorage.getItem("appId"),//当前登录账号的Id,
       wangzhenlist:"",
-      total:""
+      total:"",
     }
   },
   computed: {
@@ -43,8 +50,6 @@ export default {
   created(){
     this.getwanginfo(this.appId,this.$store.state.huiyuanId,1)
   },
-  mounted() {},
-  destroyed() {},
   methods: {
     getwanginfo(appId,Id,page){
       this.$axios.fetchPost(
@@ -52,11 +57,17 @@ export default {
         {appId:appId,Id:Id,page:page}
       ).then(res=>{
         if(res.data.code == "200"){
-          console.log(res)
           this.wangzhenlist = res.data.data
           this.total = res.data.count
+          if(this.total == 0){
+            // this.$refs.tips.aletiTipShow = true;
+          }
         }
       })
+    },
+    godetail(item){
+      console.log(item)
+      this.$router.push({path:'/wangzhen_detail',query:{tid:item.tid,title:item.title}})
     }
   }
 }
@@ -66,9 +77,29 @@ export default {
   .diagnosis-ul
     margin 0px 40px
     height 429px
-    overflow scroll
     @media screen and (min-width:1900px) {
       height 741px
+    }
+    overflow scroll
+    overflow-x hidden
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
     }
     li
       border 1px solid rgba(255, 255, 255, 0.2)
@@ -118,4 +149,15 @@ export default {
     font-size 24px
     color #B5B5B5
     padding 30px 0
+  .temporary
+    font-size 30px
+    line-height 36px
+    color #FFFFFF
+    width 300px
+    height 200px
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%); /* 50%为自身尺寸的一半 */
+    -webkit-transform: translate(-50%, -50%);
 </style>

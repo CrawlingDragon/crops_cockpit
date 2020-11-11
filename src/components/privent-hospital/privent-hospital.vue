@@ -218,7 +218,6 @@ export default {
       this.getMapData(newVal, this.bviousLevel, this.loginId, 1);
     },
     navareaname(newVal,oldval){
-      console.log(newVal)
       this.getMapData(
       this.secondName,
       this.secondLevel,

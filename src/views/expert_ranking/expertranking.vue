@@ -3,6 +3,7 @@
         <div class="header">
             <Headnav
             :lefttitle=this.lefttitle
+            @datatype="datachange"
             ></Headnav>
         </div>
         <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="ser_standard">
@@ -271,7 +272,11 @@ export default {
                     return false;
                 }
             });
-            
+        },
+        datachange(value){
+            if(value){
+                location.reload()
+            }
         }
     }
 }
@@ -445,35 +450,16 @@ export default {
     margin 0 auto
     position relative
     .header
-        position absolute
-        top 15px
+        position fixed
         width 100%
-        .text1
-            font-size 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 26px
-        .close
-            position absolute
-            left 45px
-        .title
-            margin 0 auto
-            font-size 24px
-            color #FFFFFF
-        .time
-            position absolute
-            width 200px
-            right  20px
-            top 2px
+        z-index 9999999
     .ser_standard
         position absolute
-        width 96%
+        width 94%
         left 50%
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
-        top 93px
+        top 80px
         font-size 14px
         font-family Microsoft YaHei
         font-weight 400
@@ -520,18 +506,18 @@ export default {
             }
     .expert_list
         position absolute
-        top 169px
+        top 150px
         left 50%
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
-        width 96%
+        width 94%
         overflow-x hidden
         @media screen and (min-width:1900px){
             top 231px
         }
     .page_divide
         position fixed
-        right 2%
+        right 3%
         bottom 8%
     .expert_num
         font-size 20px
@@ -539,7 +525,7 @@ export default {
         font-weight Regular
         color #B5B5B5
         position fixed
-        left 2%
+        left 3%
         bottom 8%
     ::-webkit-scrollbar 
         display none

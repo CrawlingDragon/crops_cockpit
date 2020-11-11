@@ -26,6 +26,9 @@
       </li>
     </ul>
     <div class="total">共计{{this.total}}个结果</div>
+    <div class="temporary" v-if="this.total == 0">
+        暂无订单
+    </div>
   </div>
 </template>
 <script>
@@ -63,16 +66,12 @@ export default {
         {appId:appId,uId:uId,page:page,pagesize:pagesize}
       ).then(res=>{
         if(res.data.code == "200"){
-          console.log(res)
           this.orderinfo = res.data.data
-          // this.products = res.data.data.products
           this.total = res.data.count - 0
         }
       })
     },
     watchdetail(item){
-      console.log(item)
-      window.sessionStorage.setItem("orderid",item.id)
       window.sessionStorage.setItem("ordernumber",item.ordernumber)
       this.$router.push({path:"/huiyuan_dingdan/second_order_detail",query:{Id:item.id}})
     }
@@ -82,12 +81,34 @@ export default {
 <style lang="stylus" scoped>
 .dingdan-container
   margin 0 40px
-  height 741px
+  height 450px
+  @media screen and (min-width:1900px) {
+    height 741px
+  }
   overflow scroll
+  overflow-x hidden
+  scrollbar-arrow-color rgba(3, 5, 57, 1)
+  scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+  scrollbar-track-color rgba(3, 5, 57, 1)
+  scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+  &::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+      background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+      background: transparent;
+      border-radius: 4px;
+  }
+  &:hover::-webkit-scrollbar-thumb {
+      background: hsla(0, 0%, 53%, 0.4);
+  }
+  &:hover::-webkit-scrollbar-track {
+      background: hsla(0, 0%, 53%, 0.1);
+  }
   .dingdan-ul
     margin 0px auto
     height 429px
-    overflow scroll
     @media screen and (min-width:1900px) {
       height 741px
     }
@@ -166,4 +187,15 @@ export default {
     bottom 79px
     color #B5B5B5
     font-size 24px
+.temporary
+    font-size 30px
+    line-height 36px
+    color #FFFFFF
+    width 300px
+    height 200px
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%); /* 50%为自身尺寸的一半 */
+    -webkit-transform: translate(-50%, -50%);
 </style>

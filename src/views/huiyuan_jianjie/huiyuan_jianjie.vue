@@ -91,7 +91,6 @@ export default {
         position absolute
         left 0px
         width 400px
-        height 589px
         text-align left         
         .text1
           width 100%
@@ -105,16 +104,22 @@ export default {
             width 260px
             display: -webkit-box;
             -webkit-box-orient: vertical;
-            -webkit-line-clamp: 5;
+            -webkit-line-clamp: 2;
+            @media screen and (min-width:1900px) {
+              -webkit-line-clamp: 5;
+            }
             overflow: hidden;
             .zuowu_mushu
               margin 0 10px
      .right_right
           position absolute
           text-align left
-          left 759px
           width 168px
           height 240px
+          left 500px
+          @media screen and (min-width:1900px) {
+            left 759px
+          }
         .text2
           display inline-block
           line-height 70px

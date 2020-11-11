@@ -3,6 +3,7 @@
         <div class="header">
             <Headnav
             :lefttitle=this.lefttitle
+            @datatype="datachange"
             ></Headnav>
         </div>
         <el-form :model="ruleForm" :inline="true" :rules="rules" ref="ruleForm" class="ser_standard">
@@ -327,7 +328,12 @@ export default {
                     this.sousuo(this.userid,this.currentPage,this.pagesize,this.ruleForm.expert_name,this.ruleForm.discuss_name,this.ruleForm.question,this.ruleForm.startTime,this.ruleForm.endTime)
                 })
             }
-      },
+         },
+        datachange(value){
+            if(value){
+                location.reload()
+            }
+        }
     }
 }
 </script>
@@ -343,8 +349,11 @@ export default {
 /deep/.ser_option4>.el-form-item__content{
     width 360px
     height 45px
+    @media screen and (min-width:1900px) {
+        width 500px
+    }
 }
-@media screen and (min-width:1670px){
+@media screen and (min-width:1900px){
     /deep/.ser_option1>.el-form-item__content{
         width 260px
     }
@@ -473,36 +482,16 @@ export default {
     margin 0 auto
     position relative
     .header
-        position absolute
-        top 15px
+        position fixed
+        z-index 99999
         width 100%
-        .text1
-            font-size 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 26px
-        .close
-            position absolute
-            left 45px
-        .title
-            margin 0 auto
-            font-size 24px
-            color #FFFFFF
-        .time
-            position absolute
-            width 130px
-            font-size 14px
-            right  2%
-            top 2px
     .ser_standard
         position absolute
-        width 96%
+        width 94%
         left 50%
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
-        top 93px
+        top 80px
         font-size 14px
         font-family Microsoft YaHei
         font-weight 400
@@ -549,17 +538,17 @@ export default {
             }
     .expert_list
         position absolute
-        top 166px
+        top 150px
         left 50%
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
-        width 96%
+        width 94%
         @media screen and (min-width:1900px){
             top 231px
         }
     .page_divide
         position fixed
-        right 2%
+        right 3%
         bottom 8%
     .expert_num
         font-size 20px
@@ -567,7 +556,7 @@ export default {
         font-weight Regular
         color #B5B5B5
         position fixed
-        left 2%
+        left 3%
         bottom 8%
     ::-webkit-scrollbar 
         display none

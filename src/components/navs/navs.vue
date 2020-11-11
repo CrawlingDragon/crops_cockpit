@@ -153,7 +153,6 @@ export default {
   },
   created(){
     this.getDaohangList()
-    // this.getLoginId(window.sessionStorage.getItem("LoginId"))
   },
   mounted() {
     if (this.activeProvinceComputed == "全国") {
@@ -185,9 +184,8 @@ export default {
       //计算后的面包屑导航
       let arr = [];
       let level = window.sessionStorage.getItem("curlevel")//登录的时候储存一下当前用户登录的等级
-      // let level = this.breadArr[this.breadArr-1].level
       this.breadArr.forEach((el, index) => {
-        if (el.level <= 4) {
+        if (el.level <= level) {
           arr.push(el);
         }
       });
@@ -344,12 +342,13 @@ export default {
         {appId:this.$store.state.appId}
       ).then(res=>{
         if(res.data.code == "200"){
-          console.log(res)
+          // console.log(res)
           const areaname = res.data.data.areaname;
           const arr = res.data.data.area;//获取默认导航列表
           this.getDefaultAddressArr(arr); // 获取默认导航列表
           this.getDefaultProvince(areaname); // 获取全网页地址
           this.getBreadArr(res.data.data.nav);
+          // console.log(res.data.data.nav)
           this.getDefaultCity(res.data.data.default); // 获取二级方块地址
           this.default_threeCity = res.data.data.default
           if(window.sessionStorage.getItem("curlevel")-0 <= 3){
@@ -549,7 +548,7 @@ export default {
       line-height 40px
       @media screen and (min-width:1900px){
         line-height 60px
-        font-size 19px
+        font-size 18px
       }
       &:last-child
         .symbol
@@ -610,12 +609,16 @@ export default {
     transition all 0.3s ease-in
     @media screen and (min-width:1900px) {
       top 60px
+      width 350px
     }
     & > div
       padding-top 20px
       font-size 14px
       border-bottom 1px solid rgba(31, 87, 158, 0.5)
       padding 10px 0px 5px 24px
+      @media screen and (min-width:1900px) 
+        font-size 16px
+        padding 15px 0px 10px 24px
       &:last-child
         border-bottom none
     .t1
@@ -642,20 +645,32 @@ export default {
       color #7FB5F1
       cursor default
     .t2
+      @media screen and (min-width:1900px)
+        font-size 16px
       &.choose
+        @media screen and (min-width:1900px)
+          font-size 16px
         cursor pointer
         .title-bar
           margin-bottom 12px
           cursor default
+          @media screen and (min-width:1900px)
+            font-size 24px
+            margin-bottom 20px
       &.disable
         padding-bottom 0
+        .title-bar
+          @media screen and (min-width:1900px)
+            font-size 24px
+            padding-bottom 10px
       .address-t
         color #fff
-        font-size 18px
       .title
         margin-bottom 10px
+        @media screen and (min-width:1900px)
+          font-size 18px
       .mid-number
-        font-size 30px
+        font-size 20px
         margin-left 11px
       .number
         color #A6FBFF
@@ -663,6 +678,8 @@ export default {
         & > span
           color #7FB5F1
           font-size 14px
+          @media screen and (min-width:1900px)
+            font-size 16px
           margin-left 9px
       ul
         margin-top -5px
@@ -670,6 +687,9 @@ export default {
           float left
           margin-right 5px
           line-height 25px
+          @media screen and (min-width:1900px)
+            font-size 16px
+            line-height 30px
           &.active
             color #F79D1D
 </style>

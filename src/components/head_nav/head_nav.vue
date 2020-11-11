@@ -94,7 +94,7 @@
     <Confim
       ref="confimBox"
       @btnSure="clickSure"
-      :alertText="'注销' + cur_cityname + '账号后，将退出监控平台'"
+      :alertText="'注销' + cur_cityname + '账号后，将退出驾驶舱'"
     ></Confim>
     <slot></slot>
   </div>
@@ -195,12 +195,14 @@ export default {
       } else {
         this.getIsstore(null);
       }
+      this.$emit("datatype",num)
     },
     ...mapMutations(["getNoData", "getIsstore"])
   },
   watch:{
     chooseHospitalRadio(newVal){
       console.log(newVal)
+      // this.$emit("datatype",newVal)
     }
   }
 };
@@ -211,7 +213,7 @@ export default {
   display flex
   @media screen and (min-width:1900px) {
     height 75px
-    margin-top 40px
+    padding-top 20px
   }
   width 100%
   .left_nav
@@ -274,6 +276,9 @@ export default {
         margin 0px 0px 0px 14px
         display inline-block
         vertical-align top
+        @media screen and (min-width:1900px) {
+          margin 4px 0px 0px 14px
+        }
       .index-text1
         color #7FB5F1
     .find
@@ -301,8 +306,11 @@ export default {
           background-size 28px 28px
         }
       .find-text
+        position relative
+        @media screen and (min-width:1340px) and (max-width:1899px) {
+          bottom 2px
+        }
         @media screen and (min-width:1900px){
-          position relative
           bottom 3px
         }
       .find-text1
@@ -313,7 +321,7 @@ export default {
       font-size 24px
       font-family SourceHanSansCN-Medium
       font-weight 500
-      line-height 50px
+      line-height 58px
       color #FFFFFF
       @media screen and (min-width:1900px){
         font-size 36px
@@ -372,16 +380,16 @@ export default {
           display block
       .change-box
         position absolute
+        z-index 9999
         right 230px
         top 35px
         width 355px
         height 200px
         background #05113D
-        z-index 9999999999
         border 1px solid #1B4E79
         display none
         @media screen and (min-width:1900px) {
-          top 40px 
+          top 60px 
           right 255px 
         }
         .title

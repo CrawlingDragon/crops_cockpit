@@ -3,6 +3,7 @@
         <div class="header">
            <Headnav
             :lefttitle=this.lefttitle
+            @datatype="datachange"
             ></Headnav>
         </div>
         <div class="content">
@@ -91,23 +92,23 @@ export default {
         }
     },
     created(){
-       this.openLoading();
+        this.openLoading();
         this.curcity = window.sessionStorage.getItem('curcity')
         this.lefttitle = this.curcity +'网上庄稼医院-下级医院数据统计'
         this.curlevel = window.sessionStorage.getItem('curlevel')
-        this.$parent.app_loading=false
         this.userid = window.sessionStorage.getItem('curuserid')
         this.$axios.fetchPost(
-            "/Home/Manage/GetShaoxingMpData",
-            {appId:this.userid,areaname:this.curcity,level:this.curlevel,isstore:window.sessionStorage.getItem('isstore')})
-        .then(res2=>{
-            if(res2.data.code == "200"){
-                this.wenzhen = res2.data.data.wenzhen
-                this.user = res2.data.data.user
-                this.cetu = res2.data.data.cetu
-                this.isstore = res2.data.data.isstore
-                this.mpublic = res2.data.data.mpublic
-                this.expert = res2.data.data.expert
+                "/Home/Manage/GetShaoxingMpData",
+                {appId:this.userid,areaname:this.curcity,level:this.curlevel,isstore:window.sessionStorage.getItem('isstore')})
+            .then(res2=>{
+                if(res2.data.code == "200"){
+                    console.log(res2)
+                    this.wenzhen = res2.data.data.wenzhen
+                    this.user = res2.data.data.user
+                    this.cetu = res2.data.data.cetu
+                    this.isstore = res2.data.data.isstore
+                    this.mpublic = res2.data.data.mpublic
+                    this.expert = res2.data.data.expert
             }
         })
         this.$axios.fetchPost(
@@ -228,7 +229,7 @@ export default {
                 }]
             },true);
             self.openLoading().close()
-        }, 2000);
+        }, 5000);
     },
     methods:{
         rowStyle({row}){
@@ -242,6 +243,11 @@ export default {
         },
         closefn(){
             this.$router.go(-1)
+        },
+        datachange(value){
+            if(value){
+                location.reload()
+            }
         }
     }
 }
@@ -273,26 +279,7 @@ export default {
     .header
         position fixed
         width 100%
-        .text1
-            font-size 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 26px
-        .close
-            position absolute
-            left 45px
-        .title
-            margin 0 auto
-            color #FFFFFF
-            opacity 0.9
-        .time
-            position absolute
-            width 130px
-            font-size 14px
-            right 2%
-            top 2px
+        z-index 999
     .hospital_info
         position absolute
         left 83px

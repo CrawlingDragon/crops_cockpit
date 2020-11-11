@@ -259,6 +259,7 @@ export default {
       color #fff
       font-size 20px
       border-radius 29px
+      border none
       &.disabled
         background #999
         color #7f7f7f

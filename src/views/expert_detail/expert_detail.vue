@@ -23,8 +23,8 @@
           {{detail.position}}
         </p>
         <p class="goodat">擅长作物：{{detail.zuowu}}</p>
-        <div class="work-num">处方（{{detail.chufangcount}}）：测土配方（{{detail.cetucount}}）、巡诊（{{detail.wenzhencount}}）、问珍（{{detail.wenzhencount}}）、回答（{{detail.answercount}}）</div>
-        <div class="info">简介：{{detail.description}}</div>
+        <div class="work-num">处方（{{detail.chufangcount}}）：测土配方（{{detail.cetucount}}）、巡诊（{{detail.wenzhencount}}）、问诊（{{detail.wenzhencount}}）、网诊（{{detail.answercount}}）</div>
+        <div class="info">{{detail.description.length == 0?"":"简介："}}{{detail.description}}</div>
       </div>
     </div>
     <div class="content2 " v-show="content_show == 2">
@@ -50,7 +50,8 @@ export default {
     };
   },
   activated(){
-      console.log(this.$route.query.uid)
+      this.content_show = 1
+      this.getJoinHospital(this.$route.query.uid)
       this.getDetail(this.$route.query.uid);
   },
   computed: {
@@ -63,6 +64,23 @@ export default {
   },
   destroyed() {},
   methods: {
+    getJoinHospital(uid) {
+      // ta 加入的医院
+      this.$axios
+        .fetchPost("/Home/Manage/GetManageMpDataList", {
+          appId:uid,
+          storetag:99,
+          ordertag:"default",
+          areatag:"",
+          type:"expert",
+        })
+        .then((res) => {
+          console.log(res)
+          if (res.data.code === "200") {
+            this.hospitalList = res.data.data.lists;
+          }
+        });
+    },
     topre(){
       this.$router.push({path:'/expertlist'})
     },
@@ -75,7 +93,6 @@ export default {
           purview: 1,
         })
         .then((res) => {
-          console.log(res)
           if (res.data.code === "200") {
             this.detail = res.data.data;
           }
@@ -108,7 +125,9 @@ export default {
     .item
       padding 10px 35px
       display inline-block
-      font-size 40px
+      font-size 30px
+      @media screen and (min-width:1900px)
+        font-size 40px
       margin-right 20px
       color #B5B5B5
       cursor pointer
@@ -116,11 +135,15 @@ export default {
         border-bottom 4px solid rgba(255, 102, 0, 1)
         color #fff
   .content
-    margin 0 90px
+    margin 0 40px
+    @media screen and (min-width:1900px)
+      margin 0 90px
     text-align left
   .content1
     display flex
-    padding-top 100px
+    padding-top 50px
+    @media screen and (min-width:1900px)
+      padding-top 100px
     .left
       width 320px
       margin-right 95px
@@ -169,5 +192,7 @@ export default {
         line-height 50px
         color #B5B5B5
   .content2
-    padding 100px 40px 0px 40px
+    padding 50px 40px 0px 40px
+    @media screen and (min-width:1900px)
+      padding 100px 40px 0px 40px
 </style>

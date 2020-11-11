@@ -83,7 +83,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 130px
+        top 205px
     }
     .hospitalinfo
         padding-left 3%
