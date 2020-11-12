@@ -32,7 +32,11 @@
         </div>
       </li>
       <li class="li9" style="margin-right:0;margin-left:20px;background:#fff">
+<<<<<<< HEAD
         <el-image :src="code"></el-image>
+=======
+        <div class="icon i9">二维码</div>
+>>>>>>> dev_xiaobai
       </li>
 
       <!-- <li class="li2">
@@ -53,10 +57,18 @@
         <div class="icon i4"></div>
         <p>测土配方</p>
       </li>
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_xiaobai
       <li class="li6">
         <div class="icon i6"></div>
         <p>会员</p>
       </li>
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev_xiaobai
       <li class="langer li7">
         <div class="icon i7"></div>
         <p>下级医院</p>
@@ -73,13 +85,18 @@
   </div>
 </template>
 <script>
+<<<<<<< HEAD
 // import headers from "@/components/online_hospital_header";
+=======
+// import headers from "@/components/headers/headers";
+>>>>>>> dev_xiaobai
 import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "online_hospital_channel",
   components: { Nav },
   props: {},
   data() {
+<<<<<<< HEAD
     return {
       code: ""
     };
@@ -98,6 +115,15 @@ export default {
         }
       });
     },
+=======
+    return {};
+  },
+  computed: {},
+  watch: {},
+  mounted() {},
+  destroyed() {},
+  methods: {
+>>>>>>> dev_xiaobai
     channelRoute(where) {
       switch (where) {
         case "网诊":
@@ -107,27 +133,47 @@ export default {
           break;
         case "专家":
           this.$router.push({
+<<<<<<< HEAD
             path: "/expert"
+=======
+            path: "/online_hospital_online"
+>>>>>>> dev_xiaobai
           });
           break;
         case "培训视频":
           this.$router.push({
+<<<<<<< HEAD
             path: "/video"
+=======
+            path: "/online_hospital_online"
+>>>>>>> dev_xiaobai
           });
           break;
         case "资讯":
           this.$router.push({
+<<<<<<< HEAD
             path: "/find"
+=======
+            path: "/online_hospital_online"
+>>>>>>> dev_xiaobai
           });
           break;
         case "网病虫害图库":
           this.$router.push({
+<<<<<<< HEAD
             path: "/find"
+=======
+            path: "/online_hospital_online"
+>>>>>>> dev_xiaobai
           });
           break;
         case "已下载的视频":
           this.$router.push({
+<<<<<<< HEAD
             path: "/video"
+=======
+            path: "/online_hospital_online"
+>>>>>>> dev_xiaobai
           });
           break;
       }

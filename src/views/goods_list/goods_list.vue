@@ -39,19 +39,33 @@
       </p>
       <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
     </ul>
+<<<<<<< HEAD
     <div class="result-bar" v-show="list.length != 0">共{{ count }}个结果</div>
+=======
+    <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
+    <div class="result-bar" v-show="list.length != 0">
+      共{{ list.length == 0 ? 0 : list.length }}个结果
+    </div>
+>>>>>>> dev_xiaobai
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+<<<<<<< HEAD
 import AdminHeader from "@/components/admin_hospital_header/admin_hospital_header";
+=======
+>>>>>>> dev_xiaobai
 import { mapState } from "vuex";
 
 export default {
   name: "goods_list",
   components: {
+<<<<<<< HEAD
     Header,
     AdminHeader
+=======
+    Header
+>>>>>>> dev_xiaobai
   },
   props: {},
   data() {
@@ -59,12 +73,16 @@ export default {
       menuIndex: 0, // 显示导航的索引
       menu: [], // 导航栏栏目
       list: [],
+<<<<<<< HEAD
       noGoods: false,
       count: 0,
       page: 0,
       loading: false,
       noMore: false,
       catid: 0
+=======
+      noGoods: false
+>>>>>>> dev_xiaobai
     };
   },
   computed: {

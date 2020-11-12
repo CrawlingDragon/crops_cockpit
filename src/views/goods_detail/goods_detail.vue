@@ -62,6 +62,8 @@ export default {
         .then(res => {
           if (res.data.code == 200) {
             this.detail = res.data.data;
+          }else if(res.data.code == 300){
+            console.log("暂无商品信息")
           }
         });
     },

@@ -97,7 +97,7 @@ export default {
   name: "city-hospital",
   data() {
     return {
-      wh: "width:300px;height:190px",
+      wh: "width:390px;height:166px",
       pieIndex: 1,
       colorArr: []
     };
@@ -189,6 +189,13 @@ export default {
       this.colorArr = arr;
     }
   },
+  created(){
+    console.log()
+    var w = document.documentElement.clientWidth || document.body.clientWidth
+    if(w>1900||w==1900){
+      this.wh = 'width:350px;height:247px'
+    }
+  },
   mounted() {
     let that = this;
     setInterval(function() {
@@ -230,6 +237,10 @@ export default {
 .pie-wrap
   width 300px
   height 190px
+  @media screen and (min-width:1900px) {
+    width 390px
+    height 247px
+  }
 .city-name-ul
   width 285px
   margin-left 46px
@@ -237,6 +248,9 @@ export default {
   font-size 0
   height 125px
   overflow hidden
+  @media screen and (min-width:1900px){
+    width 370px
+  }
   & > li
     float left
     width 33.33%
@@ -258,6 +272,10 @@ export default {
       text-overflow ellipsis
       white-space nowrap
       overflow hidden
+      @media screen and (min-width:1900px) {
+        font-size 18px
+        width 76px
+      }
 .text-box
   padding 0 10px 0 10px
   font-size 12px
@@ -298,17 +316,30 @@ export default {
   background rgba(6, 22, 64, 0.7)
   border 1px solid rgba(3, 130, 180, 1)
   border-radius 10px
+  @media screen and (min-width:1900px){
+    width 325px
+    height 278px
+    top 160px
+    right 60px
+  }
   color #fff
   .title
     font-size 18px
     line-height 18px
     margin 34px 0
+    @media screen and (min-width:1900px) {
+      font-size 24px
+      margin 47px 0
+    }
   .city-num-ul
     & > li
       float left
       width 33.33%
       text-align center
       margin-bottom 16px
+      @media screen and (min-width:1900px) {
+        margin-bottom 24px
+      }
       &:nth-child(4)
         width 50%
       &:nth-child(5)
@@ -317,6 +348,12 @@ export default {
         font-size 14px
         font-weight bold
         margin-bottom 9px
+        @media screen and (min-width:1900px) {
+          font-size 20px
+        }
       & > .text
         color #7FB5F1
+        @media screen and (min-width:1900px) {
+          font-size 18px
+        }
 </style>

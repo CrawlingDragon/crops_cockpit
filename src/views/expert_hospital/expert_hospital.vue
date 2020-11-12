@@ -12,8 +12,12 @@
   </div>
 </template>
 <script>
+<<<<<<< HEAD
 import Header from "@/components/online_hospital_header/online_hospital_header";
 
+=======
+import Header from "../../components/headers/headers"
+>>>>>>> dev_xiaobai
 export default {
   name: "expert_hospital",
   components: { Header },

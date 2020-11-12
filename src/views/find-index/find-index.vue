@@ -40,7 +40,11 @@
   </div>
 </template>
 <script>
+<<<<<<< HEAD:src/views/find-index/find-index.vue
 import Headnav from "@/components/head_nav/head_nav";
+=======
+import Headnav from "../../components/head_nav/head_nav"
+>>>>>>> dev_xiaobai:src/views/find-index/find-index.vue
 export default {
   name: "Find",
   data() {
@@ -100,11 +104,8 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .container
-    height 768px
-    margin 0 auto
+    position relative
     .head
-        min-width 1340px
-        margin 0 auto
         position fixed
         z-index 99999999
     .contain

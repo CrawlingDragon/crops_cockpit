@@ -52,16 +52,16 @@ export default {
         //计算出滚动区域的高度
         var h = document.documentElement.clientHeight || document.body.clientHeight
         if(h>1080||h==1080){
-            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025)}px`
+            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.085)}px`
         }else{
-            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.085)}px`
         }
     },
     methods:{
         //内容高度自适应,获取滚动区域高度
          getheight(top,bottomrate){
              var h = document.documentElement.clientHeight || document.body.clientHeight
-             return Math.round(h-top-h*bottomrate-30)
+             return Math.round(h-top-h*bottomrate-117)
          },
          godetail(item){
             window.open("http://wap.114nz.com/Web/Mpublic/detail?mId=" + item.appid)
@@ -83,7 +83,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 210px
+        top 205px
     }
     .hospitalinfo
         padding-left 3%
@@ -104,8 +104,9 @@ export default {
                 width 379.5px
                 height 187.5px
             @media screen and (min-width:1900px) 
-                width 439.5px
-                height 212.5px
+                width 440px
+                height 203px
+                margin-bottom 20px
              .hospitalname
                 text-align center
                 position relative
@@ -126,9 +127,10 @@ export default {
                 font-weight 400
                 color #FFFFFF
                 .hos_name
-                    margin 0 auto
                     width 89%
+                    margin  0 auto
                     overflow: hidden;
+                    word-break: keep-all;
                     text-overflow:ellipsis;
                     white-space: nowrap;
             .text1
@@ -167,13 +169,13 @@ export default {
                     margin-bottom 10px
         .singlehospital1
                 background rgb(4,117,124)
-    .hospital_num
+     .hospital_num
         height 16px
-        font-size 16px
+        font-size 20px
         font-family Source Han Sans CN
-        font-weight 500
-        color #80B6F2
+        font-weight Regular
+        color #B5B5B5
         position fixed
         left 2.8%
-        bottom 2.5%
+        bottom 8%
 </style>

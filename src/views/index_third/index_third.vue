@@ -42,7 +42,11 @@ import { mapState } from "vuex";
 import Empty from "@/components/empty/empty";
 export default {
   name: "index_third",
+<<<<<<< HEAD
   components: { Nav, SwiperBox, Expert, Online, Empty, Header },
+=======
+  components: { Nav, SwiperBox, Expert, Online, Empty },
+>>>>>>> dev_xiaobai
   props: {},
   data() {
     return {
@@ -73,8 +77,11 @@ export default {
             this.swiper = data.adlists;
             this.experts = data.rank_experts;
             this.answerlist = data.answerlists;
+<<<<<<< HEAD
             this.headerTitle = data.title;
             this.logoSrc = data.logo;
+=======
+>>>>>>> dev_xiaobai
           }
         });
     },

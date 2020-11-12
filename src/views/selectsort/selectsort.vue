@@ -36,7 +36,7 @@ export default {
     data(){
         return{
             // citylist:[],
-            typelist:['全部','网店','实体店'],
+            typelist:['全部','网院','实体店'],
             areadata:[],//获取到的城市的信息和对应城市的id
             cur_city:"",//当前选择的省市或者市区 县区
             cur_type:"",//当前选择的网站类型
@@ -64,9 +64,9 @@ export default {
                 //计算出滚动区域的高度
                 var h = document.documentElement.clientHeight || document.body.clientHeight
                 if(h>1080||h==1080){
-                    this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025,0.03)}px`
+                    this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.085,0.025)}px`
                 }else{
-                    this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025,0.03)}px`
+                    this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.085,0.025)}px`
                 }
                 this.total = res.data.data.lists.length - 0
                 rLoading.close()
@@ -96,14 +96,14 @@ export default {
              var colomus = Math.floor((w-w*leftrate)/102)
             //2.计算可以显示几行,取值要向上取整
              var rows = Math.ceil(this.areadata.length/colomus)
-            //3.最后得出滚动区域高度
-            return h-top-50*(rows+1)-h*bottomrate-40
+            //3.最后得出滚动区域高度 117是距离 共计的距离 43是滚动区域的padding
+            return h-top-50*(rows+1)-h*bottomrate-117-43
          },
         //网络请求封装
         sousuo(userid,cur_type,cur_city){
             this.$axios.fetchPost(
                 "/Home/Manage/GetManageMpDataList",
-                {appId:userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:cur_city}
+                {appId:userid,type:"default",ordertag:"default",storetag:cur_type,areatag:cur_city}
             ).then(res=>{
                 if(res.data.code == "200"&&res.data.message == "请求成功"){
                     this.hospitalinfo = res.data.data.lists
@@ -147,29 +147,29 @@ export default {
             //做判断是因为要根据选择的医院类型 进行request
             if(window.sessionStorage.getItem('isstore')== null || window.sessionStorage.getItem('isstore')== 'null'){
                 if(item == "全部"){
-                    this.cur_type = ''
-                }else if(item == "网店"){
-                    this.cur_type = "0"
+                    this.cur_type = 99
+                }else if(item == "网院"){
+                    this.cur_type = 0
                 }else if(item == "实体店"){
-                    this.cur_type = "1"
+                    this.cur_type = 1
                 }
                 this.openLoading()
                 this.sousuo(this.userid,this.cur_type,this.cur_city)
             }
             if(window.sessionStorage.getItem('isstore') == '1' || window.sessionStorage.getItem('isstore') == 1 ){
                 if(item == "全部"){
-                    this.cur_type = "1"
+                    this.cur_type = 1
                     this.wangdian = false
                     this.openLoading()
                     this.sousuo(this.userid,this.cur_type,this.cur_city)
-                }else if(item == "网店"){
-                    this.cur_type = "0"
+                }else if(item == "网院"){
+                    this.cur_type = 0
                     this.wangdian = true
                     this.total = 0
                     this.hospitalinfo = ''
                 }else if(item == "实体店"){
                     this.wangdian = false
-                    this.cur_type = "1"
+                    this.cur_type = 1
                     this.openLoading()
                     this.sousuo(this.userid,this.cur_type,this.cur_city)
                 }
@@ -186,7 +186,7 @@ export default {
     position relative
     top 70px
     @media screen and (min-width:1900px){
-        top 210px
+        top 205px
     }
     .kuang
         width 90px
@@ -194,9 +194,13 @@ export default {
         border 1px solid #ffffff
         color #FFFFFF
         font-size 20px
-        font-family SimHei
-        font-weight 400
+        font-family MicrosoftYaHei
+        font-weight Regular
         line-height 40px
+        @media screen and (min-width:1900px) {
+            width 113px
+            font-size 28px
+        }
     .sel_city
         padding-left 3%
         .cities
@@ -227,9 +231,8 @@ export default {
         color #B5B5B5
     .hospitalinfo
         clear both
-        margin-top 60px
+        padding-top 30px
         padding-left 3%
-        border 1px solid transparent
         overflow-x hidden
         overflow scroll
         .singlehospital
@@ -247,8 +250,9 @@ export default {
                 width 379.5px
                 height 187.5px
             @media screen and (min-width:1900px) 
-                width 439.5px
-                height 212.5px
+                width 440px
+                height 203px
+                margin-bottom 20px
              .hospitalname
                 text-align center
                 position relative
@@ -312,13 +316,13 @@ export default {
                 background rgb(4,117,124)
     .hospital_num
         height 16px
-        font-size 16px
+        font-size 20px
         font-family Source Han Sans CN
-        font-weight 500
-        color #80B6F2
+        font-weight Regular
+        color #B5B5B5
         position fixed
         left 2.8%
-        bottom 2.5%
+        bottom 88px
     .temporary
         font-size 30px
         line-height 36px

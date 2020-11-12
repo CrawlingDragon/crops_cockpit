@@ -1,14 +1,11 @@
 <template>
-  <div
-    id="pie"
-  >
-  </div>
+  <div id="pie" :style="wh"></div>
 </template>
 <script>
-let echarts = require("echarts/lib/echarts");
+const echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/pie");
 require("echarts/lib/component/tooltip");
-let colors = [
+const colors = [
   "#F79D1c",
   "#F7Db1c",
   "#b7de32",
@@ -40,18 +37,16 @@ export default {
   },
   methods: {
     initPie() {
-      let that = this;
-      let mapEcharts = echarts.init(document.getElementById("pie"));
+      const that = this;
+      const mapEcharts = echarts.init(document.getElementById("pie"));
       mapEcharts.showLoading();
       mapEcharts.setOption({
         tooltip: {
           trigger: "item",
           formatter: function(params) {
-            let arr = params.data.list;
+            const arr = params.data.list;
             let str = arr.join("<br/>");
-            str = `${params.data.name} <span style="font-size:18px">${
-              params.data.value
-            }</span>所医院<br/>${str}`;
+            str = `${params.data.name} <span style="font-size:18px">${params.data.value}</span>所医院<br/>${str}`;
             return str;
             // ("{a} <br/>{b} : {c} ({d}%)");
           }
@@ -97,11 +92,4 @@ export default {
 <style lang="stylus" scoped>
 div
   color #fff
-#pie
-  width 258px
-  height 166px
-  @media screen and (min-width:1900px) {
-    width 350px
-    height 166px
-  }
 </style>

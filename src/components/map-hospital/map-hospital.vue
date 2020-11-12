@@ -4,6 +4,7 @@
     <div class="chart">
       <ChartPie
         :pieData=CurMp
+        :wh=this.wh
         v-if="!noDatas"
         v-show="CurMp.length != 0"
       >
@@ -51,8 +52,17 @@ export default {
   name: "map-hospital",
   data() {
     return {
-      noDataMessga: "该地区暂无医院"
+      noDataMessga: "该地区暂无医院",
+      wh:""
     };
+  },
+  created(){
+    var w = document.documentElement.clientWidth || document.body.clientWidth
+    if(w>1900||w==1900){
+      this.wh = 'width:350px;height:166px'
+    }else{
+      this.wh = 'width:247px;height:166px'
+    }
   },
   props: {
     cityNames: {
@@ -72,8 +82,6 @@ export default {
       }
     }
   },
-  computed: {},
-  watch: {},
   computed: {
     noDatas() {
       return this.$store.state.noData;

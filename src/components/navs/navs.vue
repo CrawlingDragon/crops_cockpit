@@ -33,6 +33,7 @@
           <span class="first-bar">全国</span>
           <span
             v-bind:class="[
+<<<<<<< HEAD:src/components/navs/navs.vue
               activeProvinceComputed == '全国' ? 'active' : '',
               getLoginId != 5 ? 'disabled' : ''
             ]"
@@ -42,6 +43,13 @@
             >全部医院</span
           >
         </div>
+=======
+            activeProvinceComputed =='全国'
+            ? 'active'
+            :'',LoginId != 5?'disabled':'']"
+            v-on:click="getCountryDatas('全国', 0, 5, 'china', 1, '浙江省', 4, 0)"
+          >全部医院</span></div>
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
         <!--  -->
         <div class="t2 choose">
           <div class="title-bar">省</div>
@@ -186,8 +194,16 @@ export default {
       breadAds: {}, // 面包屑地址 ?
       // breadArray: this.breadArr //面包屑导航
       arrs: this.PercentArray,
+<<<<<<< HEAD:src/components/navs/navs.vue
       thressRootArr: [], // 用来放三级县级地址的跟属性
       safeThressAddress: "" // 用来暂时保存 匹配县级地址的地址
+=======
+      thressRootArr: [], //用来放三级县级地址的跟属性
+      safeThressAddress: "",//用来暂时保存 匹配县级地址的地址
+      LoginId:window.sessionStorage.getItem("LoginId"),//登陆时，保存地图参数id
+      picAddress:"",//记录当前登录账号管理院的位置信息
+      default_threeCity:""//获取默认的城市下属的默认县级城市
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
     };
   },
   props: {
@@ -203,15 +219,10 @@ export default {
       default: "浙江省"
     }
   },
+  created(){
+    this.getDaohangList()
+  },
   mounted() {
-    // console.log(this.picAddress)
-    // console.log(this.picAddress.province)
-    // console.log('登陆的id:'+JSON.stringify(this.loginId))//登陆保存地图参数的id
-    // console.log('导航信息：'+JSON.stringify(this.breadArr))//导航信息
-    // console.log('省区'+JSON.stringify(this.provincial))
-    // console.log('市区：'+JSON.stringify(this.activeCityArr))//市区
-    // console.log('县区：'+JSON.stringify(this.bviousArr))//县区
-    // console.log(this.defaultProvince)//默认省份
     if (this.activeProvinceComputed == "全国") {
       this.clickAdress = this.secondCityComputed;
     } else {
@@ -230,6 +241,7 @@ export default {
       return this.arrs.splice(1, 2);
     },
     ...mapState([
+<<<<<<< HEAD:src/components/navs/navs.vue
       "defaultProvince", // 全网请求地址
       "loginId", // 登陆时，保存地图参数id
       "breadArr", // 面包屑导航数组
@@ -242,6 +254,19 @@ export default {
       const arr = [];
       const level = this.loginId;
       // let level = this.breadArr[this.breadArr-1].level
+=======
+      "defaultProvince",//全网请求地址
+      "breadArr",//面包屑导航数组
+      "defaultCity",//方块二级请求地址
+      "bviousName",//县级名字
+      // "picAddress",
+      "appId"
+    ]),
+    computedBreadArray() {
+      //计算后的面包屑导航
+      let arr = [];
+      let level = window.sessionStorage.getItem("curlevel")//登录的时候储存一下当前用户登录的等级
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
       this.breadArr.forEach((el, index) => {
         if (el.level <= level) {
           arr.push(el);
@@ -249,10 +274,10 @@ export default {
       });
       return arr;
     },
-    getLoginId() {
-      // 反复刷新切换路由以后消失
-      return this.$store.state.loginId;
-    },
+    // getLoginId() {
+    //   // 反复刷新切换路由以后消失
+    //   return window.sessionStorage.getItem("LoginId");
+    // },
     provincial() {
       // 反复刷新切换路由以后消失
       return this.$store.state.defaultAddressArr;
@@ -262,23 +287,32 @@ export default {
       return this.$store.state.globalLevel;
     },
     leftActiveAddress() {
+<<<<<<< HEAD:src/components/navs/navs.vue
       // 导航左边位置的的确
       return this.$store.state.defaultProvince;
     },
     activeProvinceComputed() {
       // 选中的省
       if (this.getLoginId > 3) {
+=======
+      //导航左边位置的确认
+      return this.$store.state.defaultProvince;
+    },
+    activeProvinceComputed() {
+      //选中的省
+      if (this.LoginId > 3) {
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
         return this.leftActiveAddress;
       } else {
-        return this.$store.state.picAddress.province;
+        return this.picAddress.province;
       }
     },
     bviousActiveClass() {
-      if (this.getLoginId == 3) {
+      if (this.LoginId == 3) {
         return this.bviousName;
       }
-      if (this.getLoginId == 2) {
-        return this.defaultCity;
+      if (this.LoginId == 2) {
+        return this.default_threeCity;
       }
     },
     secondCityComputed() {
@@ -321,10 +355,10 @@ export default {
     },
     activeCity() {
       // 指定二级导航的选中位置
-      if (this.getLoginId == 3) {
-        return this.$store.state.picAddress.city;
-      } else if (this.getLoginId == 2) {
-        return this.$store.state.picAddress.city;
+      if (this.LoginId == 3) {
+        return this.picAddress.city;
+      } else if (this.LoginId == 2) {
+        return this.picAddress.city;
       }
     },
     bviousArr() {
@@ -366,14 +400,17 @@ export default {
         this.activeCityArr.forEach(item => {
           if (item.name == this.safeThressAddress) {
             arr = item.city;
+<<<<<<< HEAD:src/components/navs/navs.vue
           } else if (item.name == this.breadArr[2].name) {
             // 解决区级账号登录县级数据丢失问题
             arr = item.city;
+=======
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
           }
         });
         return arr;
       }
-      if (this.loginId == 2) {
+      if (window.sessionStorage.getItem == 2) {
         this.activeCityArr.forEach(item => {
           if (item.name == this.picAddress.city) {
             arr = item.city;
@@ -393,8 +430,31 @@ export default {
       "getBreadArr",
       "getBviousName",
       "getBviousLevel",
-      "getIsnav"
+      "getIsnav",
+      "getDefaultAddressArr",
     ]),
+    getDaohangList(){
+      console.log(this.$store.state.appId)
+      this.$axios.fetchPost(
+        "/Home/Login/UserNav",
+        {appId:this.$store.state.appId}
+      ).then(res=>{
+        if(res.data.code == "200"){
+          // console.log(res)
+          const areaname = res.data.data.areaname;
+          const arr = res.data.data.area;//获取默认导航列表
+          this.getDefaultAddressArr(arr); // 获取默认导航列表
+          this.getDefaultProvince(areaname); // 获取全网页地址
+          this.getBreadArr(res.data.data.nav);
+          // console.log(res.data.data.nav)
+          this.getDefaultCity(res.data.data.default); // 获取二级方块地址
+          this.default_threeCity = res.data.data.default
+          if(window.sessionStorage.getItem("curlevel")-0 <= 3){
+            this.picAddress = res.data.data.address
+          }
+        }
+      })
+    },
     loginOut() {
       // 推出登陆按钮
       this.$emit("out");
@@ -406,8 +466,13 @@ export default {
       this.showFlag = false;
     },
     getCountryDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
+<<<<<<< HEAD:src/components/navs/navs.vue
       // 点击全国获取数据
       if (this.getLoginId != "5") {
+=======
+      //点击全国获取数据
+      if (this.LoginId != "5") {
+>>>>>>> dev_xiaobai:src/components/navs/navs.vue
         isClick = 0;
       }
       if (isClick != 0) {
@@ -534,60 +599,6 @@ export default {
     }
   },
   watch: {
-    // activeCityArr(newVal) {
-    //   console.log("this.activeCityArr :", newVal);
-    // },
-    // bviousArr(newVal) {
-    //   console.log("this.bviousArr :", newVal);
-    // }
-    // defaultProvince(newVal) {
-    //   this.breadAds = {
-    //     name: newVal,
-    //     level: this.$store.state.globalLevel
-    //   };
-    //   let newLevel = this.$store.state.globalLevel;
-    //   let oldLevel = this.breadArr[this.breadArr.length - 1].level;
-    //   console.log("newLevel :", newLevel);
-    //   console.log("oldLevel :", oldLevel);
-    //   if (newLevel == oldLevel) {
-    //     if (oldLevel.length == 0) {
-    //       this.breadArr.push(this.breadAds);
-    //       this.breadArr.shift();
-    //     } else {
-    //       this.breadArr.pop();
-    //       this.breadArr.push(this.breadAds);
-    //     }
-    //     console.log("等于的情况", this.breadAds);
-    //     console.log("this.breadArr:", this.breadArr);
-    //     return;
-    //   }
-    //   if (newLevel < oldLevel) {
-    //     if (newLevel < oldLevel - 1) {
-    //       this.breadArr.push({
-    //         name: this.secondDefaultCity,
-    //         level: this.secondDlevel
-    //       });
-    //     }
-    //     this.breadArr.push(this.breadAds);
-    //     console.log("<的情况", this.breadAds);
-    //     console.log("this.breadArr:", this.breadArr);
-    //     return;
-    //   }
-    //   if (newLevel > oldLevel) {
-    //     let i = 0;
-    //     this.breadArr.forEach((item, index) => {
-    //       if (newLevel == item.level) {
-    //         i = index;
-    //       }
-    //     });
-    //     let many = this.breadArr.length - i;
-    //     this.breadArr.splice(i, many);
-    //     this.breadArr.push(this.breadAds);
-    //     console.log(">的情况", this.breadAds);
-    //     console.log("this.breadArr:", this.breadArr);
-    //     return;
-    //   }
-    // }
   }
 };
 </script>
@@ -640,14 +651,14 @@ export default {
       line-height 40px
       @media screen and (min-width:1900px){
         line-height 60px
-        font-size 19px
+        font-size 18px
       }
       &:last-child
         .symbol
           display none
       .symbol
         margin 0 10px
-        font-size 20px
+        font-size 16px
         line-height 22px
       .address-name
         cursor pointer
@@ -701,12 +712,16 @@ export default {
     transition all 0.3s ease-in
     @media screen and (min-width:1900px) {
       top 60px
+      width 350px
     }
     & > div
       padding-top 20px
       font-size 14px
       border-bottom 1px solid rgba(31, 87, 158, 0.5)
       padding 10px 0px 5px 24px
+      @media screen and (min-width:1900px) 
+        font-size 16px
+        padding 15px 0px 10px 24px
       &:last-child
         border-bottom none
     .t1
@@ -733,20 +748,32 @@ export default {
       color #7FB5F1
       cursor default
     .t2
+      @media screen and (min-width:1900px)
+        font-size 16px
       &.choose
+        @media screen and (min-width:1900px)
+          font-size 16px
         cursor pointer
         .title-bar
           margin-bottom 12px
           cursor default
+          @media screen and (min-width:1900px)
+            font-size 24px
+            margin-bottom 20px
       &.disable
         padding-bottom 0
+        .title-bar
+          @media screen and (min-width:1900px)
+            font-size 24px
+            padding-bottom 10px
       .address-t
         color #fff
-        font-size 18px
       .title
         margin-bottom 10px
+        @media screen and (min-width:1900px)
+          font-size 18px
       .mid-number
-        font-size 30px
+        font-size 20px
         margin-left 11px
       .number
         color #A6FBFF
@@ -754,6 +781,8 @@ export default {
         & > span
           color #7FB5F1
           font-size 14px
+          @media screen and (min-width:1900px)
+            font-size 16px
           margin-left 9px
       ul
         margin-top -5px
@@ -761,6 +790,9 @@ export default {
           float left
           margin-right 5px
           line-height 25px
+          @media screen and (min-width:1900px)
+            font-size 16px
+            line-height 30px
           &.active
             color #F79D1D
 </style>

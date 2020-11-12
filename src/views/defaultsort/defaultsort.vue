@@ -31,12 +31,12 @@ export default {
         return{
             hospitalinfo:[],
             userid:"" ,
-            outlink:""
+            outlink:"",
+            isstore:window.sessionStorage.getItem('isstore')//判断是新型庄稼医院还是所有医院
         }
     },
     created(){
         // 控制路由点击字体的样式，当点击默认排序时
-        console.log('666')
         this.$parent.cur_index = 1  
         console.log(window.sessionStorage.getItem('isstore'))
     },
@@ -44,9 +44,9 @@ export default {
         //计算出滚动区域的高度
         var h = document.documentElement.clientHeight || document.body.clientHeight
         if(h>1080||h==1080){
-            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.025)}px`
+            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.085)}px`
         }else{
-            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.025)}px`
+            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.085)}px`
         }
         this.userid = window.sessionStorage.getItem('curuserid')
         const rLoading = this.openLoading();
@@ -64,7 +64,7 @@ export default {
          //内容高度自适应,获取滚动区域高度
          getheight(top,bottomrate){
              var h = document.documentElement.clientHeight || document.body.clientHeight
-             return Math.round(h-top-h*bottomrate-30)
+             return Math.round(h-top-h*bottomrate-117)
          },
          godetail(item){
             console.log(item)
@@ -80,15 +80,30 @@ export default {
                 }
             })
         }
+    },
+    watch:{
+        isstore(newVal){
+        const rLoading = this.openLoading();
+        console.log(newVal)
+        this.$axios.fetchPost(
+            "/Home/Manage/GetManageMpDataList",
+            {appId:this.userid,type:"default",ordertag:"default",storetag:newVal,areatag:""}
+            ).then(res=>{
+                if(res.data.code == "200"){
+                    this.hospitalinfo = res.data.data.lists
+                    rLoading.close();
+                }
+            })
+        }
     }
 }
 </script>
 <style lang="stylus" scoped>
 .contain
-    position relative
-    top 70px
+    position absolute
+    top 145px
     @media screen and (min-width:1900px){
-        top 210px
+        top 205px
     }
     .hospitalinfo
         padding-left 3%
@@ -109,8 +124,9 @@ export default {
                 width 379.5px
                 height 187.5px
             @media screen and (min-width:1900px) 
-                width 439.5px
-                height 212.5px
+                width 440px
+                height 203px
+                margin-bottom 20px
              .hospitalname
                 text-align center
                 position relative
@@ -175,11 +191,11 @@ export default {
                 background rgb(4,117,124)
     .hospital_num
         height 16px
-        font-size 16px
+        font-size 20px
         font-family Source Han Sans CN
-        font-weight 500
-        color #80B6F2
+        font-weight Regular
+        color #B5B5B5
         position fixed
         left 2.8%
-        bottom 2.5%
+        bottom 8%
 </style>
