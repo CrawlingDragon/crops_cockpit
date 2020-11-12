@@ -12,10 +12,10 @@
             </div>
         </div>
         <div class="content">
-            <div class="con_left">
+            <div class="con_left" @click="watchdetail('3')">
                 <div class="left_title">土壤信息</div>
                 <div class="cetu_number text1">测土单号：{{this.cetuinfo.idnumber}}</div>
-                <div class="weizhi text1">土壤位置：{{this.cetuinfo.crop_patten}}</div>
+                <div class="weizhi text1">土壤位置：{{this.$route.query.address}}</div>
                 <div class="show_time text1">{{this.cetuinfo.showtime}}</div>
                 <div class="mushu text1">亩数：{{this.cetuinfo.crop_position}}</div>
                 <div class="charge_per text1">测试专家：{{this.cetuinfo.tester_expert}}</div>
@@ -28,50 +28,87 @@
                    <span class="zhibiao">{{this.cetuinfo.hl_salt}}</span>
                 </div>
             </div>
-            <div class="con_right">
+            <div class="con_right" @click="watchdetail('2')">
                 <div class="right_title">处方信息</div>
                 <div class="huifu_info">
-                    <div class="huifu_person">嵊州市蔬菜专科医院医院 官方回复：</div>
-                    <div class="huifu_nr">使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。使用下面几使用下面几种药混合使用。疗效更好。使用下面几种药混合使用。疗效更好。</div>
+                     <div v-for="(item,index) in this.cetuinfo.result" :key="index">
+                        <div class="huifu_person">{{item.chufang_expert}}</div>
+                        <div class="huifu_nr">{{item.result}}</div>
+                    </div>
                 </div>
+                <div class="no_data" v-if="this.cetuinfo.result == ''">医院暂时还没有回复</div>
             </div>
         </div>
         <div class="bottom">
             <div class="chufang">
                 <img src="../../assets/24.png" alt="">
-                <div class="text2">处方药（6）</div>
+                <div class="text2">处方药（{{this.yao_number}}）</div>
             </div>
-            <div class="yao" v-for="item in 5">
+            <div class="yao" v-for="(item,index) in this.cetuinfo.products" :key="index">
                 <div class="shadow"></div>
-                <img src="../../assets/61.png" alt="">
-                <p class="yao_name">燕化多禧利香菇多...</p>
+                <img :src="item.thumb_pic" alt="">
+                <p class="yao_name">{{item.name}}</p>
             </div>
+             <div class="no_yao" v-if="this.yao_number == 0">
+                <img src="../../assets/65.png" alt="">                
+            </div>
+        </div>
+        <div ref="detail">
+            <Detail
+            :detailinfo="this.cetuinfo"
+            :godetail="this.godetail"
+            :title="this.alert_title"
+            ></Detail>
         </div>
     </div>
 </template>
 <script>
+import Detail from "../../components/zhenliao_alert/zhenliao_alert"
 export default {
     data(){
       return{
         cetuinfo:"",//测土配方信息
-        products:""//药物信息
+        products:"",//药物信息,
+        appId:localStorage.getItem("appId"),
+        yao_number:"",//药物数量
+        godetail:"",//判断是从何处打开了弹窗
+        alert_title:"",//弹窗title
       }
     },
     activated(){
-      this.getcetuinfo(this.$route.query.id)
+      this.getcetuinfo(this.appId,"testingsoil",this.$route.query.id)
+      this.$refs.detail.style ='display:none'
+    },
+    components:{
+        Detail
     },
     methods:{
       topre(){
         this.$router.go(-1)
       },
-      getcetuinfo(Id){
-        this.$axios.fetchPost(
-          "/Home/Treatment/GetTestingsoilDetail",
-          {Id:Id}
+      watchdetail(godetails){
+        this.godetail = godetails
+        this.$refs.detail.style ='display:block'
+        if(godetails == 2){
+            this.alert_title="处方信息"
+        }
+        if(godetails == 3){
+            this.alert_title="土壤信息详情"
+        }
+      },
+      getcetuinfo(appId,frommodule,Id){
+           this.$axios.fetchPost(
+          "/Home/Treatment/GetRecipetemDetail",
+          {appId:appId,module:frommodule,Id:Id}
         ).then(res=>{
           if(res.data.code == "200"){
-              console.log(res)
-              this.cetuinfo = res.data.data
+            console.log(res)
+            this.cetuinfo = res.data.data
+            if(res.data.data.products==""){
+                this.yao_number = 0
+            }else{
+                this.yao_number = Object.keys(res.data.data.products).length
+            }
           }
         })
       },
@@ -134,12 +171,11 @@ export default {
 .content
         width 100%
         height 460px
-        border 1px solid red
         .con_left
             float left
             height 460px
             width 36%
-            border 1px solid yellow
+            border 2px solid #072F65
             font-family MicrosoftYaHei
             fong-weight Regular
             text-align left
@@ -164,7 +200,7 @@ export default {
             float right
             width 62%
             height 460px
-            border 1px solid green
+            border 2px solid #072F65
             overflow  hidden
             .right_title
                 font-size 30px
@@ -174,15 +210,18 @@ export default {
                 line-height 40px
                 font-size 24px
                 color #B5B5B5
+            .no_data
+                font-size 24px
+                color #B5B5B5
+                margin 160px 450px
     .bottom
         width 100%
         height 270px
         margin-top 31px
-        border 1px solid red
         .chufang
             width 140px
             height 270px
-            border 1px solid #091D44
+            border 2px solid #072F65
             margin-right 40px
             float left
             img 
@@ -196,7 +235,6 @@ export default {
             width 270px
             margin-right 15px
             float left
-            border 1px solid red
             position relative
             img
                 height 270px
@@ -214,5 +252,14 @@ export default {
                 top 0px
                 height 100%
                 width 100%
-                background linear-gradient(to top,#000000 1%,transparent 100%)   
+                background linear-gradient(to top,#000000 1%,transparent 100%)
+        .no_yao
+            height 270px
+            width 270px
+            float left
+            border 2px solid #072F65
+            img
+                height 120px
+                width 175px
+                margin 75px 47px
 </style>

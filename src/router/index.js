@@ -371,6 +371,21 @@ const routes = [
     import(/* webpackChunkName: "cetu_detail" */"../views/cetu_detail/cetu_detail.vue")
   },
   {
+    path:'/xunzhen_detail',
+    component:()=>
+    import(/* webpackChunkName: "xunzhen_detail" */"../views/xunzhen_detail/xunzhen_detail.vue")
+  },
+  {
+    path:'/zuozhen_detail',
+    component:()=>
+    import(/* webpackChunkName: "zuozhen_detail" */"../views/zuozhen_detail/zuozhen_detail.vue")
+  },
+  {
+    path:'/expert_paihang',
+    component:()=>
+    import(/* webpackChunkName: "expert_paihang" */"../views/expert_paihang/expert_paihang.vue")
+  },
+  {
     path:'/sao_yinongbao',
     component:()=>
     import(/* webpackChunkName: "sao_yinongbao" */"../views/sao_yinongbao/sao_yinongbao.vue")

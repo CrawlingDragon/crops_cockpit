@@ -2,11 +2,11 @@
     <div class="jianjie">
         <div class="head" @click="topre()">
             <div class="closefn"></div>
-            <div class="head-title">网诊详情</div>
+            <div class="head-title">坐诊详情</div>
         </div>
         <div class="title">{{this.$route.query.title}}</div>
         <div class="content">
-            <div class="con_left" @click="watchdetail('1')">
+            <div class="con_left" @click="watchdetail(1)">
                 <div class="left_title">作物病情资料</div>
                 <div class="plant_mode text1">{{this.zl_detail.crop_pattern}}</div>
                 <div class="bf_chengdu text1">{{this.zl_detail.crop_position}}</div>
@@ -19,7 +19,7 @@
                     </div>
                 </div>
             </div>
-            <div class="con_right" @click="watchdetail('2')">
+            <div class="con_right" @click="watchdetail(2)">
                 <div class="right_title">处方信息</div>
                 <div class="huifu_info" v-if="this.zl_detail.result != ''">
                     <div v-for="(item,index) in this.zl_detail.result" :key="index">

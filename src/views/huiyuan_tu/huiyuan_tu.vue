@@ -62,7 +62,7 @@ export default {
     },
     godetail(item){
       console.log(item)
-      this.$router.push({path:"/cetu_detail",query:{id:item.id,title:item.title}})
+      this.$router.push({path:"/cetu_detail",query:{id:item.id,title:item.title,address:item.address}})
     }
   }
 }
