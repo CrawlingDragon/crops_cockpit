@@ -107,7 +107,7 @@ export default {
   .top-nav
     margin 0 90px
     text-align center
-
+    margin-top: -17px;
     .item
       padding 10px 35px
       display inline-block

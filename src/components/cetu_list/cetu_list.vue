@@ -2,11 +2,17 @@
   <div class="cetu_list-container">
     <div class="title">测土配方记录 ></div>
     <ul class="cetu-ul">
-      <li v-for="item in 3" :key="item">
-        <p class="p1">黄桂花的番茄地</p>
-        <p class="p2">ID：12331452</p>
-        <p class="p2">取样日期：2017-05-27</p>
-        <div class="icon"></div>
+      <li v-for="item in list" :key="item.id">
+        <p class="p1">{{ item.title }}</p>
+        <p class="p2">ID：{{ item.idnumber }}</p>
+        <p class="p2">取样日期：{{ item.showtime }}</p>
+        <div
+          class="icon"
+          :class="{ icon_checking: item.teststatus == 1 }"
+        ></div>
+        <div class="icon" :class="{ icon_checked: item.teststatus == 2 }"></div>
+        <div class="icon" :class="{ icon_chufang: item.teststatus == 3 }"></div>
+        <!-- teststatus:1检测中，2检测完成，3给处方 -->
       </li>
     </ul>
   </div>
@@ -15,7 +21,14 @@
 export default {
   name: "cetu_list",
   components: {},
-  props: {},
+  props: {
+    list: {
+      type: Array,
+      default: function() {
+        return [];
+      }
+    }
+  },
   data() {
     return {};
   },
@@ -67,4 +80,10 @@ export default {
         right 20px
         bottom 35px
         position absolute
+        &.icon_checking
+          background url('./checking.png') no-repeat
+        &.icon_checked
+          background url('./checked.png') no-repeat
+        &.icon_chufang
+          background url('./chufang.png') no-repeat
 </style>

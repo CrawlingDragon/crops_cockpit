@@ -22,6 +22,11 @@ const routes = [
       import(/* webpackChunkName: "findindex" */ "../views/find-index/find-index")
   },
   {
+    path: "/find_detail",
+    component: () =>
+      import(/* webpackChunkName: "find_detail" */ "../views/find_detail/find_detail")
+  },
+  {
     path: "/home",
     name: "home",
     component: () =>
@@ -206,6 +211,14 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "online_hospital_channel" */ "../views/online_hospital_channel/online_hospital_channel.vue"
+      )
+  },
+  {
+    path: "/online_hospital_channel_second",
+    name: "online_hospital_channel_second",
+    component: () =>
+      import(
+        /* webpackChunkName: "online_hospital_channel_second" */ "../views/online_hospital_channel_second/online_hospital_channel_second"
       )
   },
   {

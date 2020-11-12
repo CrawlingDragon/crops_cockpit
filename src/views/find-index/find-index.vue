@@ -51,19 +51,19 @@ export default {
       title: "",
       cur_cityname: window.sessionStorage.getItem("name"),
       tmp_alert_satus: "",
-      changemoudle: "find", //控制头部左侧导航样式
-      middle_title: "新型庄稼医院管理驾驶舱" //中部标题
+      changemoudle: "find", // 控制头部左侧导航样式
+      middle_title: "新型庄稼医院管理驾驶舱" // 中部标题
     };
   },
   components: {
     Headnav
   },
   created() {
-    let isshaoxing = window.sessionStorage.getItem("isshaoxing");
+    const isshaoxing = window.sessionStorage.getItem("isshaoxing");
     if (isshaoxing == 1) {
       this.shaoxingprivate = true;
     }
-    //获取绍兴市为民服务平台的二维码
+    // 获取绍兴市为民服务平台的二维码
     this.$axios.fetchGet("/Admin/Api/get_qr_code").then(res => {
       this.imgurl = res.data.data.qrcode;
       this.title = res.data.data.title;

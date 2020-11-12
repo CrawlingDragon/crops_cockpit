@@ -1,6 +1,7 @@
 <template>
   <div class="goods_list_container">
-    <Header title="农资商品"></Header>
+    <Header title="农资商品" style="display:none"></Header>
+    <AdminHeader title="农资商品"></AdminHeader>
     <div class="nav-bar">
       <div
         class="item"
@@ -12,8 +13,18 @@
         {{ item.catname }}
       </div>
     </div>
-    <ul class="list_ul">
-      <li v-for="item in list" :key="item.id" @click="goToDetail(item.id)">
+    <ul
+      class="list_ul infinite-list"
+      v-infinite-scroll="load"
+      style="overflow:auto;"
+      infinite-scroll-disabled="disabled"
+    >
+      <li
+        v-for="item in list"
+        :key="item.id"
+        @click="goToDetail(item.id)"
+        class="infinite-list-item"
+      >
         <el-image class="img" :src="item.thumb_pic" fit="cover">
           <div slot="placeholder" class="image-slot">
             加载中
@@ -22,21 +33,25 @@
         </el-image>
         <p>{{ item.name }}</p>
       </li>
+      <p v-if="loading" style="text-align:center">加载中...</p>
+      <p v-if="noMore && noGoods == false" style="text-align:center">
+        没有更多了
+      </p>
+      <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
     </ul>
-    <div v-show="list.length == 0 && noGoods" class="noGoods">暂无商品</div>
-    <div class="result-bar" v-show="list.length != 0">
-      共{{ list.length == 0 ? 0 : list.length }}个结果
-    </div>
+    <div class="result-bar" v-show="list.length != 0">共{{ count }}个结果</div>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import AdminHeader from "@/components/admin_hospital_header/admin_hospital_header";
 import { mapState } from "vuex";
 
 export default {
   name: "goods_list",
   components: {
-    Header
+    Header,
+    AdminHeader
   },
   props: {},
   data() {
@@ -44,51 +59,116 @@ export default {
       menuIndex: 0, // 显示导航的索引
       menu: [], // 导航栏栏目
       list: [],
-      noGoods: false
+      noGoods: false,
+      count: 0,
+      page: 0,
+      loading: false,
+      noMore: false,
+      catid: 0
     };
   },
   computed: {
+    disabled() {
+      return this.loading || this.noMore;
+    },
     ...mapState(["appId", "purview"])
   },
-  watch: {},
+  watch: {
+    // catid(newVal, oldVal) {
+    //   // console.log("watch:>> ");
+    //   // if (oldVal != 0) {
+    //   //   // this.page = 0;
+    //   //   // this.list = [];
+    //   //   // this.loading = false;
+    //   //   // this.noMore = false;
+    //   //   setTimeout(() => {
+    //   //     this.load();
+    //   //   }, 100);
+    //   }
+    // }
+  },
   mounted() {
     this.getMenu();
   },
   destroyed() {},
   methods: {
+    load() {
+      this.loading = true;
+      this.page += 1;
+      setTimeout(() => {
+        this.noGoods = false;
+        this.$axios
+          .fetchGet("/Home/Products/GetMpProList", {
+            appId: this.appId,
+            catId: this.catid,
+            page: this.page,
+            purview: this.purview == (4 || 5) ? 1 : 0
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.list = this.list.concat(res.data.data);
+              this.loading = false;
+              this.count = res.data.count;
+              if (res.data.data.length == 0) {
+                this.noMore = true;
+              }
+              if (this.page == 1) {
+                this.noGoods = true;
+              }
+            } else {
+              this.noMore = true;
+            }
+          });
+      }, 1000);
+    },
     getMenu() {
       // 获取导航栏
       this.$axios.fetchPost("/Home/Products/GetProductsMenu").then(res => {
         if (res.data.code == 200) {
           this.menu = res.data.data;
-          setTimeout(() => {
-            this.getGoodsList(res.data.data[0].catid);
-          }, 100);
+          this.catid = res.data.data[0].catid;
         }
       });
     },
-    getGoodsList(catid) {
+    getGoodsList() {
       // 获取商品列表
       this.noGoods = false;
       this.$axios
-        .fetchPost("/Home/Products/GetMpProList", {
-          appId: 63587 || this.appId,
-          catid: catid,
-          purview: this.purview == 4 || 5 ? 1 : 0
+        .fetchGet("/Home/Products/GetMpProList", {
+          appId: this.appId,
+          catId: this.catid,
+          page: this.page,
+          purview: this.purview == (4 || 5) ? 1 : 0
         })
         .then(res => {
-          if (res.data.count == 0) {
-            this.noGoods = true;
-          }
           if (res.data.code == 200) {
-            this.list = res.data.data;
+            this.list = this.list.concat(res.data.data);
+            this.loading = false;
+            this.count = res.data.count;
+            console.log("this.page :>> ", this.page);
+            if (this.page == 1) {
+              this.noGoods = true;
+            }
+            if (res.data.data.length == 0) {
+              this.noMore = true;
+            }
+          } else {
+            this.noMore = true;
           }
         });
     },
     changeNenu(catid, index) {
       // 点击导航栏
-      this.menuIndex = index;
-      this.getGoodsList(catid);
+      if (this.menuIndex != index) {
+        this.menuIndex = index;
+        this.page = 0;
+        this.list = [];
+        this.loading = false;
+        this.noMore = false;
+        this.noGoods = false;
+        this.load();
+      }
+      this.catid = catid;
     },
     goToDetail(id) {
       // 去到商品详情
@@ -102,33 +182,35 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .goods_list_container
+  padding-top 100px
   .nav-bar
-    padding 42px 0 0
-    margin 0 90px
-    margin-bottom 70px
+    max-width 1900px
+    min-width 1340px
+    margin-bottom 60px
     text-align center
-    border-bottom 2px solid rgba(255, 255, 255, 0.2)
     & > .item
       display inline-block
       padding 0 35px 9px
       border-bottom 4px solid transparent
-      font-size 40px
+      font-size 30px
       color #C5C5C5
       cursor pointer
       margin-right 20px
       &:hover
-        border-bottom 4px solid #FF6500
+        color #FF6500
       &.active
         border-bottom 4px solid #FF6500
         color #FF6500
   .list_ul
-    margin 0 90px
+    padding 0 64px 0
     text-align left
-    padding 10px 3px 0
+    max-height 570px
+    padding-top 5px
+    min-height 300px
     & > li
-      margin-right 14px
-      width 275px
-      height 275px
+      margin-right 30px
+      width 270px
+      height 270px
       margin-bottom 55px
       display inline-block
       position relative

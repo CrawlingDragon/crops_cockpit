@@ -4,22 +4,28 @@
     <div class="detail-conatiner">
       <div class="detail-box">
         <div class="left-bar">
-          <div class="play-icons"></div>
-          <video src=""></video>
+          <!-- <div class="play-icons">
+            <el-image :src="detail.thumb"></el-image>
+          </div> -->
+          <video
+            :src="detail.videourl"
+            style="width:100%;height:100%;object-fit: fill;"
+            ref="video"
+            id="video"
+            controls
+          ></video>
         </div>
         <div class="right-bar">
-          <p class="p1">黄泽黄桃专科医院</p>
-          <p class="small-p2">课程讲师：浙江大学果树科学研究所教授 贾惠娟</p>
-          <p class="time-p3">时长：50分钟</p>
-          <p class="p4">
-            视频简介：近日，市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。二是充分全面抓好贯彻落实。全面抓好贯彻落实。
-          </p>
+          <p class="p1">{{ detail.title }}</p>
+          <p class="small-p2">课程讲师：{{ detail.expert }}</p>
+          <p class="time-p3">时长：{{ detail.duration }}</p>
+          <p class="p4">视频简介：{{ detail.description }}</p>
           <div class="btns">
-            <div class="btn">
+            <div class="btn" @click="infowShowFlag = true">
               <span class="info-btn"></span>
               <span>简 介</span>
             </div>
-            <div class="btn">
+            <div class="btn" @click="playVideo">
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
@@ -32,11 +38,26 @@
       </div>
       <div class="second-title">相关视频</div>
       <ul class="relation-ul">
-        <li v-for="item in 3" :key="item">
-          <el-image class="img" fit="cover" src="item"></el-image>
-          <p class="p1">{{ item }}123li1y2i37y12p;io37y41yu</p>
+        <li
+          v-for="item in list"
+          :key="item.id"
+          @click="goToDetal(item.catid, item.id)"
+        >
+          <el-image class="img" fit="cover" :src="item.thumb"></el-image>
+          <p class="p1">{{ item.title }}</p>
         </li>
       </ul>
+    </div>
+    <div class="info-box" v-show="infowShowFlag">
+      <div class="wrap">
+        <div class="back-btn" @click="infowShowFlag = false">
+          <div class="icon"></div>
+          简介
+        </div>
+        <div class="info-text">
+          近日，市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。二是充分...
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -50,20 +71,71 @@ export default {
   props: {},
   data() {
     return {
-      list: []
+      detail: "",
+      list: [],
+      catid: this.$route.query.catid,
+      id: this.$route.query.id,
+      infowShowFlag: false
     };
   },
   computed: {
     ...mapState(["appId"])
   },
-  watch: {},
-  mounted() {},
+  watch: {
+    $route() {
+      this.catid = this.$route.query.catid;
+      this.id = this.$route.query.id;
+      this.getVideoDetail();
+    }
+  },
+  mounted() {
+    this.getVideoDetail();
+  },
   destroyed() {},
-  methods: {}
+  methods: {
+    playVideo() {
+      function FullScreen() {
+        var ele = document.getElementById("video");
+        if (ele.requestFullscreen) {
+          ele.requestFullscreen();
+        } else if (ele.mozRequestFullScreen) {
+          ele.mozRequestFullScreen();
+        } else if (ele.webkitRequestFullScreen) {
+          ele.webkitRequestFullScreen();
+        }
+      }
+      FullScreen();
+      this.$refs.video.play();
+    },
+    getVideoDetail() {
+      this.$axios
+        .fetchPost("/Home/Video/GetVideoDetail", {
+          appId: this.appId,
+          catId: this.catid,
+          Id: this.id
+        })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.detail = res.data.data;
+            this.list = res.data.data.relation;
+          }
+        });
+    },
+    goToDetal(catid, id) {
+      this.$router.push({
+        path: "/video_detail",
+        query: { catid: catid, id: id }
+      });
+    },
+    infoShow(boolean) {
+      this.infoShowFlag = boolean;
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
 .video-containers
+  padding-top 100px
   .detail-conatiner
     margin 40px 90px 0
     text-align left
@@ -177,4 +249,38 @@ export default {
           text-overflow ellipsis
           white-space nowrap
           word-break break-all
+.info-box
+  position fixed
+  left 0
+  right 0
+  top 0
+  bottom 0
+  background #080f3e
+  z-index 222
+  .wrap
+    width 100%
+    min-width 1340px
+    max-width 1900px
+    margin 0 auto
+    .back-btn
+      text-align left
+      display flex
+      align-items center
+      padding-left 40px
+      height 100px
+      margin-bottom 30px
+      color #7FB5F1
+      font-size 30px
+      cursor pointer
+      .icon
+        width 30px
+        height 30px
+        background url('./3.png') no-repeat
+        margin-right 20px
+    .info-text
+      padding 0 180px
+      font-size: 28px;
+      color: #B5B5B5;
+      line-height: 48px;
+      text-align left
 </style>

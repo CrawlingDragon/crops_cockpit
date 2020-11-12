@@ -1,6 +1,17 @@
 <template>
   <div class="video-container">
     <Header title="培训视频"></Header>
+    <div class="tab-bar">
+      <div
+        class="item"
+        v-for="(item, index) in menu"
+        :key="item.catid"
+        @click="changeVideo(index, item.catid)"
+        :class="{ active: active == index }"
+      >
+        {{ item.catname }}
+      </div>
+    </div>
     <ul class="video-ul">
       <li
         v-for="item in list"
@@ -11,7 +22,7 @@
         <p class="p1">{{ item.title }}</p>
       </li>
     </ul>
-    <div class="result-num">共{{ list.length }}个结果</div>
+    <div class="result-num">共{{ maxitem }}个结果</div>
   </div>
 </template>
 <script>
@@ -24,7 +35,10 @@ export default {
   props: {},
   data() {
     return {
-      list: []
+      list: [],
+      active: 0,
+      menu: [],
+      maxitem: 0
     };
   },
   computed: {
@@ -33,16 +47,34 @@ export default {
   watch: {},
   mounted() {
     this.getVideoList();
+    this.gerVideoMenu();
   },
   destroyed() {},
   methods: {
-    getVideoList() {
+    gerVideoMenu() {
+      this.$axios
+        .fetchPost("/Home/Video/GetVideoMenu", { appId: this.appId })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.menu = res.data.data;
+          }
+        });
+    },
+    changeVideo(num, catid) {
+      this.active = num;
+      this.getVideoList(catid);
+    },
+    getVideoList(catid) {
       // 获取视频列表
       this.$axios
-        .fetchPost("/Home/Video/GetVideoList", { appId: this.appId })
+        .fetchPost("/Home/Video/GetVideoList", {
+          appId: this.appId,
+          catid: catid
+        })
         .then(res => {
           if (res.data.code == 200) {
             this.list = res.data.data;
+            this.maxitem = res.data.maxitem;
           }
         });
     },
@@ -58,8 +90,9 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .video-container
+  padding-top 100px
   .video-ul
-    margin 40px 90px 0
+    margin 70px 90px 0
     text-align left
     & > li
       width 409px
@@ -99,4 +132,16 @@ export default {
     text-align left
     font-size 30px
     color #B5B5B5
+.tab-bar
+  text-align center
+  & > .item
+    display inline-block
+    font-size 30px
+    color #C5C5C5
+    padding 0 10px 10px
+    margin-right 50px
+    cursor pointer
+    &.active
+      color #ff6600
+      border-bottom 1px solid #ff6600
 </style>

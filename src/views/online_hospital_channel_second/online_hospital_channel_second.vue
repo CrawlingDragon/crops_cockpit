@@ -1,48 +1,65 @@
 <template>
   <div class="channel-container">
+    <headers title="频道"></headers>
     <ul class="channel-ul">
+      <li class="langer li4 video-li">
+        <div class="icon i4"></div>
+        <p>测土配方</p>
+      </li>
       <li class="langer li1" @click="channelRoute('网诊')">
         <div class="icon i1"></div>
         <p>网诊</p>
+      </li>
+      <li class="li2" style="margin-right:20px">
+        <div class="icon i2"></div>
+        <p>坐诊</p>
+      </li>
+      <li class="li3" style="margin-right:0">
+        <div class="icon i3"></div>
+        <p>巡诊</p>
       </li>
       <li class="langer li5" @click="channelRoute('专家')">
         <div class="icon i5"></div>
         <p>专家</p>
       </li>
-      <li class="langer video-li" @click="channelRoute('培训视频')">
-        <div class="video-icon icon"></div>
+      <li class="li6 langer">
+        <div class="icon i6"></div>
+        <p>会员</p>
+      </li>
+      <li
+        class="li9 langer"
+        style="margin-right:0;margin-left:20px;background:#016AD5"
+      >
+        <div class="left-text">
+          扫一扫<br />
+          下载益农宝
+        </div>
+        <el-image :src="code" style="width:242px;height:242px"></el-image>
+      </li>
+      <li class="no-icon langer" @click="channelRoute('培训视频')">
         <p>培训视频</p>
       </li>
-      <li class="langer message-li" @click="channelRoute('资讯')">
-        <div class="message-icon icon"></div>
+      <li class="no-icon" style="margin-right:20px">
+        <p>农资商品</p>
+      </li>
+      <li class="no-icon" @click="channelRoute('资讯')">
         <p>资讯</p>
       </li>
       <li
-        class="langer bin-li"
-        style="background:#EB942D"
+        class="no-icon langer"
         @click="channelRoute('病虫害图库')"
+        style="margin-right:0"
       >
-        <div class="icon bin-icon"></div>
         <p>病虫害图库</p>
       </li>
-      <li class="down-li" @click="channelRoute('已下载的视频')">
+      <!-- <li class="down-li" @click="channelRoute('已下载的视频')">
         <div>
           <div class="down-icon"></div>
           已下载的视频
         </div>
-      </li>
-      <li class="li9" style="margin-right:0;margin-left:20px;background:#fff">
-        <el-image :src="code"></el-image>
-      </li>
+      </li> -->
 
-      <!-- <li class="li2">
-        <div class="icon i2"></div>
-        <p>坐诊</p>
-      </li>
-      <li class="li3">
-        <div class="icon i3"></div>
-        <p>巡诊</p>
-      </li>
+      <!--
       <li class="no-icon">
         <p>医院本级</p>
       </li>
@@ -53,10 +70,7 @@
         <div class="icon i4"></div>
         <p>测土配方</p>
       </li>
-      <li class="li6">
-        <div class="icon i6"></div>
-        <p>会员</p>
-      </li>
+
       <li class="langer li7">
         <div class="icon i7"></div>
         <p>下级医院</p>
@@ -73,11 +87,11 @@
   </div>
 </template>
 <script>
-// import headers from "@/components/online_hospital_header";
+import Headers from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
 export default {
   name: "online_hospital_channel",
-  components: { Nav },
+  components: { Nav, Headers },
   props: {},
   data() {
     return {
@@ -140,7 +154,7 @@ export default {
   width 100%
   max-width 1900px
   margin 0 auto
-  padding 100px 180px
+  padding 100px 180px 151px
   .channel-ul
     text-align left
     display flex
@@ -157,6 +171,12 @@ export default {
       font-size 36px
       color #FFFFFF
       cursor pointer
+      .left-text
+          text-align center
+          display inline-block
+          font-size 32px
+          color #fff
+          margin-right 26px
       &.video-li
         background #00DBC4
       &.down-li
@@ -251,6 +271,13 @@ export default {
           background url('./15.png') no-repeat
           background-size 100%
           background-position center
+       &.li4
+        .icon
+          width 80px
+          height 95px
+          background url('./14.png') no-repeat
+          background-size 100%
+          background-position center
       &.li8
         background #D93165
         width 330px
@@ -260,6 +287,4 @@ export default {
           background url('./16.png') no-repeat
           background-size 100%
           background-position center
-      &.li9
-        width 240px
 </style>

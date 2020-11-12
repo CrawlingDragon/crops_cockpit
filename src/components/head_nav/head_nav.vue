@@ -97,7 +97,7 @@
 </template>
 <script>
 import Confim from "../confim/confim";
-import { mapMutations, mapState } from "vuex";
+import { mapMutations } from "vuex";
 const Date = resolve => require(["../date/date"], resolve);
 export default {
   props: {

@@ -1,50 +1,151 @@
 <template>
   <div class="tu-container">
     <div class="bar">
-      <div class="item active">全部</div>
-      <div class="item">检测中</div>
-      <div class="item">检测完成</div>
-      <div class="item">已给处方</div>
+      <div
+        class="item"
+        @click="choose('全部')"
+        :class="{ active: chooseItem == '' }"
+      >
+        全部
+      </div>
+      <div
+        class="item"
+        @click="choose('检测中')"
+        :class="{ active: chooseItem == '1' }"
+      >
+        检测中
+      </div>
+      <div
+        class="item"
+        @click="choose('检测完成')"
+        :class="{ active: chooseItem == '2' }"
+      >
+        检测完成
+      </div>
+      <div
+        class="item"
+        @click="choose('已给处方')"
+        :class="{ active: chooseItem == '3' }"
+      >
+        已给处方
+      </div>
     </div>
-    <ul class="tu-ul">
-      <li v-for="item in 6" :key="item">
+    <ul
+      class="tu-ul infinite-list"
+      v-infinite-scroll="load"
+      style="overflow:auto;"
+      infinite-scroll-disabled="disabled"
+    >
+      <li v-for="item in list" :key="item.id" class="infinite-list-item">
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
-            嵊州蔬菜专科医院·黄莲蓉的番茄地
-            <span>ID:1233456</span>
+            {{ item.company }}·{{ item.address }}
+            <span>ID:{{ item.idnumber }}</span>
           </p>
-          <p class="p2">青塘村大山脚下那块正方形的地</p>
-          <p class="p3">取样日期：2017-05-27</p>
+          <p class="p2">{{ item.title }}</p>
+          <p class="p3">{{ item.showtime }}</p>
         </div>
         <div class="test-status">
-          <div class="icon icon-ing"></div>
-          <!-- <div class="icon icon-success"></div>
-          <div class="icon icon-way"></div>-->
-          <p>检测中</p>
+          <div class="icon icon-ing" v-if="item.teststatus == 1"></div>
+          <div class="icon icon-success" v-if="item.teststatus == 2"></div>
+          <div class="icon icon-way" v-if="item.teststatus == 3"></div>
+          <p>
+            {{
+              item.teststatus == 1
+                ? "检测中"
+                : item.teststatus == 2
+                ? "检测完成"
+                : "已给处方"
+            }}
+          </p>
         </div>
       </li>
     </ul>
+    <p v-if="loading">加载中...</p>
+    <p v-if="noMore">没有更多了</p>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "second_tu",
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      chooseItem: "",
+      list: [],
+      page: 0,
+      loading: false,
+      noMore: false
+    };
   },
-  computed: {},
-  watch: {},
+  computed: {
+    ...mapState(["appId", "purview"]),
+    disabled() {
+      return this.loading || this.noMore;
+    }
+  },
+  watch: {
+    chooseItem() {
+      this.page = 0;
+      this.list = [];
+      this.loading = false;
+      this.noMore = false;
+      this.load();
+    }
+  },
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    load() {
+      this.page += 1;
+      this.loading = true;
+      setTimeout(() => {
+        this.$axios
+          .fetchGet("/Home/Treatment/GetTestingsoilList", {
+            page: this.page,
+            appId: this.appId,
+            purview: this.purview == (3 || 4) ? 1 : 0,
+            teststatus: this.chooseItem
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.list = this.list.concat(res.data.data);
+              this.loading = false;
+              if (res.data.data.length == 0) {
+                this.noMore = true;
+              }
+            } else {
+              this.noMore = true;
+            }
+          });
+      }, 1000);
+    },
+    choose(item) {
+      switch (item) {
+        case "全部":
+          this.chooseItem = "";
+          break;
+        case "检测中":
+          this.chooseItem = "1";
+          break;
+        case "检测完成":
+          this.chooseItem = "2";
+          break;
+        case "已给处方":
+          this.chooseItem = "3";
+          break;
+      }
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .tu-container
   margin 50px 90px 0
+  margin-bottom 150px
   min-height 724px
   .bar
     text-align left

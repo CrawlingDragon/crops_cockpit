@@ -85,7 +85,8 @@ export default {
       "getAccountName",
       "getLoginId",
       "getBreadArr",
-      "setAppId"
+      "setAppId",
+      "getPurview"
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -107,6 +108,7 @@ export default {
             if (res.data.code == 200) {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
+              this.getPurview(purview);
               this.setAppId(appid);
               if (purview == 1) {
                 this.$router.push({

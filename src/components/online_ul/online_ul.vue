@@ -45,7 +45,9 @@ export default {
     }
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.load();
+  },
   destroyed() {},
   methods: {
     load() {

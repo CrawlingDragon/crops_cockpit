@@ -6,7 +6,7 @@
         <el-image class="img" :src="data.logo" fit="cover"></el-image>
         <div class="account">账号:{{ data.acount }}</div>
         <div class="btn1">退出登录</div>
-        <div class="btn1">已下载视频11</div>
+        <div class="btn1" v-if="false">已下载视频11</div>
       </div>
       <div class="right">
         <div class="title">
@@ -15,11 +15,12 @@
             data.isstore == 1 ? "实体店" : "网院"
           }}</span>
         </div>
+        <div class="property">医院属性：{{ data.level_name }}</div>
         <div class="name">作物科室：{{ data.zuowu }}</div>
         <div class="text">简介：{{ data.content }}</div>
       </div>
     </div>
-    <Nav index="6"></Nav>
+    <Nav :index="5"></Nav>
   </div>
 </template>
 <script>
@@ -62,11 +63,16 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .my-container
+  padding-top 100px
+  padding-bottom 150px
   .my-box
-    margin 60px 88px 0
+    max-width 1900px
+    margin 0 auto
+    padding 0 40px
     display flex
     .left
-      width 412px
+      width 300px
+      margin-right 50px
       .img
         width 300px
         height 300px
@@ -103,25 +109,29 @@ export default {
       height 730px
       overflow auto
       .title
-        font-size 52px
+        font-size 34px
         color #fff
         display flex
         align-items center
         .describe-title
           padding 0 23px
           background #FF6600
-          font-size 32px
+          font-size 28px
           color #FFFFFF
           margin-left 17px
           border-radius 25px
           height 50px
           line-height 50px
+      .property
+        color #F9FAFA
+        font-size 30px
+        margin-top 35px
       .name
         color #F9FAFA
         font-size 30px
         margin-bottom 15px
       .text
-        font-size 30px
+        font-size 24px
         margin-top 40px
         font-family SimHei
         font-weight 400

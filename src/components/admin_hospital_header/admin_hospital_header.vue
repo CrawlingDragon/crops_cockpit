@@ -6,12 +6,7 @@
           <el-image :src="logoSrc" fit="cover" class="img"></el-image>
         </div>
         <slot></slot>
-        <div class="admin-icon" v-if="purview == 3 || purview == 4"></div>
-        <div
-          class="goBack-icon"
-          v-show="!logoSrc"
-          v-if="purview == 1 || purview == 2"
-        ></div>
+        <div class="goBack-icon" v-show="!logoSrc"></div>
         <h2 class="h2">
           {{ title }}
           <span class="title-number" v-show="titleNumber != 0">
@@ -21,7 +16,7 @@
       </div>
       <div class="mid">{{ midTitle }}</div>
       <div class="right-bar" v-show="right_show_bar">
-        <div class="admin-index" @click="goToIndex" v-if="purview == (3 || 4)">
+        <div class="admin-index" @click="goToIndex">
           <div class="icon"></div>
           <span>驾驶舱首页</span>
         </div>
@@ -45,7 +40,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "headers",
+  name: "admin_hospital_header",
   components: {},
   props: {
     title: {
@@ -66,7 +61,7 @@ export default {
     },
     midTitle: {
       type: String,
-      default: ""
+      default: "所有专家"
     }
   },
   data() {
@@ -77,7 +72,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview"])
+    ...mapState(["appId"])
   },
   watch: {},
   created() {},
@@ -106,6 +101,11 @@ export default {
         this.$router.go(-1);
       }
     },
+    goToIndex() {
+      this.$router.push({
+        path: "/index"
+      });
+    },
     getWeather() {
       // 获取头部天气
       this.$axios
@@ -118,11 +118,6 @@ export default {
     },
     reload() {
       this.$router.go();
-    },
-    goToIndex() {
-      this.$router.push({
-        path: "/index"
-      });
     },
     goToSearch() {
       this.$router.push({
@@ -137,6 +132,7 @@ export default {
   height 100px
   position fixed
   min-width 1340px
+  max-width 1900px
   left 0
   right 0
   top 0
@@ -150,8 +146,8 @@ export default {
     margin 0 auto
     align-items center
     .left-bar
-      position absolute
       left 45px
+      position absolute
       display flex
       align-items center
       line-height 1.2
@@ -174,39 +170,22 @@ export default {
           display block
           width 100%
           height 100%
-      .admin-icon
+      .goBack-icon
         width 110px
         height 30px
         background url('./32.png') no-repeat
         cursor pointer
-      .goBack-icon
-        width 30px
-        height 30px
-        background url('./3.png') no-repeat
-        cursor pointer
-     .mid
+    .mid
       text-align center
       font-size 34px
       color: #C5C5C5;
       width 100%
     .right-bar
-      position absolute
       right 45px
+      position absolute
       display flex
       align-items center
       justify-content flex-end
-      .admin-index
-        color #7FB5F1
-        font-size 20px
-        display flex
-        align-items center
-        margin-right 50px
-        cursor pointer
-        .icon
-          width 26px
-          height 25px
-          margin-right 10px
-          background url('./28.png') no-repeat
       .search
         color #000000
         cursor pointer
@@ -223,7 +202,7 @@ export default {
           display inline-block
           width 27px
           height 27px
-          background url('./4.png') no-repeat
+          // background url('./4.png') no-repeat
           margin-right 8px
       .reload
         color #B5B5B5
@@ -238,6 +217,18 @@ export default {
           height 27px
           background url('./refresh.png') no-repeat
           margin-right 8px
+      .admin-index
+        color #7FB5F1
+        font-size 20px
+        display flex
+        align-items center
+        margin-right 50px
+        cursor pointer
+        .icon
+          width 26px
+          height 25px
+          margin-right 10px
+          background url('./28.png') no-repeat
       .weather
         color #7FB5F1
         font-size: 18px;

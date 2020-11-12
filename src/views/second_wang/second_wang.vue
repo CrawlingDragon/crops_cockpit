@@ -1,6 +1,10 @@
 <template>
   <div class="second_wang-container">
-    <Header title="网诊" :titleNumber="count"></Header>
+    <Header
+      title="网诊"
+      :titleNumber="count"
+      v-if="routeFrom != '/diagnosis/second_wang'"
+    ></Header>
     <ul
       class="wang-ul infinite-list"
       v-infinite-scroll="load"
@@ -31,7 +35,7 @@
       <p v-if="loading">加载中...</p>
       <p v-if="noMore">没有更多了</p>
     </ul>
-    <Nav></Nav>
+    <Nav :index="3" v-if="routeFrom != '/diagnosis/second_wang'"></Nav>
   </div>
 </template>
 <script>
@@ -48,17 +52,20 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      count: 0
+      count: 0,
+      routeFrom: ""
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "purview"]),
     disabled() {
       return this.loading || this.noMore;
     }
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.routeFrom = this.$route.fullPath;
+  },
   destroyed() {},
   methods: {
     load() {
@@ -68,7 +75,8 @@ export default {
         this.$axios
           .fetchPost("/Home/Treatment/GetWenList", {
             page: this.page,
-            appId: this.appId
+            appId: this.appId,
+            purview: this.purview == (3 || 4) ? 1 : 0
           })
           .then(res => {
             if (res.data.code == 200) {
@@ -94,6 +102,7 @@ export default {
   height 100%
   max-height 100%
   overflow hidden
+  padding-top 100px
   .wang-ul
     padding-bottom 155px
     max-height 690px

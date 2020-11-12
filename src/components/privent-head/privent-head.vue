@@ -2,35 +2,40 @@
   <div class="wrap">
     <ul class="header">
       <li>
-        <p>{{Mpubcount}}</p>
+        <p>{{ Mpubcount }}</p>
         <h6>庄稼医院(所)</h6>
       </li>
       <li>
-        <p>{{Usercount}}</p>
+        <p>{{ Usercount }}</p>
         <h6>会员(个)</h6>
       </li>
       <li>
-        <p>{{Expertcount}}</p>
+        <p>{{ Expertcount }}</p>
         <h6>专家(位)</h6>
       </li>
       <li>
-        <p>{{Servicecount}}</p>
+        <p>{{ Servicecount }}</p>
         <h6>服务面积(亩)</h6>
       </li>
       <li>
-        <p>{{Questioncount}}</p>
+        <p>{{ Questioncount }}</p>
         <h6>诊疗(次)</h6>
       </li>
       <li>
-        <p>{{Recipecount}}</p>
+        <p>{{ Recipecount }}</p>
         <h6>测土配方(次)</h6>
       </li>
       <li>
         <a
-          :href="'http://wap.114nz.com/UserCenter/DataV/getSalelist?areaname='+defaultProvince+'&level='+globalLevel"
+          :href="
+            'http://wap.114nz.com/UserCenter/DataV/getSalelist?areaname=' +
+              defaultProvince +
+              '&level=' +
+              globalLevel
+          "
           target="_blank"
         >
-          <p>{{Productamount}}</p>
+          <p>{{ Productamount }}</p>
           <h6>销售额</h6>
         </a>
       </li>
@@ -46,17 +51,17 @@ export default {
   },
   props: {
     Mpubcount: {
-      //医院数
+      // 医院数
       type: Number,
       default: 0
     },
     Usercount: {
-      //会员数
+      // 会员数
       type: Number,
       default: 0
     },
     Expertcount: {
-      //专家数
+      // 专家数
       type: Number,
       default: 0
     },
@@ -76,7 +81,7 @@ export default {
       default: 0
     },
     Productamount: {
-      //销售金额
+      // 销售金额
       type: Number,
       default: 0
     }
@@ -110,7 +115,7 @@ export default {
     right 0
     height 3px
     background url('./border-top.png') no-repeat
-    background-size 100% 
+    background-size 100%
     font-size 14px
   &:after
     content ''
@@ -120,7 +125,7 @@ export default {
     right 0
     height 3px
     background url('./border-bottom.png') no-repeat
-    background-size 100% 
+    background-size 100%
     font-size 14px
   & > li
     display inline-block
@@ -134,7 +139,7 @@ export default {
       font-weight 400
       @media screen and (min-width:1900px) {
         font-size 28px
-        font-weight Regular 
+        font-weight Regular
       }
     h6
       font-size 12px

@@ -1,44 +1,94 @@
 <template>
   <div class="second_zuo-container">
-    <ul class="wang-ul">
-      <li v-for="item in 6" :key="item">
+    <ul
+      class="wang-ul infinite-list"
+      v-infinite-scroll="load"
+      style="overflow:auto;"
+      infinite-scroll-disabled="disabled"
+    >
+      <li v-for="item in list" :key="item.id" class="infinite-list-item">
         <div class="icon"></div>
         <div class="text">
-          <div class="time">黄泽黄桃专科医院·黄桂花的番茄坐诊</div>
-          <p class="p1">病情描述：番茄的病情很严重，就医就医，已经持续很久很久了。</p>
-          <p class="p1">坐诊日期：2017-05-27</p>
-          <p class="p1">处方专家：沈冰</p>
+          <div class="time">{{ item.company }}·{{ item.title }}</div>
+          <p class="p1">
+            {{ item.content }}
+          </p>
+          <p class="p1">{{ item.showtime }}</p>
+          <p class="p1">{{ item.describe }}</p>
         </div>
         <div class="answer">
-          <div class="p2">处方药：拜耳 露娜森 42.8%氟菌肟菌脂杀菌剂</div>
+          <div class="p2">{{ item.name }}</div>
           <ul>
-            <li v-for="item in 3" :key="item">
-              <el-image src class="img"></el-image>
+            <li v-for="item in item.thumb_pic" :key="item">
+              <el-image :src="item" class="img"></el-image>
             </li>
           </ul>
         </div>
       </li>
+      <p v-if="loading">加载中...</p>
+      <p v-if="noMore">没有更多了</p>
     </ul>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "second_zuo",
   components: {},
   props: {},
   data() {
-    return {}
+    return {
+      list: [],
+      page: 0,
+      loading: false,
+      noMore: false
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["appId"]),
+    disabled() {
+      return this.loading || this.noMore;
+    }
+  },
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
-}
+  methods: {
+    load() {
+      this.page += 1;
+      this.loading = true;
+      setTimeout(() => {
+        this.$axios
+          .fetchGet("/Home/Treatment/GetWenzhenList", {
+            page: this.page,
+            appId: this.appId,
+            type: "1",
+            purview: this.purview == (3 || 4) ? 1 : 0
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.list = this.list.concat(res.data.data);
+              this.loading = false;
+              this.count = res.data.count;
+              if (res.data.data.length == 0) {
+                this.noMore = true;
+              }
+            } else {
+              this.noMore = true;
+            }
+          });
+      }, 1000);
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .second_zuo-container
-  min-height 724px
+  max-width 1900px
+  margin 0 auto
+  height 100%
+  max-height 100%
+  overflow hidden
   .wang-ul
     margin 48px 90px 0
     & > li
