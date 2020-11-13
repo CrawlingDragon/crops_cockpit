@@ -1,28 +1,25 @@
 <template>
   <div style="height:100%">
     <div v-if="!noDatas">
-      <div class="header">{{title}}</div>
+      <div class="header">{{ title }}</div>
       <div class="roundness">
         <div class="round">
           <CountryPie :pieData="getArr"></CountryPie>
         </div>
         <ul class="round-ul">
-          <li
-            v-for="(name,index) in ulArrText"
-            :key="name"
-          >
+          <li v-for="(name, index) in ulArrText" :key="name">
             <span
               class="color"
-              :style="{'background':ulArrColor[index]}"
+              :style="{ background: ulArrColor[index] }"
             ></span>
-            {{name}}
+            {{ name }}
           </li>
         </ul>
       </div>
       <ul class="adress-ul">
-        <li v-for="(item,index) in PercentArrayArr" :key= 'index'>
-          <p>{{item.nums}}</p>
-          <h6>{{item.name}}</h6>
+        <li v-for="(item, index) in PercentArrayArr" :key="index">
+          <p>{{ item.nums }}</p>
+          <h6>{{ item.name }}</h6>
         </li>
       </ul>
     </div>
@@ -57,16 +54,16 @@ export default {
       return this.$store.state.noData;
     },
     ulArrText() {
-      let arr = ["全国", "省", "市", "县", "乡", "村"];
-      let length = this.getPieValue.length; //数据长度
-      let result = arr
+      const arr = ["全国", "省", "市", "县", "乡", "村"];
+      const length = this.getPieValue.length; // 数据长度
+      const result = arr
         .reverse()
         .splice(0, length)
         .reverse();
       return result;
     },
     ulArrColor() {
-      let arrColor = [
+      const arrColor = [
         "#FBE69C",
         "#F79D1D",
         "#70DA83",
@@ -74,12 +71,12 @@ export default {
         "#71A3FF",
         "#F25F79"
       ];
-      let length = this.getPieValue.length; //数据长度
-      let result = arrColor.splice(0, length).reverse();
+      const length = this.getPieValue.length; // 数据长度
+      const result = arrColor.splice(0, length).reverse();
       return result;
     },
     getArr() {
-      let arr = [
+      const arr = [
         {
           name: "村级数量",
           type: "pie",
@@ -97,9 +94,9 @@ export default {
           hoverAnimation: false,
           color: ["#FBE69C", "#0E2A6D"],
           data: [
-            //村级
+            // 村级
           ]
-          //颜色值表示，建院数量为特定颜色，总数为目标建院数量，其余比例为蓝色
+          // 颜色值表示，建院数量为特定颜色，总数为目标建院数量，其余比例为蓝色
         },
         {
           name: "乡级数量",
@@ -118,7 +115,7 @@ export default {
           hoverAnimation: false,
           color: ["#F79D1D", "#0E2A6D"],
           data: [
-            //乡级
+            // 乡级
           ]
         },
         {
@@ -158,7 +155,7 @@ export default {
           hoverAnimation: false,
           color: ["#42C7C4", "#0E2A6D"],
           data: [
-            //市级
+            // 市级
           ]
         },
         {
@@ -178,7 +175,7 @@ export default {
           hoverAnimation: false,
           color: ["#71A3FF", "#0E2A6D"],
           data: [
-            //省级级
+            // 省级级
           ]
         },
         {
@@ -198,20 +195,20 @@ export default {
           hoverAnimation: false,
           color: ["#F25F79", "#0E2A6D"],
           data: [
-            //全国级
+            // 全国级
           ]
         }
       ];
       arr.forEach((item, index) => {
         item.data = this.getPieValue[index];
       });
-      let length = this.PercentArray.length;
+      const length = this.PercentArray.length;
       // console.log(length);
-      let result = arr.splice(0, length).reverse();
+      const result = arr.splice(0, length).reverse();
       result.forEach((item, index) => {
-        let data = item.data;
+        const data = item.data;
         if (data[0].value == 0 && data[1].value == 0) {
-          let r = data.splice(0, 1);
+          const r = data.splice(0, 1);
           item.color = ["#0E2A6D"];
         }
       });
@@ -219,7 +216,7 @@ export default {
     },
     getPieValue() {
       // 对的
-      let arr = [];
+      const arr = [];
       this.PercentArray.reverse().forEach((item, index) => {
         arr.push([
           {
@@ -312,7 +309,7 @@ export default {
   font-size 0px
   padding-top 18px
   @media screen and (min-width:1900px) {
-    padding-top 32px  
+    padding-top 32px
   }
   text-align center
   color #fff
@@ -321,7 +318,7 @@ export default {
     display inline-block
     margin-right 15px
     @media screen and (min-width:1900px) {
-      font-size 16px 
+      font-size 16px
     }
     p
       font-size 18px
@@ -329,7 +326,7 @@ export default {
       margin-bottom 14px
       @media screen and (min-width:1900px) {
         font-size 24px
-        margin-bottom 19px  
+        margin-bottom 19px
       }
     h6
       font-weight 400

@@ -5,7 +5,7 @@
       <div class="left">
         <el-image class="img" :src="data.logo" fit="cover"></el-image>
         <div class="account">账号:{{ data.acount }}</div>
-        <div class="btn1">退出登录</div>
+        <div class="btn1" @click="loginOut">退出登录</div>
         <div class="btn1" v-if="false">已下载视频11</div>
       </div>
       <div class="right">
@@ -48,6 +48,9 @@ export default {
   },
   destroyed() {},
   methods: {
+    loginOut() {
+      this.$router.push({ path: "/" });
+    },
     getData() {
       // 获取我的医院
       this.$axios

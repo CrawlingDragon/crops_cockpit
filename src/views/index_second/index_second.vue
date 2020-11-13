@@ -4,11 +4,7 @@
     <div class="second-container">
       <div class="left-bar">
         <div class="swiper-box">
-<<<<<<< HEAD
           <SwiperBox :list="swiper"></SwiperBox>
-=======
-          <!-- <SwiperBox></SwiperBox> -->
->>>>>>> dev_xiaobai
         </div>
         <div class="mid-nav">
           <div class="item1"></div>
@@ -140,13 +136,9 @@ export default {
   padding-top 100px
   padding-bottom 150px
   .second-container
-<<<<<<< HEAD
     margin 0 auto
     max-width 1900px
     min-width 1900px
-=======
-    margin 0 40px
->>>>>>> dev_xiaobai
     display flex
     padding: 0 45px;
     .left-bar

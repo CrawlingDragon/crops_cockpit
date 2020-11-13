@@ -33,9 +33,8 @@
           <span class="first-bar">全国</span>
           <span
             v-bind:class="[
-<<<<<<< HEAD:src/components/navs/navs.vue
               activeProvinceComputed == '全国' ? 'active' : '',
-              getLoginId != 5 ? 'disabled' : ''
+              LoginId != 5 ? 'disabled' : ''
             ]"
             v-on:click="
               getCountryDatas('全国', 0, 5, 'china', 1, '浙江省', 4, 0)
@@ -43,13 +42,6 @@
             >全部医院</span
           >
         </div>
-=======
-            activeProvinceComputed =='全国'
-            ? 'active'
-            :'',LoginId != 5?'disabled':'']"
-            v-on:click="getCountryDatas('全国', 0, 5, 'china', 1, '浙江省', 4, 0)"
-          >全部医院</span></div>
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
         <!--  -->
         <div class="t2 choose">
           <div class="title-bar">省</div>
@@ -194,16 +186,11 @@ export default {
       breadAds: {}, // 面包屑地址 ?
       // breadArray: this.breadArr //面包屑导航
       arrs: this.PercentArray,
-<<<<<<< HEAD:src/components/navs/navs.vue
       thressRootArr: [], // 用来放三级县级地址的跟属性
-      safeThressAddress: "" // 用来暂时保存 匹配县级地址的地址
-=======
-      thressRootArr: [], //用来放三级县级地址的跟属性
-      safeThressAddress: "",//用来暂时保存 匹配县级地址的地址
-      LoginId:window.sessionStorage.getItem("LoginId"),//登陆时，保存地图参数id
-      picAddress:"",//记录当前登录账号管理院的位置信息
-      default_threeCity:""//获取默认的城市下属的默认县级城市
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
+      safeThressAddress: "", // 用来暂时保存 匹配县级地址的地址
+      LoginId: window.sessionStorage.getItem("LoginId"), // 登陆时，保存地图参数id
+      picAddress: "", // 记录当前登录账号管理院的位置信息
+      default_threeCity: "" // 获取默认的城市下属的默认县级城市
     };
   },
   props: {
@@ -219,8 +206,8 @@ export default {
       default: "浙江省"
     }
   },
-  created(){
-    this.getDaohangList()
+  created() {
+    this.getDaohangList();
   },
   mounted() {
     if (this.activeProvinceComputed == "全国") {
@@ -241,32 +228,17 @@ export default {
       return this.arrs.splice(1, 2);
     },
     ...mapState([
-<<<<<<< HEAD:src/components/navs/navs.vue
       "defaultProvince", // 全网请求地址
-      "loginId", // 登陆时，保存地图参数id
       "breadArr", // 面包屑导航数组
       "defaultCity", // 方块二级请求地址
       "bviousName", // 县级名字
-      "picAddress"
-    ]),
-    computedBreadArray() {
-      // 计算后的面包屑导航
-      const arr = [];
-      const level = this.loginId;
-      // let level = this.breadArr[this.breadArr-1].level
-=======
-      "defaultProvince",//全网请求地址
-      "breadArr",//面包屑导航数组
-      "defaultCity",//方块二级请求地址
-      "bviousName",//县级名字
       // "picAddress",
       "appId"
     ]),
     computedBreadArray() {
-      //计算后的面包屑导航
-      let arr = [];
-      let level = window.sessionStorage.getItem("curlevel")//登录的时候储存一下当前用户登录的等级
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
+      // 计算后的面包屑导航
+      const arr = [];
+      const level = window.sessionStorage.getItem("curlevel"); // 登录的时候储存一下当前用户登录的等级
       this.breadArr.forEach((el, index) => {
         if (el.level <= level) {
           arr.push(el);
@@ -287,21 +259,12 @@ export default {
       return this.$store.state.globalLevel;
     },
     leftActiveAddress() {
-<<<<<<< HEAD:src/components/navs/navs.vue
-      // 导航左边位置的的确
+      // 导航左边位置的确认
       return this.$store.state.defaultProvince;
     },
     activeProvinceComputed() {
       // 选中的省
-      if (this.getLoginId > 3) {
-=======
-      //导航左边位置的确认
-      return this.$store.state.defaultProvince;
-    },
-    activeProvinceComputed() {
-      //选中的省
       if (this.LoginId > 3) {
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
         return this.leftActiveAddress;
       } else {
         return this.picAddress.province;
@@ -400,12 +363,6 @@ export default {
         this.activeCityArr.forEach(item => {
           if (item.name == this.safeThressAddress) {
             arr = item.city;
-<<<<<<< HEAD:src/components/navs/navs.vue
-          } else if (item.name == this.breadArr[2].name) {
-            // 解决区级账号登录县级数据丢失问题
-            arr = item.city;
-=======
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
           }
         });
         return arr;
@@ -431,29 +388,28 @@ export default {
       "getBviousName",
       "getBviousLevel",
       "getIsnav",
-      "getDefaultAddressArr",
+      "getDefaultAddressArr"
     ]),
-    getDaohangList(){
-      console.log(this.$store.state.appId)
-      this.$axios.fetchPost(
-        "/Home/Login/UserNav",
-        {appId:this.$store.state.appId}
-      ).then(res=>{
-        if(res.data.code == "200"){
-          // console.log(res)
-          const areaname = res.data.data.areaname;
-          const arr = res.data.data.area;//获取默认导航列表
-          this.getDefaultAddressArr(arr); // 获取默认导航列表
-          this.getDefaultProvince(areaname); // 获取全网页地址
-          this.getBreadArr(res.data.data.nav);
-          // console.log(res.data.data.nav)
-          this.getDefaultCity(res.data.data.default); // 获取二级方块地址
-          this.default_threeCity = res.data.data.default
-          if(window.sessionStorage.getItem("curlevel")-0 <= 3){
-            this.picAddress = res.data.data.address
+    getDaohangList() {
+      console.log(this.$store.state.appId);
+      this.$axios
+        .fetchPost("/Home/Login/UserNav", { appId: this.$store.state.appId })
+        .then(res => {
+          if (res.data.code == "200") {
+            // console.log(res)
+            const areaname = res.data.data.areaname;
+            const arr = res.data.data.area; // 获取默认导航列表
+            this.getDefaultAddressArr(arr); // 获取默认导航列表
+            this.getDefaultProvince(areaname); // 获取全网页地址
+            this.getBreadArr(res.data.data.nav);
+            // console.log(res.data.data.nav)
+            this.getDefaultCity(res.data.data.default); // 获取二级方块地址
+            this.default_threeCity = res.data.data.default;
+            if (window.sessionStorage.getItem("curlevel") - 0 <= 3) {
+              this.picAddress = res.data.data.address;
+            }
           }
-        }
-      })
+        });
     },
     loginOut() {
       // 推出登陆按钮
@@ -466,13 +422,8 @@ export default {
       this.showFlag = false;
     },
     getCountryDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
-<<<<<<< HEAD:src/components/navs/navs.vue
       // 点击全国获取数据
-      if (this.getLoginId != "5") {
-=======
-      //点击全国获取数据
       if (this.LoginId != "5") {
->>>>>>> dev_xiaobai:src/components/navs/navs.vue
         isClick = 0;
       }
       if (isClick != 0) {
@@ -598,8 +549,7 @@ export default {
       }
     }
   },
-  watch: {
-  }
+  watch: {}
 };
 </script>
 <style lang="stylus" scoped>
@@ -719,7 +669,7 @@ export default {
       font-size 14px
       border-bottom 1px solid rgba(31, 87, 158, 0.5)
       padding 10px 0px 5px 24px
-      @media screen and (min-width:1900px) 
+      @media screen and (min-width:1900px)
         font-size 16px
         padding 15px 0px 10px 24px
       &:last-child

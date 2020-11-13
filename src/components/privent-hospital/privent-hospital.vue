@@ -71,9 +71,10 @@ export default {
         // return true;
       }
     },
-    //获取当前导航的位置，判断是否取本级地区的数据,如果是从余杭区看 不包括市区在余杭区的数据
-    navareaname(){
-      return this.$store.state.breadArr[this.$store.state.breadArr.length-1].name
+    // 获取当前导航的位置，判断是否取本级地区的数据,如果是从余杭区看 不包括市区在余杭区的数据
+    navareaname() {
+      return this.$store.state.breadArr[this.$store.state.breadArr.length - 1]
+        .name;
     },
     cityName() {
       const level = this.$store.state.globalLevel;
@@ -160,7 +161,7 @@ export default {
       this.getSecondGlobalLevel(obj.childLevel);
       // this.getMapData(this.secondName, obj.level, this.loginId, 0);
     },
-    getMapData(name, level, loginId, isnav,navareaname) {
+    getMapData(name, level, loginId, isnav, navareaname) {
       if (level <= 1) {
         level = this.globalLevel;
       }
@@ -168,21 +169,15 @@ export default {
         this.getBviousName(null); // 重置二级导航
         this.getBviousLevel(null); // 重置二级导航
       }
-<<<<<<< HEAD:src/components/privent-hospital/privent-hospital.vue
       this.$axios
         .fetchPost("Home/NationwideDatav/GetCurMpData", {
           areaname: name,
           level: level,
           userlevel: loginId,
           isnav: isnav,
-          isstore: this.isstore
+          isstore: this.isstore,
+          navareaname: navareaname
         })
-=======
-      this.$axios.fetchPost(
-          "Home/NationwideDatav/GetCurMpData",
-          {areaname:name,level:level,userlevel:loginId,isnav:isnav,isstore:this.isstore,navareaname:navareaname}
-        )
->>>>>>> dev_xiaobai:src/components/privent-hospital/privent-hospital.vue
         .then(res => {
           if (res.data.code == 200) {
             this.count = res.data.data.count;
@@ -217,13 +212,13 @@ export default {
       if (newVal == null) return;
       this.getMapData(newVal, this.bviousLevel, this.loginId, 1);
     },
-    navareaname(newVal,oldval){
+    navareaname(newVal, oldval) {
       this.getMapData(
-      this.secondName,
-      this.secondLevel,
-      this.loginId,
-      this.isnav,
-      this.navareaname
+        this.secondName,
+        this.secondLevel,
+        this.loginId,
+        this.isnav,
+        this.navareaname
       );
     }
   },

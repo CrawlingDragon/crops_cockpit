@@ -30,10 +30,6 @@
     </div>
     <Alert :alertTitle="title" :alertText="text" ref="alertBox"></Alert>
   </div>
-<<<<<<< HEAD
-=======
-
->>>>>>> dev_xiaobai
 </template>
 <script>
 // import Alert from "../../ui-components/alert/alert";
@@ -44,13 +40,8 @@ export default {
   name: "login",
   data() {
     return {
-<<<<<<< HEAD
       username: "", // 13094810413
       password: "", // asdf1234
-=======
-      username: "", //13094810413
-      password: "", //asdf1234
->>>>>>> dev_xiaobai
       title: "登录失败",
       text: ""
     };
@@ -79,13 +70,8 @@ export default {
       }
     },
     ...mapMutations([
-<<<<<<< HEAD
-      "getDefaultProvince",
-      "getDefaultCity",
-=======
       // "getDefaultProvince",
       // "getDefaultCity",
->>>>>>> dev_xiaobai
       "getDefaultAddressArr",
       "getGlobalActiveName",
       "getGlobalFstusername",
@@ -97,16 +83,10 @@ export default {
       "getSessionUsername",
       "getPicAddress",
       "getAccountName",
-<<<<<<< HEAD
       "getLoginId",
       "getBreadArr",
       "setAppId",
       "getPurview"
-=======
-      // "getLoginId",
-      // "getBreadArr",
-      "getAppId"
->>>>>>> dev_xiaobai
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -124,20 +104,12 @@ export default {
             password: password
           })
           .then(res => {
-<<<<<<< HEAD
             console.log(res);
             if (res.data.code == 200) {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
               this.getPurview(purview);
               this.setAppId(appid);
-=======
-            console.log(res)
-            if (res.data.code == 200) {
-              const purview = res.data.data.purview;
-              const appid = res.data.data.appid;
-              this.getAppId(appid);
->>>>>>> dev_xiaobai
               if (purview == 1) {
                 this.$router.push({
                   path: "/index_third"
@@ -155,15 +127,9 @@ export default {
                 } else {
                   secondLevel = level;
                 }
-<<<<<<< HEAD
-                if (level <= 3) {
-                  this.getPicAddress(res.data.data.address);
-                }
-=======
                 // if (level <= 3) {
                 //   this.getPicAddress(res.data.data.address);
                 // }
->>>>>>> dev_xiaobai
                 const arr = res.data.data.area;
                 const areaname = res.data.data.areaname;
                 const isshaoxing = res.data.data.ishaoxing;
@@ -177,15 +143,6 @@ export default {
                 const defaultName = res.data.data.default;
                 const letter = res.data.data.letter;
                 window.sessionStorage.setItem("letter", letter);
-<<<<<<< HEAD
-                this.getDefaultProvince(areaname); // 获取全网页地址
-                this.getGlobalLevel(level); // 获取全网页等级
-                this.getDefaultCity(defaultName); // 获取二级方块地址
-                this.getSecondGlobalLevel(secondLevel); // 获取二级方块等级
-                // this.secondMapIndex(res.data.data)
-                // this.getDefaultCity(city); // 获取默认城市
-                this.getDefaultAddressArr(arr); // 获取默认导航列表
-=======
                 // this.getDefaultProvince(areaname); // 获取全网页地址
                 // this.getGlobalLevel(level); // 获取全网页等级
                 // this.getDefaultCity(defaultName); // 获取二级方块地址
@@ -193,21 +150,15 @@ export default {
                 // this.secondMapIndex(res.data.data)
                 // this.getDefaultCity(city); // 获取默认城市
                 // this.getDefaultAddressArr(arr); // 获取默认导航列表
->>>>>>> dev_xiaobai
                 this.getGlobalFstusername(res.data.data.Fstusername); // 获取益农通账号
                 this.getGlobalFstuserpw(res.data.data.Fstuserpw); // 获取益农通密码
                 this.getGlobalFstRoomid(res.data.data.FstRoomid); // 获取益农通id
                 this.getSessionUsername(this.username);
                 this.getSessionPassword(password);
                 this.getAccountName(res.data.data.areaname);
-<<<<<<< HEAD
-                this.getLoginId(level);
-                this.getBreadArr(res.data.data.nav);
-=======
                 // this.getLoginId(level);
-                window.sessionStorage.setItem("LoginId",level)//记录当前登录账号的等级水平
+                window.sessionStorage.setItem("LoginId", level); // 记录当前登录账号的等级水平
                 // this.getBreadArr(res.data.data.nav);
->>>>>>> dev_xiaobai
                 this.$router.push({
                   path: "/indexFour",
                   query: {
@@ -309,24 +260,13 @@ export default {
       color #fff
       font-size 20px
       border-radius 29px
-<<<<<<< HEAD
-      &.disabled
-        background #999
-        color #7f7f7f
-        &:hover
-=======
       border none
       &.disabled
         background #999
         color #7f7f7f
-        &:hover 
->>>>>>> dev_xiaobai
+        &:hover
           border none
           cursor wait
       &:hover
         border 1px solid #2196f3
-<<<<<<< HEAD
 </style>
-=======
-</style>
->>>>>>> dev_xiaobai

@@ -6,16 +6,15 @@
           <el-image :src="logoSrc" fit="cover" class="img"></el-image>
         </div>
         <slot></slot>
-<<<<<<< HEAD
-        <div class="admin-icon" v-if="purview == 3 || purview == 4"></div>
+        <div class="admin-icon" v-if="purview == 3 || purview == 4">
+          <div class="icon-back" @click="goBack"></div>
+          <div class="icon-close" @click="close"></div>
+        </div>
         <div
           class="goBack-icon"
           v-show="!logoSrc"
           v-if="purview == 1 || purview == 2"
         ></div>
-=======
-        <div class="goBack-icon" v-show="!logoSrc"></div>
->>>>>>> dev_xiaobai
         <h2 class="h2">
           {{ title }}
           <span class="title-number" v-show="titleNumber != 0">
@@ -23,25 +22,17 @@
           </span>
         </h2>
       </div>
-<<<<<<< HEAD
       <div class="mid">{{ midTitle }}</div>
       <div class="right-bar" v-show="right_show_bar">
         <div class="admin-index" @click="goToIndex" v-if="purview == (3 || 4)">
           <div class="icon"></div>
           <span>驾驶舱首页</span>
         </div>
-=======
-      <div class="right-bar" v-show="right_show_bar">
->>>>>>> dev_xiaobai
         <div class="reload" @click="reload">
           <span class="icon"></span>
         </div>
         <div class="weather">
-<<<<<<< HEAD
           <span class="icon"><img :src="weather.picurl" alt=""/></span>
-=======
-          <span class="icon"><img src="../../assets/62.png" alt=""/></span>
->>>>>>> dev_xiaobai
           <span>{{ weather.todaytemperature }}</span>
         </div>
         <div class="time">{{ time }}</div>
@@ -76,11 +67,7 @@ export default {
       type: Number,
       default: 0
     },
-<<<<<<< HEAD
     midTitle: {
-=======
-    returnPath: {
->>>>>>> dev_xiaobai
       type: String,
       default: ""
     }
@@ -93,11 +80,7 @@ export default {
     };
   },
   computed: {
-<<<<<<< HEAD
     ...mapState(["appId", "purview"])
-=======
-    ...mapState(["appId"])
->>>>>>> dev_xiaobai
   },
   watch: {},
   created() {},
@@ -122,18 +105,12 @@ export default {
   destroyed() {},
   methods: {
     goBack() {
-<<<<<<< HEAD
       if (!this.logoSrc) {
         this.$router.go(-1);
       }
-=======
-      if(this.$props.returnPath == "/online_hospital_channel"){
-        this.$router.push({path:this.$props.returnPath})
-      }
-      // if (!this.logoSrc) {
-      //   this.$router.go(-1);
-      // }
->>>>>>> dev_xiaobai
+    },
+    close() {
+      // 关闭下级医院
     },
     getWeather() {
       // 获取头部天气
@@ -148,14 +125,11 @@ export default {
     reload() {
       this.$router.go();
     },
-<<<<<<< HEAD
     goToIndex() {
       this.$router.push({
         path: "/index"
       });
     },
-=======
->>>>>>> dev_xiaobai
     goToSearch() {
       this.$router.push({
         path: "/search"
@@ -168,10 +142,7 @@ export default {
 .header-container
   height 100px
   position fixed
-<<<<<<< HEAD
   min-width 1340px
-=======
->>>>>>> dev_xiaobai
   left 0
   right 0
   top 0
@@ -185,13 +156,8 @@ export default {
     margin 0 auto
     align-items center
     .left-bar
-<<<<<<< HEAD
       position absolute
       left 45px
-=======
-      width 50%
-      float left
->>>>>>> dev_xiaobai
       display flex
       align-items center
       line-height 1.2
@@ -214,20 +180,27 @@ export default {
           display block
           width 100%
           height 100%
-<<<<<<< HEAD
       .admin-icon
         width 110px
         height 30px
         background url('./32.png') no-repeat
         cursor pointer
-=======
->>>>>>> dev_xiaobai
+        position relative
+        .icon-back
+          width 50px
+          height 30px
+          position absolute
+          left 0
+        .icon-close
+          width 60px
+          height 30px
+          position absolute
+          right  0
       .goBack-icon
         width 30px
         height 30px
         background url('./3.png') no-repeat
         cursor pointer
-<<<<<<< HEAD
      .mid
       text-align center
       font-size 34px
@@ -251,14 +224,6 @@ export default {
           height 25px
           margin-right 10px
           background url('./28.png') no-repeat
-=======
-    .right-bar
-      width 50%
-      float right
-      display flex
-      align-items center
-      justify-content flex-end
->>>>>>> dev_xiaobai
       .search
         color #000000
         cursor pointer
@@ -301,20 +266,11 @@ export default {
           display inline-block
           img
             display block
-<<<<<<< HEAD
-=======
-            width 36px
-            height 28px
->>>>>>> dev_xiaobai
             margin-right 8px
       .time
         color #7FB5F1
         font-size: 18px;
         display flex
         align-items center
-<<<<<<< HEAD
         // margin-right 50px
-=======
-        margin-right 50px
->>>>>>> dev_xiaobai
 </style>

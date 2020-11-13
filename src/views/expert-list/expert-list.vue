@@ -1,118 +1,138 @@
 <template>
-    <div class="contain">
-        <div class="header">
-            <div class="close-btn" style="cursor:pointer" @click = "closefn">
-                <span class="text1 jiantou">&lt;</span>
-                <span class="text1 close">所有专家</span>
-            </div>
-            <!-- <span class="text1 title">所有专家</span> -->
-            <div class="time">
-                <Date></Date>
-            </div>
-        </div>
-        <a class="expert_list" target="_blank" :href="this.outlink" ref="expert_list">
-            <div class="expert_info" v-for="(item,index) in expert_list" :key="index" @click="godetail(item,index)">
-                <img class="photo" v-lazy="item.avatar"  alt="图片好像不见了" >
-                <span class="name">{{item.realname}}</span>
-                <div class="tag">专家</div>
-                <div class="intro">
-                    <div class="row1">
-                        <span class="join_time">加入时间：{{item.jointime}}</span>
-                        <p class="company">{{item.position}}</p>
-                    </div>
-                    <div class="row2">
-                        <span class="chufang">处方({{item.chufangcount}})</span>
-                        <span class="cut_line">|</span>
-                        <span class="join_hospital">加入医院({{item.hospitalcount}})</span>
-                        <p class="skills" v-if="item.zuowu">擅长作物：{{item.zuowu}}</p>
-                    </div>
-                </div>
-            </div>
-            <mugen-scroll :handler="loadMore" :should-handle="!loading" scroll-container="expert_list">
-            </mugen-scroll>
-        </a>
-        <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
-        <div class="expert_num">
-            共{{this.total}}个结果
-        </div>
-        <Nodata v-if="this.total == 0"></Nodata>
+  <div class="contain">
+    <div class="header">
+      <div class="close-btn" style="cursor:pointer" @click="closefn">
+        <span class="text1 jiantou">&lt;</span>
+        <span class="text1 close">所有专家</span>
+      </div>
+      <!-- <span class="text1 title">所有专家</span> -->
+      <div class="time">
+        <Date></Date>
+      </div>
     </div>
+    <a
+      class="expert_list"
+      target="_blank"
+      :href="this.outlink"
+      ref="expert_list"
+    >
+      <div
+        class="expert_info"
+        v-for="(item, index) in expert_list"
+        :key="index"
+        @click="godetail(item, index)"
+      >
+        <img class="photo" v-lazy="item.avatar" alt="图片好像不见了" />
+        <span class="name">{{ item.realname }}</span>
+        <div class="tag">专家</div>
+        <div class="intro">
+          <div class="row1">
+            <span class="join_time">加入时间：{{ item.jointime }}</span>
+            <p class="company">{{ item.position }}</p>
+          </div>
+          <div class="row2">
+            <span class="chufang">处方({{ item.chufangcount }})</span>
+            <span class="cut_line">|</span>
+            <span class="join_hospital"
+              >加入医院({{ item.hospitalcount }})</span
+            >
+            <p class="skills" v-if="item.zuowu">擅长作物：{{ item.zuowu }}</p>
+          </div>
+        </div>
+      </div>
+      <mugen-scroll
+        :handler="loadMore"
+        :should-handle="!loading"
+        scroll-container="expert_list"
+      >
+      </mugen-scroll>
+    </a>
+    <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
+    <div class="expert_num">共{{ this.total }}个结果</div>
+    <Nodata v-if="this.total == 0"></Nodata>
+  </div>
 </template>
 <script>
-import Date from "../../components/date/date"
-import Nodata from "../../components/no-data/no-data"
-import MugenScroll from "vue-mugen-scroll"
+import Date from "../../components/date/date";
+import Nodata from "../../components/no-data/no-data";
+import MugenScroll from "vue-mugen-scroll";
 export default {
-    components:{
-        Date,
-        Nodata,
-        MugenScroll//滚动条下滑加载组件
+  components: {
+    Date,
+    Nodata,
+    MugenScroll // 滚动条下滑加载组件
+  },
+  data() {
+    return {
+      expert_list: [],
+      curuserid: "", // 当前的用户ID
+      outlink: "http://wap.114nz.com/Web/Expert/detail?Id=",
+      total: 0,
+      loading: false, // 加载状态
+      page: 1 // 当前页数
+    };
+  },
+  created() {
+    this.$parent.app_loading = false;
+    this.userid = window.sessionStorage.getItem("curuserid");
+    console.log(window.sessionStorage.getItem("isstore"));
+    this.getexpert_list(this.page);
+  },
+  methods: {
+    closefn() {
+      this.$router.go(-1);
     },
-    data(){
-        return{
-            expert_list:[],
-            curuserid:"" ,//当前的用户ID
-            outlink:'http://wap.114nz.com/Web/Expert/detail?Id=' ,
-            total:0,
-            loading:false,//加载状态
-            page: 1, // 当前页数
-        }
+    godetail(item, index) {
+      this.outlink = "http://wap.114nz.com/Web/Expert/detail?Id=";
+      this.outlink = this.outlink + item.uid;
     },
-    created(){
-        this.$parent.app_loading=false
-        this.userid = window.sessionStorage.getItem('curuserid')
-        console.log(window.sessionStorage.getItem('isstore'))
-        this.getexpert_list(this.page)
-        
-    },
-    methods:{
-        closefn(){
-            this.$router.go(-1)
-        },
-        godetail(item,index){
-            this.outlink = 'http://wap.114nz.com/Web/Expert/detail?Id=' 
-            this.outlink = this.outlink+item.uid
-        },
-        getexpert_list(curpage){
-            const rLoading = this.openLoading();
-            this.$axios.fetchPost(
-                "/Home/Expert/GetMpExpertList",
-                {appId:this.userid,purview:"1",page:curpage,isstore:window.sessionStorage.getItem('isstore')}
-                // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
-            ).then(res=>{
-                console.log(res)
-                rLoading.close()
-                if(res.data.code == "200"){
-                    this.total = res.data.maxitem
-                    if(this.page == 1){
-                        this.expert_list = res.data.data
-                    }else{
-                        this.expert_list.push(...res.data.data)
-                    }
-                    this.loading=false
-                }
-            })
-        },
-        loadMore() {
-            // 是否当前page不是最后一页
-            if (this.page <= Math.ceil(this.total/12)) {
-                //this.loading 控制滚动条滑到底部的时候是否执行加载操作
-                this.loading = true;
-                // 页码+1
-                this.page++;
-                this.getexpert_list(this.page)
+    getexpert_list(curpage) {
+      const rLoading = this.openLoading();
+      this.$axios
+        .fetchPost(
+          "/Home/Expert/GetMpExpertList",
+          {
+            appId: this.userid,
+            purview: "1",
+            page: curpage,
+            isstore: window.sessionStorage.getItem("isstore")
+          }
+          // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
+        )
+        .then(res => {
+          console.log(res);
+          rLoading.close();
+          if (res.data.code == "200") {
+            this.total = res.data.maxitem;
+            if (this.page == 1) {
+              this.expert_list = res.data.data;
+            } else {
+              this.expert_list.push(...res.data.data);
             }
-        }
+            this.loading = false;
+          }
+        });
+    },
+    loadMore() {
+      // 是否当前page不是最后一页
+      if (this.page <= Math.ceil(this.total / 12)) {
+        // this.loading 控制滚动条滑到底部的时候是否执行加载操作
+        this.loading = true;
+        // 页码+1
+        this.page++;
+        this.getexpert_list(this.page);
+      }
     }
-}
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .contain
     width: 100%;
-    @media screen and (max-width:1340px) 
+    @media screen and (max-width:1340px)
         width:1340px
         height 768px
-    @media screen and (min-width:1341px) 
+    @media screen and (min-width:1341px)
         height 1080px
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
@@ -239,10 +259,10 @@ export default {
                 .row2
                     position absolute
                     bottom 0px
-                    color #FFFFFF 
+                    color #FFFFFF
                     .cut_line
                         width 1px
-                        height 18px        
+                        height 18px
                         opacity 0.3
                     .join_hospital
                         margin-left 5px
@@ -263,5 +283,4 @@ export default {
         font-family Source Han Sans CN
         font-weight 500
         color #7FB5F1
-    
 </style>

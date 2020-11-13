@@ -40,11 +40,7 @@
   </div>
 </template>
 <script>
-<<<<<<< HEAD:src/views/find-index/find-index.vue
-import Headnav from "@/components/head_nav/head_nav";
-=======
-import Headnav from "../../components/head_nav/head_nav"
->>>>>>> dev_xiaobai:src/views/find-index/find-index.vue
+import Headnav from "../../components/head_nav/head_nav";
 export default {
   name: "Find",
   data() {

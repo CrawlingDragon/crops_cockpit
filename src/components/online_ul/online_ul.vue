@@ -45,13 +45,9 @@ export default {
     }
   },
   watch: {},
-<<<<<<< HEAD
   mounted() {
     this.load();
   },
-=======
-  mounted() {},
->>>>>>> dev_xiaobai
   destroyed() {},
   methods: {
     load() {
