@@ -59,7 +59,7 @@ export default {
   created(){
     var w = document.documentElement.clientWidth || document.body.clientWidth
     if(w>1900||w==1900){
-      this.wh = 'width:350px;height:166px'
+      this.wh = 'width:350px;height:166px;right:20px'
     }else{
       this.wh = 'width:247px;height:166px'
     }

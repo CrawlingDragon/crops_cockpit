@@ -15,7 +15,7 @@ Vue.component("v-chart", ECharts);
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(VueLazyLoad);
-// 尝试修改
+
 import 'vue-layer/lib/vue-layer.css';
 Vue.prototype.$layer = layer(Vue);
 
