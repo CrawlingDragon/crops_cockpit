@@ -1,76 +1,116 @@
 <template>
   <div class="vip_diagnosis-container">
-    <ul class="diagnosis-ul">
-      <li v-for="(item,index) in this.wangzhenlist" :key="index" @click="godetail(item)">
+    <ul
+      class="diagnosis-ul"
+      v-infinite-scroll="load"
+      infinite-scroll-distance="15px"
+    >
+      <li
+        v-for="(item, index) in this.wangzhenlist"
+        :key="index"
+        @click="godetail(item)"
+      >
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
-            {{item.title}}
-            <span>{{item.showtime}}</span>
+            {{ item.title }}
+            <span>{{ item.showtime }}</span>
           </p>
-          <p
-            class="p2"
-          >{{item.content}}</p>
+          <p class="p2">{{ item.content }}</p>
         </div>
         <div class="answer">
-          <p class="p3">回复数：{{item.replies}}</p>
-          <el-image
-            class="img"
-            :src= "item.thumb_pic"
-          ></el-image>
+          <p class="p3">回复数：{{ item.replies }}</p>
+          <el-image class="img" :src="item.thumb_pic">
+            <div slot="placeholder" class="image-slot">
+              <img class="loading" src="../../assets/65.png" alt="" />
+            </div>
+            <div slot="error" class="image-slot">
+              <img class="loading" src="../../assets/65.png" alt="" />
+            </div>
+          </el-image>
         </div>
       </li>
     </ul>
-    <div class="result-num">共{{this.total}}个结果</div>
+    <div class="result-num">共{{ this.total }}个结果</div>
     <div class="temporary" v-if="this.total == 0">
-        暂无提问
+      暂无提问
     </div>
   </div>
 </template>
 <script>
-import { mapMutations, mapState } from "vuex";
-import Nodata from "../../components/no-data/no-data"
+// import { mapMutations, mapState } from "vuex";
+import Nodata from "../../components/no-data/no-data";
 export default {
   name: "vip_diagnosis",
   props: {},
-  components:{
+  components: {
     Nodata
   },
   data() {
     return {
-      appId:window.localStorage.getItem("appId"),//当前登录账号的Id,
-      wangzhenlist:"",
-      total:"",
-    }
+      appId: window.localStorage.getItem("appId"), //当前登录账号的Id,
+      wangzhenlist: "",
+      total: "",
+      page: 1
+    };
   },
-  computed: {
-    ...mapState(["huiyuanId"]),
-  },
+  // computed: {
+  //   ...mapState(["huiyuanId"]),
+  // },
   watch: {},
-  created(){
-    this.getwanginfo(this.appId,this.$store.state.huiyuanId,1)
+  created() {
+    this.getwanginfo(
+      this.appId,
+      window.sessionStorage.getItem("huiyuan_id"),
+      1,
+      12
+    );
   },
   methods: {
-    getwanginfo(appId,Id,page){
-      this.$axios.fetchPost(
-        "/Home/Treatment/GetWenList",
-        {appId:appId,Id:Id,page:page}
-      ).then(res=>{
-        if(res.data.code == "200"){
-          this.wangzhenlist = res.data.data
-          this.total = res.data.count
-          if(this.total == 0){
-            // this.$refs.tips.aletiTipShow = true;
+    getwanginfo(appId, Id, page, pagesize) {
+      this.openLoading();
+      this.$axios
+        .fetchPost("/Home/Treatment/GetWenList", {
+          appId: appId,
+          Id: Id,
+          page: page,
+          pagesize: pagesize,
+          purview: 1
+        })
+        .then(res => {
+          this.openLoading().close();
+          if (res.data.code == "200") {
+            this.total = res.data.count;
+            if (this.page == 1) {
+              this.wangzhenlist = res.data.data;
+            } else {
+              this.wangzhenlist.push(...res.data.data);
+            }
           }
-        }
-      })
+        });
     },
-    godetail(item){
-      console.log(item)
-      this.$router.push({path:'/wangzhen_detail',query:{tid:item.tid,title:item.title}})
+    godetail(item) {
+      console.log(item);
+      this.$router.push({
+        path: "/wangzhen_detail",
+        query: { tid: item.tid, title: item.title }
+      });
+    },
+    load() {
+      // 是否当前page不是最后一页
+      if (this.page < Math.ceil(this.total / 12)) {
+        // 页码+1
+        this.page++;
+        this.getwanginfo(
+          this.appId,
+          window.sessionStorage.getItem("huiyuan_id"),
+          this.page,
+          12
+        );
+      }
     }
   }
-}
+};
 </script>
 <style lang="stylus" scoped>
 .vip_diagnosis-container
@@ -143,6 +183,9 @@ export default {
         .img
           width 110px
           height 110px
+          .loading
+            width 110px
+            height 110px
   .result-num
     text-align left
     margin-left 40px

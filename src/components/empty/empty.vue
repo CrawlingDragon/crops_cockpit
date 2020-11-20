@@ -1,7 +1,8 @@
 <template>
   <div class="empty-container">
-    <el-image v-if="type == img" src="" class="empty-data"></el-image>
-    <el-image v-if="type == text" src="" class="empty-data"></el-image>
+    <div class="empty-data">
+      <slot></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -10,12 +11,7 @@ export default {
   components: {},
   props: {},
   data() {
-    return {
-      type: {
-        type: String,
-        default: "img"
-      }
-    };
+    return {};
   },
   computed: {},
   watch: {},
@@ -29,6 +25,8 @@ export default {
   width 100%
   height 100%
   position relative
+  background: #091D44;
+  border: 2px solid rgba(7, 47, 101, .5)
   .empty-data
     position absolute
     left 50%

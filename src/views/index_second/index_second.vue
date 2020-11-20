@@ -7,13 +7,13 @@
           <SwiperBox :list="swiper"></SwiperBox>
         </div>
         <div class="mid-nav">
-          <div class="item1"></div>
-          <div class="item2"></div>
-          <div class="item3"></div>
-          <div class="item4"></div>
+          <div class="item1" @click="goToViplist"></div>
+          <div class="item2" @click="goToExpertlist"></div>
+          <div class="item3" @click="goToGoodslist"></div>
+          <div class="item4" @click="goToVideolist"></div>
         </div>
         <div class="bottom-bar">
-          <div class="item" @click="goToExpertRanking">
+          <div class="item" @click="goToExpertPaihang">
             <div class="l">
               <div class="icon icon01"></div>
               <p class="p1">专家回复</p>
@@ -28,9 +28,10 @@
                 <span class="number number1">{{ index + 1 }}</span>
                 <span class="name">{{ item.realname }}</span>
               </div>
+              <img src="./2.png" alt="" v-show="rank_experts.length == 0" />
             </div>
           </div>
-          <div class="item">
+          <div class="item" @click="goToNewVip">
             <div class="l">
               <div class="icon icon02"></div>
               <p class="p2">新增</p>
@@ -41,6 +42,7 @@
                 <span class="num"></span>
                 <span class="name">{{ item.name }}</span>
               </div>
+              <img src="./2.png" alt="" v-show="new_users.length == 0" />
             </div>
           </div>
         </div>
@@ -71,7 +73,7 @@ import Cetu from "@/components/cetu_list/cetu_list";
 import Online from "@/components/online_list/online_list";
 import NavList from "@/components/nav_list_second/nav_list_second";
 import SwiperBox from "@/components/swiper_box/swiper_box";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "index_second",
   components: { Header, IndexSecondImgList, Cetu, NavList, Online, SwiperBox },
@@ -100,6 +102,7 @@ export default {
   },
   destroyed() {},
   methods: {
+    ...mapMutations(["getIsstore", "setLowerHospital"]),
     getIndexData() {
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", {
@@ -119,13 +122,41 @@ export default {
             this.recommend_expert = data.recommend_expert[0];
             this.recommend_video = data.recommend_video;
             this.recommend_product = data.recommend_product;
+            this.getIsstore(data.purview);
+            this.setLowerHospital(data.title);
           }
         });
     },
-    goToExpertRanking() {
+    goToExpertPaihang() {
       // 专家排行榜
       this.$router.push({
-        path: "/expert_ranking"
+        path: "/expert_paihang"
+      });
+    },
+    goToViplist() {
+      this.$router.push({
+        path: "/second_huiyuan_list"
+      });
+    },
+    goToNewVip() {
+      this.$router.push({
+        path: "/second_huiyuan_list",
+        query: { from: "newJoin" }
+      });
+    },
+    goToExpertlist() {
+      this.$router.push({
+        path: "/expert"
+      });
+    },
+    goToGoodslist() {
+      this.$router.push({
+        path: "/goods_list"
+      });
+    },
+    goToVideolist() {
+      this.$router.push({
+        path: "/video"
       });
     }
   }
@@ -147,7 +178,6 @@ export default {
       .swiper-box
         width 100%
         height 440px
-        background pink
         margin-bottom 20px
       .mid-nav
         display flex
@@ -246,8 +276,10 @@ export default {
       .cetu-wrap
         flex 1
         margin-right 33px
+        min-height 516px
       .online-wrap
         flex 1
+        min-height 516px
 /deep/.online_list-wrap
   .title
     margin-bottom 15px

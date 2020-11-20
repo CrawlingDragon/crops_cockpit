@@ -3,39 +3,45 @@
   <div>
     <div class="dia-box">
       <a
-        :href="baseUrl+'UserCenter/DataV/getQuestionlist.html?areaname='+name+'&level='+level+'&isstore='+isstore"
+        :href="
+          baseUrl +
+            'UserCenter/DataV/getQuestionlist.html?areaname=' +
+            name +
+            '&level=' +
+            level +
+            '&isstore=' +
+            isstore
+        "
         target="_blank"
         class="head-title"
         v-if="!noDatas"
         v-show="Replydatas.length != 0"
-      >最新诊疗<span>&gt;</span></a>
+        >最新诊疗<span>&gt;</span></a
+      >
       <ul
         class="dia-ul"
         id="diaUl"
         v-if="!noDatas"
         v-show="Replydatas.length != 0"
       >
-        <li v-for="(item,index) in Replydatas" :key = "index">
+        <li
+          v-for="(item, index) in Replydatas"
+          :key="index"
+          @click="godetail(item)"
+        >
           <!-- <a
-            :href="'http://www.114nz.com/index.php?m=content&c=index&a=datavinfo&catid=1540&id='+item.tid+'&tdsourcetag=s_pcqq_aiomsg.html'"
-            target="_blank"
-          > -->
-          <a
             :href="baseUrl+(item.module == 'thread' ? 'Web/':'UserCenter/')+(item.module == 'thread' ? 'Thread':'DataV')+'/'+(item.module == 'thread' ? 'detail':'getWenzhenDetail')+(item.module == 'thread' ? '?tid='+item.tid:'?Id='+item.tid)+(item.module == 'thread' ? '':'&appId='+item.appid)+(item.module == 'thread' ? '':'&module='+item.module)"
             target="_blank"
-          >
-            <div class="time">{{item.dateline}}
-            </div>
-            <div class="text">
-              <span class="text1">{{item.subject}}</span>
-              <span
-                class="text2"
-                :style="{display:'none'}"
-              >{{item.subject}}</span>
-            </div>
-          </a>
+          > -->
+          <div class="time">{{ item.dateline }}</div>
+          <div class="text">
+            <span class="text1">{{ item.subject }}</span>
+            <span class="text2" :style="{ display: 'none' }">{{
+              item.subject
+            }}</span>
+          </div>
+          <!-- </a> -->
         </li>
-
       </ul>
       <noData
         v-if="noDatas || Replydatas.length == 0"
@@ -47,8 +53,7 @@
 
 <script>
 import noData from "../no-data/no-data";
-import { mapState } from "vuex";
-
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -86,20 +91,40 @@ export default {
   },
 
   methods: {
+    ...mapMutations(["setAppId", "setuserId"]),
+    godetail(item) {
+      this.setAppId(item.appid);
+      if (item.module == "wenzhen") {
+        this.$router.push({
+          path: "/zuozhen_detail",
+          query: { tid: item.tid }
+        });
+      } else if (item.module == "xunzhen") {
+        this.$router.push({
+          path: "/xunzhen_detail",
+          query: { tid: item.tid }
+        });
+      } else if (item.module == "thread") {
+        this.$router.push({
+          path: "/wangzhen_detail",
+          query: { tid: item.tid }
+        });
+      }
+    },
     getWidth() {
-      let textList1 = document
+      const textList1 = document
         .getElementById("diaUl")
         .getElementsByClassName("text1");
-      let textList2 = document
+      const textList2 = document
         .getElementById("diaUl")
         .getElementsByClassName("text2");
-      let liList = document
+      const liList = document
         .getElementById("diaUl")
         .getElementsByTagName("li")[0];
-      if(textList1.length){
-          for (let i = 0; i < textList1.length; i++) {
-            let textW = textList1[i].clientWidth;
-            let liW = liList.clientWidth;
+      if (textList1.length) {
+        for (let i = 0; i < textList1.length; i++) {
+          const textW = textList1[i].clientWidth;
+          const liW = liList.clientWidth;
           if (textW > 228) {
             textList1[i].className = "text1 an t1";
             textList2[i].style.display = "block";
@@ -123,7 +148,7 @@ export default {
   }
 };
 </script>
-<style lang='stylus' scoped>
+<style lang="stylus" scoped>
 .dia-box
   position relative
   height 267px
@@ -172,6 +197,7 @@ export default {
       text-align left
       color #ffffff
       line-height 20px
+      cursor pointer
       @media screen and (min-width:1900px) {
         margin-bottom 33px
       }

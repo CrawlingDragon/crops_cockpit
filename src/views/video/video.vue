@@ -1,26 +1,35 @@
 <template>
   <div class="video-container">
     <Header title="培训视频"></Header>
-    <div class="tab-bar">
+    <!-- <div class="tab-bar">
       <div
         class="item"
         v-for="(item, index) in menu"
         :key="item.catid"
         @click="changeVideo(index, item.catid)"
         :class="{ active: active == index }"
+        v-show="index == 0"
       >
         {{ item.catname }}
       </div>
-    </div>
-    <ul class="video-ul">
+    </div> -->
+    <ul
+      class="video-ul infinite-list"
+      v-infinite-scroll="load"
+      style="overflow:auto;"
+      infinite-scroll-disabled="disabled"
+    >
       <li
         v-for="item in list"
         :key="item.id"
+        class="infinite-list-item"
         @click="goToVideoDetail(item.id, item.catid)"
       >
         <el-image class="img" fit="cover" :src="item.thumb"></el-image>
         <p class="p1">{{ item.title }}</p>
       </li>
+      <p v-if="loading" class="p1">加载中...</p>
+      <p v-if="noMore" class="p1">没有更多了</p>
     </ul>
     <div class="result-num">共{{ maxitem }}个结果</div>
   </div>
@@ -38,19 +47,49 @@ export default {
       list: [],
       active: 0,
       menu: [],
-      maxitem: 0
+      maxitem: 0,
+      page: 0,
+      loading: false,
+      noMore: false
     };
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId"]),
+    disabled() {
+      return this.loading || this.noMore;
+    }
   },
   watch: {},
   mounted() {
-    this.getVideoList();
+    // this.getVideoList();
     this.gerVideoMenu();
   },
   destroyed() {},
   methods: {
+    load() {
+      this.page += 1;
+      this.loading = true;
+      setTimeout(() => {
+        this.$axios
+          .fetchGet("/Home/Video/GetVideoList", {
+            page: this.page,
+            appId: this.appId,
+            catId: "99999999"
+          })
+          .then(res => {
+            if (res.data.code == 200) {
+              this.list = this.list.concat(res.data.data);
+              this.loading = false;
+              this.maxitem = res.data.maxitem;
+              if (res.data.data.length == 0) {
+                this.noMore = true;
+              }
+            } else {
+              this.noMore = true;
+            }
+          });
+      }, 1000);
+    },
     gerVideoMenu() {
       this.$axios
         .fetchPost("/Home/Video/GetVideoMenu", { appId: this.appId })
@@ -61,15 +100,16 @@ export default {
         });
     },
     changeVideo(num, catid) {
-      this.active = num;
-      this.getVideoList(catid);
+      // this.active = num;
+      // this.getVideoList(catid);
     },
     getVideoList(catid) {
       // 获取视频列表
       this.$axios
         .fetchPost("/Home/Video/GetVideoList", {
           appId: this.appId,
-          catid: catid
+          catId: catid,
+          pageSize: 22
         })
         .then(res => {
           if (res.data.code == 200) {
@@ -92,17 +132,22 @@ export default {
 .video-container
   padding-top 100px
   .video-ul
-    margin 70px 90px 0
+    padding 0 40px
     text-align left
+    max-width 1900px
+    min-width 1340px
+    margin 60px auto 0
+    max-height 800px
+    padding-bottom 151px
     & > li
-      width 409px
+      width 348px
       height 300px
-      margin-right 30px
+      margin-right 18px
       display inline-block
       position relative
       margin-bottom 20px
       cursor pointer
-      &:nth-child(4n+0)
+      &:nth-child(5n+0)
         margin-right 0
       &:hover
         outline 3px solid #FF6600
@@ -144,4 +189,7 @@ export default {
     &.active
       color #ff6600
       border-bottom 1px solid #ff6600
+.p1
+  text-align center
+  width 100%
 </style>

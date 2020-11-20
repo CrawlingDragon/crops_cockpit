@@ -1,25 +1,28 @@
 <template>
   <div class="paihang_content">
-    <div>
-      这是头部
-    </div>
-    <div class="swiper-container" ref="mySwiper">
-      <div class="swiper-wrapper">
+    <Header
+      :title="title"
+      :right_show_bar="false"
+      midTitle="专家回复排行榜"
+    ></Header>
+    <div class="swiper-container" v-if="this.total > 0">
+      <div class="swiper-wrapper" style="height :350px;">
         <div
           class="swiper-slide"
           v-for="(item, index) in this.expert_info"
           :key="index"
+          @click="goToExpertDetail(item.uid)"
         >
           <img :src="item.avatar" alt="" />
         </div>
       </div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev" ref="prev"></div>
+      <div class="swiper-button-next" ref="next"></div>
     </div>
-    <div class="single_info">
+    <div class="single_info" v-if="this.total > 0">
       <div class="left">
         <div class="mingci text1">NO.{{ this.activeIndex + 1 }}</div>
-        <div class="name text1">{{ this.realname }}</div>
+        <p class="name text2">{{ this.realname }}</p>
       </div>
       <div class="right">
         <div class="intros">
@@ -32,17 +35,18 @@
         </div>
       </div>
     </div>
+    <div class="temporary" v-if="this.total == 0">
+      暂无排行榜
+    </div>
   </div>
 </template>
 <script>
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import Swiper from "swiper";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      appId: localStorage.getItem("appId"), // 管理院的appId
-      page: 1,
-      limit: 5,
-      pageShownumber: 3, // 控制轮播图显示几个一页
       expert_info: "",
       cur_level: 0,
       activeIndex: 0,
@@ -50,51 +54,54 @@ export default {
       paiming: "",
       position: "",
       zuowu: "",
-      replycounts: ""
+      replycounts: "",
+      total: "", //获取到的数据数量
+      title: ""
     };
   },
+  components: { Header },
   created() {
-    this.getExpertinfo(this.appId, 1, "", this.page, this.limit);
+    this.getExpertinfo(this.appId);
   },
-  mounted() {},
+  computed: {
+    ...mapState(["appId", "purview", "lowerHospital"])
+  },
+  mounted() {
+    this.title =
+      this.purview == 3 || this.purview == 4
+        ? this.lowerHospital
+        : "专家回复排行榜";
+  },
   methods: {
+    goToExpertDetail(uid) {
+      this.$router.push({
+        path: "/expert_detail",
+        query: { uid: uid }
+      });
+    },
     init(pagesize) {
       var self = this;
       var mySwiper = new Swiper(".swiper-container", {
         spaceBetween: 30,
-        loop: true,
         slidesPerView: pagesize,
         centeredSlides: true,
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true
-        },
+        slidesPerView: 5, //可见个数2
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev"
         },
         on: {
           slideChangeTransitionEnd: function() {
-            console.log(this.realIndex);
-            self.activeIndex = this.realIndex;
+            console.log(this.activeIndex);
+            self.activeIndex = this.activeIndex;
           }
-          // transitionStart(){ // 开始translate之前触发
-          //     // 如果是第一张
-          //     if(this.activeIndex == 0){
-          //         this.setTranslate(0); // 因为左边会空出一张图的距离，所以设置位移为0
-          //     }
-          // },
         }
       });
     },
     getExpertinfo(appId, purview, ordertag, page, limit) {
       this.$axios
-        .fetchPost("/Home/Expert/GetMpExpertRank", {
-          appId: appId,
-          purview: purview,
-          ordertag: ordertag,
-          page: page,
-          limit: limit
+        .fetchGet("/Home/Expert/GetMpExpertRank", {
+          appId: appId
         })
         .then(res => {
           console.log(res);
@@ -104,17 +111,10 @@ export default {
             this.position = this.expert_info[0].position;
             this.zuowu = this.expert_info[0].zuowu;
             this.replycounts = this.expert_info[0].replycounts;
-            if (res.data.data.length - 0 < 5) {
-              this.pageShownumber = res.data.data.length - 0;
-              this.$nextTick(() => {
-                this.init(this.pageShownumber);
-              });
-            } else {
-              this.$nextTick(() => {
-                this.pageShownumber = 5;
-                this.init(this.pageShownumber);
-              });
-            }
+            this.total = res.data.data.length - 0;
+            this.$nextTick(() => {
+              this.init(5);
+            });
           }
         });
     }
@@ -130,17 +130,15 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-/deep/.swiper-pagination .swiper-pagination-bullet:focus {
-           outline: none;
-    }
 .paihang_content
+    padding-top 100px
     margin 0 40px
     font-size MicrosoftYaHei
     font-weight Regular
     .swiper-container
-        margin-top 218px
         width 100%
-        height 350px
+        height 620px
+        padding-bottom 20px
         .swiper-slide
             text-align center
             font-size 18px
@@ -182,23 +180,25 @@ export default {
                 outline 3px solid #FF6600
                 box-shadow 0px 1px 26px #f60
     .swiper-button-next
-        position fixed
-        top 623px
-        right 40px
+        position absolute
+        top 383px !important
+        right 0
         height 240px
         border 1px solid rgba(255, 255, 255, 0.2)
         width 80px
+        outline none !important
         span:focus
-            outline none
+          outline none
     .swiper-button-prev
-        position fixed
-        top 623px
-        left 40px
+        position absolute
+        top 383px !important
+        left 0
         height 240px
         border 1px solid rgba(255, 255, 255, 0.2)
         width 80px
+        outline none !important
         span:focus
-            outline none
+          outline none
     .single_info
         text-align center
         font-size 18px
@@ -215,13 +215,22 @@ export default {
         -ms-flex-align center
         -webkit-align-items center
         align-items center
+        position: relative;
+        top: -280px;
         .left
             width 22.6%
             height 238px
             border-right 1px solid rgba(255, 255, 255, 0.2)
             .text1
-                font-size 50px
+                font-size 40px
                 color #FFFFFF
+            .text2
+                font-size 40px
+                color #FFFFFF
+                overflow: hidden;
+                text-overflow:ellipsis;
+                white-space: nowrap;
+                padding-left 15px
             .mingci
                 margin-top 48px
                 text-align left
@@ -256,4 +265,15 @@ export default {
                     color #FF6600
                     padding-left 43px
                     vertical-align top
+    .temporary
+      font-size 30px
+      line-height 36px
+      color #FFFFFF
+      width 300px
+      height 200px
+      position absolute
+      top 50%
+      left 50%
+      transform translate(-50%, -50%); /* 50%为自身尺寸的一半 */
+      -webkit-transform: translate(-50%, -50%);
 </style>

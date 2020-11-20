@@ -2,25 +2,30 @@
 <template>
   <div class="treat-box clearfix">
     <div class="swiper-topBar">
-      <div
-        class="swiper-container s3"
-        v-if="sw_flag && swiperArr.length != 0"
-      >
+      <div class="swiper-container s3" v-if="sw_flag && swiperArr.length != 0">
         <div class="swiper-wrapper">
           <div
-            v-for="(item,index) in swiperArr" :key = "index"
+            v-for="(item, index) in swiperArr"
+            :key="index"
             class="swiper-slide"
           >
             <div class="treat-title1">
               <a
-                :href="baseUrl+selfDetailUrl+item.id"
+                :href="baseUrl + selfDetailUrl + item.id"
                 class="detail"
                 target="_blank"
-              >{{item.name}}</a>
-              <span class="sp"><a
-                  :href="baseUrl+selfUrl+'?areaname='+name+'&level='+level"
+                >{{ item.name }}</a
+              >
+              <span class="sp"
+                ><a
+                  :href="
+                    baseUrl + selfUrl + '?areaname=' + name + '&level=' + level
+                  "
                   target="_blank"
-                >&gt;</a></span></div>
+                  >&gt;</a
+                ></span
+              >
+            </div>
             <ul class="treat-number">
               <li v-if="item.pic">
                 <div class="swiper-box">
@@ -28,14 +33,11 @@
                     <div class="swiper-wrapper">
                       <div class="swiper-slide">
                         <a
-                          :href="baseUrl+selfDetailUrl+item.id"
+                          :href="baseUrl + selfDetailUrl + item.id"
                           class="imgs-href"
                           target="_blank"
                         >
-                          <img
-                            :src="item.pic"
-                            alt="暂无图片"
-                          >
+                          <img :src="item.pic" alt="暂无图片" />
                         </a>
                         <!-- <div class="title">{{it}}</div> -->
                       </div>
@@ -102,7 +104,7 @@ export default {
       return picArr;
     },
     swiperTime() {
-      let time = this.Mplocaldata[0].pic.length * 3000;
+      const time = this.Mplocaldata[0].pic.length * 3000;
       return time + 330;
     },
     noDatas() {
@@ -118,13 +120,13 @@ export default {
 
   methods: {
     initSwiper() {
-      let that = this;
+      const that = this;
       this.$nextTick(function() {
-        let s1 = new Swiper(".s3", {
+        const s1 = new Swiper(".s3", {
           autoplay: true,
           speed: 300,
           observer: true,
-          loop:true,
+          loop: true,
           observeParents: false
         });
       });
@@ -164,7 +166,7 @@ export default {
   }
 };
 </script>
-<style lang='stylus' scoped>
+<style lang="stylus" scoped>
 .treat-box
   position relative
   // margin-top -40px
@@ -186,7 +188,7 @@ export default {
       line-height 50px
       font-size 24px
       font-weight Regular
-      font-family Microsoft YaHei 
+      font-family Microsoft YaHei
     }
     & > .detail
       display block

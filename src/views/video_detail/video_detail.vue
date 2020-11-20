@@ -29,24 +29,24 @@
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
-            <div class="btn">
-              <div class="down-icon"></div>
-              <span>下 载</span>
-            </div>
           </div>
         </div>
       </div>
       <div class="second-title">相关视频</div>
-      <ul class="relation-ul">
-        <li
-          v-for="item in list"
-          :key="item.id"
-          @click="goToDetal(item.catid, item.id)"
-        >
-          <el-image class="img" fit="cover" :src="item.thumb"></el-image>
-          <p class="p1">{{ item.title }}</p>
-        </li>
-      </ul>
+      <div class="swiper-container">
+        <ul class="relation-ul swiper-wrapper">
+          <li
+            class="swiper-slide"
+            v-for="item in list"
+            :key="item.id"
+            @click="goToDetal(item.catid, item.id)"
+          >
+            <el-image class="img" fit="cover" :src="item.thumb"></el-image>
+            <p class="p1">{{ item.title }}</p>
+          </li>
+        </ul>
+        <div class="swiper-scrollbar"></div>
+      </div>
     </div>
     <div class="info-box" v-show="infowShowFlag">
       <div class="wrap">
@@ -55,7 +55,7 @@
           简介
         </div>
         <div class="info-text">
-          近日，市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。市农业局召开全局干部职工会议，传达学习第八次党代会精神。会议要求：一是充分认识市第八次党代会的重要意义，紧密结合实际，认真学习、深刻领会会议精神，全面抓好贯彻落实。二是充分...
+          {{ detail.content }}
         </div>
       </div>
     </div>
@@ -64,7 +64,7 @@
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
-
+import Swiper from "swiper";
 export default {
   name: "videos",
   components: { Header },
@@ -93,6 +93,21 @@ export default {
   },
   destroyed() {},
   methods: {
+    init(pagesize) {
+      var mySwiper = new Swiper(".swiper-container", {
+        spaceBetween: 30,
+        slidesPerView: pagesize,
+        autoplay: {
+          delay: 3000,
+          stopOnLastSlide: false,
+          disableOnInteraction: true
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar"
+        }
+      });
+      // mySwiper
+    },
     playVideo() {
       function FullScreen() {
         var ele = document.getElementById("video");
@@ -118,14 +133,20 @@ export default {
           if (res.data.code == 200) {
             this.detail = res.data.data;
             this.list = res.data.data.relation;
+            this.$nextTick(() => {
+              this.init(5);
+            });
           }
         });
     },
     goToDetal(catid, id) {
-      this.$router.push({
-        path: "/video_detail",
-        query: { catid: catid, id: id }
-      });
+      this.catid = catid;
+      this.id = id;
+      this.getVideoDetail();
+      // this.$router.push({
+      //   path: "/video_detail",
+      //   query: { catid: catid, id: id }
+      // });
     },
     infoShow(boolean) {
       this.infoShowFlag = boolean;
@@ -136,9 +157,13 @@ export default {
 <style lang="stylus" scoped>
 .video-containers
   padding-top 100px
+  padding-bottom 30px
   .detail-conatiner
-    margin 40px 90px 0
+    padding 0 40px
     text-align left
+    min-width 1340px
+    max-width 1900px
+    margin 0 auto
     .detail-box
       display flex
       .left-bar
@@ -220,35 +245,55 @@ export default {
       color rgba(255, 255, 255, 0.5)
       line-height 36px
       margin 35px 0
-    .relation-ul
-      font-size 0
-      & > li
-        display inline-block
-        width 340px
-        height 250px
-        margin-right 20px
-        position relative
-        cursor pointer
-        .img
-          display block
-          width 100%
-          height 100%
-        .p1
-          position absolute
-          left 0
-          right 0
-          height 68px
-          background url('./text-bj.png')
-          background-size 100% 100%
-          font-size 30px
-          color #FFFFFF
-          padding-left 28px
-          line-height 68px
-          bottom 0
-          overflow hidden
-          text-overflow ellipsis
-          white-space nowrap
-          word-break break-all
+    .swiper-container
+      .relation-ul
+        .swiper-slide
+          text-align center
+          font-size 18px
+          /* Center slide text vertically */
+          display -webkit-box
+          display -ms-flexbox
+          display -webkit-flex
+          display flex
+          -webkit-box-pack center
+          -ms-flex-pack center
+          -webkit-justify-content center
+          justify-content center
+          -webkit-box-align center
+          -ms-flex-align center
+          -webkit-align-items center
+          align-items center
+          font-size 0
+        & > li
+          display inline-block
+          width 287px
+          height 250px
+          margin-right 20px
+          position relative
+          cursor pointer
+          .img
+            display block
+            width 100%
+            height 100%
+          .p1
+            position absolute
+            left 0
+            right 0
+            height 68px
+            background url('./text-bj.png')
+            background-size 100% 100%
+            font-size 30px
+            color #FFFFFF
+            padding-left 28px
+            line-height 68px
+            bottom 0
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+            word-break break-all
+    .swiper-scrollbar
+      height 5px
+      background #C5C5C5
 .info-box
   position fixed
   left 0

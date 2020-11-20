@@ -1,53 +1,40 @@
 <template>
-<div>
-    <div class="contain">
-        <div class="header">
-            <Headnav
-            :lefttitle=this.lefttitle
-            @datatype="datachange"
-            ></Headnav>
-        </div>
-        <div class="option">
-            <router-link to="/defaultsort" replace><span :class='[this.cur_index == 1 ? "text2 text3":"text2"]' @click = "changecolor1" >默认排序</span></router-link>
-            <router-link to="/multiplesort" replace><span :class='[this.cur_index == 2 ? "text2 text3":"text2"]'  @click = "changecolor2" >综合排序</span></router-link>
-            <router-link to="/selectsort" replace><span :class='[this.cur_index == 3 ? "text2 text3":"text2"]'  @click = "changecolor3" >筛选</span></router-link>
-        </div>
-        <div class="content">
-            <keep-alive v-if="$route.meta.keepAlive">
-                <router-view></router-view>
-            </keep-alive>
-        </div>
+  <div class="contain">
+    <div class="header">
+      <Headnav :lefttitle="this.lefttitle" @datatype="datachange"></Headnav>
     </div>
     <div class="option">
-      <router-link to="/defaultsort" replace
-        ><span
+      <router-link to="/defaultsort" replace>
+        <span
           :class="[this.cur_index == 1 ? 'text2 text3' : 'text2']"
           @click="changecolor1"
-          >默认排序</span
-        ></router-link
-      >
-      <router-link to="/multiplesort" replace
-        ><span
+        >
+          默认排序
+        </span>
+      </router-link>
+      <router-link to="/multiplesort" replace>
+        <span
           :class="[this.cur_index == 2 ? 'text2 text3' : 'text2']"
           @click="changecolor2"
-          >综合排序</span
-        ></router-link
-      >
-      <router-link to="/selectsort" replace
-        ><span
+        >
+          综合排序
+        </span>
+      </router-link>
+      <router-link to="/selectsort" replace>
+        <span
           :class="[this.cur_index == 3 ? 'text2 text3' : 'text2']"
           @click="changecolor3"
-          >筛选</span
-        ></router-link
-      >
+        >
+          筛选
+        </span>
+      </router-link>
     </div>
     <div class="content">
-      <keep-alive v-show="$route.meta.keepAlive">
+      <keep-alive v-if="$route.meta.keepAlive">
         <router-view></router-view>
       </keep-alive>
     </div>
   </div>
-</div>
 </template>
 <script>
 import Headnav from "../../components/head_nav/head_nav";
@@ -55,14 +42,12 @@ export default {
   components: {
     Headnav
   },
-
   data() {
     return {
       cur_index: 2,
       lefttitle: "下级医院"
     };
   },
-
   created() {
     this.$parent.app_loading = false;
   },
@@ -71,33 +56,18 @@ export default {
       e.stopPropagation();
       this.$router.back();
     },
-    data() {
-      return {
-        cur_index: 2,
-        lefttitle: "下级医院"
-      };
+    changecolor1() {
+      this.cur_index = 1;
     },
-    created() {
-      this.$parent.app_loading = false;
+    changecolor2() {
+      this.cur_index = 2;
     },
-    methods: {
-      toindex(e) {
-        e.stopPropagation();
-        this.$router.back();
-      },
-      changecolor1() {
-        this.cur_index = 1;
-      },
-      changecolor2() {
-        this.cur_index = 2;
-      },
-      changecolor3() {
-        this.cur_index = 3;
-      },
-      datachange(value) {
-        if (value) {
-          location.reload();
-        }
+    changecolor3() {
+      this.cur_index = 3;
+    },
+    datachange(value) {
+      if (value) {
+        location.reload();
       }
     }
   }
@@ -115,7 +85,6 @@ export default {
         height 50px
         z-index 99
         width 100%
-
     .option
         margin 40px auto 0px auto
         width 500px
@@ -127,7 +96,7 @@ export default {
         @media screen and (min-width:1900px) {
             margin 77px auto 0px auto
         }
-        z-index 666
+        z-index 66
         .text2
             font-size 24px
             font-family MicrosoftYaHei
@@ -150,5 +119,4 @@ export default {
         @media screen and (max-width:1899px) {
             padding-top 75px
         }
-
 </style>

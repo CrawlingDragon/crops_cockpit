@@ -36,20 +36,25 @@
       style="overflow:auto;"
       infinite-scroll-disabled="disabled"
     >
-      <li v-for="item in list" :key="item.id" class="infinite-list-item">
+      <li
+        v-for="item in list"
+        :key="item.id"
+        class="infinite-list-item"
+        @click="goToDetail(item.id)"
+      >
         <div class="icon"></div>
         <div class="text">
           <p class="p1">
-            {{ item.company }}·{{ item.address }}
+            {{ item.title }}
             <span>ID:{{ item.idnumber }}</span>
           </p>
-          <p class="p2">{{ item.title }}</p>
+          <p class="p2">{{ item.address }}</p>
           <p class="p3">{{ item.showtime }}</p>
         </div>
         <div class="test-status">
           <div class="icon icon-ing" v-if="item.teststatus == 1"></div>
-          <div class="icon icon-success" v-if="item.teststatus == 2"></div>
-          <div class="icon icon-way" v-if="item.teststatus == 3"></div>
+          <div class="icon icon-success" v-if="item.teststatus == 3"></div>
+          <div class="icon icon-way" v-if="item.teststatus == 2"></div>
           <p>
             {{
               item.teststatus == 1
@@ -61,9 +66,9 @@
           </p>
         </div>
       </li>
+      <p v-if="loading">加载中...</p>
+      <p v-if="noMore">没有更多了</p>
     </ul>
-    <p v-if="loading">加载中...</p>
-    <p v-if="noMore">没有更多了</p>
   </div>
 </template>
 <script>
@@ -138,6 +143,12 @@ export default {
           this.chooseItem = "3";
           break;
       }
+    },
+    goToDetail(id) {
+      this.$router.push({
+        path: "/cetu_detail",
+        query: { id: id }
+      });
     }
   }
 };
@@ -175,6 +186,25 @@ export default {
           box-shadow none
   .tu-ul
     margin 30px auto
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     & > li
       background rgba(9, 29, 67, 0.4)
       border 1px solid rgba(255, 255, 255, 0.2)
@@ -219,11 +249,11 @@ export default {
           margin-right 21px
           vertical-align middle
           &.icon-ing
-            background url('./27.png') no-repeat
+            background url('./35.png') no-repeat
             background-position center
             background-size 100%
           &.icon-success
-            background url('./27.png') no-repeat
+            background url('./36.png') no-repeat
             background-position center
             background-size 100%
           &.icon-way

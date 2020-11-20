@@ -1,34 +1,36 @@
 <template>
   <div class="expert">
-    <div class="title">专家回复排行榜 ></div>
+    <div class="title" @click="goToExpertRanking">专家回复排行榜 ></div>
     <ul>
-      <li v-for="(item,index) in list" :key="item.uid" @click="goToExpert(item.uid)">
+      <li
+        v-for="(item, index) in list"
+        :key="item.uid"
+        @click="goToExpert(item.uid)"
+      >
         <img :src="item.avatar" alt class="expert-avator" />
-        <div class="icon">{{index + 1}}</div>
+        <div class="icon">{{ index + 1 }}</div>
         <div class="bom-bar">
-          <p class="p1">{{item.name}}</p>
+          <p class="p1">{{ item.realname }}</p>
           <p class="p2">
             <span>总回复数</span>
-            <span class="number">{{item.posts}}</span>
+            <span class="number">{{ item.replycounts }}</span>
           </p>
         </div>
+      </li>
+      <li v-for="item in 3" :key="item" v-show="list.length == 0">
+        <Empty>
+          <img src="./2.png" alt="" />
+        </Empty>
       </li>
     </ul>
   </div>
 </template>
 <script>
-import axios from "@/http.js";
+import Empty from "@/components/empty/empty";
 export default {
   name: "expert_ranking_list",
-  components: {},
-  props: {
-    list: {
-      type: Array,
-      default: function () {
-        return [];
-      },
-    },
-  },
+  components: { Empty },
+  props: ["list"],
   data() {
     return {};
   },
@@ -38,13 +40,18 @@ export default {
   destroyed() {},
   methods: {
     goToExpert(uid) {
-      //去到专家详情页
+      // 去到专家详情页
       this.$router.push({
         path: "/expert_detail",
-        query: { uid: uid },
+        query: { uid: uid }
       });
     },
-  },
+    goToExpertRanking() {
+      this.$router.push({
+        path: "/expert_paihang"
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
@@ -56,7 +63,7 @@ export default {
     color rgba(255, 254, 254, 1)
   ul
     display flex
-    justify-content space-between
+    // justify-content space-between
     li
       width 33%
       height 306px

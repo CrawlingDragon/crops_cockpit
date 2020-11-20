@@ -204,7 +204,6 @@ export default {
       lefttitle: "评分"
     };
   },
-
   created() {
     var h = document.documentElement.clientHeight || document.body.clientHeight;
     if (h > 1080 || h == 1080) {
@@ -301,7 +300,7 @@ export default {
       return {
         disabledDate: time => {
           if (self.ruleForm.endTime) {
-            // 如果结束时间不为空，则小于结束时间
+            // 如果结束时间不为空，在选择开始时间的时候，则大于结束时间的 或者大于当前日期时间的 为禁用状态
             return (
               time.getTime() > Date.now(self.ruleForm.endTime) ||
               time.getTime() > new Date(self.ruleForm.endTime).getTime()
@@ -321,13 +320,13 @@ export default {
       return {
         disabledDate: time => {
           if (self.ruleForm.startTime) {
-            // 如果开始时间不为空，则结束时间大于开始时间
+            // 如果开始时间不为空，则小于开始时间的 或者大于当前日期时间的为禁用状态
             return (
-              time.getTime() < new Date(self.ruleForm.startTime).getTime() ||
+              time.getTime() <
+                new Date(self.ruleForm.startTime).getTime() - 8.64e7 ||
               time.getTime() > Date.now() ||
               time.getTime() > Date.now(self.ruleForm.startTime)
             );
-            console.log(beginDateVal);
           } else {
             return (
               time.getTime() < new Date(self.ruleForm.startTime).getTime ||
@@ -391,11 +390,8 @@ export default {
     },
     // 查看详情按钮
     watchdetail(index, item) {
-      window.open(
-        `http://sxone.114nz.com/#/ask_detail?tid=${
-          item.tid
-        }&from=${"jiashicang"}`
-      );
+      console.log(item);
+      this.$router.push({ path: "/wangzhen_detail", query: { tid: item.tid } });
     },
     // 进行搜索条件的表单提交
     submitForm(formName) {
@@ -712,9 +708,11 @@ export default {
         overflow hidden
         width 80%
         margin 0 auto
+        line-height 25px
         text-align left
         @media screen and (min-width:1900px) {
             font-size 24px
+            line-height 30px
             margin-bottom 17px
         }
     .score

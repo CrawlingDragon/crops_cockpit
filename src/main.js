@@ -8,12 +8,16 @@ import axios from "./http";
 import router from "./router/index";
 import "./common/css/react.styl";
 import VueLazyLoad from "vue-lazyload";
+import layer from 'vue-layer'
 // import "echarts/lib/component/category";
 import "swiper/dist/css/swiper.min.css";
 Vue.component("v-chart", ECharts);
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(VueLazyLoad);
+
+import 'vue-layer/lib/vue-layer.css';
+Vue.prototype.$layer = layer(Vue);
 
 Vue.prototype.openLoading = function() {
   const loading = this.$loading({ // 声明一个loading对象

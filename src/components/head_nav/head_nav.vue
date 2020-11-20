@@ -38,7 +38,7 @@
           :class="[
             this.changemoudle == 'find' ? 'find-text' : 'find-text find-text1'
           ]"
-          >主题看板</span
+          >{{ isshaoxing == 1 ? "数据分析" : "数据分析" }}</span
         >
       </div>
       <div
@@ -139,15 +139,15 @@ export default {
   data() {
     return {
       chooseHospitalRadio: "1",
-      cur_cityname: window.sessionStorage.getItem("name")
+      cur_cityname: window.sessionStorage.getItem("name"),
+      isshaoxing: window.sessionStorage.getItem("isshaoxing")
     };
   },
-  created() {
-    console.log(this.$store.state.isstore);
-    if (this.$store.state.isstore == "null") {
-      this.chooseHospitalRadio = "null";
-    } else {
+  mounted() {
+    if (this.$store.state.isstore == "1" || this.$store.state.isstore == 1) {
       this.chooseHospitalRadio = "1";
+    } else {
+      this.chooseHospitalRadio = "null";
     }
   },
   components: {
@@ -156,11 +156,17 @@ export default {
   },
   methods: {
     tofind() {
-      console.log("tofind");
+      // console.log("tofind");
+      const isshaoxing = window.sessionStorage.getItem("isshaoxing");
+      if (isshaoxing == 1) {
+        this.$router.push({
+          path: "/data_analysis"
+        });
+        return;
+      }
       this.$router.push({ path: "/findindex" });
     },
     toindex() {
-      console.log("toindex");
       this.$router.push({
         path: "/indexFour",
         query: {
@@ -172,8 +178,21 @@ export default {
       });
     },
     backto() {
-      if (this.$props.returnpath == "/findindex") {
+      if (
+        this.$props.returnpath == "/findindex" ||
+        this.$props.returnpath == "/data_analysis"
+      ) {
         this.$router.push({ path: this.$props.returnpath });
+      } else if (this.$props.returnpath == "/indexFour") {
+        this.$router.push({
+          path: this.$props.returnpath,
+          query: {
+            userid: window.sessionStorage.getItem("curuserid"),
+            areaname: window.sessionStorage.getItem("curcity"),
+            level: window.sessionStorage.getItem("curlevel"),
+            letter: window.sessionStorage.getItem("letter")
+          }
+        });
       } else {
         this.$router.go(-1);
       }
@@ -204,7 +223,7 @@ export default {
     ...mapMutations(["getNoData", "getIsstore"])
   },
   watch: {
-    chooseHospitalRadio(newVal) {
+    chooseHospitalRadio(newVal, oldVal) {
       console.log(newVal);
       // this.$emit("datatype",newVal)
     }
@@ -279,10 +298,7 @@ export default {
       .index-text
         margin 0px 0px 0px 14px
         display inline-block
-        vertical-align middle
-        @media screen and (min-width:1900px) {
-          margin 4px 0px 0px 14px
-        }
+        vertical-align top
       .index-text1
         color #7FB5F1
     .find

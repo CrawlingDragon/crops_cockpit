@@ -2,25 +2,22 @@
 <template>
   <div class="treat-box clearfix">
     <div class="swiper-topBar">
-      <div
-        class="swiper-container s1"
-        v-if="sw_flag && swiperArr.length != 0"
-      >
+      <div class="swiper-container s1" v-if="sw_flag && swiperArr.length != 0">
         <div class="swiper-wrapper">
           <div
-            v-for="(item,index) in swiperArr" :key="index"
+            v-for="(item, index) in swiperArr"
+            :key="index"
             class="swiper-slide"
           >
             <div class="treat-title1">
-              <a
-                :href="baseUrl+selfDetailUrl+item.id"
-                class="detail"
-                target="_blank"
-              >{{item.name || '医院'}}</a>
-              <span class="sp"><a
-                  :href="baseUrl+selfUrl+'?areaname='+name+'&level='+level+'&isstore='+isstore"
-                  target="_blank"
-                >&gt;</a></span>
+              <span @click="gonexthospital(item)" class="detail">{{
+                item.name || "医院"
+              }}</span>
+              <span class="sp"
+                ><router-link :to="{ path: '/hospitalsort' }"
+                  >&gt;</router-link
+                ></span
+              >
             </div>
             <ul class="treat-number">
               <li>
@@ -28,16 +25,9 @@
                   <div class="swiper-container2 s2">
                     <div class="swiper-wrapper">
                       <div class="swiper-slide">
-                        <a
-                          :href="baseUrl+selfDetailUrl+item.id"
-                          class="imgs-href"
-                          target="_blank"
-                        >
-                          <img
-                            :src="item.pic"
-                            alt="暂无图片"
-                          >
-                        </a>
+                        <div @click="gonexthospital(item)" class="imgs-href">
+                          <img :src="item.pic" alt="暂无图片" />
+                        </div>
                         <!-- <div class="title">{{it}}</div> -->
                       </div>
                     </div>
@@ -48,16 +38,17 @@
           </div>
         </div>
       </div>
-      <noData v-show="Mplocaldata == null || noDatas || Mplocaldata.length == 0"></noData>
+      <noData
+        v-show="Mplocaldata == null || noDatas || Mplocaldata.length == 0"
+      ></noData>
     </div>
-
   </div>
 </template>
 
 <script>
 import Swiper from "swiper";
 import noData from "../no-data/no-data";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -96,7 +87,8 @@ export default {
             picArr.push({
               id: item.id,
               name: item.name,
-              pic: el
+              pic: el,
+              isstore: item.isstore
             });
           });
         });
@@ -127,6 +119,17 @@ export default {
   },
 
   methods: {
+    ...mapMutations(["setAppId"]),
+    gonexthospital(item) {
+      this.setAppId(item.id);
+      if (item.isstore == "0") {
+        this.$router.push({ path: "/index_third" });
+      } else if (item.isstore == "1") {
+        this.$router.push({
+          path: "/index_second"
+        });
+      }
+    },
     initSwiper() {
       let that = this;
       this.$nextTick(function() {
@@ -144,7 +147,7 @@ export default {
           autoplay: true,
           speed: 300,
           observer: true,
-          loop:true,
+          loop: true,
           observeParents: false
         });
         // console.log(s1)
@@ -178,7 +181,7 @@ export default {
   }
 };
 </script>
-<style lang='stylus' scoped>
+<style lang="stylus" scoped>
 .treat-box
   position relative
   // margin-top -40px
@@ -200,7 +203,7 @@ export default {
       line-height 50px
       font-size 24px
       font-weight Regular
-      font-family Microsoft YaHei 
+      font-family Microsoft YaHei
     }
     & > .detail
       display block
@@ -210,6 +213,7 @@ export default {
       height 40px
       text-overflow ellipsis
       white-space nowrap
+      cursor pointer
       @media screen and (min-width:1900px) {
         height 50px
         width 313px
@@ -268,6 +272,7 @@ export default {
               display block
               width 232.5px
               height 150px
+              cursor pointer
               @media screen and (min-width:1900px){
                 width 359px
                 height 190px

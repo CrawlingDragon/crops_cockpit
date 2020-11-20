@@ -1,234 +1,332 @@
 <template>
-    <div class="jianjie">
-        <div class="head" @click="topre()">
-            <div class="closefn"></div>
-            <div class="head-title">网诊详情</div>
+  <div class="jianjie">
+    <Header :title="title" :right_show_bar="false" midTitle="网诊详情"></Header>
+    <div class="title">{{ zl_detail.title }}</div>
+    <div class="content">
+      <div class="con_left" @click="watchdetail('1')">
+        <div class="left_title">作物病情资料</div>
+        <div class="plant_mode text1">{{ this.zl_detail.crop_pattern }}</div>
+        <div class="bf_chengdu text1">{{ this.zl_detail.crop_position }}</div>
+        <div class="show_time text1">{{ this.zl_detail.showtime }}</div>
+        <div class="miaoshu text1">{{ this.zl_detail.content }}</div>
+        <div class="pictures">
+          <span
+            >病情图片 （{{
+              this.zl_detail.pic !== undefined &&
+              this.zl_detail.pic !== null &&
+              this.zl_detail.pic.length > 0
+                ? this.zl_detail.pic.length
+                : 0
+            }}）
+          </span>
+          <div class="pics">
+            <img
+              v-for="(item, index) in this.zl_detail.pic"
+              :key="index"
+              :src="item"
+              alt=""
+            />
+          </div>
         </div>
-        <div class="title">{{this.$route.query.title}}</div>
-        <div class="content">
-            <div class="con_left" @click="watchdetail('1')">
-                <div class="left_title">作物病情资料</div>
-                <div class="plant_mode text1">{{this.zl_detail.crop_pattern}}</div>
-                <div class="bf_chengdu text1">{{this.zl_detail.crop_position}}</div>
-                <div class="show_time text1">{{this.zl_detail.showtime}}</div>
-                <div class="miaoshu text1">{{this.zl_detail.content}}</div>
-                <div class="pictures">
-                    <span>病情图片（4）</span>
-                    <div class="pics">
-                        <img v-for="(item,index) in this.zl_detail.pic" :key="index" :src="item" alt="">
-                    </div>
-                </div>
+      </div>
+      <div class="con_right" @click="watchdetail('2')">
+        <div class="right_title">处方信息</div>
+        <div class="huifu_info" v-if="this.zl_detail.result != ''">
+          <div v-for="(item, index) in this.zl_detail.result" :key="index">
+            <div class="huifu_person">{{ item.chufang_expert }}</div>
+            <div class="pingfen" v-if="item.scoredata !== ''">
+              <el-rate
+                v-if="
+                  item.scoredata.scoretips !== 0 ||
+                    item.scoredata.scoretips !== '0'
+                "
+                class="rate"
+                :value="item.scoredata.scoretips - 0"
+                disabled
+                text-color="#ff9900"
+              >
+              </el-rate>
             </div>
-            <div class="con_right" @click="watchdetail('2')">
-                <div class="right_title">处方信息</div>
-                <div class="huifu_info" v-if="this.zl_detail.result != ''">
-                    <div v-for="(item,index) in this.zl_detail.result" :key="index">
-                        <div class="huifu_person">{{item.chufang_expert}}</div>
-                        <div class="huifu_nr">{{item.result}}</div>
-                    </div>
-                </div>
-                <div class="no_data" v-if="this.zl_detail.result == ''">医院暂时还没有回复</div>
-            </div>
+            <div class="huifu_nr">{{ item.result }}</div>
+          </div>
         </div>
-        <div class="bottom">
-            <div class="chufang">
-                <img src="../../assets/24.png" alt="">
-                <div class="text2">处方药（{{this.yao_number}}）</div>
-            </div>
-            <div class="yao" v-for="(item,index) in this.zl_detail.products" :key="index">
-                <div class="shadow"></div>
-                <img :src="item.thumb_pic" alt="">
-                <p class="yao_name">{{item.name}}</p>
-            </div>
-            <div class="no_yao" v-if="this.yao_number == 0">
-                <img src="../../assets/65.png" alt="">
-            </div>
+        <div class="no_data" v-if="this.zl_detail.result == ''">
+          医院暂时还没有回复
         </div>
-        <div ref="detail">
-            <Detail
-            :detailinfo="this.zl_detail"
-            :godetail="this.godetail"
-            :title="this.alert_title"
-            ></Detail>
-        </div>
+      </div>
     </div>
+    <div class="bottom">
+      <div class="chufang">
+        <img src="../../assets/24.png" alt="" />
+        <div class="text2">处方药（{{ this.yao_number }}）</div>
+      </div>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div
+            class="swiper-slide yao "
+            v-for="(item, index) in this.zl_detail.products"
+            :key="index"
+            @click="goToDetail(item.id)"
+          >
+            <div class="shadow"></div>
+            <img :src="item.thumb_pic" alt="" />
+            <p class="yao_name">{{ item.name }}</p>
+          </div>
+        </div>
+        <div class="swiper-scrollbar"></div>
+      </div>
+      <div class="no_yao" v-if="this.yao_number == 0">
+        <img src="../../assets/65.png" alt="" />
+      </div>
+    </div>
+    <div class="detail" ref="detail">
+      <Detail
+        :detailinfo="this.zl_detail"
+        :godetail="this.godetail"
+        :title="this.alert_title"
+      ></Detail>
+    </div>
+  </div>
 </template>
 <script>
-import Detail from "../../components/zhenliao_alert/zhenliao_alert"
+import Detail from "../../components/zhenliao_alert/zhenliao_alert";
+import Header from "@/components/online_hospital_header/online_hospital_header";
+import Swiper from "swiper";
+import { mapState } from "vuex";
 export default {
-    data(){
-      return{
-        zl_detail:"",//诊疗详情
-        replay:"",//网诊回复信息
-        appId:localStorage.getItem("appId"),
-        yao_number:"",//处方药数量
-        godetail:"",//判断是从何处打开了弹窗
-        alert_title:"",//弹窗title
+  data() {
+    return {
+      zl_detail: "", // 诊疗详情
+      replay: "", // 网诊回复信息
+      yao_number: "", // 处方药数量
+      godetail: "", // 判断是从何处打开了弹窗
+      alert_title: "", // 弹窗title
+      title: ""
+    };
+  },
+  mounted() {
+    this.getWangzhendetail(this.appId, "forum_post", this.$route.query.tid);
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "网诊详情";
+  },
+  components: {
+    Detail,
+    Header
+  },
+  computed: {
+    ...mapState(["appId", "purview", "lowerHospital"])
+  },
+  methods: {
+    topre() {
+      this.$router.go(-1);
+    },
+    init(pagesize) {
+      var self = this;
+      var mySwiper = new Swiper(".swiper-container", {
+        spaceBetween: 30,
+        slidesPerView: pagesize,
+        autoplay: {
+          delay: 3000,
+          stopOnLastSlide: false,
+          disableOnInteraction: true
+        },
+        scrollbar: {
+          el: ".swiper-scrollbar"
+        }
+      });
+    },
+    watchdetail(godetails) {
+      this.godetail = godetails;
+      this.$refs.detail.style = "display:block";
+      if (godetails == 1) {
+        this.alert_title = "作物病情资料";
+      }
+      if (godetails == 2) {
+        this.alert_title = "处方信息";
       }
     },
-    activated(){
-        this.getWangzhendetail(this.appId,"forum_post",this.$route.query.tid)
-        this.$refs.detail.style ='display:none'
+    getWangzhendetail(appId, frommodule, Id) {
+      this.$axios
+        .fetchPost("/Home/Treatment/GetRecipetemDetail", {
+          appId: appId,
+          module: frommodule,
+          Id: Id
+        })
+        .then(res => {
+          if (res.data.code == 200) {
+            this.zl_detail = res.data.data;
+            if (res.data.data.products == "") {
+              this.yao_number = 0;
+            } else {
+              this.yao_number = Object.keys(res.data.data.products).length;
+            }
+            this.$nextTick(() => {
+              this.init(5);
+            });
+          }
+        });
     },
-    components:{
-        Detail
-    },
-    methods:{
-        topre(){
-            this.$router.go(-1)
-        },
-        watchdetail(godetails){
-            this.godetail = godetails
-            this.$refs.detail.style ='display:block'
-            if(godetails == 1){
-                this.alert_title="作物病情资料"
-            }
-            if(godetails == 2){
-                this.alert_title="处方信息"
-            }
-        },
-        getWangzhendetail(appId,frommodule,Id){
-            this.$axios.fetchPost(
-            "/Home/Treatment/GetRecipetemDetail",
-            {appId:appId,module:frommodule,Id:Id}
-            ).then(res=>{
-                console.log(res)
-            if(res.data.code == 200){
-                console.log(res)
-                this.zl_detail = res.data.data
-                //   this.replay = res.data.answers
-                if(res.data.data.products==""){
-                    this.yao_number = 0
-                }else{
-                    this.yao_number = Object.keys(res.data.data.products).length
-                }
-            }
-            })
-        },
+    goToDetail(id) {
+      this.$router.push({
+        path: "/goods_detail",
+        query: { id: id }
+      });
     }
-}
+  }
+};
 </script>
 <style lang="stylus" scoped>
-  .jianjie
-    margin 0 40px
-    .head
-      position absolute
-      top 40px
-      .closefn
-        height 30px
-        width 30px
-        background url("../../assets/61.png")
-        background-size 100%
-      .head-title
-        position absolute
-        width 120px
-        top 0px
-        left 51px
-        font-size 30px
-        font-weight 400
-        color #7FB5F1
-    .title
-        font-size 34px
-        text-align left
-        padding-top 166px
-        margin-bottom 31px
-    .content
-        width 100%
-        height 460px
-        .con_left
-            float left
-            height 460px
-            width 36%
-            border 2px solid #072F65
-            font-family MicrosoftYaHei
-            fong-weight Regular
-            text-align left
-            .left_title
-                font-size 30px
-                margin 19px auto 8px 29px
-            .text1
-                font-size 24px
-                line-height 40px
-                margin-left 29px
-                color #B5B5B5
-            .pictures
-                margin 15px 120px 16px 29px
-                font-size 30px 
-                line-height 40px
-                .pics
-                    margin-top 18px
-                    img 
-                        float left
-                        height 110px
-                        width 110px
-                        margin-right 19px
-                        &:nth-child(4n+0)
-                          margin-right 0px
-        .con_right
-            text-align left
-            float right
-            width 62%
-            height 460px
-            border 2px solid #072F65
-            overflow  hidden
-            .right_title
-                font-size 30px
-                margin 19px auto 8px 29px
-            .huifu_info
-                margin auto 22px 12px 28px
-                line-height 40px
-                font-size 24px
-                color #B5B5B5
-            .no_data
-                font-size 24px
-                color #B5B5B5
-                margin 160px 450px
-    .bottom
-        width 100%
-        height 270px
-        margin-top 31px
-        .chufang
-            width 140px
-            height 270px
-            border 2px solid #091D44
-            margin-right 40px
-            float left
-            img 
-                margin 56px 40px 46px 40px
-            .text2
-                margin 40 auto
-                font-size 30px
-                line-height 40px
-        .yao
-            height 270px
-            width 270px
-            margin-right 15px
-            float left
-            position relative
-            img
-                height 270px
-                width 270px
-            .yao_name
-                position absolute
-                bottom 12px
-                left 17px
-                right 44px
-                width 100%
-                text-align left
-                font-size 24px
-            .shadow
-                position absolute
-                top 0px
-                height 100%
-                width 100%
-                background linear-gradient(to top,#000000 1%,transparent 100%)
-        .no_yao
-            height 270px
-            width 270px
-            float left
-            border 2px solid #072F65
-            img
-                height 120px
-                width 175px
-                margin 75px 47px
+/deep/.el-rate__icon
+    font-size 40px
+.jianjie
+  margin 0 40px
+  .title
+      font-size 34px
+      text-align left
+      padding-top 101px
+      margin-bottom 31px
+  .content
+      width 100%
+      height 460px
+      .con_left
+          float left
+          height 460px
+          width 36%
+          border 2px solid #072F65
+          font-family MicrosoftYaHei
+          fong-weight Regular
+          text-align left
+          .left_title
+              font-size 30px
+              margin 19px auto 8px 29px
+          .text1
+              font-size 24px
+              line-height 40px
+              margin-left 29px
+              color #B5B5B5
+          .pictures
+              margin 15px 120px 16px 29px
+              font-size 30px
+              height 160px
+              overflow hidden
+              .pics
+                  margin-top 18px
+                  img
+                      float left
+                      display block
+                      height 110px
+                      width 110px
+                      margin-right 19px
+                      &:nth-child(4n+0)
+                        margin-right 0px
+      .con_right
+          text-align left
+          float right
+          width 62%
+          height 460px
+          border 2px solid #072F65
+          overflow  hidden
+          .right_title
+              font-size 30px
+              margin 19px auto 8px 29px
+          .huifu_info
+              margin auto 22px 12px 28px
+              line-height 40px
+              font-size 24px
+              color #B5B5B5
+              height 360px
+              overflow hidden
+              .huifu_person
+                display inline-block
+              .pingfen
+                display inline-block
+                float right
+                right 40px
+          .no_data
+              font-size 24px
+              color #B5B5B5
+              margin 160px 450px
+  .bottom
+      width 100%
+      height 270px
+      margin-top 31px
+      .chufang
+          width 140px
+          height 270px
+          border 2px solid #091D44
+          margin-right 40px
+          float left
+          img
+              margin 56px 40px 46px 40px
+          .text2
+              margin 40 auto
+              font-size 30px
+              line-height 40px
+      .swiper-container
+          .swiper-slide
+              text-align center
+              font-size 18px
+              /* Center slide text vertically */
+              display -webkit-box
+              display -ms-flexbox
+              display -webkit-flex
+              display flex
+              -webkit-box-pack center
+              -ms-flex-pack center
+              -webkit-justify-content center
+              justify-content center
+              -webkit-box-align center
+              -ms-flex-align center
+              -webkit-align-items center
+              align-items center
+          .yao
+              height 270px
+              width 270px
+              margin-right 15px
+              float left
+              position relative
+              img
+                  height 270px
+                  width 270px
+              .yao_name
+                  position absolute
+                  bottom 12px
+                  left 25px
+                  right 44px
+                  width 270px
+                  text-align left
+                  font-size 24px
+                  display -webkit-box
+                  text-overflow ellipsis
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+              .shadow
+                  position absolute
+                  top 0px
+                  height 100%
+                  width 270px
+                  background linear-gradient(to top,rgba(000,000,000,0.8) 5%,transparent 40%,transparent 100%)
+          .swiper-scrollbar
+            height 5px
+            background #C5C5C5
+      .no_yao
+          height 270px
+          width 270px
+          float left
+          border 2px solid #072F65
+          img
+              height 120px
+              width 175px
+              margin 75px 47px
+  .detail
+      display none
+.miaoshu
+  display -webkit-box
+  text-overflow ellipsis
+  overflow hidden
+  display -webkit-box
+  -webkit-line-clamp 2
+  -webkit-box-orient vertical
 </style>

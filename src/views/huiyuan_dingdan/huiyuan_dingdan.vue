@@ -1,82 +1,105 @@
 <template>
   <div class="dingdan-container">
     <ul class="dingdan-ul">
-      <li v-for="(item,index) in this.orderinfo" :key="index" @click="watchdetail(item)">
+      <li
+        v-for="(item, index) in this.orderinfo"
+        :key="index"
+        @click="watchdetail(item)"
+      >
         <div class="icon"></div>
         <div class="text">
           <div class="row1">
-            <span>{{item.title}}</span>
-            <span>代购单号:{{item.ordernumber}}</span>
-            <span>{{item.showtime}}</span>
-            <div class="row1_text pay_status">{{item.orderstate == 1?"交易成功":"待付款"}}</div>
-            <div class="row1_text">参考总价:<span class="price">¥{{item.ordercost}}</span></div>
+            <span>{{ item.title }}</span>
+            <span>代购单号:{{ item.ordernumber }}</span>
+            <span>{{ item.showtime }}</span>
+            <div class="row1_text pay_status">
+              {{ item.orderstate == 1 ? "交易成功" : "待付款" }}
+            </div>
+            <div class="row1_text">
+              参考总价:<span class="price">¥{{ item.ordercost }}</span>
+            </div>
           </div>
-          <p class="order_kinds">
-            <span class="single_row" v-for="(item,index) in item.products " :key="index">
-              <span>{{item.name}}</span>
-              <span>{{item.spec_sn}}</span>
-              <span class="text1">¥{{item.price}}</span>
-              <span>*{{item.quantity}}</span>
-            </span>
-          </p>
+          <div class="order_kinds">
+            <p
+              class="single_row"
+              v-for="(item, index) in item.products"
+              :key="index"
+              v-show="index < 3"
+            >
+              <span>{{ item.name }}</span>
+              <span>{{ item.spec_sn }}</span>
+              <span class="text1">¥{{ item.price }}</span>
+              <span>*{{ item.quantity }}</span>
+            </p>
+          </div>
           <div class="order_pics">
-              <img  v-for="(item,index) in item.products.reverse()" :key="index" :src= item.goods_pic alt="">
+            <img
+              v-for="(item, index) in item.products"
+              :key="index"
+              v-show="index < 3"
+              :src="item.goods_pic"
+              alt=""
+            />
           </div>
         </div>
       </li>
     </ul>
-    <div class="total">共计{{this.total}}个结果</div>
+    <div class="total">共计{{ this.total }}个结果</div>
     <div class="temporary" v-if="this.total == 0">
-        暂无订单
+      暂无订单
     </div>
   </div>
 </template>
 <script>
-import {mapState } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "second_dingdan",
   components: {},
   props: {},
   data() {
     return {
-      appId:window.localStorage.getItem("appId"),
-      page:1,
-      pagesize:4,
-      orderinfo:"",//订单的信息
-      products:"",//订单中的商品信息
-      total:"",
-      uid:window.sessionStorage.getItem("huiyuan_uid")
-    }
+      appId: window.localStorage.getItem("appId"),
+      page: 1,
+      pagesize: 4,
+      orderinfo: "", // 订单的信息
+      products: "", // 订单中的商品信息
+      total: "",
+      uid: window.sessionStorage.getItem("huiyuan_uid")
+    };
   },
   computed: {
-    ...mapState([
-      "huiyuanName",
-      "huiyuanId"
-      ]),
+    ...mapState(["huiyuanName", "huiyuanId"])
   },
   watch: {},
   created() {
-    this.getDingdan(this.appId,this.uid,1,5)
+    this.getDingdan(this.appId, this.uid, 1, 5);
   },
   destroyed() {},
   methods: {
-    getDingdan(appId,uId,page,pagesize){
-      this.$axios.fetchPost(
-        "/Home/Order/GetMpMemberOrder",
-        {appId:appId,uId:uId,page:page,pagesize:pagesize}
-      ).then(res=>{
-        if(res.data.code == "200"){
-          this.orderinfo = res.data.data
-          this.total = res.data.count - 0
-        }
-      })
+    getDingdan(appId, uId, page, pagesize) {
+      this.$axios
+        .fetchGet("/Home/Order/GetMpMemberOrder", {
+          appId: appId,
+          uId: uId,
+          page: page,
+          pagesize: pagesize
+        })
+        .then(res => {
+          if (res.data.code == "200") {
+            this.orderinfo = res.data.data;
+            this.total = res.data.count - 0;
+          }
+        });
     },
-    watchdetail(item){
-      window.sessionStorage.setItem("ordernumber",item.ordernumber)
-      this.$router.push({path:"/huiyuan_dingdan/second_order_detail",query:{Id:item.id}})
+    watchdetail(item) {
+      window.sessionStorage.setItem("ordernumber", item.ordernumber);
+      this.$router.push({
+        path: "/huiyuan_dingdan/second_order_detail",
+        query: { Id: item.id }
+      });
     }
   }
-}
+};
 </script>
 <style lang="stylus" scoped>
 .dingdan-container
@@ -152,16 +175,15 @@ export default {
         .order_kinds
            color #ffffff
            font-size 30px
-           line-height 40px
+           line-height 35px
            width 900px
            height 120px
-           display: -webkit-box;
-           -webkit-box-orient: vertical;
-           -webkit-line-clamp: 3;
-           overflow: hidden;
            .single_row
               display inline-block
               width 100%
+              overflow hidden
+              text-overflow ellipsis
+              white-space nowrap
            .text1
               margin-left 37px
               margin-right 20px
@@ -174,7 +196,7 @@ export default {
            width 400px
            height 110px
            overflow hidden
-           img 
+           img
             width 110px
             height 110px
             float right

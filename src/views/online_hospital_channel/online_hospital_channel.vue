@@ -1,5 +1,6 @@
 <template>
   <div class="channel-container">
+    <Headers title="频道"></Headers>
     <ul class="channel-ul">
       <li class="langer li1" @click="channelRoute('网诊')">
         <div class="icon i1"></div>
@@ -20,19 +21,21 @@
       <li
         class="langer bin-li"
         style="background:#EB942D"
-        @click="channelRoute('病虫害图库')"
+        @click="channelRoute('病虫害')"
       >
         <div class="icon bin-icon"></div>
-        <p>病虫害图库</p>
+        <p>病虫害</p>
       </li>
-      <li class="down-li" @click="channelRoute('已下载的视频')">
-        <div>
-          <div class="down-icon"></div>
-          已下载的视频
+      <li
+        class="langer"
+        style="margin-right:0;background:#016AD5;text-algin:center"
+        @click="openCode"
+      >
+        <div class="left-text" style="">
+          扫一扫<br />
+          下载益农宝
         </div>
-      </li>
-      <li class="li9" style="margin-right:0;margin-left:20px;background:#fff">
-        <el-image :src="code"></el-image>
+        <el-image :src="code" style="width:242px;height:242px"></el-image>
       </li>
 
       <!-- <li class="li2">
@@ -69,31 +72,51 @@
         <div class="icon i9">二维码</div>
       </li> -->
     </ul>
+    <SaoYinongbao
+      @changeFlaw="changeCode"
+      :codeboxFlaw="codeboxFlaw"
+    ></SaoYinongbao>
     <Nav></Nav>
   </div>
 </template>
 <script>
-// import headers from "@/components/online_hospital_header";
+import Headers from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
+import SaoYinongbao from "@/views/sao_yinongbao/sao_yinongbao";
+import { mapState } from "vuex";
+import img from "./channel_scan.png";
 export default {
   name: "online_hospital_channel",
-  components: { Nav },
+  components: { Nav, Headers, SaoYinongbao },
   props: {},
   data() {
     return {
-      code: ""
+      code: "",
+      codeboxFlaw: false
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["purview"])
+  },
   watch: {},
   mounted() {
     this.getErCode();
   },
   destroyed() {},
   methods: {
+    openCode() {
+      this.codeboxFlaw = true;
+    },
+    changeCode(boo) {
+      this.codeboxFlaw = boo;
+    },
     getErCode() {
       this.$axios.fetchPost("/Admin/Api/get_qr_code").then(res => {
         if (res.data.code == 200) {
+          if (this.purview == 1 || this.purview == 2) {
+            this.code = img;
+            return;
+          }
           this.code = res.data.data.qrcode;
         }
       });
@@ -120,9 +143,10 @@ export default {
             path: "/find"
           });
           break;
-        case "网病虫害图库":
+        case "病虫害":
           this.$router.push({
-            path: "/find"
+            path: "/find",
+            query: { from: "bingchonghai" }
           });
           break;
         case "已下载的视频":
@@ -262,4 +286,10 @@ export default {
           background-position center
       &.li9
         width 240px
+.left-text
+  text-align center
+  display inline-block
+  font-size 32px
+  color #fff
+  margin-right 26px
 </style>

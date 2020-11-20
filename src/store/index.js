@@ -32,9 +32,18 @@ export default new Vuex.Store({
     isnav: 1,
     isstore: window.sessionStorage.getItem("isstore"), // null为全国数据，1为新院数据
     huiyuanName: "", // 新院我的会员名字
-    huiyuanId: ""// 新院我的会员id
+    huiyuanId: "", // 新院我的会员id
+    lowerHospital: window.localStorage.getItem("lowerHospital"),
+    prevroute: "" // 专家列表记录上一层返回的地址
   },
   mutations: {
+    getPrevroute(state, data) { // 专家页面获取上一层返回的路由
+      state.prevroute = data;
+    },
+    setLowerHospital (state, data) {
+      state.lowerHospital = data;
+      window.localStorage.getItem("lowerHospital", data);
+    },
     setAppId(state, data) {
       state.appId = data;
       localStorage.setItem("appId", data);
@@ -87,6 +96,7 @@ export default new Vuex.Store({
       // 登陆之后的地图右边数据显示 = 点击之后的右边数据显示
       state.globalActiveName = data;
     },
+
     getGlobalFstusername(state, data) {
       // 益农通账号
       state.globalFstusername = data;

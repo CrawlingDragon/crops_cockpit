@@ -1,11 +1,6 @@
 <template>
   <div class="expert_detail-container">
-    <Header title="专家详情" :right_show_bar="false"></Header>
-    <!-- <div class="head-title">专家：{{ detail.realname }}</div> -->
-    <div @click="topre">
-      <div class="closefn"></div>
-      <div class="head-title">专家：{{ detail.realname }}</div>
-    </div>
+    <Header :title="title" :right_show_bar="false" midTitle="专家详情"></Header>
     <div class="top-nav">
       <div
         class="item"
@@ -36,11 +31,12 @@
         <p class="title" v-if="detail.position">{{ detail.position }}</p>
         <p class="goodat" v-if="detail.zuowu">擅长作物：{{ detail.zuowu }}</p>
         <div class="work-num">
-          处方（{{ chufangCount }}）：测土配方（{{
-            detail.cetucount
-          }}）、巡诊（{{ detail.wenzhencount }}）、问珍（{{
-            detail.wenzhencount
-          }}）、回答（{{ detail.answercount }}）
+          处方（{{ detail.chufangcount }}）：
+          <span v-show="isstore == 2 || isstore == 4"
+            >测土配方（{{ detail.cetucount }}）、巡诊（{{
+              detail.xunzhencount
+            }}）、坐诊（{{ detail.wenzhencount }}）、</span
+          >网诊（{{ detail.answercount }}）
         </div>
         <div class="info" v-if="detail.description">
           简介：{{ detail.description }}
@@ -48,35 +44,37 @@
       </div>
     </div>
     <div class="content2 content" v-show="content_show == 2">
-      <OnlineUl :expertId="uId"></OnlineUl>
+      <ChufangUl :expertId="uId"></ChufangUl>
     </div>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
-import OnlineUl from "@/components/online_ul/online_ul";
+import ChufangUl from "@/components/chufang_ul/chufang_ul";
 import { mapState } from "vuex";
 export default {
   name: "expert_detail",
   components: {
     Header,
-    OnlineUl
+    ChufangUl
   },
   props: {},
   data() {
     return {
       content_show: 1,
       detail: "",
-      hospitalList: []
+      hospitalList: [],
+      uId: this.$route.query.uid,
+      title: ""
     };
   },
   activated() {
     this.content_show = 1;
-    this.getJoinHospital(this.$route.query.uid);
-    this.getDetail(this.$route.query.uid);
+    // this.getJoinHospital(this.$route.query.uid);
+    // this.getDetail(this.$route.query.uid);
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "purview", "lowerHospital", "isstore"]),
     chufangCount() {
       const r =
         parseFloat(this.detail.cetucount) +
@@ -88,6 +86,8 @@ export default {
   },
   watch: {},
   mounted() {
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "专家详情";
     this.getDetail();
   },
   destroyed() {},
@@ -98,11 +98,25 @@ export default {
         .fetchPost("/Home/Expert/GetMpExpertDetail", {
           appId: this.appId,
           uId: this.uId,
-          purview: 0
+          purview: this.purview == 3 || this.purview == 4 ? 1 : 0
         })
         .then(res => {
           if (res.data.code === "200") {
             this.hospitalList = res.data.data.lists;
+          }
+        });
+    },
+    getDetail() {
+      // 获取专家的详细数据
+      this.$axios
+        .fetchPost("/Home/Expert/GetMpExpertDetail", {
+          appId: this.appId,
+          uId: this.uId
+          // purview: this.purview == 3 || this.purview == 4 ? 1 : 0
+        })
+        .then(res => {
+          if (res.data.code === "200") {
+            this.detail = res.data.data;
           }
         });
     }
@@ -127,10 +141,12 @@ export default {
         border-bottom 4px solid rgba(255, 102, 0, 1)
         color #fff
   .content
-    margin 0 40px
+    padding 0 40px
+    max-width 1900px
+    min-width 1340px
+    margin 0 auto
     @media screen and (min-width:1900px)
-      margin 0 90px
-    text-align left
+      text-align left
   .content1
     display flex
     padding-top 60px
@@ -147,6 +163,7 @@ export default {
         line-height 50px
     .right
       flex 1
+      text-align left
       .name
         font-size 40px
         color #fff

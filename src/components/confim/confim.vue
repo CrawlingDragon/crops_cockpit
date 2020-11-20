@@ -1,21 +1,24 @@
 <template>
   <transition name="fade">
-    <div
-      class="alert-wrap"
-      v-if="showFlag"
-    >
+    <div class="alert-wrap" v-if="showFlag">
       <div class="alert-box">
-        <div :class='[alertText==""? "alert-title1":"alert-title"]'>{{alertTitle}}</div>
-        <div class="alert-text">{{alertText}}</div>
+        <div :class="[alertText == '' ? 'alert-title1' : 'alert-title']">
+          {{ alertTitle }}
+        </div>
+        <div class="alert-text">{{ alertText }}</div>
         <div class="btn-wrap">
           <div
-            :class='[alertText==""? "btn btn1":"btn"]'
+            :class="[alertText == '' ? 'btn btn1' : 'btn']"
             v-on:click="makeSure"
-          >{{btnLeft}}</div>
+          >
+            {{ btnLeft }}
+          </div>
           <div
-            :class='[alertText==""? "btn btn1":"btn"]'
+            :class="[alertText == '' ? 'btn btn1' : 'btn']"
             v-on:click="makeNo"
-          >{{btnRight}}</div>
+          >
+            {{ btnRight }}
+          </div>
         </div>
       </div>
     </div>
@@ -63,10 +66,9 @@ export default {
   width 100%
   height 768px
   @media screen and (min-width:1900px) {
-    width 1920px
     height 1080px
   }
-  position absolute
+  position fixed
   left 0
   right 0
   top 0

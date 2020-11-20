@@ -1,8 +1,9 @@
 <template>
   <div class="good_detail-container">
-    <Header title="商品详情" :right_show_bar="false"></Header>
+    <Header :title="title" :right_show_bar="false" midTitle="商品详情"></Header>
     <el-container>
-      <el-aside width="320px" class="aside">
+      <div class="no_data" v-show="noData">暂无商品信息</div>
+      <el-aside width="320px" class="aside" v-show="!noData">
         <el-image
           class="goods-img"
           :src="detail.product_pic"
@@ -18,7 +19,7 @@
         </div>
         <div class="kind">类别：{{ detail.catname }}</div>
       </el-aside>
-      <el-main>
+      <el-main v-show="!noData">
         <div class="main-title">{{ detail.name }}</div>
         <div class="container" v-html="detail.content"></div>
       </el-main>
@@ -35,11 +36,13 @@ export default {
   data() {
     return {
       id: this.$route.query.id,
-      detail: ""
+      detail: "",
+      noData: false,
+      title: ""
     };
   },
   computed: {
-    ...mapState(["appId", "purView"])
+    ...mapState(["appId", "purview"])
   },
   watch: {
     $route() {
@@ -57,13 +60,18 @@ export default {
         .fetchPost("/Home/Products/GetMpProDetail", {
           appId: this.appId,
           Id: this.$route.query.id,
-          purview: this.purView == (4 || 5) ? 1 : 0
+          purview: 0
         })
         .then(res => {
           if (res.data.code == 200) {
             this.detail = res.data.data;
-          }else if(res.data.code == 300){
-            console.log("暂无商品信息")
+            this.title =
+              this.purview == 3 || this.purview == 4
+                ? res.data.data.company
+                : "商品详情";
+          } else if (res.data.code == 300) {
+            console.log("暂无商品信息");
+            this.noData = true;
           }
         });
     },
@@ -81,6 +89,7 @@ export default {
     max-width 1900px
     min-width 1340px
     padding 0 40px
+    margin 0 auto
   .aside
     .goods-img
       width 320px
@@ -125,4 +134,12 @@ export default {
       text-align left
       line-height 40px
       font-size 30px
+.no_data
+  height 500px
+  overflow auto
+  text-align center
+  line-height 500px
+  font-size 50px
+  color #fff
+  margin 0 auto
 </style>

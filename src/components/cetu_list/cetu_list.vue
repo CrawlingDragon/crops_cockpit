@@ -1,8 +1,8 @@
 <template>
   <div class="cetu_list-container">
-    <div class="title">测土配方记录 ></div>
+    <div class="title" @click="goToCetuList">测土配方记录 ></div>
     <ul class="cetu-ul">
-      <li v-for="item in list" :key="item.id">
+      <li v-for="item in list" :key="item.id" @click="goToCetuDetail(item.id)">
         <p class="p1">{{ item.title }}</p>
         <p class="p2">ID：{{ item.idnumber }}</p>
         <p class="p2">取样日期：{{ item.showtime }}</p>
@@ -15,20 +15,17 @@
         <!-- teststatus:1检测中，2检测完成，3给处方 -->
       </li>
     </ul>
+    <Empty v-show="list.length == 0">
+      <img src="./cetu_noData.png" alt="" />
+    </Empty>
   </div>
 </template>
 <script>
+import Empty from "@/components/empty/empty";
 export default {
   name: "cetu_list",
-  components: {},
-  props: {
-    list: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    }
-  },
+  components: { Empty },
+  props: ["list"],
   data() {
     return {};
   },
@@ -36,19 +33,33 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    goToCetuList() {
+      this.$router.push({
+        path: "/diagnosis/second_tu"
+      });
+    },
+    goToCetuDetail(id) {
+      this.$router.push({
+        path: "/cetu_detail",
+        query: { id: id }
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
 .cetu_list-container
   text-align left
+  height 100%
   .title
     font-size 32px
     line-height 32px
     margin-bottom 15px
     cursor pointer
+  .empty-container
+    height 473px
   .cetu-ul
-    border 2px solid #072F65
     border-left none
     border-bottom none
     li

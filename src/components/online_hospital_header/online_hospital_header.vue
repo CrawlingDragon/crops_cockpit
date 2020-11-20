@@ -1,19 +1,25 @@
 <template>
   <div class="header-container">
     <div class="head-wrap cf">
-      <div class="left-bar" @click="goBack">
-        <div class="logo" v-show="logoSrc">
-          <el-image :src="logoSrc" fit="cover" class="img"></el-image>
+      <div class="left-bar">
+        <div class="logo" v-show="logoSrc" v-if="purview == 1 || purview == 2">
+          <img src="./main_page_icon.png" alt="" class="img" />
         </div>
         <slot></slot>
-        <div class="admin-icon" v-if="purview == 3 || purview == 4">
+        <div
+          class="admin-icon"
+          v-if="purview == 3 || purview == 4"
+          v-show="!isWangzhen"
+        >
           <div class="icon-back" @click="goBack"></div>
           <div class="icon-close" @click="close"></div>
         </div>
+        <div class="goBack-icon" v-show="isWangzhen" @click="goBack"></div>
         <div
           class="goBack-icon"
-          v-show="!logoSrc"
+          v-show="!logoSrc && !isWangzhen"
           v-if="purview == 1 || purview == 2"
+          @click="goBack"
         ></div>
         <h2 class="h2">
           {{ title }}
@@ -22,9 +28,13 @@
           </span>
         </h2>
       </div>
-      <div class="mid">{{ midTitle }}</div>
+      <div class="mid" v-if="purview == 3 || purview == 4">{{ midTitle }}</div>
       <div class="right-bar" v-show="right_show_bar">
-        <div class="admin-index" @click="goToIndex" v-if="purview == (3 || 4)">
+        <div
+          class="admin-index"
+          @click="goToIndex"
+          v-if="purview == 3 || purview == 4"
+        >
           <div class="icon"></div>
           <span>驾驶舱首页</span>
         </div>
@@ -32,8 +42,8 @@
           <span class="icon"></span>
         </div>
         <div class="weather">
-          <span class="icon"><img :src="weather.picurl" alt=""/></span>
-          <span>{{ weather.todaytemperature }}</span>
+          <span class="icon"><img :src="weather.todaypicture" alt=""/></span>
+          <span>{{ weather.nowtemperature }} ℃</span>
         </div>
         <div class="time">{{ time }}</div>
         <!-- <div class="search" @click="goToSearch">
@@ -51,6 +61,10 @@ export default {
   name: "headers",
   components: {},
   props: {
+    isWangzhen: {
+      type: Boolean,
+      default: false
+    },
     title: {
       type: String,
       default: ""
@@ -70,21 +84,28 @@ export default {
     midTitle: {
       type: String,
       default: ""
+    },
+    returnPath: {
+      type: String,
+      default: ""
     }
   },
   data() {
     return {
       time: "",
       query: "",
-      weather: ""
+      weather: "",
+      closeNumer: 1,
+      src: ""
     };
   },
   computed: {
-    ...mapState(["appId", "purview"])
+    ...mapState(["appId", "purview", "curuserid"])
   },
   watch: {},
   created() {},
   mounted() {
+    this.src = "./main_page_icon.png";
     // 获取时间
     const time = new Date();
     setInterval(() => {
@@ -105,17 +126,35 @@ export default {
   destroyed() {},
   methods: {
     goBack() {
-      if (!this.logoSrc) {
+      if (this.returnPath != "") {
+        this.$router.push({
+          path: this.returnPath
+        });
+      } else {
         this.$router.go(-1);
       }
     },
     close() {
       // 关闭下级医院
+      if (this.closeNumer == 2) {
+        this.$router.push({
+          path: "/indexFour",
+          query: {
+            userid: window.sessionStorage.getItem("curuserid"),
+            areaname: window.sessionStorage.getItem("curcity"),
+            level: window.sessionStorage.getItem("curlevel"),
+            letter: window.sessionStorage.getItem("letter")
+          }
+        });
+        return;
+      }
+      this.closeNumer += 1;
+      this.$layer.msg("再按一次关闭该医院");
     },
     getWeather() {
       // 获取头部天气
       this.$axios
-        .fetchPost("/Home/Index/GetAreaWeather", { appId: this.appId })
+        .fetchGet("/Home/Index/GetAreaWeather", { appId: this.appId })
         .then(res => {
           if (res.data.code === "200") {
             this.weather = res.data.data;
@@ -127,7 +166,13 @@ export default {
     },
     goToIndex() {
       this.$router.push({
-        path: "/index"
+        path: "/indexFour",
+        query: {
+          userid: window.sessionStorage.getItem("curuserid"),
+          areaname: window.sessionStorage.getItem("curcity"),
+          level: window.sessionStorage.getItem("curlevel"),
+          letter: window.sessionStorage.getItem("letter")
+        }
       });
     },
     goToSearch() {
@@ -155,6 +200,7 @@ export default {
     max-width 1900px
     margin 0 auto
     align-items center
+    position relative
     .left-bar
       position absolute
       left 45px
@@ -167,15 +213,14 @@ export default {
         font-size 30px
         color rgba(181, 181, 181, 1)
         font-weight 400
-        cursor pointer
         color #7FB5F1
         padding-left 30px
         .title-number
           margin-left 10px
       .logo
         float left
-        width 40px
-        height 40px
+        width 65px
+        height 65px
         .img
           display block
           width 100%
@@ -183,19 +228,21 @@ export default {
       .admin-icon
         width 110px
         height 30px
-        background url('./32.png') no-repeat
         cursor pointer
         position relative
         .icon-back
-          width 50px
+          width 56px
           height 30px
           position absolute
           left 0
+          background url('./32.png') no-repeat
         .icon-close
-          width 60px
+          width 55px
           height 30px
           position absolute
           right  0
+          background url('./32.png') no-repeat
+          background-position right
       .goBack-icon
         width 30px
         height 30px
@@ -264,9 +311,13 @@ export default {
         color #7FB5F1
         .icon
           display inline-block
+          width 26px
+          height 26px
+          margin-right 8px
           img
+            width 100%
+            height 100%
             display block
-            margin-right 8px
       .time
         color #7FB5F1
         font-size: 18px;

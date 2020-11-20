@@ -1,21 +1,13 @@
 <template>
   <div class="contain">
     <div class="header">
-      <div class="close-btn" style="cursor:pointer" @click="closefn">
-        <span class="text1 jiantou">&lt;</span>
-        <span class="text1 close">所有专家</span>
-      </div>
-      <!-- <span class="text1 title">所有专家</span> -->
-      <div class="time">
-        <Date></Date>
-      </div>
+      <Headnav
+        :lefttitle="this.lefttitle"
+        :returnpath="this.returnpath"
+        @datatype="datachange"
+      ></Headnav>
     </div>
-    <a
-      class="expert_list"
-      target="_blank"
-      :href="this.outlink"
-      ref="expert_list"
-    >
+    <div class="expert_list" ref="expert_list" v-infinite-scroll="load">
       <div
         class="expert_info"
         v-for="(item, index) in expert_list"
@@ -26,81 +18,86 @@
         <span class="name">{{ item.realname }}</span>
         <div class="tag">专家</div>
         <div class="intro">
-          <div class="row1">
-            <span class="join_time">加入时间：{{ item.jointime }}</span>
-            <p class="company">{{ item.position }}</p>
-          </div>
-          <div class="row2">
-            <span class="chufang">处方({{ item.chufangcount }})</span>
-            <span class="cut_line">|</span>
-            <span class="join_hospital"
-              >加入医院({{ item.hospitalcount }})</span
-            >
-            <p class="skills" v-if="item.zuowu">擅长作物：{{ item.zuowu }}</p>
-          </div>
+          <p :class="[item.position.length == 1 ? 'company1' : 'company']">
+            {{ item.position }}
+          </p>
+          <span class="join_time">加入时间：{{ item.jointime }}</span>
+          <p class="skills" v-if="item.zuowu">擅长作物：{{ item.zuowu }}</p>
+          <span class="chufang">处方({{ item.chufangcount }})</span>
+          <span class="cut_line">|</span>
+          <span class="join_hospital">加入医院({{ item.hospitalcount }})</span>
         </div>
       </div>
-      <mugen-scroll
-        :handler="loadMore"
-        :should-handle="!loading"
-        scroll-container="expert_list"
-      >
-      </mugen-scroll>
-    </a>
+    </div>
     <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
     <div class="expert_num">共{{ this.total }}个结果</div>
     <Nodata v-if="this.total == 0"></Nodata>
   </div>
 </template>
 <script>
-import Date from "../../components/date/date";
+import Headnav from "../../components/head_nav/head_nav";
 import Nodata from "../../components/no-data/no-data";
-import MugenScroll from "vue-mugen-scroll";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
-    Date,
-    Nodata,
-    MugenScroll // 滚动条下滑加载组件
+    Headnav,
+    Nodata
   },
   data() {
     return {
       expert_list: [],
       curuserid: "", // 当前的用户ID
-      outlink: "http://wap.114nz.com/Web/Expert/detail?Id=",
       total: 0,
-      loading: false, // 加载状态
-      page: 1 // 当前页数
+      page: 1, // 当前页数
+      lefttitle: "所有专家",
+      returnpath: "/findindex"
     };
   },
+  computed: {
+    ...mapState(["prevroute"])
+  },
   created() {
-    this.$parent.app_loading = false;
     this.userid = window.sessionStorage.getItem("curuserid");
-    console.log(window.sessionStorage.getItem("isstore"));
     this.getexpert_list(this.page);
   },
+  beforeRouteEnter: (to, from, next) => {
+    console.log(from.path);
+    next(vm => {
+      if (
+        from.path == "/indexFour" ||
+        from.path == "/findindex" ||
+        from.path == "/data_analysis"
+      ) {
+        vm.returnpath = from.path;
+        vm.getPrevroute(from.path);
+      } else if (from.path == "/expert_detail_four") {
+        if (vm.prevroute == "/indexFour") {
+          vm.returnpath = "/indexFour";
+        } else if (vm.prevroute == "/data_analysis") {
+          vm.returnpath = "/data_analysis";
+        }
+      }
+    });
+  },
   methods: {
-    closefn() {
-      this.$router.go(-1);
-    },
+    ...mapMutations(["getPrevroute"]),
     godetail(item, index) {
-      this.outlink = "http://wap.114nz.com/Web/Expert/detail?Id=";
-      this.outlink = this.outlink + item.uid;
+      window.sessionStorage.setItem("expert_uid", item.uid);
+      this.$router.push({
+        path: "/expert_detail_four",
+        query: { appId: this.userid, uid: item.uid }
+      });
     },
     getexpert_list(curpage) {
       const rLoading = this.openLoading();
       this.$axios
-        .fetchPost(
-          "/Home/Expert/GetMpExpertList",
-          {
-            appId: this.userid,
-            purview: "1",
-            page: curpage,
-            isstore: window.sessionStorage.getItem("isstore")
-          }
-          // `appId=${this.userid}&purview=${"1"}&page=${curpage}&isstore=${window.sessionStorage.getItem('isstore')}`
-        )
+        .fetchPost("/Home/Expert/GetMpExpertList", {
+          appId: this.userid,
+          purview: "1",
+          page: curpage,
+          isstore: window.sessionStorage.getItem("isstore")
+        })
         .then(res => {
-          console.log(res);
           rLoading.close();
           if (res.data.code == "200") {
             this.total = res.data.maxitem;
@@ -109,18 +106,20 @@ export default {
             } else {
               this.expert_list.push(...res.data.data);
             }
-            this.loading = false;
           }
         });
     },
-    loadMore() {
+    load() {
       // 是否当前page不是最后一页
       if (this.page <= Math.ceil(this.total / 12)) {
-        // this.loading 控制滚动条滑到底部的时候是否执行加载操作
-        this.loading = true;
         // 页码+1
         this.page++;
         this.getexpert_list(this.page);
+      }
+    },
+    datachange(value) {
+      if (value) {
+        location.reload();
       }
     }
   }
@@ -128,50 +127,22 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .contain
-    width: 100%;
-    @media screen and (max-width:1340px)
-        width:1340px
-        height 768px
-    @media screen and (min-width:1341px)
-        height 1080px
+    width 100%
+    height 100%
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
-    position relative
     .header
-        position absolute
-        top 15px
         width 100%
-        .text1
-            font-size 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 26px
-            z-index 666
-        .close
-            position absolute
-            left 45px
-            z-index 666
-        .title
-            margin 0 auto
-            font-size 24px
-            color #FFFFFF
-        .time
-            position absolute
-            width 130px
-            font-size 14px
-            right  2%
-            top 2px
     .expert_list
-        position absolute
-        width 85%
-        top 63px
-        bottom 75px
-        left 50%
-        transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
-        -webkit-transform: translate(-50%, 0%);
-        height 630px
+        margin 0 auto
+        width 94%
+        margin-top 53px
+        left 3%
+        height 560px
+        @media screen and (min-width:1900px) {
+            height 741px
+            margin-top 123px
+        }
         overflow scroll
         overflow-x hidden
         scrollbar-arrow-color rgba(3, 5, 57, 1)
@@ -193,36 +164,43 @@ export default {
         &:hover::-webkit-scrollbar-track {
             background: hsla(0, 0%, 53%, 0.1);
         }
-        @media screen and (min-height:860px)
-            height 84.5%
-        @supports (-ms-ime-align: auto) and (min-height:860px)
-            height 83.5%
-        @media screen and (min-height:1080px)
-            height 87.9%
         .expert_info
             position relative
-            width 100%
-            height 154px
+            height 180px
+            width 49%
+            float left
+            margin-right 1.8%
             margin-bottom 5px
             border 2px solid rgba(255, 255, 255, 0.15)
+            &:nth-child(2n+0)
+                margin-right 0px
+            @media screen and (min-width:1900px) {
+                height 235px
+                margin-bottom 18px
+            }
             .photo
                 position absolute
-                height 150px
-                width 150px
+                height 176px
+                width 180px
                 top 0px
                 left 0px
+                @media screen and (min-width:1900px) {
+                    width 235px
+                    height 231px
+                }
             .name
-                margin-top 25px
+                margin 15px 10px auto 32%
                 font-size 30px
                 float left
-                margin-left 175px
                 font-family Source Han Sans CN
                 font-weight 400
                 color #FFFFFF
+                @media screen and (min-width:1900px) {
+                    margin 22px 18px auto 266px
+                }
             .tag
                 display inline-block
-                margin-top 24px
-                margin-left 10px
+                margin-top 15px
                 float left
                 width 60px
                 height 35px
@@ -233,54 +211,64 @@ export default {
                 font-weight 400
                 color #FFFFFF
                 line-height 35px
+                @media screen and (min-width:1900px) {
+                    margin-top 18px
+                    font-size 24px
+                    width 95px
+                    height 38px
+                    line-height 38px
+                }
             .intro
                 position absolute
-                width 1084px
-                height 55px
-                top 75px
-                left 171px
+                width 70%
+                height 54%
+                top 35%
+                left 32%
                 font-size 20px
                 font-family SimHei
-                font-weight 400
+                font-weight Regular
                 line-height 28px
-                .row1
-                    position absolute
-                    top 0
-                    left 0
+                @media screen and (min-width:1900px) {
+                    left 30%
+                    line-height 35px
+                }
+                .company
+                    width 100%
+                    float left
+                    text-align left
+                    vertical-align top
+                    overflow hidden
+                    text-overflow ellipsis
+                    white-space nowrap
                     color #808080
-                    .join_time
-                        vertical-align top
-                    .company
-                        display inline-block
-                        margin-left 52px
-                        overflow hidden
-                        text-overflow ellipsis
-                        white-space nowrap
-                .row2
-                    position absolute
-                    bottom 0px
+                .company1
+                    display none
+                .join_time
+                    width 100%
+                    float left
+                    text-align left
+                    color #808080
+                .skills
+                    width 90%
+                    float left
+                    text-align left
+                    vertical-align top
+                    overflow hidden
+                    text-overflow ellipsis
+                    white-space nowrap
                     color #FFFFFF
-                    .cut_line
-                        width 1px
-                        height 18px
-                        opacity 0.3
-                    .join_hospital
-                        margin-left 5px
-                    .skills
-                        display inline-block
-                        text-align left
-                        vertical-align top
-                        margin-left 55px
-                        overflow hidden
-                        width 800px
-                        text-overflow ellipsis
-                        white-space nowrap
+                .chufang,.cut_line,.join_hospital
+                    float left
+                    color #FFFFFF
     .expert_num
-        position absolute
-        bottom 17px
-        left 7.5%
+        position fixed
+        left 44px
+        bottom 66px
         font-size 16px
-        font-family Source Han Sans CN
-        font-weight 500
-        color #7FB5F1
+        font-family SimHei
+        font-weight Regular
+        color #B5B5B5
+        @media screen and (min-width:1900px) {
+            font-size 24px
+        }
 </style>

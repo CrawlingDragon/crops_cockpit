@@ -2,7 +2,7 @@
   <div class="channel-container">
     <headers title="频道"></headers>
     <ul class="channel-ul">
-      <li class="langer li4 video-li">
+      <li class="langer li4 video-li" @click="channelRoute('测土配方')">
         <div class="icon i4"></div>
         <p>测土配方</p>
       </li>
@@ -10,11 +10,11 @@
         <div class="icon i1"></div>
         <p>网诊</p>
       </li>
-      <li class="li2" style="margin-right:20px">
+      <li class="li2" style="margin-right:20px" @click="channelRoute('坐诊')">
         <div class="icon i2"></div>
         <p>坐诊</p>
       </li>
-      <li class="li3" style="margin-right:0">
+      <li class="li3" style="margin-right:0" @click="channelRoute('巡诊')">
         <div class="icon i3"></div>
         <p>巡诊</p>
       </li>
@@ -22,13 +22,14 @@
         <div class="icon i5"></div>
         <p>专家</p>
       </li>
-      <li class="li6 langer">
+      <li class="li6 langer" @click="channelRoute('会员')">
         <div class="icon i6"></div>
         <p>会员</p>
       </li>
       <li
         class="li9 langer"
         style="margin-right:0;margin-left:20px;background:#016AD5"
+        @click="openCode"
       >
         <div class="left-text">
           扫一扫<br />
@@ -39,7 +40,11 @@
       <li class="no-icon langer" @click="channelRoute('培训视频')">
         <p>培训视频</p>
       </li>
-      <li class="no-icon" style="margin-right:20px">
+      <li
+        class="no-icon"
+        style="margin-right:20px"
+        @click="channelRoute('农资商品')"
+      >
         <p>农资商品</p>
       </li>
       <li class="no-icon" @click="channelRoute('资讯')">
@@ -47,10 +52,10 @@
       </li>
       <li
         class="no-icon langer"
-        @click="channelRoute('病虫害图库')"
+        @click="channelRoute('病虫害')"
         style="margin-right:0"
       >
-        <p>病虫害图库</p>
+        <p>病虫害</p>
       </li>
       <!-- <li class="down-li" @click="channelRoute('已下载的视频')">
         <div>
@@ -83,40 +88,85 @@
         <div class="icon i9">二维码</div>
       </li> -->
     </ul>
+    <SaoYinongbao
+      @changeFlaw="changeCode"
+      :codeboxFlaw="codeboxFlaw"
+    ></SaoYinongbao>
     <Nav></Nav>
   </div>
 </template>
 <script>
 import Headers from "@/components/online_hospital_header/online_hospital_header";
-import Nav from "@/components/nav_list/nav_list";
+import Nav from "@/components/nav_list_second/nav_list_second";
+import SaoYinongbao from "@/views/sao_yinongbao/sao_yinongbao";
+import { mapState } from "vuex";
+import img from "./channel_scan.png";
 export default {
   name: "online_hospital_channel",
-  components: { Nav, Headers },
+  components: { Nav, Headers, SaoYinongbao },
   props: {},
   data() {
     return {
-      code: ""
+      code: "",
+      codeboxFlaw: false
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["purview"])
+  },
   watch: {},
   mounted() {
     this.getErCode();
   },
   destroyed() {},
   methods: {
+    openCode() {
+      this.codeboxFlaw = true;
+    },
+    changeCode(boo) {
+      this.codeboxFlaw = boo;
+    },
     getErCode() {
       this.$axios.fetchPost("/Admin/Api/get_qr_code").then(res => {
         if (res.data.code == 200) {
+          if (this.purview == 1 || this.purview == 2) {
+            this.code = img;
+            return;
+          }
           this.code = res.data.data.qrcode;
         }
       });
     },
     channelRoute(where) {
       switch (where) {
+        case "测土配方":
+          this.$router.push({
+            path: "/diagnosis/second_tu"
+          });
+          break;
+        case "坐诊":
+          this.$router.push({
+            path: "/diagnosis/second_zuo"
+          });
+          break;
+        case "巡诊":
+          this.$router.push({
+            path: "/diagnosis/second_xun"
+          });
+          break;
+        case "会员":
+          this.$router.push({
+            path: "/second_huiyuan_list"
+          });
+          break;
+        case "农资商品":
+          this.$router.push({
+            path: "/goods_list"
+          });
+          break;
         case "网诊":
           this.$router.push({
-            path: "/second_wang"
+            path: "/diagnosis/second_wang"
           });
           break;
         case "专家":
@@ -134,9 +184,10 @@ export default {
             path: "/find"
           });
           break;
-        case "网病虫害图库":
+        case "病虫害":
           this.$router.push({
-            path: "/find"
+            path: "/find",
+            query: { from: "bingchonghai" }
           });
           break;
         case "已下载的视频":

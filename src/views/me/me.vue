@@ -1,11 +1,17 @@
 <template>
   <div class="my-container">
-    <Header title="我的"></Header>
+    <Header :title="title" midTitle="关于"></Header>
     <div class="my-box">
       <div class="left">
         <el-image class="img" :src="data.logo" fit="cover"></el-image>
         <div class="account">账号:{{ data.acount }}</div>
-        <div class="btn1" @click="loginOut">退出登录</div>
+        <div
+          v-show="purview == 1 || purview == 2"
+          class="btn1"
+          @click="loignOutBtn"
+        >
+          退出登录
+        </div>
         <div class="btn1" v-if="false">已下载视频11</div>
       </div>
       <div class="right">
@@ -16,39 +22,65 @@
           }}</span>
         </div>
         <div class="property">医院属性：{{ data.level_name }}</div>
-        <div class="name">作物科室：{{ data.zuowu }}</div>
+        <div class="name">诊疗科室：{{ data.zuowu }}</div>
+        <div class="name">医院地址：{{ data.mpaddress }}</div>
         <div class="text">简介：{{ data.content }}</div>
+        <div v-for="item in data.pic_url" :key="item" class="item-img">
+          <el-image :src="item" class="el-img"></el-image>
+        </div>
       </div>
     </div>
-    <Nav :index="5"></Nav>
+    <Nav :index="5" v-if="isstore == 1"></Nav>
+    <!-- 网诊 -->
+    <NavSecond :index="5" v-if="isstore == 2"></NavSecond>
+    <!--诊疗 -->
+    <Confim
+      ref="confimBox"
+      @btnSure="clickSure"
+      :alertText="'注销账号' + data.name + '后，将退出驾驶舱'"
+    ></Confim>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
+import NavSecond from "@/components/nav_list_second/nav_list_second";
+import Confim from "@/components/confim/confim";
 import { mapState } from "vuex";
 export default {
   name: "me",
   components: {
     Header,
-    Nav
+    Nav,
+    NavSecond,
+    Confim
   },
   props: {},
   data() {
     return {
-      data: ""
+      data: "",
+      title: ""
     };
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "purview", "lowerHospital", "isstore"])
   },
   watch: {},
   mounted() {
     this.getData();
+    if (this.purview == 3 || this.purview == 4) {
+      this.title = this.lowerHospital;
+    } else {
+      this.title = "我的";
+    }
   },
   destroyed() {},
   methods: {
-    loginOut() {
+    loignOutBtn() {
+      // 退出登陆按钮
+      this.$refs.confimBox.showFlag = true;
+    },
+    clickSure() {
       this.$router.push({ path: "/" });
     },
     getData() {
@@ -140,4 +172,13 @@ export default {
         font-weight 400
         color rgba(181, 181, 181, 1)
         line-height 50px
+        padding-right 20px
+.item-img
+  margin 10px auto
+  display block
+  text-align center
+  .el-img
+    display inline-block
+    width auto
+    text-align center
 </style>

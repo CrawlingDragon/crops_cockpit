@@ -70,7 +70,7 @@ export default {
       }
     },
     ...mapMutations([
-      // "getDefaultProvince",
+      "getDefaultProvince",
       // "getDefaultCity",
       "getDefaultAddressArr",
       "getGlobalActiveName",
@@ -134,6 +134,9 @@ export default {
                 const areaname = res.data.data.areaname;
                 const isshaoxing = res.data.data.ishaoxing;
                 const name = res.data.data.name;
+                // store.commit('getGlobalFstusername', res.data.data.Fstusername); //获取益农通账号
+                // store.commit('getGlobalFstuserpw', res.data.data.Fstuserpw); //获取益农通密码
+                // store.commit('getGlobalFstRoomid', res.data.data.FstRoomid); //获取益农通id
                 window.sessionStorage.setItem("name", name);
                 window.sessionStorage.setItem("curcity", areaname);
                 window.sessionStorage.setItem("isshaoxing", isshaoxing); // 判断是否是绍兴市或者是绍兴市所属县级管理院
@@ -143,8 +146,8 @@ export default {
                 const defaultName = res.data.data.default;
                 const letter = res.data.data.letter;
                 window.sessionStorage.setItem("letter", letter);
-                // this.getDefaultProvince(areaname); // 获取全网页地址
-                // this.getGlobalLevel(level); // 获取全网页等级
+                this.getDefaultProvince(areaname); // 获取全网页地址
+                this.getGlobalLevel(level); // 获取全网页等级
                 // this.getDefaultCity(defaultName); // 获取二级方块地址
                 this.getSecondGlobalLevel(secondLevel); // 获取二级方块等级
                 // this.secondMapIndex(res.data.data)

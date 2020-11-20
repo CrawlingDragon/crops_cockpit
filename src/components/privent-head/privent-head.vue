@@ -105,7 +105,6 @@ export default {
     width 816px
     height 79px
     margin 28px auto
-    padding-top 17px
   }
   &:before
     content ''
@@ -144,10 +143,8 @@ export default {
     h6
       font-size 12px
       color #7FB5F1
-      margin-top 3px
+      font-weight Regular
       @media screen and (min-width:1900px) {
         font-size 16px
-        font-weight Regular
-        margin-top 5px
       }
 </style>

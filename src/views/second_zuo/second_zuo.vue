@@ -6,14 +6,21 @@
       style="overflow:auto;"
       infinite-scroll-disabled="disabled"
     >
-      <li v-for="item in list" :key="item.id" class="infinite-list-item">
+      <li
+        v-for="item in list"
+        :key="item.id"
+        class="infinite-list-item"
+        @click="goToDetail(item.id)"
+      >
         <div class="icon"></div>
         <div class="text">
-          <div class="time">{{ item.company }}·{{ item.title }}</div>
+          <div class="time">
+            {{ item.title }}
+          </div>
           <p class="p1">
             {{ item.content }}
           </p>
-          <p class="p1">{{ item.showtime }}</p>
+          <div class="p1">{{ item.showtime }}</div>
           <p class="p1">{{ item.describe }}</p>
         </div>
         <div class="answer">
@@ -78,6 +85,12 @@ export default {
             }
           });
       }, 1000);
+    },
+    goToDetail(id) {
+      this.$router.push({
+        path: "/zuozhen_detail",
+        query: { tid: id }
+      });
     }
   }
 };
@@ -89,8 +102,28 @@ export default {
   height 100%
   max-height 100%
   overflow hidden
+  padding-bottom 150px
   .wang-ul
     margin 48px 90px 0
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     & > li
       background rgba(9, 29, 67, 0.4)
       border 1px solid rgba(255, 255, 255, 0.2)
@@ -112,7 +145,6 @@ export default {
         overflow hidden
         text-overflow ellipsis
         display -webkit-box
-        -webkit-line-clamp 3
         -webkit-box-orient vertical
         .time
           font-size 36px

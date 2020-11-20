@@ -98,9 +98,6 @@
             </Box>
           </div>
         </div>
-        <!-- <div v-if="this.changemoudle =='find'">
-          <Find></Find>
-        </div> -->
       </div>
       <transition name="fade">
         <AlertTip ref="tips"></AlertTip>
@@ -184,7 +181,7 @@ export default {
       cur_cityname: window.sessionStorage.getItem("name"),
       showvideoflag: false, // 控制益农通视频点播
       curmoudle: "index", // 控制头部左侧导航样式,
-      middle_title: "新型庄稼医院管理驾驶舱" // 中部标题
+      middle_title: "新型庄稼医院管理驾驶舱" // 中部标题,
     };
   },
   methods: {
@@ -220,7 +217,8 @@ export default {
       "getNoData",
       "getBreadArr",
       "getIsnav",
-      "getIsstore"
+      "getIsstore",
+      "getSecondGlobalLevel"
     ]),
     getData(id, name, level, isClick) {
       if (isClick & (isClick != 0)) {
@@ -282,7 +280,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["isstore", "accountName"]),
+    ...mapState(["isstore", "accountName", "defaultProvince", "globalLevel"]),
     accountName() {
       return this.$store.state.accountName;
     },
@@ -306,30 +304,38 @@ export default {
       return `${this.firstQuestName}建院情况`;
     }
   },
-  // beforeRouteEnter:(to,from,next)=>{
-  //   // console.log('from',from)
-  //   // console.log('to',to)
-  //   // if(from.name == "Nexthospital"||from.name == "Expertlist"||from.path=="/hospitalsort"||from.path == "/discussscore"||from.path=="/expertranking"){
-  //   //   next(vm=>{vm.changemoudle = 'find'})
-  //   // }else if(from.path == "/defaultsort"||from.path == "/multiplesort"||from.path=="/selectsort"||from.path=="/discussscore"){
-  //   //   next(vm=>{vm.changemoudle = 'find'})
-  //   // }else if(from.path == "/"){
-  //   //   next(vm=>{vm.changemoudle = 'index'})
-  //   // }
-  // },
-  // created() {
-  //       let cur_status = window.sessionStorage.getItem("cur_status")
-  //       if(!cur_status){
-  //         this.changemoudle ="index"
-  //       }else{
-  //         this.changemoudle = window.sessionStorage.getItem("cur_status")
-  //       }
-  // },
+  beforeRouteEnter: (to, from, next) => {
+    // console.log(this);
+    if (from.path !== "/") {
+      window.sessionStorage.setItem("xxx", "xx");
+      next(vm => {
+        // 从下级医院返回的时候对城市和管理院等级进行初始化
+        // console.log("首页>>>", "路由守卫");
+        vm.getDefaultProvince(window.sessionStorage.getItem("curcity"));
+        vm.getGlobalLevel(window.sessionStorage.getItem("curlevel"));
+      });
+    } else {
+      window.sessionStorage.setItem("xxx", "yy");
+      next();
+    }
+  },
   mounted() {
-    console.log(this.isvideo);
     this.userid = this.$route.query.userid;
     this.letter = this.$route.query.letter;
     this.navList = this.$store.state.defaultAddressArr; // 导航的省市乡县列表
+    const x = window.sessionStorage.getItem("xxx");
+    if (x == "xx") {
+      this.getDefaultProvince(window.sessionStorage.getItem("curcity"));
+      this.getGlobalLevel(window.sessionStorage.getItem("curlevel"));
+      const level = window.sessionStorage.getItem("curlevel");
+      if (level >= 3) {
+        const secondLevel = level - 1;
+        this.getSecondGlobalLevel(secondLevel);
+      } else {
+        const secondLevel = level;
+        this.getSecondGlobalLevel(secondLevel);
+      }
+    }
     this.getData(this.userid, this.firstQuestName, this.firstQuestLevel, 1);
     // this.chooseHospitalRadio = this.isstore || "null";
   },
@@ -350,7 +356,6 @@ export default {
     SwiperBase,
     Date,
     Headnav
-    // Loadings
   },
   watch: {
     isstore(newVal) {
@@ -359,14 +364,10 @@ export default {
     },
     changemoudle(newVal, oldVal) {
       if (oldVal == "find") {
-        // console.log(this.userid, this.firstQuestName, this.firstQuestLevel, 1)
         this.navList = this.$store.state.defaultAddressArr;
         this.getData(this.userid, this.firstQuestName, this.firstQuestLevel, 1);
       }
     }
-  },
-  beforeDestroyed() {
-    console.log("1 :>> ", 1);
   }
 };
 </script>
@@ -490,31 +491,31 @@ bg-image($url)
       }
       &:last-child
         margin-right 0
-    .video-wrap
-      width 100%
-      height 100%
-      position absolute
-      left 0
-      right 0
-      top 0
-      bottom 0
-      background rgb(0, 0, 45)
-      z-index 11119999999
-      .close-btn
-        padding-top 15px
-        .text1
-            font-size 20px
-            color #7FB5F1
-            border-radius: 2px
-        .jiantou
-            position absolute
-            left 25px
-        .close
-            position absolute
-            left 45px
-      .liubai
-          padding-bottom 50px
-      .video
-          outline none
-          width 80%
+  .video-wrap
+    width 100%
+    height 100%
+    position absolute
+    left 0
+    right 0
+    top 0
+    bottom 0
+    background rgb(0, 0, 45)
+    z-index 11119999999
+    .close-btn
+      padding-top 15px
+      .text1
+          font-size 20px
+          color #7FB5F1
+          border-radius: 2px
+      .jiantou
+          position absolute
+          left 25px
+      .close
+          position absolute
+          left 45px
+    .liubai
+        padding-bottom 50px
+    .video
+        outline none
+        width 80%
 </style>

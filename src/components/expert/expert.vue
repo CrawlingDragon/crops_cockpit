@@ -12,13 +12,17 @@
       <p class="time">加入时间：{{ item.jointime }}</p>
       <p class="goodat">擅长作物：{{ item.zuowu }}</p>
       <div class="bottom">
-        <span style="margin-right:10px">处方（{{ item.chufangcount }}）</span
-        >加入医院（{{ item.hospitalcount }}）
+        <span style="margin-right:10px">处方（{{ item.chufangcount }}）</span>
+        <span v-show="purview == 1 || purview == 2">
+          加入医院（{{ item.hospitalcount }}）</span
+        >
       </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "expert",
   components: {},
@@ -33,7 +37,9 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    ...mapState(["purview"])
+  },
   watch: {},
   mounted() {},
   destroyed() {},

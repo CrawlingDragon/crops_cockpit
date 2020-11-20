@@ -1,17 +1,31 @@
 <template>
   <div class="second_wang-container">
+    <AdminHeader
+      v-if="purview == 3 || purview == 4"
+      :midTitle="
+        routeFrom == '/diagnosis/second_wang' ? '诊疗' : '网诊' + count
+      "
+      :title="lowerHospital"
+    ></AdminHeader>
     <Header
       title="网诊"
       :titleNumber="count"
       v-if="routeFrom != '/diagnosis/second_wang'"
+      v-show="purview == 1 || purview == 2"
     ></Header>
+
     <ul
       class="wang-ul infinite-list"
       v-infinite-scroll="load"
       style="overflow:auto;"
       infinite-scroll-disabled="disabled"
     >
-      <li v-for="item in list" :key="item.tid" class="infinite-list-item">
+      <li
+        v-for="item in list"
+        :key="item.tid"
+        class="infinite-list-item"
+        @click="goToWangDetail(item.tid)"
+      >
         <div class="icon"></div>
         <div class="text">
           <div class="time">
@@ -41,10 +55,11 @@
 <script>
 import Nav from "@/components/nav_list/nav_list";
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import AdminHeader from "@/components/admin_header/admin_header";
 import { mapState } from "vuex";
 export default {
   name: "second_wang",
-  components: { Nav, Header },
+  components: { Nav, Header, AdminHeader },
   props: {},
   data() {
     return {
@@ -57,7 +72,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview"]),
+    ...mapState(["appId", "purview", "lowerHospital"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -69,6 +84,7 @@ export default {
   destroyed() {},
   methods: {
     load() {
+      console.log("1 :>> ", 1);
       this.page += 1;
       this.loading = true;
       setTimeout(() => {
@@ -91,6 +107,12 @@ export default {
             }
           });
       }, 1000);
+    },
+    goToWangDetail(tid) {
+      this.$router.push({
+        path: "/wangzhen_detail",
+        query: { tid: tid }
+      });
     }
   }
 };
@@ -99,14 +121,30 @@ export default {
 .second_wang-container
   max-width 1900px
   margin 0 auto
-  height 100%
-  max-height 100%
-  overflow hidden
+  min-height 724px
   padding-top 100px
   .wang-ul
-    padding-bottom 155px
-    max-height 690px
-    padding 0 40px
+    padding 0 40px 155px
+    max-height 768px
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     & > li
       background rgba(9, 29, 67, 0.4)
       border 1px solid rgba(255, 255, 255, 0.2)

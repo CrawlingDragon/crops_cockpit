@@ -1,9 +1,9 @@
 <template>
   <!-- 网院首页的网诊列表 -->
   <div class="online_list-wrap">
-    <div class="title">最新网诊 ></div>
+    <div class="title" @click="goToOnlineList">最新网诊 ></div>
     <ul class="online-ul">
-      <li v-for="item in list" :key="item.tid" @click="goToDetail">
+      <li v-for="item in list" :key="item.tid" @click="goToDetail(item.tid)">
         <div class="top">
           <span class="item-title">{{ item.title }}</span>
           <span class="time">{{ item.showtime }}</span>
@@ -13,32 +13,45 @@
         </div>
       </li>
     </ul>
+    <Empty v-show="list.length == 0">
+      <img src="./online_noData.png" alt="" />
+    </Empty>
   </div>
 </template>
 <script>
+import Empty from "@/components/empty/empty";
+import { mapState } from "vuex";
 export default {
   name: "online_list",
-  components: {},
-  props: {
-    list: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    }
-  },
+  components: { Empty },
+  props: ["list"],
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    ...mapState(["isstore"])
+  },
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {
-    goToDetail() {
+    goToDetail(tid) {
       this.$router.push({
-        path: "/online_detail"
+        path: "/wangzhen_detail",
+        query: { tid: tid }
       });
+    },
+    goToOnlineList() {
+      // second_wang
+      if (this.isstore == 1) {
+        this.$router.push({
+          path: "second_wang"
+        });
+      } else {
+        this.$router.push({
+          path: "/diagnosis/second_wang"
+        });
+      }
     }
   }
 };
@@ -51,8 +64,9 @@ export default {
     margin-bottom 30px
     color #FFFDFD
     line-height 32px
+  .empty-container
+    height 473px
   .online-ul
-    border 2px solid #072F65
     border-left none
     border-bottom none
     li

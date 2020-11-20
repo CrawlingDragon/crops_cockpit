@@ -1,5 +1,8 @@
 module.exports = {
   publicPath: "./",
+  chainWebpack: config => {
+    config.output.filename("[name].[hash].js").end();
+  },
   devServer: {
     overlay: {
       warnings: false,

@@ -5,22 +5,16 @@
       class="header"
       v-if="!noDatas"
       v-show="Memberdata.length != 0"
-    >最新加入的会员</a>
-    <ul
-      class="nums"
-      v-if="!noDatas"
-      v-show="Memberdata.length != 0"
+      >最新加入的会员</a
     >
-      <li v-for="(meItem,index) in Memberdata" :key="index">
-        <div class="num">{{meItem.inputtime}}</div>
+    <ul class="nums" v-if="!noDatas" v-show="Memberdata.length != 0">
+      <li v-for="(meItem, index) in Memberdata" :key="index">
+        <div class="num">{{ meItem.inputtime }}</div>
         <div class="person-img">
-          <img
-            :src="meItem.avatar"
-            alt=""
-          >
+          <img :src="meItem.avatar" alt="" />
         </div>
-        <div class="name">{{meItem.name}}</div>
-        <div class="total-num">{{meItem.title}}</div>
+        <div class="name">{{ meItem.name }}</div>
+        <div class="total-num">{{ meItem.title }}</div>
       </li>
     </ul>
     <noData

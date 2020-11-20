@@ -1,84 +1,121 @@
 <template>
   <div class="expert_detail-container">
-    <div @click="go_huiyuan()">
-      <div class="closefn"></div>
-      <div class="head-title">会员：{{this.huiyuan_name}}</div>
-    </div>
+    <Header
+      :title="this.huiyuan_name"
+      :right_show_bar="false"
+      :returnPath="this.returnPath"
+    ></Header>
     <div class="top-nav">
-      <router-link to='/second_huiyuan_itro/huiyuan_wang' ><span  class="item" @click="content_show = 1" :class="{active:content_show == 1}">网诊</span></router-link>
-      <router-link to="/second_huiyuan_itro/huiyuan_jianjie" ><span  class="item" @click="content_show = 2" :class="{active:content_show == 2}">简介</span></router-link>
-      <router-link to="/second_huiyuan_itro/huiyuan_tu" ><span  class="item" @click="content_show = 3" :class="{active:content_show == 3}">测土配方</span></router-link>
-      <router-link to="/second_huiyuan_itro/huiyuan_dingdan" ><span class="item" @click="content_show = 4" :class="{active:content_show == 4}">订单</span></router-link>
+      <router-link to="/second_huiyuan_itro/huiyuan_wang"
+        ><span
+          class="item"
+          @click="content_show = 1"
+          :class="{ active: content_show == 1 }"
+          >网诊</span
+        ></router-link
+      >
+      <router-link to="/second_huiyuan_itro/huiyuan_jianjie"
+        ><span
+          class="item"
+          @click="content_show = 2"
+          :class="{ active: content_show == 2 }"
+          >简介</span
+        ></router-link
+      >
+      <router-link to="/second_huiyuan_itro/huiyuan_tu"
+        ><span
+          class="item"
+          @click="content_show = 3"
+          :class="{ active: content_show == 3 }"
+          >测土配方</span
+        ></router-link
+      >
+      <router-link to="/second_huiyuan_itro/huiyuan_dingdan"
+        ><span
+          class="item"
+          @click="content_show = 4"
+          :class="{ active: content_show == 4 }"
+          >订单</span
+        ></router-link
+      >
     </div>
     <div class="intro_content">
+      <keep-alive v-if="$route.meta.keepAlive">
         <router-view></router-view>
+      </keep-alive>
     </div>
   </div>
 </template>
 <script>
-import Hospital from "@/components/hospital_list_item/hospital_list_item";
+import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapMutations, mapState } from "vuex";
 export default {
-  name: "expert_detail",
   components: {
-    Hospital,
+    // Hospital,
+    Header
   },
-  props: {
-  },
+  props: {},
   data() {
     return {
-      content_show: 1,
-      huiyuan_name:"",
-      huiyuanname:window.sessionStorage.getItem("huiyuan_name")
+      content_show: 2,
+      huiyuan_name: "",
+      huiyuanname: "",
+      returnPath: "/second_huiyuan_list"
     };
   },
-  activated(){
-    this.huiyuan_name = window.sessionStorage.getItem("huiyuan_name")
-    this.content_show = 1
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => {
+      switch (from.path) {
+        case "/wangzhen_detail":
+          vm.content_show = 1;
+          break;
+        case "/cetu_detail":
+          vm.content_show = 3;
+          break;
+        case "/huiyuan_dingdan/second_order_detail":
+          vm.content_show = 4;
+          break;
+        default:
+          vm.content_show = 2;
+          break;
+      }
+    });
+  },
+  mounted() {
+    this.huiyuan_name = "会员:" + window.sessionStorage.getItem("huiyuan_name");
+    this.content_show = window.sessionStorage.getItem("content_show");
+  },
+  destroyed() {
+    window.sessionStorage.setItem("content_show", this.content_show);
   },
   computed: {
-    ...mapState([
-      "appId",
-      "huiyuanName",
-      "huiyuanId"
-      ]),
+    ...mapState(["appId", "huiyuanName", "huiyuanId"])
   },
   methods: {
-    go_huiyuan(){
-      this.$router.push({path:'/second_huiyuan_list'})
-    },
-    getDetail() {
-      // 获取专家的详细数据
-      this.$axios
-        .fetchPost("/Home/Expert/GetMpExpertDetail", {
-          appId: this.appid,
-          uId: this.uId,
-          purview: 4,
-        })
-        .then((res) => {
-          if (res.data.code === "200") {
-            this.detail = res.data.data;
-          }
-        });
-    },
     getJoinHospital() {
       // ta 加入的医院
       this.$axios
         .fetchPost("/Home/Manage/GetManageMpDataList", {
           appId: this.appid,
-          type: "expert",
+          type: "expert"
         })
-        .then((res) => {
+        .then(res => {
           if (res.data.code === "200") {
             this.hospitalList = res.data.data.lists;
           }
         });
-    },
+    }
   },
+  watch: {
+    content_show(newVal, oldVal) {
+      console.log(newVal, oldVal);
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
 .expert_detail-container
+  padding-top 100px
   .closefn
     position absolute
     width 30px
@@ -93,7 +130,7 @@ export default {
     font-size 30px
     font-weight Regular
     color #7FB5F1
-    padding 42px 0 10px 90px
+    padding 35px 0 10px 90px
     text-align left
   .top-nav
     margin 0 90px

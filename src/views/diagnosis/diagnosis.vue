@@ -1,6 +1,6 @@
 <template>
   <div class="diagnosis-container">
-    <Header title="诊疗"></Header>
+    <Header :title="title" :midTitle="midTitle"></Header>
     <div class="nav-top">
       <div
         class="item"
@@ -51,14 +51,33 @@ export default {
   data() {
     return {
       activeIndex: 1,
-      count: ""
+      count: "",
+      title: "",
+      midTitle: "诊疗"
     };
   },
   computed: {
-    ...mapState(["appId", "purview"])
+    ...mapState(["appId", "purview", "lowerHospital"])
   },
   watch: {},
   mounted() {
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "诊疗";
+    const name = this.$route.path;
+    switch (name) {
+      case "/diagnosis/second_tu":
+        this.activeIndex = 1;
+        break;
+      case "/diagnosis/second_wang":
+        this.activeIndex = 2;
+        break;
+      case "/diagnosis/second_zuo":
+        this.activeIndex = 3;
+        break;
+      case "/diagnosis/second_xun":
+        this.activeIndex = 4;
+        break;
+    }
     this.getTreamentCount();
   },
   destroyed() {},

@@ -44,12 +44,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "expertlist" */ "../views/expert-list/expert-list.vue")
   },
-  {
-    path: "/hospitalsort",
-    name: "Hospitalsort",
-    component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
-  },
+  // {
+  //   path: "/hospitalsort",
+  //   name: "Hospitalsort",
+  //   component: () =>
+  //     import(/* webpackChunkName: "hospitalsort" */ "../views/hospitalsort/hospitalsort.vue")
+  // },
   {
     path: "/nexthospital",
     name: "nexthospital",
@@ -71,7 +71,7 @@ const routes = [
       {
         path: "/hospitalsort",
         component: () =>
-          import(/* webpackChunkName: "WebForCounty" */ "../views/defaultsort/defaultsort.vue"),
+          import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
         meta: {
           keepAlive: true
         },
@@ -116,6 +116,12 @@ const routes = [
     name: "Discussscore",
     component: () =>
       import(/* webpackChunkName: "discussscore" */ "../views/discuss_score/discussscore.vue")
+  },
+  {
+    path: "/expert_detail_four",
+    name: "expert_detail_four",
+    component: () =>
+      import(/* webpackChunkName: "expert_detail_four" */ "../views/expert_detail_four/expert_detail_four.vue")
   },
   {
     path: "/indexFour",
@@ -277,6 +283,17 @@ const routes = [
     name: "video",
     component: () =>
       import(/* webpackChunkName: "video" */ "../views/video/video.vue")
+  }, {
+    path: "/data_analysis",
+    name: "data_analysis",
+    component: () =>
+      import(/* webpackChunkName: "data_analysis" */ "../views/data_analysis/data_analysis.vue")
+  },
+  {
+    path: "/answer_data_detail",
+    name: "answer_data_detail",
+    component: () =>
+      import(/* webpackChunkName: "answer_data_detail" */ "../views/answer_data_detail/answer_data_detail.vue")
   },
   {
     path: "/video_detail",
@@ -363,39 +380,44 @@ const routes = [
       import(/* webpackChunkName: "second_huiyuan_itro" */ "../views/second_huiyuan_itro/second_huiyuan_itro.vue"),
     children: [
       {
-        path: "",
-        component: () =>
-          import(
-            /* webpackChunkName: "huiyuan_wang" */ "../views/huiyuan_wang/huiyuan_wang.vue"
-          )
-      },
-      {
         path: "/second_huiyuan_itro/huiyuan_wang",
         component: () =>
           import(
             /* webpackChunkName: "huiyun_wang" */ "../views/huiyuan_wang/huiyuan_wang.vue"
-          )
+          ),
+        meta: {
+          keepAlive: true
+        }
       },
       {
         path: "/second_huiyuan_itro/huiyuan_tu",
         component: () =>
           import(
             /* webpackChunkName: "huiyuan_tu" */ "../views/huiyuan_tu/huiyuan_tu.vue"
-          )
+          ),
+        meta: {
+          keepAlive: true
+        }
       },
       {
         path: "/second_huiyuan_itro/huiyuan_jianjie",
         component: () =>
           import(
             /* webpackChunkName: "huiyuan_intro" */ "../views/huiyuan_jianjie/huiyuan_jianjie.vue"
-          )
+          ),
+        meta: {
+          keepAlive: true
+        }
       },
       {
         path: "/second_huiyuan_itro/huiyuan_dingdan",
         component: () =>
           import(
             /* webpackChunkName: "huiyuan_dingdan" */ "../views/huiyuan_dingdan/huiyuan_dingdan.vue"
-          )
+          ),
+        meta: {
+          keepAlive: true
+        }
       },
     ]
   },
@@ -434,11 +456,19 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "sao_yinongbao" */"../views/sao_yinongbao/sao_yinongbao.vue")
   },
+  {
+    path: "/binchonghai_detail",
+    component: () =>
+      import(/* webpackChunkName: "binchonghai_detail" */"../views/binchonghai_detail/binchonghai_detail.vue")
+  }
 ];
 
 const router = new VueRouter({
   routes,
-  mode: "hash"
+  mode: "hash",
+  scrollBehavior (to, from, savedPosition) {
+    return { x: 0, y: 0 }
+  }
 });
 
 export default router;

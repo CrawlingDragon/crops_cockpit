@@ -1,102 +1,146 @@
 <template>
-    <div class="contain">
-        <div class="hospitalinfo" ref="hospitalinfo"> 
-            <div @click="godetail(item)" :class='[item.isstore == 0 ? "singlehospital":"singlehospital singlehospital1"]' v-for="(item,index) in hospitalinfo" :key="index" >
-                <div class="hospitalname"><p class="hos_name">{{item.name}}</p></div>
-                <div class="expert">
-                    <span class="text1 expertnum">专家</span>
-                    <span class="text1 num1">{{item.expert}}</span>
-                </div>
-                <div class="diagnose">
-                    <span class="text1 net_diagnose">{{item.isstore == 1? "会员":"网诊"}}</span>
-                    <span class="text1 num2">{{item.isstore == 1? item.user:item.wen}}</span>
-                </div>
-                <div class="chufang">
-                    <span class="text1 yaofang" v-if="item.isstore == 1">处方</span>
-                    <span class="text1 num3" v-if="item.isstore==1">{{item.chufang}}</span>
-                </div>
-            </div>
+  <div class="contain">
+    <div class="hospitalinfo" ref="hospitalinfo">
+      <div
+        @click="godetail(item)"
+        :class="[
+          item.isstore == 0
+            ? 'singlehospital'
+            : 'singlehospital singlehospital1'
+        ]"
+        v-for="(item, index) in hospitalinfo"
+        :key="index"
+      >
+        <div class="hospitalname">
+          <p class="hos_name">{{ item.name }}</p>
         </div>
-        <div class="hospital_num">
-            共{{hospitalinfo.length}}个结果
+        <div class="expert">
+          <span class="text1 expertnum">专家</span>
+          <span class="text1 num1">{{ item.expert }}</span>
         </div>
-        <div class="temporary" v-if="this.hospitalinfo.length = 0">
-            暂无符合条件的医院
+        <div class="diagnose">
+          <span class="text1 net_diagnose">{{
+            item.isstore == 1 ? "会员" : "网诊"
+          }}</span>
+          <span class="text1 num2">{{
+            item.isstore == 1 ? item.user : item.wen
+          }}</span>
         </div>
+        <div class="chufang">
+          <span class="text1 yaofang" v-if="item.isstore == 1">处方</span>
+          <span class="text1 num3" v-if="item.isstore == 1">{{
+            item.chufang
+          }}</span>
+        </div>
+      </div>
     </div>
+    <div class="hospital_num">共{{ hospitalinfo.length }}个结果</div>
+    <div class="temporary" v-if="(this.hospitalinfo.length = 0)">
+      暂无符合条件的医院
+    </div>
+  </div>
 </template>
+
 <script>
+import { mapMutations } from "vuex";
 export default {
-    data(){
-        return{
-            hospitalinfo:[],
-            userid:"" ,
-            outlink:"",
-            isstore:window.sessionStorage.getItem('isstore')//判断是新型庄稼医院还是所有医院
-        }
-    },
-    created(){
-        // 控制路由点击字体的样式，当点击默认排序时
-        this.$parent.cur_index = 1  
-        console.log(window.sessionStorage.getItem('isstore'))
-    },
-    mounted(){
-        //计算出滚动区域的高度
-        var h = document.documentElement.clientHeight || document.body.clientHeight
-        if(h>1080||h==1080){
-            this.$refs.hospitalinfo.style.height = `${this.getheight(204,0.085)}px`
-        }else{
-            this.$refs.hospitalinfo.style.height = `${this.getheight(70,0.085)}px`
-        }
-        this.userid = window.sessionStorage.getItem('curuserid')
-        const rLoading = this.openLoading();
-        this.$axios.fetchPost(
-            "/Home/Manage/GetManageMpDataList",
-            {appId:this.userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
-        ).then(res=>{
-            if(res.data.code == "200"){
-                this.hospitalinfo = res.data.data.lists
-                rLoading.close();
-            }
-        })
-    },
-    methods:{
-         //内容高度自适应,获取滚动区域高度
-         getheight(top,bottomrate){
-             var h = document.documentElement.clientHeight || document.body.clientHeight
-             return Math.round(h-top-h*bottomrate-117)
-         },
-         godetail(item){
-            console.log(item)
-            window.open("http://wap.114nz.com/Web/Mpublic/detail?mId=" + item.appid)
-            // 跳转外部连接后获取的数据消失，需要请求一下304缓存
-            this.$axios.fetchPost(
-                "/Home/Manage/GetManageMpDataList",
-                {appId:this.userid,type:"default",ordertag:"default",storetag:window.sessionStorage.getItem('isstore'),areatag:""}
-            ).then(res=>{
-                console.log(res)
-                if(res.data.code == "200"){
-                    this.hospitalinfo = res.data.data.lists
-                }
-            })
-        }
-    },
-    watch:{
-        isstore(newVal){
-        const rLoading = this.openLoading();
-        console.log(newVal)
-        this.$axios.fetchPost(
-            "/Home/Manage/GetManageMpDataList",
-            {appId:this.userid,type:"default",ordertag:"default",storetag:newVal,areatag:""}
-            ).then(res=>{
-                if(res.data.code == "200"){
-                    this.hospitalinfo = res.data.data.lists
-                    rLoading.close();
-                }
-            })
-        }
+  data() {
+    return {
+      hospitalinfo: [],
+      userid: "",
+      outlink: "",
+      isstore: window.sessionStorage.getItem("isstore") // 判断是新型庄稼医院还是所有医院
+    };
+  },
+  created() {
+    // 控制路由点击字体的样式，当点击默认排序时
+    this.$parent.cur_index = 1;
+    console.log(window.sessionStorage.getItem("isstore"));
+  },
+  mounted() {
+    // 计算出滚动区域的高度
+    var h = document.documentElement.clientHeight || document.body.clientHeight;
+    if (h > 1080 || h == 1080) {
+      this.$refs.hospitalinfo.style.height = `${this.getheight(204, 0.085)}px`;
+    } else {
+      this.$refs.hospitalinfo.style.height = `${this.getheight(70, 0.085)}px`;
     }
-}
+    this.userid = window.sessionStorage.getItem("curuserid");
+    const rLoading = this.openLoading();
+    this.$axios
+      .fetchPost("/Home/Manage/GetManageMpDataList", {
+        appId: this.userid,
+        type: "default",
+        ordertag: "default",
+        storetag: window.sessionStorage.getItem("isstore"),
+        areatag: ""
+      })
+      .then(res => {
+        if (res.data.code == "200") {
+          this.hospitalinfo = res.data.data.lists;
+          rLoading.close();
+        }
+      });
+  },
+  methods: {
+    ...mapMutations(["setAppId"]),
+    // 内容高度自适应,获取滚动区域高度
+    getheight(top, bottomrate) {
+      var h =
+        document.documentElement.clientHeight || document.body.clientHeight;
+      return Math.round(h - top - h * bottomrate - 117);
+    },
+    godetail(item) {
+      this.setAppId(item.appid);
+      if (item.isstore == 1) {
+        this.$router.push({
+          path: "/index_second"
+        });
+      } else if (item.isstore == 0) {
+        this.$router.push({
+          path: "/index_third"
+        });
+      }
+      this.setAppId(item.appid);
+      // window.open("http://wap.114nz.com/Web/Mpublic/detail?mId=" + item.appid);
+      // 跳转外部连接后获取的数据消失，需要请求一下304缓存
+      this.$axios
+        .fetchPost("/Home/Manage/GetManageMpDataList", {
+          appId: this.userid,
+          type: "default",
+          ordertag: "default",
+          storetag: window.sessionStorage.getItem("isstore"),
+          areatag: ""
+        })
+        .then(res => {
+          // console.log(res);
+          if (res.data.code == "200") {
+            this.hospitalinfo = res.data.data.lists;
+          }
+        });
+    }
+  },
+  watch: {
+    isstore(newVal) {
+      const rLoading = this.openLoading();
+      console.log(newVal);
+      this.$axios
+        .fetchPost("/Home/Manage/GetManageMpDataList", {
+          appId: this.userid,
+          type: "default",
+          ordertag: "default",
+          storetag: newVal,
+          areatag: ""
+        })
+        .then(res => {
+          if (res.data.code == "200") {
+            this.hospitalinfo = res.data.data.lists;
+            rLoading.close();
+          }
+        });
+    }
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .contain
@@ -123,7 +167,7 @@ export default {
             @media screen and (min-width:1640px) and (max-width:1890px)
                 width 379.5px
                 height 187.5px
-            @media screen and (min-width:1900px) 
+            @media screen and (min-width:1900px)
                 width 440px
                 height 203px
                 margin-bottom 20px

@@ -6,31 +6,31 @@
         <div class="text">{{ item.title }}</div>
       </el-carousel-item>
     </el-carousel>
+    <Empty v-show="list.length == 0">
+      <img src="./2.png" alt="" />
+    </Empty>
   </div>
 </template>
 <script>
 // import Swiper from "swiper";
+import Empty from "@/components/empty/empty";
+
 export default {
   name: "swiper-box",
-  components: {},
-  props: {
-    list: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    }
-  },
+  components: { Empty },
+  props: ["list"],
   data() {
     return {
-      activeTid: 0
+      activeTid: 0,
+      id: 0
     };
   },
   computed: {},
   watch: {
     list(newVal) {
       if (newVal.length != 0) {
-        this.activeTid = this.list[0].catid;
+        this.activeCatid = this.list[0].catid;
+        this.id = this.list[0].id;
       }
     }
   },
@@ -38,12 +38,13 @@ export default {
   destroyed() {},
   methods: {
     changeItem(item, i1) {
-      this.activeTid = this.list[item].catid;
+      this.activeCatid = this.list[item].catid;
+      this.id = this.list[item].id;
     },
     goToMessageDetail() {
       this.$router.push({
         path: "/find_detail",
-        query: { tid: this.activeTid }
+        query: { catid: this.activeCatid, id: this.id, from: "ad" }
       });
     }
   }

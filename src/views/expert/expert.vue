@@ -1,6 +1,6 @@
 <template>
   <div class="expert-container">
-    <Header title="所有专家"></Header>
+    <Header :title="title" midTitle="所有专家"></Header>
     <ul
       class="expert-ul infinite-list"
       v-infinite-scroll="load"
@@ -34,17 +34,21 @@ export default {
       list: [],
       loading: false,
       noMore: false,
-      count: 0
+      count: 0,
+      title: ""
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "lowerHospital", "purview"]),
     disabled() {
       return this.loading || this.noMore;
     }
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "所有专家";
+  },
   destroyed() {},
   methods: {
     load() {
@@ -86,6 +90,25 @@ export default {
     display flex
     flex-wrap wrap
     max-height 740px
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     li
       width 50%
       padding-right 10px

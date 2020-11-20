@@ -1,19 +1,16 @@
 <template>
   <div class="jianjie">
-    <div class="head" @click="topre()">
-      <div class="closefn"></div>
-      <div class="head-title">巡诊详情</div>
-    </div>
-    <div class="title">{{ this.$route.query.title }}</div>
+    <Header :title="title" midTitle="巡诊详情" :right_show_bar="false"></Header>
+    <div class="title">{{ zl_detail.title }}</div>
     <div class="content">
-      <div class="con_left" @click="watchdetail(1)">
+      <div class="con_left" @click="watchdetail('1')">
         <div class="left_title">作物病情资料</div>
         <div class="plant_mode text1">{{ this.zl_detail.crop_pattern }}</div>
         <div class="bf_chengdu text1">{{ this.zl_detail.crop_position }}</div>
         <div class="show_time text1">{{ this.zl_detail.showtime }}</div>
         <div class="miaoshu text1">{{ this.zl_detail.content }}</div>
         <div class="pictures">
-          <span>病情图片（4）</span>
+          <span>病情图片（{{ imgLength }}）</span>
           <div class="pics">
             <img
               v-for="(item, index) in this.zl_detail.pic"
@@ -24,13 +21,13 @@
           </div>
         </div>
       </div>
-      <div class="con_right" @click="watchdetail(2)">
+      <div class="con_right" @click="watchdetail('2')">
         <div class="right_title">处方信息</div>
         <div class="huifu_info" v-if="this.zl_detail.result != ''">
-          <div v-for="(item, index) in this.zl_detail.result" :key="index">
-            <div class="huifu_person">{{ item.chufang_expert }}</div>
-            <div class="huifu_nr">{{ item.result }}</div>
-          </div>
+          <!-- // 只有网诊才是数组 -->
+          {{ zl_detail.result }}
+          <!-- <div class="huifu_person">{{ zl_detail.result }}</div> -->
+          <!-- <div class="huifu_nr">{{ zl_detail.result.result }}</div> -->
         </div>
         <div class="no_data" v-if="this.zl_detail.result == ''">
           医院暂时还没有回复
@@ -46,6 +43,7 @@
         class="yao"
         v-for="(item, index) in this.zl_detail.products"
         :key="index"
+        @click="goToDetail(item.id)"
       >
         <div class="shadow"></div>
         <img :src="item.thumb_pic" alt="" />
@@ -66,29 +64,44 @@
 </template>
 <script>
 import Detail from "../../components/zhenliao_alert/zhenliao_alert";
+import Header from "@/components/online_hospital_header/online_hospital_header";
+import { mapState } from "vuex";
+
 export default {
   data() {
     return {
-      zl_detail: "", // 诊疗详情
+      zl_detail: {}, // 诊疗详情
       replay: "", // 网诊回复信息
       appId: localStorage.getItem("appId"),
       yao_number: "", // 处方药数量
       godetail: "", // 判断是从何处打开了弹窗
-      alert_title: "" // 弹窗title
+      alert_title: "", // 弹窗title
+      title: "",
+      imgLength: 0
     };
   },
-  activated() {
-    this.getWangzhendetail(this.appId, "forum_post", this.$route.query.tid);
+  computed: {
+    ...mapState(["purview", "lowerHospital"])
+  },
+  mounted() {
+    this.getWangzhendetail(this.appId, "xunzhen", this.$route.query.tid);
     this.$refs.detail.style = "display:none";
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "巡诊详情";
   },
   components: {
-    Detail
+    Detail,
+    Header
   },
   methods: {
-    topre() {
-      this.$router.go(-1);
+    goToDetail(id) {
+      this.$router.push({
+        path: "/goods_detail",
+        query: { id: id }
+      });
     },
     watchdetail(godetails) {
+      console.log("godetails :>> ", godetails);
       this.godetail = godetails;
       this.$refs.detail.style = "display:block";
       if (godetails == 1) {
@@ -110,6 +123,8 @@ export default {
           if (res.data.code == 200) {
             console.log(res);
             this.zl_detail = res.data.data;
+            this.imgLength =
+              res.data.data.pic == "" ? 0 : res.data.data.pic.length;
             //   this.replay = res.data.answers
             if (res.data.data.products == "") {
               this.yao_number = 0;
@@ -125,26 +140,10 @@ export default {
 <style lang="stylus" scoped>
 .jianjie
   margin 0 40px
-  .head
-    position absolute
-    top 40px
-    .closefn
-      height 30px
-      width 30px
-      background url("../../assets/61.png")
-      background-size 100%
-    .head-title
-      position absolute
-      width 120px
-      top 0px
-      left 51px
-      font-size 30px
-      font-weight 400
-      color #7FB5F1
+  padding-top 100px
   .title
       font-size 34px
       text-align left
-      padding-top 166px
       margin-bottom 31px
   .content
       width 100%
@@ -193,6 +192,8 @@ export default {
               line-height 40px
               font-size 24px
               color #B5B5B5
+              height 360px
+              overflow hidden
           .no_data
               font-size 24px
               color #B5B5B5
@@ -230,6 +231,12 @@ export default {
               width 100%
               text-align left
               font-size 24px
+              display -webkit-box
+              text-overflow ellipsis
+              overflow: hidden;
+              display: -webkit-box;
+              -webkit-line-clamp: 2;
+              -webkit-box-orient: vertical;
           .shadow
               position absolute
               top 0px
@@ -245,4 +252,11 @@ export default {
               height 120px
               width 175px
               margin 75px 47px
+.miaoshu
+  display -webkit-box
+  text-overflow ellipsis
+  overflow hidden
+  display -webkit-box
+  -webkit-line-clamp 2
+  -webkit-box-orient vertical
 </style>

@@ -2,7 +2,7 @@
   <!-- 网院网诊的ul -->
   <div class="second_wang-container">
     <ul
-      class="wang-ul infinite-list"
+      class="wang-ul infinite-list scroll"
       v-infinite-scroll="load"
       style="overflow:auto;"
       infinite-scroll-disabled="disabled"
@@ -23,12 +23,7 @@ export default {
   components: {
     OnlineItem
   },
-  props: {
-    expertId: {
-      type: String,
-      default: ""
-    }
-  },
+  props: {},
   data() {
     return {
       list: [],
@@ -87,4 +82,23 @@ export default {
     padding-bottom 155px
     max-height 690px
     padding 0 40px
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
 </style>

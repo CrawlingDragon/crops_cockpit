@@ -6,6 +6,7 @@
         :class="{ active: index == 1 }"
         @click="changeRouter('频道')"
         v-show="showNav"
+        v-if="purview == 2"
       >
         <span>频道</span>
       </li>
@@ -27,6 +28,7 @@
         :class="{ active: index == 4 }"
         @click="changeRouter('发现')"
         v-show="showNav"
+        v-if="purview == 2"
       >
         <span>发现</span>
       </li>
@@ -35,12 +37,13 @@
         @click="changeRouter('我的')"
         v-show="showNav"
       >
-        <span>我的</span>
+        <span>{{ purview == 4 || purview == 3 ? "关于" : "我的" }}</span>
       </li>
     </ul>
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "nav_list",
   components: {},
@@ -58,7 +61,9 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    ...mapState(["purview"])
+  },
   watch: {},
   mounted() {},
   destroyed() {},

@@ -38,7 +38,7 @@
       </div>
       <div class="ul-wrap">
         <ul class="r-ul">
-          <li v-for="item in 8" :key="item">
+          <li v-for="item in 8" :key="item" @click="goToDetail(item.id)">
             <el-image fit="cover" class="img"></el-image>
           </li>
         </ul>
@@ -69,6 +69,12 @@ export default {
   },
   destroyed() {},
   methods: {
+    goToDetail(id) {
+      this.$router.push({
+        path: "/goods_detail",
+        query: { id: id }
+      });
+    },
     getDetailData() {
       // 获取配方详情
       this.$axios

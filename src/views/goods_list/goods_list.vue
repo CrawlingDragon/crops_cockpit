@@ -1,6 +1,6 @@
 <template>
   <div class="goods_list_container">
-    <Header title="农资商品" style="display:none"></Header>
+    <Header title="农资商品"></Header>
     <div class="nav-bar">
       <div
         class="item"
@@ -183,6 +183,7 @@ export default {
   .nav-bar
     max-width 1900px
     min-width 1340px
+    margin: 0 auto;
     margin-bottom 60px
     text-align center
     & > .item
@@ -204,6 +205,25 @@ export default {
     max-height 570px
     padding-top 5px
     min-height 300px
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     & > li
       margin-right 30px
       width 270px

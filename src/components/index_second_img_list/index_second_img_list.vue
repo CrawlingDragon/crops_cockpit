@@ -1,46 +1,37 @@
 <template>
   <div class="index_second_img_list">
     <ul>
-      <li>
-        <img :src="expert.avatar" alt="" />
-        <div class="tip"><span>专家</span></div>
-        <div class="text-bar">{{ expert.realname }}</div>
+      <li @click="goToExpert(expert.uid)">
+        <img v-if="expert" :src="expert.avatar" alt="" />
+        <div class="tip" v-if="expert"><span>专家</span></div>
+        <div v-if="expert" class="text-bar">{{ expert.realname }}</div>
+        <Empty v-if="!expert">
+          <img src="./noData.png" alt="" />
+        </Empty>
       </li>
-      <li>
-        <img :src="video.thumb" alt="" />
-        <div class="tip"><span>培训视频</span></div>
+      <li @click="goToVideoDetail(video.catid, video.id)">
+        <img :src="video.thumb" alt="" v-if="video" />
+        <div class="tip" v-if="video"><span>培训视频</span></div>
+        <Empty v-if="!video">
+          <img src="./noData.png" alt="" />
+        </Empty>
       </li>
-      <li>
-        <img :src="goods.thumb" alt="" />
-        <div class="tip"><span>NEW</span></div>
+      <li @click="goToGoodsDetail(goods.id)">
+        <img v-if="goods" :src="goods.thumb" alt="" />
+        <div class="tip" v-if="goods"><span>NEW</span></div>
+        <Empty v-if="!goods">
+          <img src="./noData.png" alt="" />
+        </Empty>
       </li>
     </ul>
   </div>
 </template>
 <script>
+import Empty from "@/components/empty/empty";
 export default {
   name: "index_second_img_list",
-  components: {},
-  props: {
-    expert: {
-      type: Object,
-      default: function() {
-        return {};
-      }
-    },
-    video: {
-      type: Object,
-      default: function() {
-        return {};
-      }
-    },
-    goods: {
-      type: Object,
-      default: function() {
-        return {};
-      }
-    }
-  },
+  components: { Empty },
+  props: ["expert", "video", "goods"],
   data() {
     return {};
   },
@@ -48,7 +39,26 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    goToExpert(uid) {
+      this.$router.push({
+        path: "expert_detail",
+        query: { uid: uid }
+      });
+    },
+    goToVideoDetail(catid, id) {
+      this.$router.push({
+        path: "video_detail",
+        query: { catid: catid, id: id }
+      });
+    },
+    goToGoodsDetail(id) {
+      this.$router.push({
+        path: "goods_detail",
+        query: { id: id }
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="find_detail-container">
-    <Header title="资讯详情"></Header>
+    <Header title="资讯详情" :isWangzhen="true"></Header>
     <div
       class="left-bar"
       @click="goToOther('prev')"
@@ -18,7 +18,7 @@
       <div class="btn-p">下篇</div>
     </div>
     <div class="container">
-      <div class="h2">{{ detail.title }} 字法”</div>
+      <div class="h2">{{ detail.title }}</div>
       <div class="small-title">
         <span class="time" v-if="detail.copyfrom">{{ detail.copyfrom }}</span>
         {{ detail.inputtime }}
@@ -29,19 +29,33 @@
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import { mapState } from "vuex";
 export default {
   name: "find_detail",
   components: { Header },
   props: {},
   data() {
     return {
+      title: "",
       detail: "",
       catId: this.$route.query.catid, // 分类id
-      Id: this.$route.query.id // 新闻id
+      Id: this.$route.query.id, // 新闻id
+      from: this.$route.query.from
     };
   },
-  computed: {},
-  watch: {},
+  computed: {
+    ...mapState(["appId"])
+  },
+  watch: {
+    catId() {
+      this.from = this.$route.query.from;
+      this.getDetail();
+    },
+    Id() {
+      this.from = this.$route.query.from;
+      this.getDetail();
+    }
+  },
   mounted() {
     this.getDetail();
   },
@@ -51,33 +65,31 @@ export default {
       this.$axios
         .fetchPost("/Home/News/GetPushMessageDetail", {
           catId: this.catId,
-          Id: this.Id
+          Id: this.Id,
+          appId: this.from == "ad" ? this.appId : ""
         })
         .then(res => {
           if (res.data.code == 200) {
             this.detail = res.data.data;
+            this.title = res.data.data.title;
           }
         });
     },
     goToOther(other) {
       if (other == "prev") {
-        if (!this.detail.previous_page) return;
-        this.$router.push({
-          path: "find_detail",
-          query: {
-            catid: this.detail.previous_page.catid,
-            id: this.detail.previous_page.id
-          }
-        });
-      } else if (other == "nexr") {
-        if (!this.detail.next_page) return;
-        this.$router.push({
-          path: "find_detail",
-          query: {
-            catid: this.detail.next_page.catid,
-            id: this.detail.next_page.id
-          }
-        });
+        if (!this.detail.previous_page) {
+          this.$layer.msg("已是第一篇");
+          return;
+        }
+        this.catId = this.detail.previous_page.catid;
+        this.Id = this.detail.previous_page.id;
+      } else if (other == "next") {
+        if (!this.detail.next_page) {
+          this.$layer.msg("已是最后一篇");
+          return;
+        }
+        this.catId = this.detail.next_page.catid;
+        this.Id = this.detail.next_page.id;
       }
     }
   }
@@ -91,27 +103,30 @@ export default {
   padding 100px 125px 100px
   position relative
   .left-bar
-    position absolute
+    position fixed
     left 40px
-    top 300px
+    top 40%
     cursor pointer
     .icon
       width 50px
       height 100px
       margin-bottom 20px
-      background url('./20.png') no-repeat
+      background url('./21.png') no-repeat
+      transform:rotate(180deg);
     .btn-p
       color #808596
       font-size 30px
     &.disabled
       .icon
         background url('./20.png') no-repeat
+        transform:rotate(0);
+        cursor default
       .btn-p
         color #2F3C5D
   .right-bar
-    position absolute
+    position fixed
     right 40px
-    top 300px
+    top 40%
     cursor pointer
     .icon
       width 50px
@@ -123,12 +138,12 @@ export default {
       font-size 30px
     &.disabled
       .icon
-        background url('./21.png') no-repeat
+        background url('./20.png') no-repeat
+        transform:rotate(180deg);
       .btn-p
         color #2F3C5D
   .container
     position relative
-
     .h2
       font-size: 50px;
       color: #FFFFFF;
@@ -142,6 +157,21 @@ export default {
       .time
         margin-right 20px
     .text
-      img
+      font-size 30px !important
+      line-height 1.2
+      text-align left
+      background none !important
+      /deep/span
+        font-size 30px !important
+        line-height 1.2
+        background none !important
+      /deep/p
+        font-size 30px !important
+        line-height 1.2
+        background none !important
+      /deep/img
         max-width 100%
+        text-align center
+        display block
+        margin 0 auto
 </style>

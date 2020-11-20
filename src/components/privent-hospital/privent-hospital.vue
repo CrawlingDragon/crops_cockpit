@@ -35,7 +35,8 @@ export default {
       cityNameCom: "",
       pieArray: [], // pie的数据
       count: {}, // 庄稼医院，会员，专家等数量
-      secondPieList: [] // 第二个pie的数据
+      secondPieList: [], // 第二个pie的数据
+      loginId: window.sessionStorage.getItem("LoginId") // 登陆时，保存地图参数id
     };
   },
   props: {
@@ -59,7 +60,7 @@ export default {
       "isstore"
     ]),
     showComponent() {
-      const id = this.$store.state.loginId;
+      const id = this.loginId;
       if (id == 2) {
         return false;
       } else {
@@ -73,8 +74,7 @@ export default {
     },
     // 获取当前导航的位置，判断是否取本级地区的数据,如果是从余杭区看 不包括市区在余杭区的数据
     navareaname() {
-      return this.$store.state.breadArr[this.$store.state.breadArr.length - 1]
-        .name;
+      return this.$store.state.breadArr[this.$store.state.breadArr.length - 1].name;
     },
     cityName() {
       const level = this.$store.state.globalLevel;
@@ -128,18 +128,24 @@ export default {
     secondLevel() {
       // 二级请求的地址等级
       return this.$store.state.secondGlobalLevel;
-    },
-    loginId() {
-      return this.$store.state.loginId;
     }
   },
   mounted() {
-    this.getMapData(
-      this.secondName,
-      this.secondLevel,
-      this.loginId,
-      this.isnav
-    );
+    if (this.loginId - 0 == 2) {
+      this.getMapData(
+        this.navareaname,
+        this.secondLevel,
+        this.loginId,
+        this.isnav
+      );
+    } else {
+      this.getMapData(
+        this.secondName,
+        this.secondLevel,
+        this.loginId,
+        this.isnav
+      );
+    }
   },
   methods: {
     ...mapMutations([
@@ -196,17 +202,25 @@ export default {
       // 点击地图，更新中间区域数据
       // this.getMapData(midObj.name, midObj.level, this.loginId, this.isnav);
       this.getDefaultCity(midObj.name);
-      // console.log("text :");
     }
   },
   watch: {
     secondName() {
-      this.getMapData(
-        this.secondName,
-        this.secondLevel,
-        this.loginId,
-        this.isnav
-      );
+      if (this.loginId - 0 == 2) {
+        this.getMapData(
+          this.navareaname,
+          this.secondLevel,
+          this.loginId,
+          this.isnav
+        );
+      } else {
+        this.getMapData(
+          this.secondName,
+          this.secondLevel,
+          this.loginId,
+          this.isnav
+        );
+      }
     },
     bviousName(newVal) {
       if (newVal == null) return;

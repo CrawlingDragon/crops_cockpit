@@ -1,33 +1,30 @@
 <template>
   <div class="map-wrap">
-    <div
-      id="mapId"
-    ></div>
-    <div
-      class="showMapData"
-      ref="mapData"
-    >
-      <span>{{cityName}}</span> ｜ <span
+    <div id="mapId"></div>
+    <div class="showMapData" ref="mapData">
+      <span>{{ cityName }}</span> ｜
+      <span
         class="number"
         @click="lookSecondDetail"
-        :class="{'none':cityVal}"
-      >{{cityVal == 0 ? '暂无医院':'详情>'}}</span>
+        :class="{ none: cityVal }"
+        >{{ cityVal == 0 ? "暂无医院" : "详情>" }}</span
+      >
     </div>
   </div>
 </template>
 <script>
-let echarts = require("echarts/lib/echarts");
+import { mapMutations, mapState } from "vuex";
+const echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/pie");
 require("echarts/lib/chart/map");
 require("echarts/lib/component/tooltip");
-import { mapMutations, mapState } from "vuex";
 export default {
   name: "maps",
   data() {
     return {
       pieIndex: 0,
-      cityName: "", //城市名称
-      cityVal: "", //城市对应的数据
+      cityName: "", // 城市名称
+      cityVal: "", // 城市对应的数据
       obj: {}
     };
   },
@@ -46,11 +43,11 @@ export default {
   methods: {
     ...mapMutations(["changeBaseCity", "getIsnav"]),
     initMap(name) {
-      let that = this;
+      const that = this;
       // 注册可用的地图
-      let mapEcharts = echarts.init(document.getElementById("mapId"));
+      const mapEcharts = echarts.init(document.getElementById("mapId"));
       this.$axios
-        .fetchPost("/Home/NationwideDatav/getJosnArea", {areaname:name})
+        .fetchPost("/Home/NationwideDatav/getJosnArea", { areaname: name })
         .then(res => {
           echarts.registerMap(name, res.data);
           mapEcharts.setOption(
@@ -60,7 +57,7 @@ export default {
                 // formatter: "{b}:{c}所"
                 formatter: function(name) {
                   // return "";
-                  let val = isNaN(name.data.value) ? 0 : name.data.value;
+                  const val = isNaN(name.data.value) ? 0 : name.data.value;
                   // if(isNaN(name.data.value)){
 
                   // }
@@ -107,8 +104,8 @@ export default {
 
           mapEcharts.off("click");
           mapEcharts.on("click", function(params) {
-            let x = params.event.offsetX;
-            let y = params.event.offsetY;
+            const x = params.event.offsetX;
+            const y = params.event.offsetY;
             that.$refs.mapData.style.left = x + "px";
             that.$refs.mapData.style.top = y + "px";
             that.$refs.mapData.style.display = "block";
@@ -144,14 +141,14 @@ export default {
               };
             }
 
-            //点击地图，更新中间区域内容
+            // 点击地图，更新中间区域内容
             that.$emit("getMidData", midObj);
           });
         });
     },
     lookSecondDetail() {
       if (this.cityVal != 0) {
-        //点击地图查看详情，全网页数据更新
+        // 点击地图查看详情，全网页数据更新
         this.$emit("upCity", this.obj);
       }
     }
@@ -163,7 +160,7 @@ export default {
   //   }
   // },
   mounted() {
-    //用一个中心bus事件吧
+    // 用一个中心bus事件吧
     this.initMap(this.name);
   },
   // beforeDestroy(){
@@ -183,7 +180,7 @@ export default {
     },
     mapsArray() {
       // 给地图的数组
-      let arr = [];
+      const arr = [];
       this.mapData.forEach((item, index) => {
         if (this.pieIndex == index) {
           arr.push({

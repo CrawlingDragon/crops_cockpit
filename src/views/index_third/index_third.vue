@@ -1,6 +1,14 @@
 <template>
   <div class="index_third-container">
-    <Header :title="headerTitle" :logoSrc="logoSrc"></Header>
+    <Header
+      :title="headerTitle"
+      :logoSrc="logoSrc"
+      v-show="purview == 1 || purview == 2"
+    ></Header>
+    <AdminHeader
+      v-if="purview == 3 || purview == 4"
+      :title="headerTitle"
+    ></AdminHeader>
     <div class="container-box">
       <div class="left-bar">
         <div class="item item1" @click="goToOnline">
@@ -26,7 +34,6 @@
       </div>
       <div class="right-bar">
         <Online :list="answerlist"></Online>
-        <!-- <Empty></Empty> -->
       </div>
     </div>
     <Nav :index="2"></Nav>
@@ -38,11 +45,11 @@ import Nav from "@/components/nav_list/nav_list";
 import SwiperBox from "@/components/swiper_box/swiper_box";
 import Expert from "@/components/expert_ranking_list/expert_ranking_list";
 import Online from "@/components/online_list/online_list";
-import { mapState } from "vuex";
-import Empty from "@/components/empty/empty";
+import AdminHeader from "@/components/admin_header/admin_header";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "index_third",
-  components: { Nav, SwiperBox, Expert, Online, Empty, Header },
+  components: { Nav, SwiperBox, Expert, Online, Header, AdminHeader },
   props: {},
   data() {
     return {
@@ -54,7 +61,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "purview"])
   },
   watch: {},
   mounted() {
@@ -62,6 +69,7 @@ export default {
   },
   destroyed() {},
   methods: {
+    ...mapMutations(["getIsstore", "setLowerHospital"]),
     getHospitalIndexData() {
       // 获取首页数据
       this.$axios
@@ -75,6 +83,8 @@ export default {
             this.answerlist = data.answerlists;
             this.headerTitle = data.title;
             this.logoSrc = data.logo;
+            this.getIsstore(data.purview);
+            this.setLowerHospital(data.title);
           }
         });
     },

@@ -18,7 +18,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   font-family MicrosoftYaHei
   text-align: center;
-  min-width: 1908px;
+  min-width: 1340px
   color: #fff;
   margin: 0 auto;
   width: 100%

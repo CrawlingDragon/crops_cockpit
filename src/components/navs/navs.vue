@@ -179,15 +179,13 @@ export default {
       showFlag: "",
       clickAdress: "", // 选中一级的地址，用于展现二级地址是什么，从一级数组里匹配
       hoverItem: "",
-      // breadArr: [], //面包屑导航 ?
       secondDefaultCity: this.$store.state.defaultCity,
       secondDlevel: this.$store.state.secondGlobalLevel,
       threeClickAddress: "",
       breadAds: {}, // 面包屑地址 ?
-      // breadArray: this.breadArr //面包屑导航
       arrs: this.PercentArray,
       thressRootArr: [], // 用来放三级县级地址的跟属性
-      safeThressAddress: "", // 用来暂时保存 匹配县级地址的地址
+      safeThressAddress: "杭州市", // 用来暂时保存 匹配县级地址的地址
       LoginId: window.sessionStorage.getItem("LoginId"), // 登陆时，保存地图参数id
       picAddress: "", // 记录当前登录账号管理院的位置信息
       default_threeCity: "" // 获取默认的城市下属的默认县级城市
@@ -218,8 +216,8 @@ export default {
     const level = this.$store.state.globalLevel;
     // let bread = this.$store.state.accountName;
     const ads = this.$store.state.defaultProvince;
-    // this.activeoBviousArr();
-    if (this.loginId <= 3) {
+    if (this.LoginId - 0 <= 3) {
+      // 当时省级以下的管理院登录的时候 用来判断获取默认市区的县级地址
       this.safeThressAddress = this.defaultProvince;
     }
   },
@@ -232,7 +230,6 @@ export default {
       "breadArr", // 面包屑导航数组
       "defaultCity", // 方块二级请求地址
       "bviousName", // 县级名字
-      // "picAddress",
       "appId"
     ]),
     computedBreadArray() {
@@ -246,10 +243,6 @@ export default {
       });
       return arr;
     },
-    // getLoginId() {
-    //   // 反复刷新切换路由以后消失
-    //   return window.sessionStorage.getItem("LoginId");
-    // },
     provincial() {
       // 反复刷新切换路由以后消失
       return this.$store.state.defaultAddressArr;
@@ -308,10 +301,8 @@ export default {
       //   });
       // }
       this.provincial.forEach(item => {
-        console.log(item.name);
         if (item.name == this.secondCityComputed) {
           arr = item.city;
-          console.log(item.name);
         }
       });
       return arr;
@@ -359,7 +350,7 @@ export default {
         });
         return arr;
       }
-      if (globalLevel == 2 && this.loginId != 2) {
+      if (globalLevel == 2 && this.LoginId != 2) {
         this.activeCityArr.forEach(item => {
           if (item.name == this.safeThressAddress) {
             arr = item.city;
@@ -367,7 +358,7 @@ export default {
         });
         return arr;
       }
-      if (window.sessionStorage.getItem == 2) {
+      if (this.LoginId == 2) {
         this.activeCityArr.forEach(item => {
           if (item.name == this.picAddress.city) {
             arr = item.city;
@@ -391,18 +382,22 @@ export default {
       "getDefaultAddressArr"
     ]),
     getDaohangList() {
-      console.log(this.$store.state.appId);
+      this.openLoading();
       this.$axios
-        .fetchPost("/Home/Login/UserNav", { appId: this.$store.state.appId })
+        .fetchPost("/Home/Login/UserNav", {
+          appId: window.sessionStorage.curuserid
+        })
         .then(res => {
           if (res.data.code == "200") {
-            // console.log(res)
+            this.openLoading().close();
             const areaname = res.data.data.areaname;
             const arr = res.data.data.area; // 获取默认导航列表
+            var nav = res.data.data.nav;
             this.getDefaultAddressArr(arr); // 获取默认导航列表
             this.getDefaultProvince(areaname); // 获取全网页地址
             this.getBreadArr(res.data.data.nav);
             // console.log(res.data.data.nav)
+            this.getGlobalLevel(res.data.data.nav[nav.length - 1].level);
             this.getDefaultCity(res.data.data.default); // 获取二级方块地址
             this.default_threeCity = res.data.data.default;
             if (window.sessionStorage.getItem("curlevel") - 0 <= 3) {
@@ -462,7 +457,7 @@ export default {
       dindex
     ) {
       // 点击面包屑导航
-      if (this.loginId < 3) {
+      if (this.LoginId < 3) {
         isclick = 0;
         this.getDatas(name, id, level, letter, isclick, dname, dlevel, dindex);
         return false;
@@ -509,14 +504,12 @@ export default {
         // 点击县级地址的导航
         // 不发送地图
         // 不发送dname，dlevel,dindex
-        // console.log(name, id, level, letter, isclick, dname, dlevel, dindex);
-        // console.log("level :", level);
         letter = null;
         dindex = null;
-        // this.getDefaultProvince(name); //请求一级地址
-        // this.getGlobalLevel(level); //请求二级地址
-        // this.getDefaultCity(dname); //请求二级地址
-        // this.getSecondGlobalLevel(dlevel);
+        this.getDefaultProvince(name); // 请求一级地址
+        this.getGlobalLevel(level); // 请求二级地址
+        this.getDefaultCity(dname); // 请求二级地址
+        this.getSecondGlobalLevel(dlevel);
         this.getBviousName(name);
         this.getBviousLevel(level);
         const obj = { id, name, level, letter, isClick };
@@ -549,7 +542,14 @@ export default {
       }
     }
   },
-  watch: {}
+  watch: {
+    globalLevel(newVal, oldVal) {
+      if (this.LoginId - 0 <= 3) {
+        // 当时省级以下的管理院登录的时候 用来判断获取默认市区的县级地址
+        this.safeThressAddress = this.picAddress.city;
+      }
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

@@ -1,94 +1,106 @@
 <template>
-    <div class="contain">
-        <div class="header">
-            <Headnav
-            :lefttitle = this.lefttitle
-            :returnpath = this.returnpath
-            @datatype="datachange"
-            ></Headnav>
-        </div>
-        <div class="expert_list" ref="expert_list"  v-infinite-scroll="load">
-            <div class="expert_info" v-for="(item,index) in expert_list" :key="index" @click="godetail(item,index)">
-                <img class="photo" v-lazy="item.avatar"  alt="图片好像不见了" >
-                <span class="name">{{item.realname}}</span>
-                <div class="tag">专家</div>
-                <div class="intro">
-                    <p :class='[item.position.length == 1? "company1":"company"]'>{{item.position}}</p>
-                    <span class="join_time">加入时间：{{item.jointime}}</span>
-                    <p class="skills" v-if="item.zuowu">擅长作物：{{item.zuowu}}</p>
-                    <span class="chufang">处方({{item.chufangcount}})</span>
-                    <span class="cut_line">|</span>
-                    <span class="join_hospital">加入医院({{item.hospitalcount}})</span>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
-        <div class="expert_num">
-            共{{this.total}}个结果
-        </div>
-        <Nodata v-if="this.total == 0"></Nodata>
+  <div class="contain">
+    <div class="header">
+      <Headnav
+        :lefttitle="this.lefttitle"
+        :returnpath="this.returnpath"
+        @datatype="datachange"
+      ></Headnav>
     </div>
+    <div class="expert_list" ref="expert_list" v-infinite-scroll="load">
+      <div
+        class="expert_info"
+        v-for="(item, index) in expert_list"
+        :key="index"
+        @click="godetail(item, index)"
+      >
+        <img class="photo" v-lazy="item.avatar" alt="图片好像不见了" />
+        <span class="name">{{ item.realname }}</span>
+        <div class="tag">专家</div>
+        <div class="intro">
+          <p :class="[item.position.length == 1 ? 'company1' : 'company']">
+            {{ item.position }}
+          </p>
+          <span class="join_time">加入时间：{{ item.jointime }}</span>
+          <p class="skills" v-if="item.zuowu">擅长作物：{{ item.zuowu }}</p>
+          <span class="chufang">处方({{ item.chufangcount }})</span>
+          <span class="cut_line">|</span>
+          <span class="join_hospital">加入医院({{ item.hospitalcount }})</span>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
+    <div class="expert_num">共{{ this.total }}个结果</div>
+    <Nodata v-if="this.total == 0"></Nodata>
+  </div>
 </template>
 <script>
-import Headnav from "../../components/head_nav/head_nav"
-import Nodata from "../../components/no-data/no-data"
+import Headnav from "../../components/head_nav/head_nav";
+import Nodata from "../../components/no-data/no-data";
 export default {
-    components:{
-        Headnav,
-        Nodata,
+  components: {
+    Headnav,
+    Nodata
+  },
+  data() {
+    return {
+      expert_list: [],
+      curuserid: "", // 当前的用户ID
+      total: 0,
+      page: 1, // 当前页数
+      lefttitle: "所有专家",
+      returnpath: "/findindex"
+    };
+  },
+  created() {
+    this.userid = window.sessionStorage.getItem("curuserid");
+    this.getexpert_list(this.page);
+  },
+  methods: {
+    godetail(item, index) {
+      window.sessionStorage.setItem("expert_uid", item.uid);
+      this.$router.push({
+        path: "/expert_detail",
+        query: { appId: this.userid, uid: item.uid }
+      });
     },
-    data(){
-        return{
-            expert_list:[],
-            curuserid:"" ,//当前的用户ID
-            total:0,
-            page: 1, // 当前页数
-            lefttitle:'所有专家',
-            returnpath:"/findindex"
-        }
-    },
-    created(){
-        this.userid = window.sessionStorage.getItem('curuserid')
-        this.getexpert_list(this.page)
-    },
-    methods:{
-        godetail(item,index){
-            window.sessionStorage.setItem("expert_uid",item.uid)
-            this.$router.push({path:'/expert_detail',query:{appId:this.userid,uid:item.uid}})
-        },
-        getexpert_list(curpage){
-            const rLoading = this.openLoading();
-            this.$axios.fetchPost(
-                "/Home/Expert/GetMpExpertList",
-                {appId:this.userid,purview:"1",page:curpage,isstore:window.sessionStorage.getItem('isstore')}
-            ).then(res=>{
-                rLoading.close()
-                if(res.data.code == "200"){
-                    this.total = res.data.maxitem
-                    if(this.page == 1){
-                        this.expert_list = res.data.data
-                    }else{
-                        this.expert_list.push(...res.data.data)
-                    } 
-                }
-            })
-        },
-        load() {
-            console.log("触发了")
-            // 是否当前page不是最后一页
-            if (this.page <= Math.ceil(this.total/12)) {
-                // 页码+1
-                this.page++;
-                this.getexpert_list(this.page)
+    getexpert_list(curpage) {
+      const rLoading = this.openLoading();
+      this.$axios
+        .fetchPost("/Home/Expert/GetMpExpertList", {
+          appId: this.userid,
+          purview: "1",
+          page: curpage,
+          isstore: window.sessionStorage.getItem("isstore")
+        })
+        .then(res => {
+          rLoading.close();
+          if (res.data.code == "200") {
+            this.total = res.data.maxitem;
+            if (this.page == 1) {
+              this.expert_list = res.data.data;
+            } else {
+              this.expert_list.push(...res.data.data);
             }
-        },
-        datachange(value){
-            if(value){
-                location.reload()
-            }
-        }
+          }
+        });
+    },
+    load() {
+      console.log("触发了");
+      // 是否当前page不是最后一页
+      if (this.page <= Math.ceil(this.total / 12)) {
+        // 页码+1
+        this.page++;
+        this.getexpert_list(this.page);
+      }
+    },
+    datachange(value) {
+      if (value) {
+        location.reload();
+      }
     }
-}
+  }
+};
 </script>
 <style lang="stylus" scoped>
 .contain
@@ -236,5 +248,4 @@ export default {
         @media screen and (min-width:1900px) {
             font-size 24px
         }
-    
 </style>

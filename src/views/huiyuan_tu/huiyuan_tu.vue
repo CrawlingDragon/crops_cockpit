@@ -1,6 +1,6 @@
 <template>
   <div class="tu-container">
-    <ul class="tu-ul">
+    <ul class="tu-ul" v-infinite-scroll="load" infinite-scroll-distance="15px">
       <li v-for="(item,index) in cetulist " :key="index" @click="godetail(item)">
         <div class="icon"></div>
         <div class="text">
@@ -12,7 +12,7 @@
           <p class="p3">{{item.showtime}}</p>
         </div>
         <div class="test-status">
-          <div  :class='[item.status == 1?"icon icon-ing":item.status==2?"icon icon-success":"icon icon-way"]'></div>
+          <div  :class='[item.status == 1?"icon icon-ing":item.status==2?"icon icon-way":"icon icon-success"]'></div>
           <p>{{item.status == 1?"检测中":item.status==2?"检测完成":"已给处方"}}</p>
         </div>
       </li>
@@ -26,13 +26,9 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 export default {
-  name: "huiyuan_tu",
-  components: {},
-  props: {},
   data() {
     return {
       page:1,//当前页数，
-      appId:window.localStorage.getItem("appId"),
       cetulist:"",//测土配方列表
       pagesize:"",//每页显示的数据
       status:"",
@@ -40,29 +36,38 @@ export default {
     }
   },
   computed: {
-    ...mapState(["huiyuanId"]),
+    ...mapState(["huiyuanId","appId"]),
   },
-  watch: {},
-  created(){
-  this.getcetuinfo(this.appId,this.page,this.$store.state.huiyuanId)
+  mounted(){
+    this.getcetuinfo(this.appId,this.page,window.sessionStorage.getItem("huiyuan_id"))
   },
-  mounted() {},
-  destroyed() {},
   methods: {
     getcetuinfo(appId,page,Id){
       this.$axios.fetchPost(
         "/Home/Treatment/GetTestingsoilList",
-        {appId:appId,page:page,textstatus:"",Id:Id}
+        {appId:appId,page:page,textstatus:"",Id:Id,purview:1}
       ).then(res=>{
         if(res.data.code == "200"){
-            this.cetulist = res.data.data
             this.total = res.data.count
+             if(this.page == 1){
+              this.cetulist = res.data.data
+            }else{
+              this.cetulist.push(...res.data.data)
+            }
         }
       })
     },
     godetail(item){
       console.log(item)
       this.$router.push({path:"/cetu_detail",query:{id:item.id,title:item.title,address:item.address}})
+    },
+    load() {
+          // 是否当前page不是最后一页
+      if (this.page < Math.ceil(this.total/12)) {
+          // 页码+1
+          this.page++;
+          this.getcetuinfo(this.appId,this.page,window.sessionStorage.getItem("huiyuan_id"))
+      }
     }
   }
 }
@@ -73,7 +78,6 @@ export default {
   .tu-ul
     margin 0px auto
     height 429px
-    overflow scroll
     @media screen and (min-width:1900px) {
       height 741px
     }

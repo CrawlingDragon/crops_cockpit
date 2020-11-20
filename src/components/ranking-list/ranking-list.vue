@@ -1,30 +1,20 @@
 <template>
   <div class="treat-person">
-    <a
-      :href="baseUrl+'UserCenter/DataV/getExpertlist.html?areaname='+name+'&level='+level+'&isstore='+isstore"
+    <router-link
+      :to="{ path: '/expertlist' }"
       class="header"
-      target="_blank"
       v-if="!noDatas"
       v-show="afterExpphdata.length != 0"
-    >专家排行榜<span>&gt;</span></a>
-    <ul
-      class="nums"
-      v-if="!noDatas"
-      v-show="afterExpphdata.length != 0"
+      >专家排行榜<span>&gt;</span></router-link
     >
-      <li v-for="(item,index) in afterExpph" :key="index">
-        <div
-          class="num"
-          :style={color:item.color}
-        >{{index+1}}</div>
+    <ul class="nums" v-if="!noDatas" v-show="afterExpphdata.length != 0">
+      <li v-for="(item, index) in afterExpph" :key="index">
+        <div class="num" :style="{ color: item.color }">{{ index + 1 }}</div>
         <div class="person-img">
-          <img
-            :src="item.avatar"
-            alt=""
-          >
+          <img :src="item.avatar" alt="" />
         </div>
-        <div class="name">{{item.name}}</div>
-        <div class="total-num">{{item.posts}}</div>
+        <div class="name">{{ item.name }}</div>
+        <div class="total-num">{{ item.posts }}</div>
       </li>
     </ul>
     <noData
@@ -34,9 +24,9 @@
   </div>
 </template>
 <script>
-const colorArr = ["#FA4647", "#F79D1D", "#F79D1D", "#0963B1", "#0963B1"];
 import noData from "../no-data/no-data";
 import { mapState } from "vuex";
+const colorArr = ["#FA4647", "#F79D1D", "#F79D1D", "#0963B1", "#0963B1"];
 export default {
   name: "ranking-list",
   data() {
@@ -106,7 +96,7 @@ export default {
       height 50px
       font-size 24px
       font-weight Regular
-      font-family Microsoft YaHei 
+      font-family Microsoft YaHei
     }
     &>span
       line-height 40px
@@ -147,7 +137,7 @@ export default {
           margin-right 54px
           font-szie 22px
           font-weight Bold
-          font-family MicrosoftYaHei-Bold 
+          font-family MicrosoftYaHei-Bold
         }
       .person-img
         display inline-block

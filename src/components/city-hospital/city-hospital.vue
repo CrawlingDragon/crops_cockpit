@@ -3,82 +3,70 @@
     <div class="pie-wrap">
       <ChartPie
         name="city"
-        :pieData=CurMp
+        :pieData="CurMp"
         v-show="CurMp.length != 0"
-        :wh='wh'
+        :wh="wh"
       ></ChartPie>
       <noData v-if="noDatas || CurMp.length == 0"></noData>
     </div>
     <ul class="city-name-ul clearfix">
-      <li v-for="(item,index) in pieLiArr">
-        <span
-          class="square"
-          :style="{background:colorArr[index]}"
-        ></span>
-        <p class="name">{{item}}</p>
+      <li v-for="(item, index) in pieLiArr" :key="index">
+        <span class="square" :style="{ background: colorArr[index] }"></span>
+        <p class="name">{{ item }}</p>
       </li>
     </ul>
-    <div
-      class="city-context"
-      v-if="countObj"
-    >
-      <div
-        class="title"
-        v-show="countObj"
-      >{{countObj.name}}</div>
-      <ul
-        class="city-num-ul clearfix"
-        v-show="countObj.level != 0"
-      >
+    <div class="city-context" v-if="countObj">
+      <div class="title" v-show="countObj">{{ countObj.name }}</div>
+      <ul class="city-num-ul clearfix" v-show="countObj.level != 0">
         <li>
-          <p class="num">{{countObj.count.Usercount}}
-          </p>
+          <p class="num">{{ countObj.count.Usercount }}</p>
           <p class="text">会员</p>
         </li>
         <li>
-          <p class="num">{{countObj.count.Expertcount}}
-          </p>
+          <p class="num">{{ countObj.count.Expertcount }}</p>
           <p class="text">专家</p>
         </li>
         <li>
-          <p class="num">{{countObj.count.Servicecount}}
-          </p>
+          <p class="num">{{ countObj.count.Servicecount }}</p>
           <p class="text">服务面积</p>
         </li>
         <li>
-          <p class="num">{{countObj.count.Questioncount}}
-          </p>
+          <p class="num">{{ countObj.count.Questioncount }}</p>
           <p class="text">诊疗</p>
         </li>
         <li>
-          <p class="num">{{countObj.count.Recipecount}}
-          </p>
+          <p class="num">{{ countObj.count.Recipecount }}</p>
           <p class="text">测土配方</p>
         </li>
       </ul>
       <div
         class="text-box"
         v-show="countObj.level == 0"
-        :class="{w:countObj.pic}"
+        :class="{ w: countObj.pic }"
       >
-        {{countObj.introduce}}
+        {{ countObj.introduce }}
       </div>
       <img
         :src="countObj.pic"
         class="text-box-img"
         v-show="countObj.level == 0 && countObj.pic"
-      >
+      />
       <a
-        :href="'http://wap.114nz.com/Web/Mpublic/detail.html?mId='+countObj.linkid"
+        :href="
+          'http://wap.114nz.com/Web/Mpublic/detail.html?mId=' + countObj.linkid
+        "
         target="_blank"
         v-show="countObj.level == 0"
         class="getMore"
-      >更多 ></a>
+        >更多 ></a
+      >
     </div>
   </div>
 </template>
 <script>
-let colors = [
+import ChartPie from "../chart-pie/chart-pie";
+import noData from "../no-data/no-data";
+const colors = [
   "#F79D1c",
   "#F7Db1c",
   "#b7de32",
@@ -88,10 +76,12 @@ let colors = [
   "#3287de",
   "#9b32de",
   "#dc32de",
-  "#cf6d25"
+  "#cf6d25",
+  "#e24440",
+  "#27aeb6",
+  "#b59bff",
+  "#66941e"
 ];
-import ChartPie from "../chart-pie/chart-pie";
-import noData from "../no-data/no-data";
 // import { setTimeout } from "timers";
 export default {
   name: "city-hospital",
@@ -148,7 +138,7 @@ export default {
 
     pieLiArr() {
       let result = [];
-      let arr = this.pieLi.concat([]);
+      const arr = this.pieLi.concat([]);
       if (this.pieLi.length > 15) {
         result = arr.splice(0, 14);
         result.push("其他");
@@ -173,13 +163,13 @@ export default {
       if (!this.CurMp) {
         return;
       }
-      //数组内 value 不等于0的数量
-      let length = this.CurMp.filter(item => item.value !== 0).length;
-      //length = 4
+      // 数组内 value 不等于0的数量
+      const length = this.CurMp.filter(item => item.value !== 0).length;
+      // length = 4
       // 数组内 value 等于0的数量
-      let len = this.pieLi.length - length;
-      //数组内等于0的数量
-      let newArr = [];
+      const len = this.pieLi.length - length;
+      // 数组内等于0的数量
+      const newArr = [];
       for (let i = 0; i < len; i++) {
         newArr.push("#7FB5F1");
       }
@@ -189,15 +179,15 @@ export default {
       this.colorArr = arr;
     }
   },
-  created(){
-    console.log()
-    var w = document.documentElement.clientWidth || document.body.clientWidth
-    if(w>1900||w==1900){
-      this.wh = 'width:350px;height:247px'
+  created() {
+    console.log();
+    var w = document.documentElement.clientWidth || document.body.clientWidth;
+    if (w > 1900 || w == 1900) {
+      this.wh = "width:350px;height:247px";
     }
   },
   mounted() {
-    let that = this;
+    const that = this;
     setInterval(function() {
       that.pieIndex++;
       if (that.pieIndex >= that.list.length) {
@@ -210,13 +200,13 @@ export default {
     CurMp(newVal) {
       console.log("colorArr");
       let arr = colors.concat([]);
-      //数组内 value 不等于0的数量
-      let length = newVal.filter(item => item.value !== 0).length;
-      //length = 4
+      // 数组内 value 不等于0的数量
+      const length = newVal.filter(item => item.value !== 0).length;
+      // length = 4
       // 数组内 value 等于0的数量
-      let len = this.pieLi.length - length;
-      //数组内等于0的数量
-      let newArr = [];
+      const len = this.pieLi.length - length;
+      // 数组内等于0的数量
+      const newArr = [];
       for (let i = 0; i < len; i++) {
         newArr.push("#7FB5F1");
       }
