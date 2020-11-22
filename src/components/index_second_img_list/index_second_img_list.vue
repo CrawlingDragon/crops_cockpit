@@ -1,7 +1,7 @@
 <template>
   <div class="index_second_img_list">
     <ul>
-      <li @click="goToExpert(expert.uid)">
+      <li @click="goToExpert()">
         <img v-if="expert" :src="expert.avatar" alt="" />
         <div class="tip" v-if="expert"><span>专家</span></div>
         <div v-if="expert" class="text-bar">{{ expert.realname }}</div>
@@ -40,10 +40,14 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
-    goToExpert(uid) {
+    goToExpert() {
+      if (this.expert == undefined) {
+        this.$layer.msg("暂无专家");
+        return;
+      }
       this.$router.push({
         path: "expert_detail",
-        query: { uid: uid }
+        query: { uid: this.expert.uid }
       });
     },
     goToVideoDetail(catid, id) {
@@ -53,6 +57,10 @@ export default {
       });
     },
     goToGoodsDetail(id) {
+      if (this.goods == "") {
+        this.$layer.msg("暂无商品");
+        return;
+      }
       this.$router.push({
         path: "goods_detail",
         query: { id: id }

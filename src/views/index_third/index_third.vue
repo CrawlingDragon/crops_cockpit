@@ -69,7 +69,7 @@ export default {
   },
   destroyed() {},
   methods: {
-    ...mapMutations(["getIsstore", "setLowerHospital"]),
+    ...mapMutations(["setHospitalIsstore", "setLowerHospital"]),
     getHospitalIndexData() {
       // 获取首页数据
       this.$axios
@@ -83,7 +83,7 @@ export default {
             this.answerlist = data.answerlists;
             this.headerTitle = data.title;
             this.logoSrc = data.logo;
-            this.getIsstore(data.purview);
+            this.setHospitalIsstore(data.purview);
             this.setLowerHospital(data.title);
           }
         });

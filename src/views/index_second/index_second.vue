@@ -102,7 +102,7 @@ export default {
   },
   destroyed() {},
   methods: {
-    ...mapMutations(["getIsstore", "setLowerHospital"]),
+    ...mapMutations(["setHospitalIsstore", "setLowerHospital"]),
     getIndexData() {
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", {
@@ -122,13 +122,17 @@ export default {
             this.recommend_expert = data.recommend_expert[0];
             this.recommend_video = data.recommend_video;
             this.recommend_product = data.recommend_product;
-            this.getIsstore(data.purview);
+            this.setHospitalIsstore(data.purview);
             this.setLowerHospital(data.title);
           }
         });
     },
     goToExpertPaihang() {
       // 专家排行榜
+      if (this.rank_experts.length == 0) {
+        this.$layer.msg("暂无排行榜");
+        return;
+      }
       this.$router.push({
         path: "/expert_paihang"
       });
@@ -139,6 +143,10 @@ export default {
       });
     },
     goToNewVip() {
+      if (this.new_users.length == 0) {
+        this.$layer.msg("暂无会员");
+        return;
+      }
       this.$router.push({
         path: "/second_huiyuan_list",
         query: { from: "newJoin" }

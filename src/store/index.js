@@ -34,9 +34,15 @@ export default new Vuex.Store({
     huiyuanName: "", // 新院我的会员名字
     huiyuanId: "", // 新院我的会员id
     lowerHospital: window.localStorage.getItem("lowerHospital"),
-    prevroute: "" // 专家列表记录上一层返回的地址
+    prevroute: "", // 专家列表记录上一层返回的地址
+    hospitalIsstore:window.localStorage.getItem('hospitalIsstore')
   },
   mutations: {
+    setHospitalIsstore (state, data) {
+      //用于设置医院的isstore 属性，是否是网院还是新院
+      state.hospitalIsstore = data
+      window.localStorage.setItem('hospitalIsstore',data)
+     },
     getPrevroute(state, data) { // 专家页面获取上一层返回的路由
       state.prevroute = data;
     },

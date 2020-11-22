@@ -30,9 +30,9 @@
         </div>
       </div>
     </div>
-    <Nav :index="5" v-if="isstore == 1"></Nav>
+    <Nav :index="5" v-if="hospitalIsstore == 1"></Nav>
     <!-- 网诊 -->
-    <NavSecond :index="5" v-if="isstore == 2"></NavSecond>
+    <NavSecond :index="5" v-if="hospitalIsstore == 2"></NavSecond>
     <!--诊疗 -->
     <Confim
       ref="confimBox"
@@ -63,7 +63,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isstore"])
+    ...mapState(["appId", "purview", "lowerHospital", "hospitalIsstore"])
   },
   watch: {},
   mounted() {

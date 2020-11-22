@@ -67,7 +67,21 @@
         </div>
       </li>
       <p v-if="loading">加载中...</p>
-      <p v-if="noMore">没有更多了</p>
+      <p v-if="noMore && noData == false">没有更多了</p>
+      <div class="noData" v-show="chooseItem == '' && noData">
+        暂无测土配方
+      </div>
+      <div class="noData" v-show="chooseItem == '1' && noData">
+        <p class="p1">暂无测土配方</p>
+        <p class="p1">请先使用新型庄稼医院管理平台录入测土配方记录</p>
+      </div>
+      <div class="noData" v-show="chooseItem == '2' && noData">
+        <p class="p1">暂无测土配方</p>
+        <p class="p1">请先使用新型庄稼医院管理平台录入测土配方记录</p>
+      </div>
+      <div class="noData" v-show="chooseItem == '3' && noData">
+        暂无测土配方
+      </div>
     </ul>
   </div>
 </template>
@@ -83,7 +97,8 @@ export default {
       list: [],
       page: 0,
       loading: false,
-      noMore: false
+      noMore: false,
+      noData: false
     };
   },
   computed: {
@@ -107,6 +122,7 @@ export default {
     load() {
       this.page += 1;
       this.loading = true;
+      this.noData = false;
       setTimeout(() => {
         this.$axios
           .fetchGet("/Home/Treatment/GetTestingsoilList", {
@@ -121,6 +137,9 @@ export default {
               this.loading = false;
               if (res.data.data.length == 0) {
                 this.noMore = true;
+                if (this.page == 1) {
+                  this.noData = true;
+                }
               }
             } else {
               this.noMore = true;
@@ -265,4 +284,7 @@ export default {
           font-size 36px
           display inline-block
           vertical-align middle
+    .noData
+      font-size 26px
+      color #7fb5f1
 </style>

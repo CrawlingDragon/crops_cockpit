@@ -32,7 +32,7 @@
         <p class="goodat" v-if="detail.zuowu">擅长作物：{{ detail.zuowu }}</p>
         <div class="work-num">
           处方（{{ detail.chufangcount }}）：
-          <span v-show="isstore == 2 || isstore == 4"
+          <span v-show="hospitalIsstore == 2 || hospitalIsstore == 4"
             >测土配方（{{ detail.cetucount }}）、巡诊（{{
               detail.xunzhencount
             }}）、坐诊（{{ detail.wenzhencount }}）、</span
@@ -74,7 +74,7 @@ export default {
     // this.getDetail(this.$route.query.uid);
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isstore"]),
+    ...mapState(["appId", "purview", "lowerHospital", "hospitalIsstore"]),
     chufangCount() {
       const r =
         parseFloat(this.detail.cetucount) +
