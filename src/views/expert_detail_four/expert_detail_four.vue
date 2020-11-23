@@ -100,7 +100,6 @@ export default {
           purview: 1
         })
         .then(res => {
-          console.log(res);
           if (res.data.code === "200") {
             this.hospitalList = res.data.data.lists;
           }
@@ -119,7 +118,6 @@ export default {
         })
         .then(res => {
           if (res.data.code === "200") {
-            console.log(res);
             this.detail = res.data.data;
           }
         });
