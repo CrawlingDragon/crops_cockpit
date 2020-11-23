@@ -102,7 +102,6 @@ export default {
                 {appId:this.userid,areaname:this.curcity,level:this.curlevel,isstore:window.sessionStorage.getItem('isstore')})
             .then(res2=>{
                 if(res2.data.code == "200"){
-                    console.log(res2)
                     this.wenzhen = res2.data.data.wenzhen
                     this.user = res2.data.data.user
                     this.cetu = res2.data.data.cetu
@@ -116,7 +115,6 @@ export default {
                 {appId:this.userid,isstore:window.sessionStorage.getItem('isstore')})
         .then(res1=>{
              if(res1.data.code == "200"){
-                 console.log(res1)
                 this.chartxianshi = res1.data.data.chart.length
                 this.chartdata = res1.data.data.chart
                 this.chartxianshi = res1.data.data.chart.length

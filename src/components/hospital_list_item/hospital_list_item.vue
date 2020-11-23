@@ -109,13 +109,14 @@ export default {
     .title
       font-size 28px
       text-align left
+      margin-bottom 10px
       @media screen and (min-width:1900px)
+        margin-bottom 27px
         font-size 34px
       overflow hidden
       text-overflow ellipsis
       white-space nowrap
       line-height 1.2
-      margin-bottom 27px
     .num-item
       display inline-block
       width 33.33%

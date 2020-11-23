@@ -221,12 +221,6 @@ export default {
       this.$emit("datatype", num);
     },
     ...mapMutations(["getNoData", "getIsstore"])
-  },
-  watch: {
-    chooseHospitalRadio(newVal, oldVal) {
-      console.log(newVal);
-      // this.$emit("datatype",newVal)
-    }
   }
 };
 </script>

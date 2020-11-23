@@ -161,7 +161,6 @@ export default {
       // console.log("obj :", obj);
       // 改变vuex的二级地址，触发二级地址的watch，在本page
       this.$emit("clickMapForData", obj);
-      console.log(obj.childName);
       this.getDefaultCity(obj.childName);
       this.getIsnav(1);
       this.getSecondGlobalLevel(obj.childLevel);

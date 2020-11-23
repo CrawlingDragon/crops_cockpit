@@ -87,7 +87,7 @@ export default {
   name: "city-hospital",
   data() {
     return {
-      wh: "width:390px;height:166px",
+      wh: "width:390px;height:166px;top:20px",
       pieIndex: 1,
       colorArr: []
     };
@@ -183,7 +183,7 @@ export default {
     console.log();
     var w = document.documentElement.clientWidth || document.body.clientWidth;
     if (w > 1900 || w == 1900) {
-      this.wh = "width:350px;height:247px";
+      this.wh = "width:360px;height:247px;left:35px";
     }
   },
   mounted() {
@@ -236,10 +236,11 @@ export default {
   margin-left 46px
   margin-top 12px
   font-size 0
-  height 125px
+  height 115px
   overflow hidden
   @media screen and (min-width:1900px){
     width 370px
+    height 125px
   }
   & > li
     float left

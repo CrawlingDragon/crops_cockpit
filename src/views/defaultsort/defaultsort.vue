@@ -55,7 +55,6 @@ export default {
   created() {
     // 控制路由点击字体的样式，当点击默认排序时
     this.$parent.cur_index = 1;
-    console.log(window.sessionStorage.getItem("isstore"));
   },
   mounted() {
     // 计算出滚动区域的高度
