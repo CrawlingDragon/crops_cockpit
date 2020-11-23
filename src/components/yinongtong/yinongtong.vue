@@ -42,13 +42,13 @@ export default {
   },
   computed: {
     yName() {
-      return this.$store.state.globalFstusername;
+      return window.localStorage.getItem("globalFstusername");
     },
     yPassword() {
-      return this.$store.state.globalFstuserpw;
+      return window.localStorage.getItem("globalFstuserpw");
     },
     yRoomId() {
-      return this.$store.state.globalFstRoomid;
+      return window.localStorage.getItem("globalFstRoomid");
     }
   },
   methods: {

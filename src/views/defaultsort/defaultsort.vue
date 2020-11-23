@@ -89,6 +89,14 @@ export default {
         document.documentElement.clientHeight || document.body.clientHeight;
       return Math.round(h - top - h * bottomrate - 117);
     },
+    // open() {
+    //   this.$alert('因业务原因村级庄稼医院暂时不能从驾驶舱中查看', '打开失败', {
+    //     confirmButtonText: '知道了',
+    //     center: true,
+    //     callback: action => {
+    //     }
+    //   });
+    // },
     godetail(item) {
       this.setAppId(item.appid);
       if (item.isstore == 1) {
@@ -100,6 +108,11 @@ export default {
           path: "/index_third"
         });
       }
+    //   if(item.istown == 0){
+       
+    //   }else{
+    //     this.open()
+    //   }
     }
   },
   watch: {
