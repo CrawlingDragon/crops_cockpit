@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       cur_index: 2,
-      lefttitle: "下级医院"
+      lefttitle: "下级医院",
     };
   },
   created() {
@@ -119,4 +119,11 @@ export default {
         @media screen and (max-width:1899px) {
             padding-top 75px
         }
+    .alert_bc
+      height 100%
+      width 100%
+      background rgba(0,0,45,0.6)
+      z-index 98
+      position fixed
+      top 0px
 </style>

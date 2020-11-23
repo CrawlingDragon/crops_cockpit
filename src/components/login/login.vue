@@ -108,6 +108,7 @@ export default {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
               this.getPurview(purview);
+              // test 
               this.setAppId(appid);
               if (purview == 1) {
                 this.$router.push({

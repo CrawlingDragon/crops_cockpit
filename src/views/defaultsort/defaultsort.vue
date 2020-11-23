@@ -100,23 +100,6 @@ export default {
           path: "/index_third"
         });
       }
-      this.setAppId(item.appid);
-      // window.open("http://wap.114nz.com/Web/Mpublic/detail?mId=" + item.appid);
-      // 跳转外部连接后获取的数据消失，需要请求一下304缓存
-      this.$axios
-        .fetchPost("/Home/Manage/GetManageMpDataList", {
-          appId: this.userid,
-          type: "default",
-          ordertag: "default",
-          storetag: window.sessionStorage.getItem("isstore"),
-          areatag: ""
-        })
-        .then(res => {
-          // console.log(res);
-          if (res.data.code == "200") {
-            this.hospitalinfo = res.data.data.lists;
-          }
-        });
     }
   },
   watch: {

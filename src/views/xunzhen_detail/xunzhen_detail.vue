@@ -21,7 +21,7 @@
           </div>
         </div>
       </div>
-      <div class="con_right" @click="watchdetail('2')">
+      <div class="con_right" @click="watchdetail(4)">
         <div class="right_title">处方信息</div>
         <div class="huifu_info" v-if="this.zl_detail.result != ''">
           <!-- // 只有网诊才是数组 -->
@@ -107,7 +107,7 @@ export default {
       if (godetails == 1) {
         this.alert_title = "作物病情资料";
       }
-      if (godetails == 2) {
+      if (godetails == 4) {
         this.alert_title = "处方信息";
       }
     },

@@ -49,7 +49,7 @@ export default {
   },
   data() {
     return {
-      purview: 0,
+      // purview: 0,
       uid: window.sessionStorage.getItem("expert_uid"), //专家的uid
       hospitalList: ""
     };
@@ -60,19 +60,19 @@ export default {
   destroyed() {},
   methods: {
     ...mapMutations(["setAppId"]),
-    getHospitalType(appId) {
-      // 获取医院的类型
-      this.$axios
-        .fetchPost("/Home/Index/GetIndexMpData", { appId: appId })
-        .then(res => {
-          if (res.data.code == 200) {
-            this.purview = res.data.data.purview;
-          }
-        });
-    },
+    // getHospitalType(appId) {
+    //   // 获取医院的类型
+    //   this.$axios
+    //     .fetchPost("/Home/Index/GetIndexMpData", { appId: appId })
+    //     .then(res => {
+    //       if (res.data.code == 200) {
+    //         this.purview = res.data.data.purview;
+    //       }
+    //     });
+    // },
     goToHospitalIndex(appid, isstore) {
       this.setAppId(appid);
-      if (isstore == 2) {
+      if (isstore == 1) {
         this.$router.push({
           path: "/index_second",
           query: { appId: appid }
@@ -102,13 +102,13 @@ export default {
       margin-right 19px
     color #fff
     font-family SimHei
-    padding 30px 5px 30px 31px
+    padding 30px 31px 30px 31px
     margin-bottom 27px
     &:nth-child(4n)
       margin-right 0
     .title
       font-size 28px
-      text-align left
+      text-align center
       margin-bottom 10px
       @media screen and (min-width:1900px)
         margin-bottom 27px
@@ -126,12 +126,10 @@ export default {
         font-size 20px
         color #CDCDCD
         @media screen and (min-width:1900px)
-          font-size 26px
-        text-align left
+          font-size 28px
+        text-align center
       .p1
         margin-bottom 5px
-      .p2
-        padding-left 5px
   .singlehospital1
     background  rgba(1, 217, 173, 0.5)
 </style>
