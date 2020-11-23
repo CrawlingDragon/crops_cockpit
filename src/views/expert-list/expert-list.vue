@@ -61,7 +61,6 @@ export default {
     this.getexpert_list(this.page);
   },
   beforeRouteEnter: (to, from, next) => {
-    console.log(from.path);
     next(vm => {
       if (
         from.path == "/indexFour" ||

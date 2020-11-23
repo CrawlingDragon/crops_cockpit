@@ -104,7 +104,6 @@ export default {
             password: password
           })
           .then(res => {
-            console.log(res);
             if (res.data.code == 200) {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;

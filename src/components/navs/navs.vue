@@ -279,6 +279,8 @@ export default {
       let arr = [];
       if (this.clickAdress == "全国") {
         this.clickAdress = "浙江省";
+        //从其他省份点击回来的时候 直接点击县级地址会造成县级地区消失，此时需要指定为杭州市
+        this.safeThressAddress = "杭州市"
       }
       this.provincial.forEach(item => {
         if (item.name == this.clickAdress) {
@@ -400,8 +402,16 @@ export default {
             this.getGlobalLevel(res.data.data.nav[nav.length - 1].level);
             this.getDefaultCity(res.data.data.default); // 获取二级方块地址
             this.default_threeCity = res.data.data.default;
-            if (window.sessionStorage.getItem("curlevel") - 0 <= 3) {
+            var cur_level = window.sessionStorage.getItem("curlevel")
+            if ( cur_level- 0 <= 3) {
               this.picAddress = res.data.data.address;
+            }
+            //点击切换选择仅新型庄稼医院 或者全部医院的时候二级请求等级需要重置
+            if(cur_level>=3){
+              let secondlevel = cur_level - 1
+              this.getSecondGlobalLevel(secondlevel)
+            }else{
+              this.getSecondGlobalLevel(cur_level)
             }
           }
         });

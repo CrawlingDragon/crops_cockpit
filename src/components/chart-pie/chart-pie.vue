@@ -53,7 +53,7 @@ export default {
             str = `${params.data.name} <span style="font-size:18px">${params.data.value}</span>所医院<br/>${str}`;
             return str;
             // ("{a} <br/>{b} : {c} ({d}%)");
-          }
+          },
         },
         // legend: {
         //   type: "scroll",
@@ -74,9 +74,16 @@ export default {
             radius: "70%",
             center: ["50%", "50%"],
             color: colors,
-            data: that.pieData
-          }
-        ]
+            data: that.pieData,
+            label:{
+              textStyle: {
+      　　　　   "fontSize": 14,
+                "fontWeight":600
+      　　    }
+            }
+          },
+          
+        ],
       });
       mapEcharts.hideLoading();
     }

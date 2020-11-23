@@ -229,11 +229,14 @@ bg-image($url)
       display inline-block
       font-family Microsoft YaHei
       font-weight Regular
-      vertical-align center
+      vertical-align top
       padding-right 8px
       color #F79D1D
+      position relative
+      bottom 3px
       @media screen and (min-width:1900px) {
         font-size 23px
+        bottom 4px
       }
     .img3
       float right

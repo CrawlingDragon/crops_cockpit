@@ -223,11 +223,6 @@ export default {
       this.$refs.mapData.style.display = "none";
       console.log("地图名字：", newVal);
     },
-    pieIndex(newVal, oldVal) {
-      console.log("pieIndex");
-      console.log(newVal, oldVal);
-      // this.initMap(this.name);
-    },
     mapsArray() {
       // console.log("mapsArray :");
       this.initMap(this.name);
