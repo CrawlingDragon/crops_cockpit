@@ -106,13 +106,16 @@ export default new Vuex.Store({
     getGlobalFstusername(state, data) {
       // 益农通账号
       state.globalFstusername = data;
+      window.localStorage.setItem("globalFstusername",data)
     },
     getGlobalFstuserpw(state, data) {
       // 益农通密码
       state.globalFstuserpw = data;
+      window.localStorage.setItem("globalFstuserpw",data)
     },
     getGlobalFstRoomid(state, data) {
       state.globalFstRoomid = data;
+      window.localStorage.setItem("globalFstRoomid",data)
     },
     getNoData(state, data) {
       state.noData = data;

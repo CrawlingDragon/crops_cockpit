@@ -220,7 +220,10 @@ export default {
       }
       this.$emit("datatype", num);
     },
-    ...mapMutations(["getNoData", "getIsstore"])
+    ...mapMutations([
+      "getNoData", 
+      "getIsstore"
+      ])
   }
 };
 </script>

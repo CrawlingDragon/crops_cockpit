@@ -331,6 +331,10 @@ export default {
     h6
       font-weight 400
       color #7FB5F1
+      @media screen and (min-width:1900px) {
+        font-size 14px
+        margin-bottom 19px
+      }
     &:last-child
       margin-right 0
 </style>

@@ -265,7 +265,7 @@ export default {
         top 205px
     }
     .kuang
-        width 90px
+        min-width 90px
         height 40px
         border 1px solid #ffffff
         color #FFFFFF
@@ -274,7 +274,7 @@ export default {
         font-weight Regular
         line-height 40px
         @media screen and (min-width:1900px) {
-            width 113px
+            min-width 113px
             font-size 28px
         }
     .sel_city
