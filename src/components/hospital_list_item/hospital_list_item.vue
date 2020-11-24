@@ -8,7 +8,7 @@
           ? 'singlehospital'
           : 'singlehospital singlehospital1'
       ]"
-      @click="goToHospitalIndex(item.appid, item.isstore)"
+      @click="goToHospitalIndex(item.appid, item.isstore,item.istown)"
     >
       <div class=" title">{{ item.name }}</div>
       <div class="num-item">
@@ -70,18 +70,29 @@ export default {
     //       }
     //     });
     // },
-    goToHospitalIndex(appid, isstore) {
+    open() {
+      this.$alert('因业务原因村级庄稼医院暂时不能从驾驶舱中查看', '打开失败', {
+        confirmButtonText: '知道了',
+        center: true,
+        customClass: 'myAlert',
+        callback: action => {
+        }
+      });
+    },
+    goToHospitalIndex(appid, isstore,istown) {
       this.setAppId(appid);
-      if (isstore == 1) {
-        this.$router.push({
-          path: "/index_second",
-          query: { appId: appid }
-        });
-      } else {
-        this.$router.push({
-          path: "/index_third",
-          query: { appId: appid }
-        });
+      if(istown == 0){
+        if (isstore == 1) {
+          this.$router.push({
+            path: "/index_second"
+          });
+        } else if (isstore == 0) {
+          this.$router.push({
+            path: "/index_third"
+          });
+        }
+      }else{
+        this.open()
       }
     }
   }

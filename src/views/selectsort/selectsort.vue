@@ -240,19 +240,29 @@ export default {
         }
       }
     },
+    open() {
+      this.$alert('因业务原因村级庄稼医院暂时不能从驾驶舱中查看', '打开失败', {
+        confirmButtonText: '知道了',
+        center: true,
+        callback: action => {
+        }
+      });
+    },
     godetail(item) {
       this.setAppId(item.appid);
-      if (item.isstore == 1) {
-        this.$router.push({
-          path: "/index_second"
-        });
-      } else if (item.isstore == 0) {
-        this.$router.push({
-          path: "/index_third"
-        });
+      if(item.istown == 0){
+        if (item.isstore == 1) {
+          this.$router.push({
+            path: "/index_second"
+          });
+        } else if (item.isstore == 0) {
+          this.$router.push({
+            path: "/index_third"
+          });
+        }
+      }else{
+        this.open()
       }
-      this.setAppId(item.appid);
-      // window.open("http://wap.114nz.com/Web/Mpublic/detail?mId=" + item.appid);
     }
   }
 };

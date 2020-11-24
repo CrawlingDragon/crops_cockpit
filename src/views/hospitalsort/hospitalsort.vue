@@ -73,6 +73,22 @@ export default {
   }
 };
 </script>
+<style lang="stylus">
+//村级医院跳转下级医院弹窗
+.el-message-box
+  width 320px
+  background rgba(26, 82, 159, 1)
+  border 1px solid rgba(26, 82, 159, 1)
+  .el-message-box__title
+    color #fff
+  .el-message-box__message
+    color #fff
+  .el-button--primary
+    background rgba(26, 82, 159, 1)
+    border-color rgba(255, 255, 255, 1)
+  .el-message-box__close,.el-icon-close
+    color #FFF
+</style>
 <style lang="stylus" scoped>
 .contain
     width 100%

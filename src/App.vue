@@ -23,11 +23,4 @@ export default {
   margin: 0 auto;
   width: 100%
   height 100%
-.create-isLoading
-  font-size 30px
-  .el-loading-spinner
-      font-size 20px
-      .el-loading-text
-          font-size 20px !important
-          margin-top 10px
 </style>
