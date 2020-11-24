@@ -1,9 +1,10 @@
 <template>
   <div class="expert_detail-container">
     <Header
-      :title="this.huiyuan_name"
+      :title="title"
       :right_show_bar="false"
       :returnPath="this.returnPath"
+      :midTitle="huiyuan_name"
     ></Header>
     <div class="top-nav">
       <router-link to="/second_huiyuan_itro/huiyuan_wang"
@@ -60,6 +61,7 @@ export default {
       content_show: 2,
       huiyuan_name: "",
       huiyuanname: "",
+      title: "",
       returnPath: "/second_huiyuan_list"
     };
   },
@@ -84,12 +86,22 @@ export default {
   mounted() {
     this.huiyuan_name = "会员:" + window.sessionStorage.getItem("huiyuan_name");
     this.content_show = window.sessionStorage.getItem("content_show");
+    this.title =
+      this.purview == 3 || this.purview == 4
+        ? this.lowerHospital
+        : this.huiyuan_name;
   },
   destroyed() {
     window.sessionStorage.setItem("content_show", this.content_show);
   },
   computed: {
-    ...mapState(["appId", "huiyuanName", "huiyuanId"])
+    ...mapState([
+      "appId",
+      "huiyuanName",
+      "huiyuanId",
+      "lowerHospital",
+      "purview"
+    ])
   },
   methods: {
     getJoinHospital() {

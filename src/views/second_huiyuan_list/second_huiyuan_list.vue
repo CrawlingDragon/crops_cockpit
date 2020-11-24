@@ -1,7 +1,11 @@
 <template>
   <div class="contain">
     <div class="head">
-      <Headers :title="this.title" :returnPath="this.returnPath"></Headers>
+      <Headers
+        :title="title"
+        :returnPath="this.returnPath"
+        midTitle="我的会员"
+      ></Headers>
     </div>
     <div class="my_huiyuan">
       <div
@@ -44,10 +48,12 @@ export default {
     Headers
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "purview", "lowerHospital"])
   },
   mounted() {
     this.gethuiyuan_list(1, 14);
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "我的会员";
   },
   methods: {
     gethuiyuan_list(page, pagesize) {

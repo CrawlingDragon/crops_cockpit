@@ -1,6 +1,6 @@
 <template>
   <div class="goods_list_container">
-    <Header title="农资商品"></Header>
+    <Header :title="title" midTitle="农资商品"></Header>
     <div class="nav-bar">
       <div
         class="item"
@@ -68,24 +68,13 @@ export default {
     disabled() {
       return this.loading || this.noMore;
     },
-    ...mapState(["appId", "purview"])
+    ...mapState(["appId", "purview", "lowerHospital"])
   },
-  watch: {
-    // catid(newVal, oldVal) {
-    //   // console.log("watch:>> ");
-    //   // if (oldVal != 0) {
-    //   //   // this.page = 0;
-    //   //   // this.list = [];
-    //   //   // this.loading = false;
-    //   //   // this.noMore = false;
-    //   //   setTimeout(() => {
-    //   //     this.load();
-    //   //   }, 100);
-    //   }
-    // }
-  },
+  watch: {},
   mounted() {
     this.getMenu();
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "农资商品";
   },
   destroyed() {},
   methods: {

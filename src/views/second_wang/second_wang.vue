@@ -13,7 +13,6 @@
       v-if="routeFrom != '/diagnosis/second_wang'"
       v-show="purview == 1 || purview == 2"
     ></Header>
-
     <ul
       class="wang-ul infinite-list"
       v-infinite-scroll="load"
@@ -46,8 +45,9 @@
           ></el-image>
         </div>
       </li>
-      <p v-if="loading">加载中...</p>
-      <p v-if="noMore">没有更多了</p>
+      <div v-if="noData"></div>
+      <p v-if="loading && !noData">加载中...</p>
+      <p v-if="noMore && !noData">没有更多了</p>
     </ul>
     <Nav :index="3" v-if="routeFrom != '/diagnosis/second_wang'"></Nav>
   </div>
@@ -68,6 +68,7 @@ export default {
       loading: false,
       noMore: false,
       count: 0,
+      noData: false,
       routeFrom: ""
     };
   },
@@ -101,6 +102,9 @@ export default {
               this.count = res.data.count;
               if (res.data.data.length == 0) {
                 this.noMore = true;
+                if (this.page == 1) {
+                  this.noData = true;
+                }
               }
             } else {
               this.noMore = true;

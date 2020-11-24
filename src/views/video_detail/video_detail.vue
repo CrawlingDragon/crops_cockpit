@@ -29,6 +29,9 @@
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
+            <!-- <div class="download btn" @click="downVideo">
+              下载视频
+            </div> -->
           </div>
         </div>
       </div>
@@ -65,6 +68,7 @@
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 import Swiper from "swiper";
+import download from "../../common/js/download";
 export default {
   name: "videos",
   components: { Header },
@@ -90,6 +94,7 @@ export default {
   },
   mounted() {
     this.getVideoDetail();
+    // this.downloadfile(this.detail.videourl, "xxxx", "video/map4");
   },
   destroyed() {},
   methods: {
