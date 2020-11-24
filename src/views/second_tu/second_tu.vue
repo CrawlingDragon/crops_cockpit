@@ -69,7 +69,8 @@
       <p v-if="loading">加载中...</p>
       <p v-if="noMore && noData == false">没有更多了</p>
       <div class="noData" v-show="chooseItem == '' && noData">
-        暂无测土配方
+        <p class="p1">暂无测土配方</p>
+        <p class="p1">请先使用新型庄稼医院管理平台录入测土配方记录</p>
       </div>
       <div class="noData" v-show="chooseItem == '1' && noData">
         <p class="p1">暂无测土配方</p>
@@ -80,7 +81,8 @@
         <p class="p1">请先使用新型庄稼医院管理平台录入测土配方记录</p>
       </div>
       <div class="noData" v-show="chooseItem == '3' && noData">
-        暂无测土配方
+        <p class="p1">暂无测土配方</p>
+        <p class="p1">请先使用新型庄稼医院管理平台录入测土配方记录</p>
       </div>
     </ul>
   </div>
@@ -287,4 +289,5 @@ export default {
     .noData
       font-size 26px
       color #7fb5f1
+      line-height 60px
 </style>

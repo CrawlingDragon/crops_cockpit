@@ -45,7 +45,11 @@
           ></el-image>
         </div>
       </li>
+<<<<<<< Updated upstream
       <div v-if="noData"></div>
+=======
+      <div class="noData" v-if="noData">暂无会员提问,敬请期待</div>
+>>>>>>> Stashed changes
       <p v-if="loading && !noData">加载中...</p>
       <p v-if="noMore && !noData">没有更多了</p>
     </ul>
@@ -68,8 +72,13 @@ export default {
       loading: false,
       noMore: false,
       count: 0,
+<<<<<<< Updated upstream
       noData: false,
       routeFrom: ""
+=======
+      routeFrom: "",
+      noData: false
+>>>>>>> Stashed changes
     };
   },
   computed: {
@@ -85,7 +94,6 @@ export default {
   destroyed() {},
   methods: {
     load() {
-      console.log("1 :>> ", 1);
       this.page += 1;
       this.loading = true;
       setTimeout(() => {
@@ -191,4 +199,8 @@ export default {
         .img
           width 110px
           height 110px
+.noData
+  font-size 26px
+  color #7fb5f1
+  line-height 60px
 </style>

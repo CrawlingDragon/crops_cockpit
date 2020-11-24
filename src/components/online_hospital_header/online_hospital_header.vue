@@ -21,7 +21,7 @@
           v-if="purview == 1 || purview == 2"
           @click="goBack"
         ></div>
-        <h2 class="h2">
+        <h2 class="h2" @click="goToLowerHospital">
           {{ title }}
           <span class="title-number" v-show="titleNumber != 0">
             {{ titleNumber }}
@@ -100,7 +100,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "curuserid"])
+    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore"])
   },
   watch: {},
   created() {},
@@ -125,6 +125,16 @@ export default {
   },
   destroyed() {},
   methods: {
+    goToLowerHospital() {
+      // 当显示为下级医院的时候点击去下级医院首页
+      if (this.title.indexOf("医院") >= 0) {
+        if (this.hospitalIsstore == 1) {
+          this.$router.push({ path: "/index_third" });
+        } else if (this.hospitalIsstore == 2) {
+          this.$router.push({ path: "/index_second" });
+        }
+      }
+    },
     goBack() {
       if (this.returnPath != "") {
         this.$router.push({
