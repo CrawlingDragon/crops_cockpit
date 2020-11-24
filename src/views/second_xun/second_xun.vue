@@ -30,8 +30,12 @@
           </ul>
         </div>
       </li>
-      <p v-if="loading">加载中...</p>
-      <p v-if="noMore">没有更多了</p>
+      <div class="noData" v-if="noData">
+        <p>暂无巡诊</p>
+        <p>请先使用新型庄稼医院管理平台录入巡诊记录</p>
+      </div>
+      <p v-if="loading && !noData">加载中...</p>
+      <p v-if="noMore && !noData">没有更多了</p>
     </ul>
   </div>
 </template>
@@ -46,7 +50,8 @@ export default {
       list: [],
       page: 0,
       loading: false,
-      noMore: false
+      noMore: false,
+      noData: false
     };
   },
   computed: {
@@ -77,6 +82,9 @@ export default {
               this.count = res.data.count;
               if (res.data.data.length == 0) {
                 this.noMore = true;
+                if (this.page == 1) {
+                  this.noData = true;
+                }
               }
             } else {
               this.noMore = true;
@@ -167,4 +175,10 @@ export default {
             .img
               width 110px
               height 110px
+.noData
+  font-size 26px
+  color #7fb5f1
+  // height 60px
+  & > P
+    line-height 60px
 </style>

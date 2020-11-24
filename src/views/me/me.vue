@@ -3,7 +3,9 @@
     <Header :title="title" midTitle="关于"></Header>
     <div class="my-box">
       <div class="left">
-        <el-image class="img" :src="data.logo" fit="cover"></el-image>
+        <el-image class="img" :src="data.logo" fit="cover">
+          <div slot="error" class="image-slot"></div>
+        </el-image>
         <div class="account">账号:{{ data.acount }}</div>
         <div
           v-show="purview == 1 || purview == 2"
@@ -116,6 +118,10 @@ export default {
         border-radius 20px
         background linear-gradient(-90deg, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1))
         padding 15px
+        .image-slot
+          background url('../../assets/65.png') no-repeat
+          background-position center center
+          background-size 80%
       .account
         font-size 28px
         color rgba(255, 255, 255, 0.5)

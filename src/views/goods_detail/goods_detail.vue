@@ -4,11 +4,9 @@
     <el-container>
       <div class="no_data" v-show="noData">暂无商品信息</div>
       <el-aside width="320px" class="aside" v-show="!noData">
-        <el-image
-          class="goods-img"
-          :src="detail.product_pic"
-          fit="cover"
-        ></el-image>
+        <el-image class="goods-img" :src="detail.product_pic" fit="cover">
+          <div slot="error" class="image-slot"></div>
+        </el-image>
         <div class="price-title">参考单价：</div>
         <div class="price">{{ detail.price }}</div>
         <div class="size">
@@ -95,6 +93,10 @@ export default {
       width 320px
       height 320px
       margin-bottom 44px
+      .image-slot
+        background url('../../assets/65.png') no-repeat
+        background-position center center
+        background-size 80%
     .price-title
       font-size 30px
       color rgba(255, 255, 255, 1)
