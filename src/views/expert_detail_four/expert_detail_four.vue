@@ -22,7 +22,14 @@
     </div>
     <div class="content1 content" v-show="content_show == 1">
       <div class="left">
-        <el-image class="img" fit="cover" :src="detail.avatar"></el-image>
+        <el-image class="img" fit="cover" :src="detail.avatar">
+           <div slot="placeholder" class="image-slot">
+            <img class="loading" src="../../assets/65.png" alt="" />
+          </div>
+          <div slot="error" class="image-slot">
+            <img class="loading" src="../../assets/65.png" alt="" />
+          </div>
+        </el-image>
         <p class="p1">
           开处方次数：<span class="number">{{ detail.chufangcount }}</span>
         </p>
@@ -76,6 +83,8 @@ export default {
   },
   mounted() {
     this.content_show = 1;
+    sessionStorage.setItem("appId",this.$route.query.appId)
+    sessionStorage.setItem("uid",this.$route.query.uid)
     this.getJoinHospital(this.$route.query.uid);
     this.getDetail(this.$route.query.uid);
   },

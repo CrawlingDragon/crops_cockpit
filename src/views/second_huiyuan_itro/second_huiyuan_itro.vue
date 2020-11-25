@@ -58,11 +58,12 @@ export default {
   props: {},
   data() {
     return {
-      content_show: 2,
+      content_show: "",
       huiyuan_name: "",
       huiyuanname: "",
       title: "",
-      returnPath: "/second_huiyuan_list"
+      returnPath: "/second_huiyuan_list",
+      count:1,//控制第一次的时候不在路由栈中执行-1操作
     };
   },
   beforeRouteEnter: (to, from, next) => {
@@ -104,6 +105,7 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations(["getPrecount"]),
     getJoinHospital() {
       // ta 加入的医院
       this.$axios
@@ -120,7 +122,11 @@ export default {
   },
   watch: {
     content_show(newVal, oldVal) {
-      console.log(newVal, oldVal);
+      this.count ++ 
+      if(this.count>3){
+        //因为使用了repalce，中间有三次是在原路由栈上进行的替换
+        this.getPrecount(1)
+      }
     }
   }
 };

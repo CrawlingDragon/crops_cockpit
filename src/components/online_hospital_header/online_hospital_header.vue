@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState ,mapMutations} from "vuex";
 
 export default {
   name: "headers",
@@ -100,7 +100,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore"])
+    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore","precount"])
   },
   watch: {},
   created() {},
@@ -135,12 +135,18 @@ export default {
         }
       }
     },
+    ...mapMutations(["getPrecount"]),
     goBack() {
       if (this.returnPath != "") {
-        this.$router.push({
-          path: this.returnPath
-        });
-      } else {
+        if(this.returnPath == "/second_huiyuan_list"){
+          this.getPrecount(1)
+        }
+        this.$router.replace({
+          path:this.returnPath
+        })
+      }else if(this.precount !== -1){
+        this.$router.go(this.precount)
+      }else {
         this.$router.go(-1);
       }
     },

@@ -7,13 +7,11 @@
         midTitle="我的会员"
       ></Headers>
     </div>
-    <div class="my_huiyuan">
+    <div class="my_huiyuan"  v-infinite-scroll="load">
       <div
         class="single_huiyuan"
         v-for="(item, index) in this.huiyuan_list"
-        v-infinite-scroll="load"
         :key="index"
-        infinite-scroll-distance="15px"
         @click="watch_detail(item)"
       >
         <el-image class="photo" :src="item.avatar"></el-image>
@@ -41,7 +39,7 @@ export default {
       total: "", // 当前会员总数
       title: "我的会员",
       returnPath: "/index_second",
-      from: this.$route.query.from
+      // from: this.$route.query.from
     };
   },
   components: {
@@ -57,6 +55,7 @@ export default {
   },
   methods: {
     gethuiyuan_list(page, pagesize) {
+      this.openLoading()
       this.$axios
         .fetchPost("/Home/Member/GetMpUser", {
           appId: this.appId,
@@ -72,7 +71,7 @@ export default {
             } else {
               this.huiyuan_list.push(...res.data.data);
             }
-            this.loading = false;
+            this.openLoading().close()
           }
         });
     },
@@ -96,7 +95,7 @@ export default {
       if (this.page < Math.ceil(this.total / 14)) {
         // 页码+1
         this.page++;
-        this.gethuiyuan_list(this.page);
+        this.gethuiyuan_list(this.page,14);
       }
     }
   }
@@ -113,27 +112,27 @@ export default {
     height 500px
     @media screen and (min-width:1900px)
       height 700px
-      overflow scroll
-      overflow-x hidden
-      scrollbar-arrow-color rgba(3, 5, 57, 1)
-      scrollbar-base-color hsla(0, 0%, 53%, 0.4)
-      scrollbar-track-color rgba(3, 5, 57, 1)
-      scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
-      &::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
-          background: transparent;
-      }
-      &::-webkit-scrollbar-thumb {
-          background: transparent;
-          border-radius: 4px;
-      }
-      &:hover::-webkit-scrollbar-thumb {
-          background: hsla(0, 0%, 53%, 0.4);
-      }
-      &:hover::-webkit-scrollbar-track {
-          background: hsla(0, 0%, 53%, 0.1);
-      }
+    overflow scroll
+    overflow-x hidden
+    scrollbar-arrow-color rgba(3, 5, 57, 1)
+    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
+    scrollbar-track-color rgba(3, 5, 57, 1)
+    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: transparent;
+        border-radius: 4px;
+    }
+    &:hover::-webkit-scrollbar-thumb {
+        background: hsla(0, 0%, 53%, 0.4);
+    }
+    &:hover::-webkit-scrollbar-track {
+        background: hsla(0, 0%, 53%, 0.1);
+    }
     .single_huiyuan
         height 329px
         width 232px

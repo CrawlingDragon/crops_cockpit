@@ -103,12 +103,17 @@ export default {
     },
     watchdetail(godetails) {
       this.godetail = godetails;
-      this.$refs.detail.style = "display:block";
       if (godetails == 1) {
         this.alert_title = "作物病情资料";
+        this.$refs.detail.style = "display:block";
       }
       if (godetails == 4) {
-        this.alert_title = "处方信息";
+         if(this.zl_detail.result == ""){
+          //如果处方信息为空则什么也不做
+        }else{
+          this.alert_title = "处方信息";
+          this.$refs.detail.style = "display:block";
+        }
       }
     },
     getWangzhendetail(appId, frommodule, Id) {
@@ -152,7 +157,8 @@ export default {
           float left
           height 460px
           width 36%
-          border 2px solid #072F65
+          background #091D44
+          border 1px solid rgba(255, 255, 255, 0.2)
           font-family MicrosoftYaHei
           fong-weight Regular
           text-align left
@@ -182,7 +188,8 @@ export default {
           float right
           width 62%
           height 460px
-          border 2px solid #072F65
+          background #091D44
+          border 1px solid rgba(255, 255, 255, 0.2)
           overflow  hidden
           .right_title
               font-size 30px
@@ -205,7 +212,8 @@ export default {
       .chufang
           width 140px
           height 270px
-          border 2px solid #091D44
+          background #091D44
+          border 1px solid rgba(255, 255, 255, 0.2)
           margin-right 40px
           float left
           img
@@ -247,7 +255,8 @@ export default {
           height 270px
           width 270px
           float left
-          border 2px solid #072F65
+          background #091D44
+          border 1px solid rgba(255, 255, 255, 0.2)
           img
               height 120px
               width 175px
