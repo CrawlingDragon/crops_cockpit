@@ -61,7 +61,10 @@ export default {
       content_show: "",
       huiyuan_name: "",
       huiyuanname: "",
+<<<<<<< Updated upstream
       title: "",
+=======
+>>>>>>> Stashed changes
       returnPath: "/second_huiyuan_list",
       count:1,//控制第一次的时候不在路由栈中执行-1操作
     };

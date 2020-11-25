@@ -100,7 +100,11 @@ export default {
     };
   },
   computed: {
+<<<<<<< Updated upstream
     ...mapState(["appId", "purview", "curuserid", "hospitalIsstore","precount"])
+=======
+    ...mapState(["appId", "purview", "curuserid","precount"])
+>>>>>>> Stashed changes
   },
   watch: {},
   created() {},
@@ -125,6 +129,7 @@ export default {
   },
   destroyed() {},
   methods: {
+<<<<<<< Updated upstream
     goToLowerHospital() {
       // 当显示为下级医院的时候点击去下级医院首页
       if (this.title.indexOf("医院") >= 0) {
@@ -135,6 +140,8 @@ export default {
         }
       }
     },
+=======
+>>>>>>> Stashed changes
     ...mapMutations(["getPrecount"]),
     goBack() {
       if (this.returnPath != "") {
