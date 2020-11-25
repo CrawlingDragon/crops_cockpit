@@ -36,9 +36,14 @@ export default new Vuex.Store({
     lowerHospital: window.localStorage.getItem("lowerHospital"),
     prevroute: "", // 专家列表记录上一层返回的地址
     precount:-1,//记录要返回的页面在历史的第几个页面
-    hospitalIsstore:window.localStorage.getItem('hospitalIsstore')
+    hospitalIsstore: window.localStorage.getItem('hospitalIsstore'),
+    adminRoute:window.localStorage.getItem('adminRoute')
   },
   mutations: {
+    setAdminRoute (state, data) {
+      state.adminRoute = data
+      window.localStorage.setItem('adminRoute',data)
+     },
     setHospitalIsstore (state, data) {
       //用于设置医院的isstore 属性，是否是网院还是新院
       state.hospitalIsstore = data

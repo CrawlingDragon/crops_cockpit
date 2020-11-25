@@ -32,6 +32,13 @@
             <!-- <div class="download btn" @click="downVideo">
               下载视频
             </div> -->
+            <video
+              :src="videoSrc"
+              width="200px"
+              height="200px"
+              style="display:none;border:1px solid #fff"
+              controls
+            ></video>
           </div>
         </div>
       </div>
@@ -79,7 +86,8 @@ export default {
       list: [],
       catid: this.$route.query.catid,
       id: this.$route.query.id,
-      infowShowFlag: false
+      infowShowFlag: false,
+      videoSrc: ""
     };
   },
   computed: {
@@ -98,6 +106,11 @@ export default {
   },
   destroyed() {},
   methods: {
+    downVideo() {
+      // alert(1);
+      // this.videoSrc = require("/Users/wuhelong/Documents/图片/cce50b4fd7e395d2379c28dc66c07368_1.mp4");
+      // this.videoSrc = "file:///D:/video/cce50b4fd7a0d586dfe2d764pim.mp4";
+    },
     init(pagesize) {
       var mySwiper = new Swiper(".swiper-container", {
         spaceBetween: 30,

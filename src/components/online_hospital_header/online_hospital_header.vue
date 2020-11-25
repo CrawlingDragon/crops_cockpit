@@ -55,10 +55,9 @@
   </div>
 </template>
 <script>
-import { mapState ,mapMutations} from "vuex";
-
+import { mapState, mapMutations } from "vuex";
 export default {
-  name: "headers",
+  name: "online_hospital_headers",
   components: {},
   props: {
     isWangzhen: {
@@ -96,15 +95,19 @@ export default {
       query: "",
       weather: "",
       closeNumer: 1,
-      src: ""
+      src: "",
+      from: this.$route.query.from
     };
   },
   computed: {
-<<<<<<< Updated upstream
-    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore","precount"])
-=======
-    ...mapState(["appId", "purview", "curuserid","precount"])
->>>>>>> Stashed changes
+    ...mapState([
+      "appId",
+      "purview",
+      "curuserid",
+      "hospitalIsstore",
+      "precount",
+      "adminRoute"
+    ])
   },
   watch: {},
   created() {},
@@ -129,7 +132,6 @@ export default {
   },
   destroyed() {},
   methods: {
-<<<<<<< Updated upstream
     goToLowerHospital() {
       // 当显示为下级医院的时候点击去下级医院首页
       if (this.title.indexOf("医院") >= 0) {
@@ -140,35 +142,44 @@ export default {
         }
       }
     },
-=======
->>>>>>> Stashed changes
     ...mapMutations(["getPrecount"]),
     goBack() {
+      if (this.from == "adminRoute") {
+        window.close();
+      }
+
       if (this.returnPath != "") {
-        if(this.returnPath == "/second_huiyuan_list"){
-          this.getPrecount(1)
+        if (this.returnPath == "/second_huiyuan_list") {
+          this.getPrecount(1);
         }
         this.$router.replace({
-          path:this.returnPath
-        })
-      }else if(this.precount !== -1){
-        this.$router.go(this.precount)
-      }else {
+          path: this.returnPath
+        });
+      } else if (this.precount !== -1) {
+        this.$router.go(this.precount);
+      } else {
         this.$router.go(-1);
       }
     },
     close() {
       // 关闭下级医院
       if (this.closeNumer == 2) {
-        this.$router.push({
-          path: "/indexFour",
-          query: {
-            userid: window.sessionStorage.getItem("curuserid"),
-            areaname: window.sessionStorage.getItem("curcity"),
-            level: window.sessionStorage.getItem("curlevel"),
-            letter: window.sessionStorage.getItem("letter")
-          }
-        });
+        window.close();
+        // if (this.adminRoute == "/indexFour") {
+        //   this.$router.push({
+        //     path: "/indexFour",
+        //     query: {
+        //       userid: window.sessionStorage.getItem("curuserid"),
+        //       areaname: window.sessionStorage.getItem("curcity"),
+        //       level: window.sessionStorage.getItem("curlevel"),
+        //       letter: window.sessionStorage.getItem("letter")
+        //     }
+        //   });
+        // } else {
+        //   this.$router.push({
+        //     path: this.adminRoute
+        //   });
+        // }
         return;
       }
       this.closeNumer += 1;

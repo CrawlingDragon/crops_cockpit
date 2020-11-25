@@ -1,7 +1,7 @@
 /* eslint-disable semi */
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import store from "../store/index"
 Vue.use(VueRouter);
 //* 以下是驾驶舱新增的
 const originalPush = VueRouter.prototype.push;
@@ -19,7 +19,10 @@ const routes = [
   {
     path: "/findindex",
     component: () =>
-      import(/* webpackChunkName: "findindex" */ "../views/find-index/find-index")
+      import(/* webpackChunkName: "findindex" */ "../views/find-index/find-index"),
+      meta: {
+        adminRoute:true
+      }
   },
   {
     path: "/find_detail",
@@ -30,13 +33,19 @@ const routes = [
     path: "/home",
     name: "home",
     component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue")
+      import(/* webpackChunkName: "WebForCounty" */ "../views/index_four/web-for-country.vue"),
+      meta: {
+        adminRoute:true
+      }
   },
   {
     path: "/nexthospital",
     name: "nexthospital",
     component: () =>
-      import(/* webpackChunkName: "nexthospital" */ "../views/nexthospital/nexthospital.vue")
+      import(/* webpackChunkName: "nexthospital" */ "../views/nexthospital/nexthospital.vue"),
+      meta: {
+        adminRoute:true
+      }
   },
   {
     path: "/expertlist",
@@ -67,13 +76,17 @@ const routes = [
     name: "Hospitalsort",
     component: () =>
       import(/* webpackChunkName: "Hospitalsort" */ "../views/hospitalsort/hospitalsort"),
+      meta: {
+        adminRoute:true
+      },
     children: [
       {
         path: "/hospitalsort",
         component: () =>
           import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
         meta: {
-          keepAlive: true
+          keepAlive: true,
+          adminRoute:true
         },
       },
       {
@@ -82,7 +95,8 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "defaultsort" */ "../views/defaultsort/defaultsort.vue"),
         meta: {
-          keepAlive: true
+          keepAlive: true,
+          adminRoute:true
         },
       },
       {
@@ -91,7 +105,8 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "multiplesort" */ "../views/multiplesort/multiplesort.vue"),
         meta: {
-          keepAlive: true
+          keepAlive: true,
+          adminRoute:true
         },
       },
       {
@@ -100,7 +115,8 @@ const routes = [
         component: () =>
           import(/* webpackChunkName: "selectsort" */ "../views/selectsort/selectsort.vue"),
         meta: {
-          keepAlive: true
+          keepAlive: true,
+          adminRoute:true
         },
       }
     ]
@@ -127,6 +143,9 @@ const routes = [
     path: "/indexFour",
     name: "IndexFour",
     component: () => import(/* webpackChunkName: "index */ "../views/index_four/index.vue"),
+    meta: {
+      adminRoute:true
+    }
   },
   {
     path: "/indexFirst",
@@ -138,7 +157,10 @@ const routes = [
     path: "/channel",
     name: "channel",
     component: () =>
-      import(/* webpackChunkName: "channel" */ "../views/channel/channel.vue")
+      import(/* webpackChunkName: "channel" */ "../views/channel/channel.vue"),
+      meta: {
+        adminRoute:true
+      }
   },
   {
     path: "/expert",
@@ -468,7 +490,15 @@ const router = new VueRouter({
   mode: "hash",
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
-  }
-});
+  },
 
+});
+router.beforeEach((to, from, next) => {
+  // ...
+  if (to.meta.adminRoute) {
+    // console.log('store :>> ', to);
+    store.commit('setAdminRoute',to.path)
+  }
+next()
+})
 export default router;

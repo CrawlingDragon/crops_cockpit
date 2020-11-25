@@ -139,6 +139,7 @@ export default {
     margin 60px auto 0
     max-height 800px
     padding-bottom 151px
+    padding-top 3px
     & > li
       width 348px
       height 300px

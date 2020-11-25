@@ -45,7 +45,7 @@ export default {
   data() {
     return {
       cur_index: 2,
-      lefttitle: "下级医院",
+      lefttitle: "下级医院"
     };
   },
   created() {

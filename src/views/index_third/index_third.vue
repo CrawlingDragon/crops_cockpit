@@ -3,7 +3,7 @@
     <Header
       :title="headerTitle"
       :logoSrc="logoSrc"
-      v-show="purview == 1 || purview == 2"
+      v-if="purview == 1 || purview == 2"
     ></Header>
     <AdminHeader
       v-if="purview == 3 || purview == 4"

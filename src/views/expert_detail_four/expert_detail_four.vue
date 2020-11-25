@@ -23,7 +23,7 @@
     <div class="content1 content" v-show="content_show == 1">
       <div class="left">
         <el-image class="img" fit="cover" :src="detail.avatar">
-           <div slot="placeholder" class="image-slot">
+          <div slot="placeholder" class="image-slot">
             <img class="loading" src="../../assets/65.png" alt="" />
           </div>
           <div slot="error" class="image-slot">
@@ -65,6 +65,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import Hospital from "@/components/hospital_list_item/hospital_list_item";
 import { mapState } from "vuex";
@@ -83,8 +84,8 @@ export default {
   },
   mounted() {
     this.content_show = 1;
-    sessionStorage.setItem("appId",this.$route.query.appId)
-    sessionStorage.setItem("uid",this.$route.query.uid)
+    sessionStorage.setItem("appId", this.$route.query.appId);
+    sessionStorage.setItem("uid", this.$route.query.uid);
     this.getJoinHospital(this.$route.query.uid);
     this.getDetail(this.$route.query.uid);
   },

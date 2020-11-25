@@ -241,27 +241,30 @@ export default {
       }
     },
     open() {
-      this.$alert('因业务原因村级庄稼医院暂时不能从驾驶舱中查看', '打开失败', {
-        confirmButtonText: '知道了',
+      this.$alert("因业务原因村级庄稼医院暂时不能从驾驶舱中查看", "打开失败", {
+        confirmButtonText: "知道了",
         center: true,
-        callback: action => {
-        }
+        callback: action => {}
       });
     },
     godetail(item) {
       this.setAppId(item.appid);
-      if(item.istown == 0){
+      if (item.istown == 0) {
         if (item.isstore == 1) {
-          this.$router.push({
-            path: "/index_second"
+          let route = this.$router.resolve({
+            path: "/index_second",
+            query: { from: "adminRoute" }
           });
+          window.open(route.href, "_blank");
         } else if (item.isstore == 0) {
-          this.$router.push({
-            path: "/index_third"
+          let route = this.$router.resolve({
+            path: "/index_third",
+            query: { from: "adminRoute" }
           });
+          window.open(route.href, "_blank");
         }
-      }else{
-        this.open()
+      } else {
+        this.open();
       }
     }
   }

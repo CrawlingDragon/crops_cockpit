@@ -61,12 +61,9 @@ export default {
       content_show: "",
       huiyuan_name: "",
       huiyuanname: "",
-<<<<<<< Updated upstream
       title: "",
-=======
->>>>>>> Stashed changes
       returnPath: "/second_huiyuan_list",
-      count:1,//控制第一次的时候不在路由栈中执行-1操作
+      count: 1 //控制第一次的时候不在路由栈中执行-1操作
     };
   },
   beforeRouteEnter: (to, from, next) => {
@@ -125,10 +122,10 @@ export default {
   },
   watch: {
     content_show(newVal, oldVal) {
-      this.count ++ 
-      if(this.count>3){
+      this.count++;
+      if (this.count > 3) {
         //因为使用了repalce，中间有三次是在原路由栈上进行的替换
-        this.getPrecount(1)
+        this.getPrecount(1);
       }
     }
   }

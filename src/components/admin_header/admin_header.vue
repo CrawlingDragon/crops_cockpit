@@ -53,7 +53,7 @@
 import { mapState } from "vuex";
 
 export default {
-  name: "headers",
+  name: "admin_headers",
   components: {},
   props: {
     title: {
@@ -87,11 +87,12 @@ export default {
       query: "",
       weather: "",
       closeNumer: 1,
-      src: ""
+      src: "",
+      from: this.$route.query.from
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "curuserid"])
+    ...mapState(["appId", "purview", "curuserid", "adminRoute"])
   },
   watch: {},
   created() {},
@@ -117,6 +118,9 @@ export default {
   destroyed() {},
   methods: {
     goBack() {
+      if (this.from == "adminRoute") {
+        window.close();
+      }
       if (this.returnPath != "") {
         this.$router.push({
           path: this.returnPath
@@ -128,15 +132,23 @@ export default {
     close() {
       // 关闭下级医院
       if (this.closeNumer == 2) {
-        this.$router.push({
-          path: "/indexFour",
-          query: {
-            userid: window.sessionStorage.getItem("curuserid"),
-            areaname: window.sessionStorage.getItem("curcity"),
-            level: window.sessionStorage.getItem("curlevel"),
-            letter: window.sessionStorage.getItem("letter")
-          }
-        });
+        window.close();
+        // alert(2);
+        // if (this.adminRoute == "/indexFour") {
+        //   this.$router.push({
+        //     path: "/indexFour",
+        //     query: {
+        //       userid: window.sessionStorage.getItem("curuserid"),
+        //       areaname: window.sessionStorage.getItem("curcity"),
+        //       level: window.sessionStorage.getItem("curlevel"),
+        //       letter: window.sessionStorage.getItem("letter")
+        //     }
+        //   });
+        // } else {
+        //   this.$router.push({
+        //     path: this.adminRoute
+        //   });
+        // }
         return;
       }
       this.closeNumer += 1;
