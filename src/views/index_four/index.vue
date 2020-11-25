@@ -501,6 +501,8 @@ bg-image($url)
     bottom 0
     background rgb(0, 0, 45)
     z-index 11119999999
+    @media screen and (min-width:1900px)
+      min-height 1080px
     .close-btn
       padding-top 15px
       .text1

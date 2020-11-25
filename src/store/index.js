@@ -35,6 +35,7 @@ export default new Vuex.Store({
     huiyuanId: "", // 新院我的会员id
     lowerHospital: window.localStorage.getItem("lowerHospital"),
     prevroute: "", // 专家列表记录上一层返回的地址
+    precount:-1,//记录要返回的页面在历史的第几个页面
     hospitalIsstore:window.localStorage.getItem('hospitalIsstore')
   },
   mutations: {
@@ -45,6 +46,14 @@ export default new Vuex.Store({
      },
     getPrevroute(state, data) { // 专家页面获取上一层返回的路由
       state.prevroute = data;
+      localStorage.setItem("prevroute",data)
+    },
+    getPrecount(state,data){
+      if(data ==1){
+        state.precount = state.precount-1
+      }else if(data == 0){
+        state.precount = -1
+      }
     },
     setLowerHospital (state, data) {
       state.lowerHospital = data;

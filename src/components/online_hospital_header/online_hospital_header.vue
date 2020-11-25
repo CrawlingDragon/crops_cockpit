@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState ,mapMutations} from "vuex";
 
 export default {
   name: "headers",
@@ -100,7 +100,11 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore"])
+<<<<<<< Updated upstream
+    ...mapState(["appId", "purview", "curuserid", "hospitalIsstore","precount"])
+=======
+    ...mapState(["appId", "purview", "curuserid","precount"])
+>>>>>>> Stashed changes
   },
   watch: {},
   created() {},
@@ -125,6 +129,7 @@ export default {
   },
   destroyed() {},
   methods: {
+<<<<<<< Updated upstream
     goToLowerHospital() {
       // 当显示为下级医院的时候点击去下级医院首页
       if (this.title.indexOf("医院") >= 0) {
@@ -135,12 +140,20 @@ export default {
         }
       }
     },
+=======
+>>>>>>> Stashed changes
+    ...mapMutations(["getPrecount"]),
     goBack() {
       if (this.returnPath != "") {
-        this.$router.push({
-          path: this.returnPath
-        });
-      } else {
+        if(this.returnPath == "/second_huiyuan_list"){
+          this.getPrecount(1)
+        }
+        this.$router.replace({
+          path:this.returnPath
+        })
+      }else if(this.precount !== -1){
+        this.$router.go(this.precount)
+      }else {
         this.$router.go(-1);
       }
     },

@@ -198,7 +198,6 @@ export default {
   },
   watch: {
     CurMp(newVal) {
-      console.log("colorArr");
       let arr = colors.concat([]);
       // 数组内 value 不等于0的数量
       const length = newVal.filter(item => item.value !== 0).length;

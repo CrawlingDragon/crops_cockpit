@@ -69,12 +69,14 @@ export default {
       ) {
         vm.returnpath = from.path;
         vm.getPrevroute(from.path);
-      } else if (from.path == "/expert_detail_four") {
-        if (vm.prevroute == "/indexFour") {
-          vm.returnpath = "/indexFour";
-        } else if (vm.prevroute == "/data_analysis") {
-          vm.returnpath = "/data_analysis";
-        }
+      } else if (from.path == "/expert_detail_four"||from.path=="/") {
+        //加入from.path是因为 点击选择全部医院或者新型医院后vuex中记录的上级页面信息的路由消失了
+        //将上一级的路由信息存成本地存储 如果vuex失效 访问本地缓存
+          if (vm.prevroute == "/indexFour"||localStorage.getItem("prevroute")=="/indexFour") {
+            vm.returnpath = "/indexFour";
+          } else if (vm.prevroute == "/data_analysis"||localStorage.getItem("prevroute")=="/data_analysis") {
+            vm.returnpath = "/data_analysis";
+          }
       }
     });
   },

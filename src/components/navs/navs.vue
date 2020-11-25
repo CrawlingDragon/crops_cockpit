@@ -65,7 +65,8 @@
               "
               v-bind:class="[
                 pItem.isclick == 0 ? 'disable' : '',
-                pItem.name == activeProvinceComputed ? 'active' : ''
+                pItem.name == activeProvinceComputed ? 'active' : '',
+                active_breadArr.length > 1 ? (pItem.name == active_breadArr[1].name ? 'active' : '') :''
               ]"
             >
               {{ pItem.name }}
@@ -99,7 +100,8 @@
                 activeCityArrItem.name == activeProvinceComputed ||
                 activeCityArrItem.name == activeCity
                   ? 'active'
-                  : ''
+                  : '',
+                active_breadArr.length > 2 ? (activeCityArrItem.name == active_breadArr[2].name ? 'active' : '') :''
               ]"
             >
               {{ activeCityArrItem.name }}
@@ -126,10 +128,11 @@
               "
               :class="[
                 bvious.name == activeProvinceComputed ||
-                bvious.name == bviousActiveClass
+                bvious.name == bviousActiveClass 
                   ? 'active'
                   : '',
-                bvious.isclick == 0 ? 'disable' : ''
+                bvious.isclick == 0 ? 'disable' : '',
+                active_breadArr.length > 3 ? (bvious.name == active_breadArr[3].name ? 'active' : '') :''
               ]"
             >
               {{ bvious.name }}
@@ -188,7 +191,8 @@ export default {
       safeThressAddress: "杭州市", // 用来暂时保存 匹配县级地址的地址
       LoginId: window.sessionStorage.getItem("LoginId"), // 登陆时，保存地图参数id
       picAddress: "", // 记录当前登录账号管理院的位置信息
-      default_threeCity: "" // 获取默认的城市下属的默认县级城市
+      default_threeCity: "", // 获取默认的城市下属的默认县级城市
+      active_breadArr:this.$store.state.breadArr
     };
   },
   props: {
@@ -558,6 +562,10 @@ export default {
         // 当时省级以下的管理院登录的时候 用来判断获取默认市区的县级地址
         this.safeThressAddress = this.picAddress.city;
       }
+    },
+    breadArr(newVal,oldVal){
+      //每次点击后更细面包屑数组
+      this.active_breadArr = newVal
     }
   }
 };
