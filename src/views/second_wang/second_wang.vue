@@ -1,11 +1,11 @@
 <template>
   <div class="second_wang-container">
     <AdminHeader
-      v-if="purview == 3 || purview == 4"
+      v-show="purview == 3 || purview == 4"
       :midTitle="
         routeFrom == '/diagnosis/second_wang' ? '诊疗' : '网诊' + count
       "
-      :title="lowerHospital"
+      :title="title"
     ></AdminHeader>
     <Header
       title="网诊"
@@ -69,7 +69,8 @@ export default {
       noMore: false,
       count: 0,
       routeFrom: "",
-      noData: false
+      noData: false,
+      title: ""
     };
   },
   computed: {
@@ -81,6 +82,7 @@ export default {
   watch: {},
   mounted() {
     this.routeFrom = this.$route.fullPath;
+    this.title = this.lowerHospital;
   },
   destroyed() {},
   methods: {

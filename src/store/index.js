@@ -62,7 +62,7 @@ export default new Vuex.Store({
     },
     setLowerHospital (state, data) {
       state.lowerHospital = data;
-      window.localStorage.getItem("lowerHospital", data);
+      window.localStorage.setItem("lowerHospital", data);
     },
     setAppId(state, data) {
       state.appId = data;

@@ -277,12 +277,14 @@ export default {
     clearInterval(timeInterval2);
   },
   methods: {
-    ...mapMutations(["setAppId"]),
+    ...mapMutations(["setAppId", "appId"]),
     getZuowu() {
-      this.$axios.fetchGet("/Home/DatavDemo/getZuowu").then(res => {
-        this.zuowu = res.data.splice(0, 6);
-        this.initPie();
-      });
+      this.$axios
+        .fetchGet("/Home/DatavDemo/getZuowu", { appId: this.appId })
+        .then(res => {
+          this.zuowu = res.data.splice(0, 6);
+          this.initPie();
+        });
     },
     getCode() {
       this.$axios.fetchGet("/Admin/Api/get_qr_code").then(res => {
@@ -326,18 +328,22 @@ export default {
     },
     getSaleAmount() {
       // 销售额
-      this.$axios.fetchGet("/Home/DatavDemo/getRecentSaleAmount").then(res => {
-        this.saleAmount = res.data;
-        setTimeout(() => {
-          this.initSale();
-        }, 100);
-      });
+      this.$axios
+        .fetchGet("/Home/DatavDemo/getRecentSaleAmount", { appId: this.appId })
+        .then(res => {
+          this.saleAmount = res.data;
+          setTimeout(() => {
+            this.initSale();
+          }, 100);
+        });
     },
     getServiceArea() {
-      this.$axios.fetchGet("/Home/DatavDemo/getServiceArea").then(res => {
-        this.serviceArea = res.data;
-        this.initServe();
-      });
+      this.$axios
+        .fetchGet("/Home/DatavDemo/getServiceArea", { appId: this.appId })
+        .then(res => {
+          this.serviceArea = res.data;
+          this.initServe();
+        });
     },
     initPie() {
       // 问答管理
