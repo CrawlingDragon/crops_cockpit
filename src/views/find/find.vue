@@ -26,14 +26,13 @@
         @click="goToDetail(item.catid, item.id)"
       >
         <div class="bj-wrap">
-          <el-image :src="item.thumb" class="small-img" fit="cover">
-            <div slot="error" class="image-slot">
-              <div class="image-error"></div>
-            </div>
+          <el-image :src="iconImg" class="small-img" fit="cover">
+            <div slot="error" class="image_error"></div>
+            <div slot="placeholder" class="image_error"></div>
           </el-image>
           <div class="title-bar">{{ item.title }}</div>
           <div class="text">
-            {{ item.copyfrom }}
+            <span class="from" v-show="item.copyfrom">{{ item.copyfrom }}</span>
             <span class="time">{{ item.inputtime }}</span>
           </div>
         </div>
@@ -56,9 +55,8 @@
       >
         <div class="content">
           <el-image class="el-img" :src="item.thumb">
-            <div slot="error" class="image-slot">
-              <div class="image-error"></div>
-            </div>
+            <div slot="error" class="image_error"></div>
+            <div slot="placeholder" class="image_error"></div>
           </el-image>
           <div class="p">{{ item.title }}</div>
         </div>
@@ -75,6 +73,7 @@ import Nav from "@/components/nav_list/nav_list";
 import NavSecond from "@/components/nav_list_second/nav_list_second";
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
+import AdminHeader from "@/components/admin_header/admin_header";
 export default {
   name: "find",
   components: {
@@ -94,7 +93,8 @@ export default {
       loading: false,
       noMore: false,
       catid: 0,
-      from: this.$route.query.from
+      from: this.$route.query.from,
+      iconImg: require("./44.png")
     };
   },
   computed: {
@@ -297,6 +297,8 @@ export default {
           color #808080
           font-size 24px
           margin-right 34px
+          .from
+            margin-right 20px
       &:nth-child(odd)
         .bj-wrap
           margin-right 10px

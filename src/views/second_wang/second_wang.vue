@@ -37,11 +37,9 @@
         </div>
         <div class="answer">
           <div class="p2">回复数：{{ item.replies }}</div>
-          <el-image
-            fit="cover"
-            :src="item.thumb_pic"
-            class="img"
-            v-if="item.thumb_pic"
+          <el-image fit="cover" :src="item.thumb_pic" class="img">
+            <div class="imgae_error" slot="placeholder"></div>
+            <div class="image_error" slot="error"></div
           ></el-image>
         </div>
       </li>

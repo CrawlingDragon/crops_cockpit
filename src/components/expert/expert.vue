@@ -13,7 +13,7 @@
       <p class="goodat">擅长作物：{{ item.zuowu }}</p>
       <div class="bottom">
         <span style="margin-right:10px">处方（{{ item.chufangcount }}）</span>
-        <span v-show="purview == 1"> 加入医院（{{ item.hospitalcount }}）</span>
+        <span v-show="purview == 3"> 加入医院（{{ item.hospitalcount }}）</span>
       </div>
     </div>
   </div>
