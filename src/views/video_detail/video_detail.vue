@@ -1,6 +1,6 @@
 <template>
   <div class="video-containers">
-    <Header title="视频详情" :right_show_bar="false"></Header>
+    <Header :title="title" :right_show_bar="false" midTitle="视频详情"></Header>
     <div class="detail-conatiner">
       <div class="detail-box">
         <div class="left-bar">
@@ -29,9 +29,10 @@
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
-            <!-- <div class="download btn" @click="downVideo">
+            <div class="download btn" @click="downVideo">
+              <!-- <input type="file" class="file" /> -->
               下载视频
-            </div> -->
+            </div>
             <video
               :src="videoSrc"
               width="200px"
@@ -87,11 +88,12 @@ export default {
       catid: this.$route.query.catid,
       id: this.$route.query.id,
       infowShowFlag: false,
-      videoSrc: ""
+      videoSrc: "",
+      title: ""
     };
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "purview", "lowerHospital"])
   },
   watch: {
     $route() {
@@ -102,6 +104,8 @@ export default {
   },
   mounted() {
     this.getVideoDetail();
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "视频详情";
     // this.downloadfile(this.detail.videourl, "xxxx", "video/map4");
   },
   destroyed() {},

@@ -17,7 +17,13 @@
               : 'icon icon-way'
           ]"
         ></div>
-        <span class="status_text">已给处方</span>
+        <span class="status_text">{{
+          cetuinfo.teststatus == 1
+            ? "检测中"
+            : this.cetuinfo.teststatus == 2
+            ? "检测完成"
+            : "已给处方"
+        }}</span>
       </div>
     </div>
     <div class="content">
@@ -143,9 +149,9 @@ export default {
     watchdetail(godetails) {
       this.godetail = godetails;
       if (godetails == 4) {
-         if(this.cetuinfo.result == ""){
+        if (this.cetuinfo.result == "") {
           //如果处方信息为空则什么也不做
-        }else{
+        } else {
           this.alert_title = "处方信息";
           this.$refs.detail.style = "display:block";
         }

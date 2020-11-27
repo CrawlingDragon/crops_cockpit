@@ -1,6 +1,6 @@
 <template>
   <div class="video-container">
-    <Header title="培训视频"></Header>
+    <Header :title="title" midTitle="培训视频"></Header>
     <!-- <div class="tab-bar">
       <div
         class="item"
@@ -25,7 +25,10 @@
         class="infinite-list-item"
         @click="goToVideoDetail(item.id, item.catid)"
       >
-        <el-image class="img" fit="cover" :src="item.thumb"></el-image>
+        <el-image class="img" fit="cover" :src="item.thumb">
+          <div slot="error" class="image-slot"></div>
+          <div slot="placeholder" class="image-slot"></div>
+        </el-image>
         <p class="p1">{{ item.title }}</p>
       </li>
       <p v-if="loading" class="p1">加载中...</p>
@@ -50,11 +53,12 @@ export default {
       maxitem: 0,
       page: 0,
       loading: false,
-      noMore: false
+      noMore: false,
+      title: ""
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "purview", "lowerHospital"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -63,6 +67,8 @@ export default {
   mounted() {
     // this.getVideoList();
     this.gerVideoMenu();
+    this.title =
+      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "培训视频";
   },
   destroyed() {},
   methods: {
@@ -157,6 +163,17 @@ export default {
       .img
         width 100%
         height 100%
+        & > img
+          display block
+          width 100%
+          background url('../../assets/65.png') no-repeat
+          background-position center center
+          background-size 80%
+        .image-slot
+          width 100%
+          background url('../../assets/65.png') no-repeat
+          background-position center center
+          background-size 80%
       .p1
         position absolute
         left 0

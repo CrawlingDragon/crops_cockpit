@@ -6,6 +6,7 @@
       <el-aside width="320px" class="aside" v-show="!noData">
         <el-image class="goods-img" :src="detail.product_pic" fit="cover">
           <div slot="error" class="image-slot"></div>
+          <div slot="placeholder" class="image_error"></div>
         </el-image>
         <div class="price-title">参考单价：</div>
         <div class="price">{{ detail.price }}</div>

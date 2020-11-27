@@ -19,6 +19,8 @@
           :src="item.thumb_pic"
           class="img"
           v-if="item.thumb_pic"
+          ><div slot="error" class="image_error"></div>
+          <div class="image_error" slot="placeholder"></div
         ></el-image>
       </div>
     </div>

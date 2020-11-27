@@ -5,6 +5,7 @@
       <div class="left">
         <el-image class="img" :src="data.logo" fit="cover">
           <div slot="error" class="image-slot"></div>
+          <div slot="placeholder" class="image-slot"></div>
         </el-image>
         <div class="account">账号:{{ data.acount }}</div>
         <div

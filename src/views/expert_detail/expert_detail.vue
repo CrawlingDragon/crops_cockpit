@@ -19,7 +19,10 @@
     </div>
     <div class="content1 content" v-show="content_show == 1">
       <div class="left">
-        <el-image class="img" fit="cover" :src="detail.avatar"></el-image>
+        <el-image class="img" fit="cover" :src="detail.avatar">
+          <div slot="error" class="image_error"></div>
+          <div class="image_error" slot="placeholder"></div>
+        </el-image>
         <p class="p1">开处方次数：{{ detail.chufangcount }}</p>
         <p class="p2">加入时间：{{ detail.jointime }}</p>
       </div>

@@ -29,7 +29,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["isstore"])
+    ...mapState(["hospitalIsstore"])
   },
   watch: {},
   mounted() {},
@@ -43,7 +43,7 @@ export default {
     },
     goToOnlineList() {
       // second_wang
-      if (this.isstore == 1) {
+      if (this.hospitalIsstore == 1) {
         this.$router.push({
           path: "second_wang"
         });
