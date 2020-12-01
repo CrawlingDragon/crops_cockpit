@@ -97,24 +97,13 @@ export default {
   computed: {
     ...mapState(["appId"])
   },
-  beforeRouteEnter:(to, from, next)=>{
-    //当进入我的会员的时候使用了 router.push导致路由栈信息更新 无法使用router.go(-1)返回管理院页面
-    //修改为router.replace 并且记录要退回页面的路径在replace之后的第几个页面，设置一个vuex的precount变量记录向路由栈中添加路由信息的次数
-    next(vm=>{
-      if(from.path == "/second_huiyuan_list"&&localStorage.getItem("purview")>2){
-        vm.getPrecount(1)
-      }else{
-        vm.getPrecount(0)
-      }
-    })
-  },
   watch: {},
   mounted() {
     this.getIndexData();
   },
   destroyed() {},
   methods: {
-    ...mapMutations(["setHospitalIsstore", "setLowerHospital","getPrecount"]),
+    ...mapMutations(["setHospitalIsstore", "setLowerHospital"]),
     getIndexData() {
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", {

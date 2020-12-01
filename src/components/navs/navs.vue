@@ -385,7 +385,8 @@ export default {
       "getBviousName",
       "getBviousLevel",
       "getIsnav",
-      "getDefaultAddressArr"
+      "getDefaultAddressArr",
+      "setIsMapUpdata"
     ]),
     getDaohangList() {
       this.openLoading();
@@ -432,6 +433,7 @@ export default {
     },
     getCountryDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
       // 点击全国获取数据
+      this.setIsMapUpdata(1)
       if (this.LoginId != "5") {
         isClick = 0;
       }
@@ -448,6 +450,7 @@ export default {
     },
     getDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
       // 点击请求省级数据
+      this.setIsMapUpdata(1)
       if (isClick != 0) {
         this.clickAdress = name;
         this.safeThressAddress = dname;
@@ -470,6 +473,7 @@ export default {
       dlevel,
       dindex
     ) {
+      this.setIsMapUpdata(1)
       // 点击面包屑导航
       if (this.LoginId < 3) {
         isclick = 0;
@@ -484,7 +488,7 @@ export default {
           level,
           (letter = null),
           (isClick = 1),
-          dname,
+          name,//当点击面包屑的时候县级地址的时候 areaname 要是当前县级地址,因此要为name，而不是dname
           dlevel,
           dindex
         );
@@ -543,6 +547,7 @@ export default {
       realLevel,
       dindex
     ) {
+      this.setIsMapUpdata(1)
       // 点击市级导航
       if (isClick != 0) {
         this.safeThressAddress = name;

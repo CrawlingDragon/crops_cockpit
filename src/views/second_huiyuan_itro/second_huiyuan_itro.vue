@@ -58,7 +58,7 @@ export default {
   props: {},
   data() {
     return {
-      content_show: "",
+      content_show:2,
       huiyuan_name: "",
       huiyuanname: "",
       title: "",
@@ -67,6 +67,7 @@ export default {
     };
   },
   beforeRouteEnter: (to, from, next) => {
+    console.log(from.path)
     next(vm => {
       switch (from.path) {
         case "/wangzhen_detail":
@@ -79,7 +80,9 @@ export default {
           vm.content_show = 4;
           break;
         default:
-          vm.content_show = 2;
+          vm.$nextTick(()=>{
+            vm.content_show = 2;
+          });
           break;
       }
     });
@@ -105,7 +108,6 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations(["getPrecount"]),
     getJoinHospital() {
       // ta 加入的医院
       this.$axios
@@ -118,15 +120,6 @@ export default {
             this.hospitalList = res.data.data.lists;
           }
         });
-    }
-  },
-  watch: {
-    content_show(newVal, oldVal) {
-      this.count++;
-      if (this.count > 3) {
-        //因为使用了repalce，中间有三次是在原路由栈上进行的替换
-        this.getPrecount(1);
-      }
     }
   }
 };

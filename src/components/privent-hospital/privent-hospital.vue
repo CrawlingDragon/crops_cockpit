@@ -5,6 +5,7 @@
       <Maps
         :name="cityMap"
         :mapData="proMapData"
+        :cityNames="secondName"
         @upCity="getDownCity"
         @getMidData="clickMapMidBar"
       ></Maps>
