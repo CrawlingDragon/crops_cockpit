@@ -97,7 +97,7 @@ export default {
       if (item.module == "wenzhen") {
         let route = this.$router.resolve({
           path: "/zuozhen_detail",
-          query: { from: "adminRoute", tid: item.tid }
+          query: { from: "adminRoute", tid: item.tid, appId: item.appid }
         });
         window.open(route.href, "_blank");
         // this.$router.push({
@@ -107,7 +107,7 @@ export default {
       } else if (item.module == "xunzhen") {
         let route = this.$router.resolve({
           path: "/xunzhen_detail",
-          query: { from: "adminRoute", tid: item.tid }
+          query: { from: "adminRoute", tid: item.tid, appId: item.appid }
         });
         window.open(route.href, "_blank");
         // this.$router.push({

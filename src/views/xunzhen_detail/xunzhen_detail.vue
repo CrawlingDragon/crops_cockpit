@@ -65,7 +65,7 @@
 <script>
 import Detail from "../../components/zhenliao_alert/zhenliao_alert";
 import Header from "@/components/online_hospital_header/online_hospital_header";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
   data() {
@@ -77,39 +77,52 @@ export default {
       godetail: "", // 判断是从何处打开了弹窗
       alert_title: "", // 弹窗title
       title: "",
-      imgLength: 0
+      imgLength: 0,
+      queryAppId: this.$route.query.appId
     };
   },
   computed: {
     ...mapState(["purview", "lowerHospital"])
   },
+  created() {
+    if (this.$route.query.appId != undefined) {
+      this.setAppId(this.queryAppId);
+    }
+    console.log("this.queryAppId :>> ", this.queryAppId);
+  },
   mounted() {
-    this.getWangzhendetail(this.appId, "xunzhen", this.$route.query.tid);
+    if (this.$route.query.appId != undefined) {
+      this.setAppId(this.queryAppId);
+      this.getWangzhendetail(this.queryAppId, "xunzhen", this.$route.query.tid);
+    } else {
+      this.getWangzhendetail(this.appId, "xunzhen", this.$route.query.tid);
+    }
+
     this.$refs.detail.style = "display:none";
-    this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "巡诊详情";
   },
   components: {
     Detail,
     Header
   },
   methods: {
+    ...mapMutations(["setLowerHospital", "setAppId"]),
     goToDetail(id) {
       this.$router.push({
         path: "/goods_detail",
         query: { id: id }
       });
     },
-    watchdetail(godetails) {``
+    watchdetail(godetails) {
+      ``;
       this.godetail = godetails;
       if (godetails == 1) {
         this.$refs.detail.style = "display:block";
         this.alert_title = "作物病情资料";
       }
       if (godetails == 4) {
-       if(this.zl_detail.result == ""){
+        if (this.zl_detail.result == "") {
           //如果处方信息为空则什么也不做
-        }else{
+        } else {
           this.alert_title = "处方信息";
           this.$refs.detail.style = "display:block";
         }
@@ -125,8 +138,13 @@ export default {
         .then(res => {
           console.log(res);
           if (res.data.code == 200) {
-            console.log(res);
             this.zl_detail = res.data.data;
+            this.setLowerHospital(res.data.data.mpublic);
+            console.log("res.data.data.mpublic :>> ", res.data.data.mpublic);
+            this.title =
+              this.purview == 3 || this.purview == 4
+                ? res.data.data.mpublic
+                : "巡诊详情";
             this.imgLength =
               res.data.data.pic == "" ? 0 : res.data.data.pic.length;
             //   this.replay = res.data.answers

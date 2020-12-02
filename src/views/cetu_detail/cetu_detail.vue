@@ -95,7 +95,7 @@
 <script>
 import Detail from "../../components/zhenliao_alert/zhenliao_alert";
 import Header from "@/components/online_hospital_header/online_hospital_header";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 import Swiper from "swiper";
 export default {
   data() {
@@ -105,15 +105,28 @@ export default {
       yao_number: "", // 药物数量
       godetail: "", // 判断是从何处打开了弹窗
       alert_title: "", // 弹窗title
-      title: ""
+      title: "",
+      queryAppId: this.$route.query.appId
     };
   },
+  created() {
+    if (this.$route.query.appId != undefined) {
+      this.setAppId(this.queryAppId);
+    }
+    console.log("this.queryAppId :>> ", this.queryAppId);
+  },
   mounted() {
-    this.getcetuinfo("testingsoil", this.$route.query.id);
-    this.title =
-      this.purview == 3 || this.purview == 4
-        ? this.lowerHospital
-        : "测土配方详情";
+    // this.title =
+    //   this.purview == 3 || this.purview == 4
+    //     ? this.lowerHospital
+    //     : "测土配方详情";
+    console.log("this.$route.query.appId  :>> ", this.$route.query.appId);
+    if (this.$route.query.appId != undefined) {
+      this.setAppId(this.queryAppId);
+      this.getcetuinfo("testingsoil", this.$route.query.id);
+    } else {
+      this.getcetuinfo("testingsoil", this.$route.query.id);
+    }
   },
   components: {
     Detail,
@@ -123,6 +136,7 @@ export default {
     ...mapState(["appId", "purview", "lowerHospital"])
   },
   methods: {
+    ...mapMutations(["setLowerHospital", "setAppId"]),
     goToDetail(id) {
       this.$router.push({
         path: "/goods_detail",
@@ -171,6 +185,12 @@ export default {
         .then(res => {
           if (res.data.code == "200") {
             this.cetuinfo = res.data.data;
+            this.setLowerHospital(res.data.data.mpublic);
+            console.log("res.data.data.mpublic :>> ", res.data.data.mpublic);
+            this.title =
+              this.purview == 3 || this.purview == 4
+                ? res.data.data.mpublic
+                : "测土配方详情";
             if (res.data.data.products == "") {
               this.yao_number = 0;
             } else {

@@ -134,11 +134,12 @@ export default {
     goToLowerHospital() {
       // 当显示为下级医院的时候点击去下级医院首页
       if (this.title.indexOf("医院") >= 0) {
-        if (this.hospitalIsstore == 1) {
-          this.$router.push({ path: "/index_third" });
-        } else if (this.hospitalIsstore == 2) {
-          this.$router.push({ path: "/index_second" });
-        }
+        this.$router.push({ path: "/index_second" });
+        // if (this.hospitalIsstore == 1) {
+        //   this.$router.push({ path: "/index_third" });
+        // } else if (this.hospitalIsstore == 2) {
+
+        // }
       }
     },
     goBack() {

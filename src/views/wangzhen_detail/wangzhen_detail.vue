@@ -92,7 +92,7 @@
 import Detail from "../../components/zhenliao_alert/zhenliao_alert";
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import Swiper from "swiper";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -105,9 +105,10 @@ export default {
     };
   },
   mounted() {
+    // this.setAppId(this.queryAppId);
     this.getWangzhendetail(this.appId, "forum_post", this.$route.query.tid);
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "网诊详情";
+      this.purview == 3 || this.purview == 4 ? "网诊详情" : "网诊详情";
   },
   components: {
     Detail,
@@ -117,6 +118,7 @@ export default {
     ...mapState(["appId", "purview", "lowerHospital"])
   },
   methods: {
+    ...mapMutations(["setLowerHospital"]),
     topre() {
       this.$router.go(-1);
     },
@@ -142,9 +144,9 @@ export default {
         this.$refs.detail.style = "display:block";
       }
       if (godetails == 2) {
-        if(this.zl_detail.result == ""){
+        if (this.zl_detail.result == "") {
           //如果处方信息为空则什么也不做
-        }else{
+        } else {
           this.alert_title = "处方信息";
           this.$refs.detail.style = "display:block";
         }
