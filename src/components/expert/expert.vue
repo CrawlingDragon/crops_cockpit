@@ -13,7 +13,14 @@
       <p class="goodat">擅长作物：{{ item.zuowu }}</p>
       <div class="bottom">
         <span style="margin-right:10px">处方（{{ item.chufangcount }}）</span>
-        <span v-show="purview == 3"> 加入医院（{{ item.hospitalcount }}）</span>
+        <span
+          v-show="
+            (purview == 3 && hospitalIsstore == 2) ||
+              (purview == 4 && hospitalIsstore == 2)
+          "
+        >
+          加入医院（{{ item.hospitalcount }}）</span
+        >
       </div>
     </div>
   </div>
@@ -36,7 +43,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["purview"])
+    ...mapState(["purview", "hospitalIsstore"])
   },
   watch: {},
   mounted() {},

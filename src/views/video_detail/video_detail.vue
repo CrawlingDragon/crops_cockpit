@@ -29,7 +29,7 @@
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
-            <div class="download btn" @click="downVideo">
+            <div class="download btn" @click="downVideo" style="display:none;">
               <!-- <input type="file" class="file" /> -->
               下载视频
             </div>

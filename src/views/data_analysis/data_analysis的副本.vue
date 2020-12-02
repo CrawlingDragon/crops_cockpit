@@ -129,8 +129,7 @@ export default {
       dataIndex: 0,
       pieDataIndex: 0,
       zuowu: "",
-      zuozhenEchart: "",
-      hospitalEchart: ""
+      zuowuEchart: ""
     };
   },
   computed: {
@@ -286,7 +285,7 @@ export default {
     ...mapMutations(["setAppId"]),
     getZuowu() {
       this.$axios
-        .fetchGet("/Home/DatavDemo/getZuowu?appId=" + this.appId)
+        .fetchGet("/Home/DatavDemo/getZuowu", { appId: this.appId })
         .then(res => {
           this.zuowu = res.data.splice(0, 6);
           this.initPie();
@@ -327,43 +326,19 @@ export default {
                 this.zuozhenActive = 0;
               }
               // this.initZuozhen();
-              this.zuozhenEchart.setOption({
+              this.zuowuEchart.setOption({
                 radar: {
-                  // shape: 'circle',
                   indicator: this.wenzhenxunzhen.title[this.zuozhenActive]
                 },
                 series: [
                   {
                     name: this.zuozhenActive == 0 ? "巡诊数量" : "坐诊数量",
-                    data: [
-                      {
-                        value: this.wenzhenxunzhen.number[this.zuozhenActive]
-                      }
-                    ]
+                    value: this.wenzhenxunzhen.number[this.zuozhenActive]
                   }
                 ]
               });
               // this.initHospital();
-              this.hospitalEchart.setOption({
-                xAxis: {
-                  type: "category",
-                  data: this.hospital.name
-                },
-                series: [
-                  {
-                    type: "bar",
-                    data: this.hospital.number[this.zuozhenActive]
-                  },
-                  {
-                    data: this.hospital.number[this.zuozhenActive],
-                    type: "line",
-                    itemStyle: {
-                      color: "#87DBF7"
-                    }
-                  }
-                ]
-              });
-            }, 2000);
+            }, 4000);
           }, 100);
         });
     },
@@ -579,8 +554,8 @@ export default {
     },
     initZuozhen() {
       // const mapEchartP = echarts.init(document.getElementById("zuozhen"));
-      this.zuozhenEchart = echarts.init(document.getElementById("zuozhen"));
-      this.zuozhenEchart.setOption(
+      this.zuowuEchart = echarts.init(document.getElementById("zuozhen"));
+      this.zuowuEchart.setOption(
         {
           tooltip: {},
           radar: {
@@ -613,8 +588,8 @@ export default {
       );
     },
     initHospital() {
-      this.hospitalEchart = echarts.init(document.getElementById("hospital"));
-      this.hospitalEchart.setOption({
+      const mapEchartP = echarts.init(document.getElementById("hospital"));
+      mapEchartP.setOption({
         tooltip: {
           trigger: "item",
           formatter: "{b}: {c}"

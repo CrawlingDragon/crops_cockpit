@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="content content01" v-show="showFlag == 'a'">
-        <div class="title">前10作物</div>
+        <div class="title">前{{ zuowuData.length - 1 }}作物</div>
         <div class="echart-box" id="zuowu"></div>
         <div class="title">数据明细</div>
         <div class="table-box">
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="content content02" v-show="showFlag == 'b'">
-        <div class="title">前10医院</div>
+        <div class="title">前{{ hospitalData.length - 1 }}医院</div>
         <div class="echart-box" id="hospital"></div>
         <div class="title">数据明细</div>
         <div class="table-box">
@@ -160,7 +160,7 @@ export default {
     getZuowu() {
       this.$axios
         .fetchGet(
-          "/Home/DatavDemo/getZuowu??appId=" + this.appId + "&action=total"
+          "/Home/DatavDemo/getZuowu?appId=" + this.appId + "&action=total"
         )
         .then(res => {
           this.zuowuData = res.data;
