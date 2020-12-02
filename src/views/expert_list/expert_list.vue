@@ -86,7 +86,6 @@ export default {
         });
     },
     load() {
-      console.log("触发了");
       // 是否当前page不是最后一页
       if (this.page <= Math.ceil(this.total / 12)) {
         // 页码+1

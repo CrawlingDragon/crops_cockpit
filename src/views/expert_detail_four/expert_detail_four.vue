@@ -94,7 +94,7 @@ export default {
   },
   watch: {
     content_show(newVal) {
-      console.log(newVal);
+      // console.log(newVal);
     }
   },
   methods: {

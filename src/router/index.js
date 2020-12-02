@@ -53,18 +53,6 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "expertlist" */ "../views/expert-list/expert-list.vue")
   },
-  // {
-  //   path: "/hospitalsort",
-  //   name: "Hospitalsort",
-  //   component: () =>
-  //     import(/* webpackChunkName: "hospitalsort" */ "../views/hospitalsort/hospitalsort.vue")
-  // },
-  {
-    path: "/nexthospital",
-    name: "nexthospital",
-    component: () =>
-      import(/* webpackChunkName: "nexthospital" */ "../views/nexthospital/nexthospital.vue")
-  },
   {
     path: "/expertlist",
     name: "expertlist",
@@ -242,14 +230,6 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "index_third" */ "../views/index_third/index_third.vue"
-      )
-  },
-  {
-    path: "/online_hospital_channel",
-    name: "online_hospital_channel",
-    component: () =>
-      import(
-        /* webpackChunkName: "online_hospital_channel" */ "../views/online_hospital_channel/online_hospital_channel.vue"
       )
   },
   {

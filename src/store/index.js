@@ -35,11 +35,14 @@ export default new Vuex.Store({
     huiyuanId: "", // 新院我的会员id
     lowerHospital: window.localStorage.getItem("lowerHospital"),
     prevroute: "", // 专家列表记录上一层返回的地址
-    precount:-1,//记录要返回的页面在历史的第几个页面
     hospitalIsstore: window.localStorage.getItem('hospitalIsstore'),
-    adminRoute:window.localStorage.getItem('adminRoute')
+    adminRoute:window.localStorage.getItem('adminRoute'),
+    ismapupdate:0//如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
   },
   mutations: {
+    setIsMapUpdata(state,data){
+      state.ismapupdate = state.ismapupdate-data
+    },
     setAdminRoute (state, data) {
       state.adminRoute = data
       window.localStorage.setItem('adminRoute',data)
@@ -52,13 +55,6 @@ export default new Vuex.Store({
     getPrevroute(state, data) { // 专家页面获取上一层返回的路由
       state.prevroute = data;
       localStorage.setItem("prevroute",data)
-    },
-    getPrecount(state,data){
-      if(data ==1){
-        state.precount = state.precount-1
-      }else if(data == 0){
-        state.precount = -1
-      }
     },
     setLowerHospital (state, data) {
       state.lowerHospital = data;

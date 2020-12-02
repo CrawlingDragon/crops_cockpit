@@ -38,7 +38,7 @@ export default {
       page: 1, // 当前页数
       total: "", // 当前会员总数
       title: "我的会员",
-      returnPath: "/index_second",
+      // returnPath: "/index_second",
       // from: this.$route.query.from
     };
   },

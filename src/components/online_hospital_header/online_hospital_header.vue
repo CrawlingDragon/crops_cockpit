@@ -105,7 +105,6 @@ export default {
       "purview",
       "curuserid",
       "hospitalIsstore",
-      "precount",
       "adminRoute"
     ])
   },
@@ -142,21 +141,14 @@ export default {
         }
       }
     },
-    ...mapMutations(["getPrecount"]),
     goBack() {
       if (this.from == "adminRoute") {
         window.close();
       }
-
       if (this.returnPath != "") {
-        if (this.returnPath == "/second_huiyuan_list") {
-          this.getPrecount(1);
-        }
         this.$router.replace({
           path: this.returnPath
         });
-      } else if (this.precount !== -1) {
-        this.$router.go(this.precount);
       } else {
         this.$router.go(-1);
       }

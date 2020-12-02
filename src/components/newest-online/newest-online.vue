@@ -91,11 +91,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setAppId", "setuserId", "getPrecount"]),
+    ...mapMutations(["setAppId", "setuserId"]),
     godetail(item) {
       this.setAppId(item.appid);
-      //这里要设置一下，从管理院进入下级管理院的时候要把precount进行清零
-      this.getPrecount(0);
       if (item.module == "wenzhen") {
         let route = this.$router.resolve({
           path: "/zuozhen_detail",

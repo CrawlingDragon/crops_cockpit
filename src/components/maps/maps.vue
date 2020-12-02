@@ -38,7 +38,7 @@ export default {
       default: function() {
         return [];
       }
-    }
+    },
   },
   methods: {
     ...mapMutations(["changeBaseCity", "getIsnav"]),
@@ -111,7 +111,6 @@ export default {
             that.$refs.mapData.style.display = "block";
             that.pieIndex = params.dataIndex;
             that.cityName = params.name;
-            // console.log(that.cityName)
             that.cityVal = params.value;
             that.obj = {
               name: params.name,
@@ -168,7 +167,7 @@ export default {
   //   window.sessionStorage.setItem('mapIndex',this.pieIndex)
   // },
   computed: {
-    ...mapState(["globalLevel"]),
+    ...mapState(["globalLevel","ismapupdate"]),
     textBoolean() {
       let textBoolean = true;
       if (this.name == "china") {
@@ -224,8 +223,11 @@ export default {
       console.log("地图名字：", newVal);
     },
     mapsArray() {
-      // console.log("mapsArray :");
       this.initMap(this.name);
+    },
+    ismapupdate(newVal){
+      this.pieIndex = 0
+      this.$refs.mapData.style.display = "none";
     }
   }
 };
