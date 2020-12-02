@@ -137,7 +137,8 @@ export default {
         this.navareaname,
         this.secondLevel,
         this.loginId,
-        this.isnav
+        this.isnav,
+        this.navareaname
       );
     } else {
       this.getMapData(
@@ -205,13 +206,14 @@ export default {
     }
   },
   watch: {
-    secondName() {
+    secondName(newVal,oldval) {
       if (this.loginId - 0 == 2) {
         this.getMapData(
           this.navareaname,
           this.secondLevel,
           this.loginId,
-          this.isnav
+          this.isnav,
+          this.navareaname
         );
       } else {
         this.getMapData(
