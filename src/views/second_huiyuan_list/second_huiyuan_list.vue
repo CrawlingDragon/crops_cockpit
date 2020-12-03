@@ -7,7 +7,7 @@
         midTitle="我的会员"
       ></Headers>
     </div>
-    <div class="my_huiyuan"  v-infinite-scroll="load">
+    <div class="my_huiyuan" v-infinite-scroll="load">
       <div
         class="single_huiyuan"
         v-for="(item, index) in this.huiyuan_list"
@@ -38,7 +38,7 @@ export default {
       page: 1, // 当前页数
       total: "", // 当前会员总数
       title: "我的会员",
-      // returnPath: "/index_second",
+      returnPath: "/index_second"
       // from: this.$route.query.from
     };
   },
@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     gethuiyuan_list(page, pagesize) {
-      this.openLoading()
+      this.openLoading();
       this.$axios
         .fetchPost("/Home/Member/GetMpUser", {
           appId: this.appId,
@@ -71,7 +71,7 @@ export default {
             } else {
               this.huiyuan_list.push(...res.data.data);
             }
-            this.openLoading().close()
+            this.openLoading().close();
           }
         });
     },
@@ -95,7 +95,7 @@ export default {
       if (this.page < Math.ceil(this.total / 14)) {
         // 页码+1
         this.page++;
-        this.gethuiyuan_list(this.page,14);
+        this.gethuiyuan_list(this.page, 14);
       }
     }
   }

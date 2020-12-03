@@ -22,6 +22,7 @@
           <div class="pics">
             <img
               v-for="(item, index) in this.zl_detail.pic"
+              v-show="index<5"
               :key="index"
               :src="item"
               alt=""

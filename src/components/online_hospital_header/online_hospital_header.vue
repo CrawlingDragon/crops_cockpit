@@ -147,9 +147,16 @@ export default {
         window.close();
       }
       if (this.returnPath != "") {
-        this.$router.replace({
-          path: this.returnPath
-        });
+        if (this.returnPath == "/index_second") {
+          this.$router.replace({
+            path: this.returnPath,
+            query: { from: "adminRoute" }
+          });
+        } else {
+          this.$router.replace({
+            path: this.returnPath
+          });
+        }
       } else {
         this.$router.go(-1);
       }

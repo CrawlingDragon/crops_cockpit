@@ -14,6 +14,7 @@
           <div class="pics">
             <img
               v-for="(item, index) in this.zl_detail.pic"
+              v-show="index < 5"
               :key="index"
               :src="item"
               alt=""
@@ -40,15 +41,20 @@
         <img src="../../assets/24.png" alt="" />
         <div class="text2">处方药（{{ this.yao_number }}）</div>
       </div>
-      <div
-        class="yao"
-        v-for="(item, index) in this.zl_detail.products"
-        :key="index"
-        @click="goToDetail(item.id)"
-      >
-        <div class="shadow"></div>
-        <img :src="item.thumb_pic" alt="" />
-        <p class="yao_name">{{ item.name }}</p>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <div
+            class="swiper-slide yao "
+            v-for="(item, index) in this.zl_detail.products"
+            :key="index"
+            @click="goToDetail(item.id)"
+          >
+            <div class="shadow"></div>
+            <img :src="item.thumb_pic" alt="" />
+            <p class="yao_name">{{ item.name }}</p>
+          </div>
+        </div>
+        <div class="swiper-scrollbar"></div>
       </div>
       <div class="no_yao" v-if="this.yao_number == 0">
         <img src="../../assets/65.png" alt="" />
@@ -237,35 +243,55 @@ export default {
               margin 40 auto
               font-size 30px
               line-height 40px
-      .yao
-          height 270px
-          width 270px
-          margin-right 15px
-          float left
-          position relative
-          img
+      .swiper-container
+          .swiper-slide
+              text-align center
+              font-size 18px
+              /* Center slide text vertically */
+              display -webkit-box
+              display -ms-flexbox
+              display -webkit-flex
+              display flex
+              -webkit-box-pack center
+              -ms-flex-pack center
+              -webkit-justify-content center
+              justify-content center
+              -webkit-box-align center
+              -ms-flex-align center
+              -webkit-align-items center
+              align-items center
+          .yao
               height 270px
               width 270px
-          .yao_name
-              position absolute
-              bottom 12px
-              left 17px
-              right 44px
-              width 100%
-              text-align left
-              font-size 24px
-              display -webkit-box
-              text-overflow ellipsis
-              overflow: hidden;
-              display: -webkit-box;
-              -webkit-line-clamp: 2;
-              -webkit-box-orient: vertical;
-          .shadow
-              position absolute
-              top 0px
-              height 100%
-              width 100%
-              background linear-gradient(to top,#000000 1%,transparent 100%)
+              margin-right 15px
+              float left
+              position relative
+              img
+                  height 270px
+                  width 270px
+              .yao_name
+                  position absolute
+                  bottom 12px
+                  left 25px
+                  right 44px
+                  width 270px
+                  text-align left
+                  font-size 24px
+                  display -webkit-box
+                  text-overflow ellipsis
+                  overflow: hidden;
+                  display: -webkit-box;
+                  -webkit-line-clamp: 2;
+                  -webkit-box-orient: vertical;
+              .shadow
+                  position absolute
+                  top 0px
+                  height 100%
+                  width 270px
+                  background linear-gradient(to top,rgba(000,000,000,0.8) 5%,transparent 40%,transparent 100%)
+          .swiper-scrollbar
+            height 5px
+            background #C5C5C5
       .no_yao
           height 270px
           width 270px
