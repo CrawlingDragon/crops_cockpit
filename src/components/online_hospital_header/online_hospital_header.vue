@@ -2,13 +2,25 @@
   <div class="header-container">
     <div class="head-wrap cf">
       <div class="left-bar">
-        <div class="logo" v-show="logoSrc" v-if="purview == 1 || purview == 2">
+        <div
+          class="logo"
+          v-if="
+            (purview == 1 && logoSrc) ||
+              (purview == 2 && logoSrc) ||
+              (purview == 46 && isLowerHospital == 'false')
+          "
+          v-show="logoSrc"
+        >
           <img src="./main_page_icon.png" alt="" class="img" />
         </div>
         <slot></slot>
         <div
           class="admin-icon"
-          v-if="purview == 3 || purview == 4"
+          v-if="
+            purview == 3 ||
+              purview == 4 ||
+              (purview == 46 && isLowerHospital == 'true')
+          "
           v-show="!isWangzhen"
         >
           <div class="icon-back" @click="goBack"></div>
@@ -18,47 +30,78 @@
         <div
           class="goBack-icon"
           v-show="!logoSrc && !isWangzhen"
-          v-if="purview == 1 || purview == 2"
+          v-if="
+            purview == 1 ||
+              purview == 2 ||
+              (purview == 46 && isLowerHospital == 'false')
+          "
           @click="goBack"
         ></div>
-        <h2 class="h2" @click="goToLowerHospital">
+        <h2
+          class="h2"
+          @click="goToLowerHospital"
+          :class="{ haveHospital: haveHospitalName && istown == 0 }"
+        >
           {{ title }}
           <span class="title-number" v-show="titleNumber != 0">
             {{ titleNumber }}
           </span>
         </h2>
       </div>
-      <div class="mid" v-if="purview == 3 || purview == 4">{{ midTitle }}</div>
+      <div
+        class="mid"
+        v-if="
+          purview == 3 ||
+            purview == 4 ||
+            (purview == 46 && isLowerHospital == 'true') ||
+            showMidTitle == true
+        "
+        v-show="!isWangzhen"
+      >
+        {{ midTitle }}
+      </div>
       <div class="right-bar" v-show="right_show_bar">
         <div
           class="admin-index"
           @click="goToIndex"
-          v-if="purview == 3 || purview == 4"
+          v-if="
+            purview == 3 ||
+              purview == 4 ||
+              (purview == 46 && isLowerHospital == 'true')
+          "
         >
           <div class="icon"></div>
-          <span>驾驶舱首页</span>
+          <span>平台首页</span>
         </div>
         <div class="reload" @click="reload">
           <span class="icon"></span>
         </div>
-        <div class="weather">
-          <span class="icon"><img :src="weather.todaypicture" alt=""/></span>
-          <span>{{ weather.nowtemperature }} ℃</span>
-        </div>
+        <div
+          class="login-out"
+          @click="loignOutBtn"
+          v-if="
+            (purview == 3 || purview == 4 || purview == 46) &&
+              isLowerHospital == 'false'
+          "
+        ></div>
         <div class="time">{{ time }}</div>
-        <!-- <div class="search" @click="goToSearch">
-        <span class="icon"></span>
-        <span>搜索</span>
-      </div> -->
       </div>
     </div>
+    <!--诊疗 -->
+    <Confim
+      ref="confimBox"
+      @btnSure="clickSure"
+      :alertText="'注销账号' + loginName + '后，将退出登录'"
+    ></Confim>
   </div>
 </template>
 <script>
+let timer;
 import { mapState, mapMutations } from "vuex";
+import Confim from "@/components/confim/confim";
 export default {
   name: "online_hospital_headers",
-  components: {},
+  components: { Confim },
   props: {
     isWangzhen: {
       type: Boolean,
@@ -69,8 +112,8 @@ export default {
       default: ""
     },
     logoSrc: {
-      type: String,
-      default: ""
+      type: Boolean,
+      default: false
     },
     right_show_bar: {
       type: Boolean,
@@ -87,16 +130,24 @@ export default {
     returnPath: {
       type: String,
       default: ""
+    },
+    istown: {
+      type: Number,
+      default: 0
+    },
+    aId: {
+      type: String,
+      default: ""
     }
   },
   data() {
     return {
-      time: "",
+      time: "2020-12-11 10：00",
       query: "",
-      weather: "",
       closeNumer: 1,
       src: "",
-      from: this.$route.query.from
+      from: this.$route.query.from,
+      routePath: this.$route.path
     };
   },
   computed: {
@@ -105,16 +156,49 @@ export default {
       "purview",
       "curuserid",
       "hospitalIsstore",
-      "adminRoute"
-    ])
+      "adminRoute",
+      "loginHospitalName",
+      "isLowerHospital"
+    ]),
+    loginName() {
+      if (this.loginHospitalName.indexOf("医院") >= 0) {
+        return this.loginHospitalName;
+      } else {
+        return this.loginHospitalName + "医院";
+      }
+    },
+    haveHospitalName() {
+      if (
+        this.title.indexOf("医院") >= 0 &&
+        this.$router.currentRoute.name != "index_second" &&
+        this.$router.currentRoute.name != "index_first" &&
+        this.routePath != "/village_me"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    showMidTitle() {
+      let path = this.$route.path;
+      if (
+        path == "/zuozhen_detail" ||
+        path == "/xunzhen_detail" ||
+        path == "/cetu_detail"
+      ) {
+        return true;
+      } else {
+        false;
+      }
+    }
   },
   watch: {},
   created() {},
   mounted() {
-    this.src = "./main_page_icon.png";
+    // console.log("this.$router.current :>> ", this.$route.path);
     // 获取时间
     const time = new Date();
-    setInterval(() => {
+    timer = setInterval(() => {
       const y = time.getFullYear();
       const m =
         time.getMonth() + 1 < 10
@@ -126,20 +210,49 @@ export default {
         time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
       this.time = y + "-" + m + "-" + d + "  " + h + ":" + min;
     }, 1000);
-    this.getWeather();
+    // this.getWeather();
     // 获取天气
   },
-  destroyed() {},
+  destroyed() {
+    clearInterval(timer);
+  },
   methods: {
+    loignOutBtn() {
+      // 退出登陆按钮
+      this.$refs.confimBox.showFlag = true;
+    },
+    clickSure() {
+      // if (this.isLowerHospital == "true") {
+      //   window.close();
+      // } else {
+
+      // }
+      this.$router.push({ path: "/" });
+    },
     goToLowerHospital() {
       // 当显示为下级医院的时候点击去下级医院首页
+      if (this.istown == 1) {
+        this.$router.push({
+          path: "/village_me",
+          query: { appId: this.aId }
+        });
+        return;
+      }
+      if (
+        this.$router.currentRoute.name == "index_second" ||
+        this.$router.currentRoute.name == "index_first" ||
+        this.routePath == "/village_me"
+      ) {
+        return;
+      }
       if (this.title.indexOf("医院") >= 0) {
-        this.$router.push({ path: "/index_second" });
-        // if (this.hospitalIsstore == 1) {
-        //   this.$router.push({ path: "/index_third" });
-        // } else if (this.hospitalIsstore == 2) {
-
-        // }
+        if (this.purview == 46 && this.isLowerHospital == "false") {
+          this.$router.push({
+            path: "/index_first"
+          });
+        } else {
+          this.$router.push({ path: "/index_second" });
+        }
       }
     },
     goBack() {
@@ -164,55 +277,37 @@ export default {
     close() {
       // 关闭下级医院
       if (this.closeNumer == 2) {
+        if (this.purview == 46 && this.isLowerHospital == "false") {
+          this.$router.push({
+            path: "/index_first"
+          });
+          return;
+        }
         window.close();
-        // if (this.adminRoute == "/indexFour") {
-        //   this.$router.push({
-        //     path: "/indexFour",
-        //     query: {
-        //       userid: window.sessionStorage.getItem("curuserid"),
-        //       areaname: window.sessionStorage.getItem("curcity"),
-        //       level: window.sessionStorage.getItem("curlevel"),
-        //       letter: window.sessionStorage.getItem("letter")
-        //     }
-        //   });
-        // } else {
-        //   this.$router.push({
-        //     path: this.adminRoute
-        //   });
-        // }
         return;
       }
       this.closeNumer += 1;
       this.$layer.msg("再按一次关闭该医院");
     },
-    getWeather() {
-      // 获取头部天气
-      this.$axios
-        .fetchGet("/Home/Index/GetAreaWeather", { appId: this.appId })
-        .then(res => {
-          if (res.data.code === "200") {
-            this.weather = res.data.data;
-          }
-        });
-    },
     reload() {
       this.$router.go();
     },
     goToIndex() {
-      this.$router.push({
-        path: "/indexFour",
-        query: {
-          userid: window.sessionStorage.getItem("curuserid"),
-          areaname: window.sessionStorage.getItem("curcity"),
-          level: window.sessionStorage.getItem("curlevel"),
-          letter: window.sessionStorage.getItem("letter")
-        }
-      });
-    },
-    goToSearch() {
-      this.$router.push({
-        path: "/search"
-      });
+      if (this.purview == 46) {
+        this.$router.push({
+          path: "/index_first"
+        });
+      } else {
+        this.$router.push({
+          path: "/indexFour",
+          query: {
+            userid: window.sessionStorage.getItem("curuserid"),
+            areaname: window.sessionStorage.getItem("curcity"),
+            level: window.sessionStorage.getItem("curlevel"),
+            letter: window.sessionStorage.getItem("letter")
+          }
+        });
+      }
     }
   }
 };
@@ -249,6 +344,8 @@ export default {
         font-weight 400
         color #7FB5F1
         padding-left 30px
+        &.haveHospital
+          cursor: pointer;
         .title-number
           margin-left 10px
       .logo
@@ -334,24 +431,15 @@ export default {
           cursor pointer
           width 27px
           height 27px
-          background url('./refresh.png') no-repeat
+          background url('../../assets/image/refresh.png') no-repeat
+          background-size 100% 100%
           margin-right 8px
-      .weather
-        color #7FB5F1
-        font-size: 18px;
-        display flex
-        align-items center
-        margin-right 37px
-        color #7FB5F1
-        .icon
-          display inline-block
-          width 26px
-          height 26px
-          margin-right 8px
-          img
-            width 100%
-            height 100%
-            display block
+      .login-out
+          width 30px
+          height 28px
+          background url('../../assets/image/login_out_icon.png') no-repeat
+          margin-right 60px
+          cursor: pointer;
       .time
         color #7FB5F1
         font-size: 18px;

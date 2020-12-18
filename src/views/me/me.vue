@@ -9,7 +9,11 @@
         </el-image>
         <div class="account">账号:{{ data.acount }}</div>
         <div
-          v-show="purview == 1 || purview == 2"
+          v-show="
+            purview == 1 ||
+              purview == 2 ||
+              (purview == 46 && this.isLowerHospital == 'false')
+          "
           class="btn1"
           @click="loignOutBtn"
         >
@@ -20,8 +24,8 @@
       <div class="right">
         <div class="title">
           {{ data.name }}
-          <span class="describe-title">{{
-            data.isstore == 1 ? "实体店" : "网院"
+          <span class="describe-title" v-if="data.isstore == 2">{{
+            网院
           }}</span>
         </div>
         <div class="property">医院属性：{{ data.level_name }}</div>
@@ -33,14 +37,19 @@
         </div>
       </div>
     </div>
-    <Nav :index="5" v-if="hospitalIsstore == 1"></Nav>
-    <!-- 网诊 -->
-    <NavSecond :index="5" v-if="hospitalIsstore == 2"></NavSecond>
-    <!--诊疗 -->
+    <!-- <Nav :index="5" v-if="purview == 2"></Nav> -->
+    <NavSecond
+      :index="5"
+      v-if="(purview == 46 && isLowerHospital == 'true') || purview == 2"
+    ></NavSecond>
+    <NavThird
+      :index="5"
+      v-if="purview == 46 && isLowerHospital == 'false'"
+    ></NavThird>
     <Confim
       ref="confimBox"
       @btnSure="clickSure"
-      :alertText="'注销账号' + data.name + '后，将退出驾驶舱'"
+      :alertText="'注销账号' + data.name + '后，将退出登录'"
     ></Confim>
   </div>
 </template>
@@ -48,6 +57,7 @@
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
 import NavSecond from "@/components/nav_list_second/nav_list_second";
+import NavThird from "@/components/nav_list_third/nav_list_third";
 import Confim from "@/components/confim/confim";
 import { mapState } from "vuex";
 export default {
@@ -56,7 +66,8 @@ export default {
     Header,
     Nav,
     NavSecond,
-    Confim
+    Confim,
+    NavThird
   },
   props: {},
   data() {
@@ -66,13 +77,25 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "hospitalIsstore"])
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "hospitalIsstore",
+      "isLowerHospital"
+    ])
   },
   watch: {},
   mounted() {
     this.getData();
-    if (this.purview == 3 || this.purview == 4) {
+    if (
+      this.purview == 3 ||
+      this.purview == 4 ||
+      (this.purview == 46 && this.isLowerHospital == "true")
+    ) {
       this.title = this.lowerHospital;
+    } else if (this.purview == 46 && this.isLowerHospital == "false") {
+      this.title = "我的";
     } else {
       this.title = "我的";
     }

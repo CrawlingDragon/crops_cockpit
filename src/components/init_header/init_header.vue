@@ -12,48 +12,14 @@
       <span class="h5">新型庄稼医院管理驾驶舱</span>
     </div>
     <div class="change-data">
-      <div class="change-icon"></div>
-      <div class="change-box">
-        <div class="title">
-          <span class="p1 active">医院数据源切换</span>
-          <span class="p2">{{ cur_cityname }}</span>
-        </div>
-        <div class="choose">
-          <div class="item" @click="chooseHospital('null')">
-            <div
-              class="radio"
-              :class="{
-                active:
-                  chooseHospitalRadio == 'null' || chooseHospitalRadio == 2
-              }"
-            ></div>
-            <span
-              :class="{
-                active:
-                  chooseHospitalRadio == 'null' || chooseHospitalRadio == 2
-              }"
-              >显示所有医院</span
-            >
-          </div>
-          <div class="item" @click="chooseHospital(1)">
-            <div
-              class="radio"
-              :class="{ active: chooseHospitalRadio == 1 }"
-            ></div>
-            <span :class="{ active: chooseHospitalRadio == 1 }"
-              >仅显示新型</span
-            >
-          </div>
-        </div>
-        <div class="login-out" @click="loignOutBtn">退出登录</div>
-      </div>
+      <div class="login-out" @click="loignOutBtn"></div>
     </div>
     <div class="icon-refresh" @click="refresh"></div>
     <Date />
     <Confim
       ref="confimBox"
       @btnSure="clickSure"
-      :alertText="'注销' + cur_cityname + '账号后，将退出驾驶舱'"
+      :alertText="'注销' + loginName + '账号后，将退出登录'"
     ></Confim>
   </div>
 </template>
@@ -66,13 +32,17 @@ export default {
   components: { Date, Confim },
   props: {},
   data() {
-    return {
-      cur_cityname: "",
-      chooseHospitalRadio: "null"
-    };
+    return {};
   },
   computed: {
-    ...mapState(["appId", "isstore"])
+    ...mapState(["appId", "isstore", "loginHospitalName"]),
+    loginName() {
+      if (this.loginHospitalName.indexOf("医院") >= 0) {
+        return this.loginHospitalName;
+      } else {
+        return this.loginHospitalName + "医院";
+      }
+    }
   },
   watch: {},
   mounted() {
@@ -91,18 +61,6 @@ export default {
           letter: window.sessionStorage.getItem("letter")
         }
       });
-    },
-    chooseHospital(num) {
-      // 选择所有/或者新型医院
-      if (num == this.isstore) {
-        return;
-      }
-      this.chooseHospitalRadio = num;
-      if (num == 1) {
-        this.getIsstore(1);
-      } else {
-        this.getIsstore(null);
-      }
     },
     loignOutBtn() {
       // 退出登陆按钮
@@ -205,80 +163,11 @@ bg-image($url)
     top 46px
     right 239px
     height 30px
-    &:hover .change-box
-      display block
-    .change-icon
-      width 28px
+    .login-out
+      width 30px
       height 28px
-      margin-top 0px
-      background url('./setting-icon.png') no-repeat
-      background-size 100%
-      bg-image('./setting-icon')
-      cursor pointer
-      &:hover .change-box
-        display block
-    .change-box
-      position absolute
-      left -300px
-      top 24px
-      width 355px
-      height 200px
-      background #05113D
-      z-index 9999999999
-      border 1px solid #1B4E79
-      display none
-      .title
-        padding 30px 0px 20px 20px
-        font-size 14px
-        font-family Microsoft YaHei
-        font-weight 400
-        color rgba(127, 181, 241, 1)
-        text-align left
-        & > span
-          display inline-block
-          width 50%
-          user-select none
-          &.active
-            font-weight bold
-            font-size 18px
-      .choose
-        margin-top 20px
-        padding 0 20px
-        & > .item
-          display inline-block
-          width 50%
-          color #fff
-          font-size 16px
-          text-align left
-          cursor pointer
-          .radio
-            width 22px
-            height 22px
-            background url('./radio.png') no-repeat
-            margin-right 10px
-            display inline-block
-            vertical-align middle
-            &.active
-              background url('./checked-radio.png') no-repeat
-              color #F79D1D
-          & > span
-            display inline-block
-            vertical-align middle
-            &.active
-              color #F79D1D
-      .login-out
-        position absolute
-        left 0
-        right 0
-        bottom 0
-        height 50px
-        border-top 1px solid #1B4E79
-        text-align center
-        font-size 16px
-        line-height 50px
-        color #fff
-        cursor pointer
-        user-select none
+      background url('../../assets/image/login_out_icon.png') no-repeat
+      cursor: pointer;
   .icon-refresh
     width 28px
     height 28px

@@ -58,7 +58,7 @@ export default {
   props: {},
   data() {
     return {
-      content_show:2,
+      content_show: 2,
       huiyuan_name: "",
       huiyuanname: "",
       title: "",
@@ -67,7 +67,7 @@ export default {
     };
   },
   beforeRouteEnter: (to, from, next) => {
-    console.log(from.path)
+    console.log(from.path);
     next(vm => {
       switch (from.path) {
         case "/wangzhen_detail":
@@ -80,7 +80,7 @@ export default {
           vm.content_show = 4;
           break;
         default:
-          vm.$nextTick(()=>{
+          vm.$nextTick(() => {
             vm.content_show = 2;
           });
           break;
@@ -91,7 +91,7 @@ export default {
     this.huiyuan_name = "会员:" + window.sessionStorage.getItem("huiyuan_name");
     this.content_show = window.sessionStorage.getItem("content_show");
     this.title =
-      this.purview == 3 || this.purview == 4
+      this.purview == 3 || this.purview == 4 || this.purview == 46
         ? this.lowerHospital
         : this.huiyuan_name;
   },

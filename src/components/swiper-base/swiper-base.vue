@@ -126,7 +126,7 @@ export default {
           autoplay: true,
           speed: 300,
           observer: true,
-          loop: true,
+          // loop: true,
           observeParents: false
         });
       });

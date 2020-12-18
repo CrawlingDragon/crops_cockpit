@@ -14,10 +14,6 @@
               <span class="num">{{ this.mpublic }}</span
               >所
             </div>
-            <div class="isstore">
-              其中<span class="num">{{ this.isstore }}</span
-              >所实体店
-            </div>
           </td>
         </tr>
         <tr class="hang">
@@ -91,6 +87,7 @@
 <script>
 var echarts = require("echarts");
 import Headnav from "../../components/head_nav/head_nav";
+import { mapState } from "vuex";
 export default {
   components: {
     Headnav
@@ -115,18 +112,21 @@ export default {
       lefttitle: "下级医院"
     };
   },
+  computed: {
+    ...mapState(["loginHospitalName", "appId"])
+  },
   created() {
     this.openLoading();
     this.curcity = window.sessionStorage.getItem("curcity");
-    this.lefttitle = window.sessionStorage.getItem("name") + "-医院数据统计";
+    this.lefttitle = this.loginHospitalName + "-医院数据统计";
     this.curlevel = window.sessionStorage.getItem("curlevel");
     this.userid = window.sessionStorage.getItem("curuserid");
     this.$axios
       .fetchPost("/Home/Manage/GetShaoxingMpData", {
-        appId: this.userid,
-        areaname: this.curcity,
-        level: this.curlevel,
-        isstore: window.sessionStorage.getItem("isstore")
+        appId: this.appId
+        // areaname: this.curcity,
+        // level: this.curlevel,
+        // isstore: window.sessionStorage.getItem("isstore")
       })
       .then(res2 => {
         if (res2.data.code == "200") {
@@ -140,8 +140,8 @@ export default {
       });
     this.$axios
       .fetchPost("/Home/Manage/GetManageMpAreaData", {
-        appId: this.userid,
-        isstore: window.sessionStorage.getItem("isstore")
+        appId: this.appId
+        // isstore: window.sessionStorage.getItem("isstore")
       })
       .then(res1 => {
         if (res1.data.code == "200") {
@@ -168,14 +168,112 @@ export default {
               this.chartname.push("");
             }
           }
+          this.openLoading().close();
+          setTimeout(() => {
+            this.initEchart();
+          }, 100);
         }
       });
   },
   mounted() {
-    var myChart = echarts.init(document.getElementById("echartContainer"));
-    const self = this;
+    // var myChart = echarts.init(document.getElementById("echartContainer"));
+    // const self = this;
     // 绘制图表
-    setTimeout(() => {
+    // setTimeout(() => {
+    //   myChart.setOption(
+    //     {
+    //       title: {
+    //         text: "医院数量",
+    //         left: "left",
+    //         textStyle: {
+    //           fontFamily: "SimHei",
+    //           fontWeight: 400,
+    //           fontSize: 24,
+    //           color: "#FFFFFF"
+    //         },
+    //         padding: [20, 0, 0, 20]
+    //       },
+    //       //空值echarts的上下左右位置
+    //       grid: {
+    //         x: 50,
+    //         y: 80,
+    //         x2: 50,
+    //         y2: 60,
+    //         borderWidth: 10
+    //       },
+    //       color: ["#3398DB"],
+    //       tooltip: {},
+    //       xAxis: {
+    //         type: "category",
+    //         data: self.chartname,
+    //         boundaryGap: true,
+    //         axisTick: {
+    //           show: false
+    //           // interval: 1,
+    //         },
+    //         axisLine: {
+    //           lineStyle: {
+    //             color: "#FF6600", // 颜色
+    //             width: 1 // 粗细
+    //           }
+    //         },
+    //         axisLabel: {
+    //           show: true,
+    //           interval: 0, //当数据过多时候重叠显示
+    //           // rotate:40,
+    //           textStyle: {
+    //             fontFamily: "SimHei",
+    //             fontWeight: 400,
+    //             fontSize: 14,
+    //             color: "#FFFFFF"
+    //           }
+    //         }
+    //       },
+    //       yAxis: {
+    //         show: false,
+    //         axisLine: {
+    //           lineStyle: {
+    //             color: "#FF6600",
+    //             width: 20 //这里是为了突出显示加上的
+    //           }
+    //         }
+    //       },
+    //       series: [
+    //         {
+    //           name: "医院数量",
+    //           type: "bar",
+    //           barWidth: 10, //柱图宽度
+    //           data: self.chartnum,
+    //           barGap: "10%",
+    //           barCategoryGap: "10%",
+    //           itemStyle: {
+    //             normal: {
+    //               color: "#FF6600",
+    //               label: {
+    //                 show: true, //开启显示
+    //                 position: "top", //在上方显示
+    //                 textStyle: {
+    //                   //数值样式
+    //                   fontFamily: "SimHei",
+    //                   fontWeight: 400,
+    //                   fontSize: 20,
+    //                   color: "#FF6600"
+    //                 }
+    //               }
+    //             }
+    //           }
+    //         }
+    //       ]
+    //     },
+    //     true
+    //   );
+    //   self.openLoading().close();
+    // }, 100);
+  },
+  methods: {
+    initEchart() {
+      var myChart = echarts.init(document.getElementById("echartContainer"));
+      let self = this;
       myChart.setOption(
         {
           title: {
@@ -263,10 +361,7 @@ export default {
         },
         true
       );
-      self.openLoading().close();
-    }, 5000);
-  },
-  methods: {
+    },
     rowStyle({ row }) {
       if (row) {
         return {

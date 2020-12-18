@@ -36,8 +36,15 @@
         :class="{ active: index == 5 }"
         @click="changeRouter('我的')"
         v-show="showNav"
+        v-if="loginId != appId || purview == 2"
       >
-        <span>{{ purview == 4 || purview == 3 ? "关于" : "我的" }}</span>
+        <span>{{
+          purview == 4 ||
+          purview == 3 ||
+          (purview == 46 && isLowerHospital == "true")
+            ? "关于"
+            : "我的"
+        }}</span>
       </li>
     </ul>
   </div>
@@ -45,7 +52,7 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  name: "nav_list",
+  name: "nav_list_second",
   components: {},
   props: {
     index: { type: Number, default: 1 },
@@ -62,7 +69,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["purview"])
+    ...mapState(["purview", "isLowerHospital", "loginId", "appId"])
   },
   watch: {},
   mounted() {},

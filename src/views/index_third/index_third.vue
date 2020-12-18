@@ -1,10 +1,6 @@
 <template>
   <div class="index_third-container">
-    <Header
-      :title="headerTitle"
-      :logoSrc="logoSrc"
-      v-if="purview == 1 || purview == 2"
-    ></Header>
+    <Header :title="headerTitle" v-if="purview == 1 || purview == 2"></Header>
     <AdminHeader
       v-if="purview == 3 || purview == 4"
       :title="headerTitle"

@@ -68,11 +68,12 @@ export default {
       count: 0,
       routeFrom: "",
       noData: false,
-      title: ""
+      title: "",
+      routerPath: this.$route.path
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital"]),
+    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -92,7 +93,7 @@ export default {
           .fetchPost("/Home/Treatment/GetWenList", {
             page: this.page,
             appId: this.appId,
-            purview: this.purview == (3 || 4) ? 1 : 0
+            purview: this.routerPath == "/diagnosis_general/second_wang" ? 1 : 0
           })
           .then(res => {
             if (res.data.code == 200) {

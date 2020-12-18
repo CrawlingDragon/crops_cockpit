@@ -78,19 +78,18 @@ export default {
     return {
       content_show: 1,
       detail: "",
-      hospitalList: [],
-      appid: this.$route.query.appId
+      hospitalList: []
     };
   },
   mounted() {
     this.content_show = 1;
-    sessionStorage.setItem("appId", this.$route.query.appId);
+    // sessionStorage.setItem("appId", this.$route.query.appId);
     sessionStorage.setItem("uid", this.$route.query.uid);
     this.getJoinHospital(this.$route.query.uid);
     this.getDetail(this.$route.query.uid);
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "loginId"])
   },
   watch: {
     content_show(newVal) {
@@ -116,13 +115,13 @@ export default {
         });
     },
     topre() {
-      this.$router.push({ path: "/expertlist" });
+      this.$router.go(-1);
     },
     getDetail(uid) {
       // 获取专家的详细数据
       this.$axios
         .fetchPost("/Home/Expert/GetMpExpertDetail", {
-          appId: this.appid,
+          appId: this.loginId,
           uId: uid,
           purview: 1
         })

@@ -210,6 +210,7 @@ export default {
     text-align left
     display flex
     flex-wrap wrap
+    padding-top 3px
     li
       height 270px
       margin-bottom 12px

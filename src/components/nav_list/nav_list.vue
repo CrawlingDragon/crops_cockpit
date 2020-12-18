@@ -37,7 +37,13 @@
         @click="changeRouter('我的')"
         v-show="showNav"
       >
-        <span>{{ purview == 3 || purview == 4 ? "关于" : "我的" }}</span>
+        <span>{{
+          purview == 3 ||
+          purview == 4 ||
+          (purview == 46 && isLowerHospital == "true")
+            ? "关于"
+            : "我的"
+        }}</span>
       </li>
     </ul>
   </div>
@@ -62,7 +68,7 @@ export default {
     return {};
   },
   computed: {
-    ...mapState(["purview"])
+    ...mapState(["purview", "isLowerHospital"])
   },
   watch: {},
   mounted() {},

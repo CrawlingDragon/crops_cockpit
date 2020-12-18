@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    appId: localStorage.getItem("appId"),
-    purview: localStorage.getItem("purview"),
+    appId: window.localStorage.getItem("appId"),
+    purview: window.localStorage.getItem("purview"),
     // 以下是管理驾驶舱加入的
     accountName: "", // 登陆账号（其实是地址）
     defaultProvince: "", // 全网请求地址
@@ -22,8 +22,6 @@ export default new Vuex.Store({
     globalFstuserpw: "", // 益农通密码
     globalFstRoomid: "", // 益农通房间id
     noData: false, // 没数据时
-    // picAddress: {},//记录当前登录账号管理院的位置信息
-    // loginId: {}, //登陆时，保存地图参数id
     sessionUsername: "", // 账号
     sessionPassword: "", // 密码
     breadArr: [], // 面包屑导航数组
@@ -37,9 +35,20 @@ export default new Vuex.Store({
     prevroute: "", // 专家列表记录上一层返回的地址
     hospitalIsstore: window.localStorage.getItem('hospitalIsstore'),
     adminRoute:window.localStorage.getItem('adminRoute'),
-    ismapupdate:0//如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
+    ismapupdate: 0,//如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
+    loginHospitalName: window.localStorage.getItem('loginHospitalName'),
+    loginId: window.localStorage.getItem('loginId'), //记录登录的appid
+    isLowerHospital:window.sessionStorage.getItem('isLowerHospital') //是否是下级医院  true 为上级医院,  false 为下级医院
   },
   mutations: {
+    setIsLowerHospital (state, data) {
+      state.isLowerHospital = data
+      window.sessionStorage.setItem('isLowerHospital',data)
+     },
+    setLoginHospitalName (state, data) {
+      state.loginHospitalName = data
+      window.localStorage.setItem('loginHospitalName',data)
+     },
     setIsMapUpdata(state,data){
       state.ismapupdate = state.ismapupdate-data
     },
@@ -62,11 +71,11 @@ export default new Vuex.Store({
     },
     setAppId(state, data) {
       state.appId = data;
-      localStorage.setItem("appId", data);
+      window.localStorage.setItem("appId", data);
     },
     getPurview(state, data) {
       state.purview = data;
-      localStorage.setItem("purview", data);
+      window.localStorage.setItem("purview", data);
     },
     // 以下是管理驾驶舱新加入的
     getIsnav(state, data) {
@@ -139,10 +148,11 @@ export default new Vuex.Store({
     getSecondMapIndex(state, data) {
       state.secondMapIndex = data;
     },
-    // getLoginId(state, data) {
-    //   //登陆时，保存地图参数id
-    //   state.loginId = data
-    // },
+    setLoginId(state, data) {
+      //登陆时，保存地图参数id
+      state.loginId = data
+      window.localStorage.setItem('loginId',data)
+    },
     getBreadArr(state, data) { // 获取面包屑导航
       state.breadArr = data;
     },

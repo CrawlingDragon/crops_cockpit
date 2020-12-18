@@ -47,7 +47,9 @@ export default {
   watch: {},
   mounted() {
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "所有专家";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "所有专家";
   },
   destroyed() {},
   methods: {

@@ -1,31 +1,36 @@
 <template>
   <div class="message_list">
-    <div class="message" v-for="(item,index) in list" :key="item.id" v-show="changeIndex === index" @click="
-    goToMessageDetail(item.module,item.id)">
-      <!--测土 -->
+    <div
+      class="message"
+      v-for="(item, index) in list"
+      :key="item.id"
+      v-show="changeIndex === index"
+      @click="goToMessageDetail(item.module, item.id, item.appid, item.mpname)"
+    >
       <div class="icon"></div>
-      <p class="p1">{{item.title}}</p>
-      <p class="p2">{{item.mess}}</p>
-      <div class="times">{{item.datetime}}</div>
+      <p class="p1">{{ item.title }}</p>
+      <p class="p2">{{ item.mess }}</p>
+      <div class="times">{{ item.datetime }}</div>
     </div>
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "message_list",
   components: {},
   props: {
     list: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return {
       changeIndex: 0,
-      setinterval: "",
+      setinterval: ""
     };
   },
   computed: {},
@@ -34,11 +39,14 @@ export default {
       this.changeIndex = 0;
       clearInterval(this.setinterval);
       this.changeIndexFunction();
-    },
+    }
   },
   mounted() {},
-  destroyed() {},
+  destroyed() {
+    clearInterval(this.setinterval);
+  },
   methods: {
+    ...mapMutations(["setAppId", "setIsLowerHospital", "setLowerHospital"]),
     changeIndexFunction() {
       // 3s变换index，按顺序显示通知信息
       const len = this.list.length;
@@ -47,34 +55,75 @@ export default {
         if (this.changeIndex >= len) {
           this.changeIndex = 0;
         }
-      }, 3000);
+      }, 6000);
     },
-    goToMessageDetail(module, id) {
+    goToMessageDetail(module, id, appId, mpname) {
       // 点击通知列表，去相应的详情页
-      // const router = this.chooseDetailModule(module);
-      this.$router.push({
-        path: `/module_detail`,
-        query: { module: module, id: id },
-      });
+      this.setAppId(appId);
+      this.setIsLowerHospital("true");
+      this.setLowerHospital(mpname);
+      setTimeout(() => {
+        this.chooseDetailModule(module, id);
+      }, 100);
     },
-    chooseDetailModule(type) {
+    chooseDetailModule(type, id) {
       // 解析去对应module type
       switch (type) {
-        case "mp":
-          return "医院";
+        case "testingsoil":
+          // 测土详情
+          // this.setLowerHospital("true");
+          const router1 = this.$router.resolve({
+            path: "/cetu_detail",
+            query: { id: id }
+          });
+          window.open(router1.href, "_blank");
           break;
-        case "cetu":
-          return "测土";
+        case "forum_post":
+          // 去网诊详情
+          this.setLowerHospital("false");
+          this.$router.push({
+            path: "/wangzhen_detail",
+            query: { tid: id }
+          });
+          // const router2 = this.$router.resolve({
+          //   path: "/wangzhen_detail",
+          //   query: { tid: id }
+          // });
+          // window.open(router2.href, "_blank");
           break;
-        case "zuochen":
-          return "坐珍";
+        case "wenzhen":
+          const router4 = this.$router.resolve({
+            path: `/zuozhen_detail`,
+            query: { tid: id }
+          });
+          window.open(router4.href, "_blank");
+          // this.$router.push({
+          //   path: `/zuozhen_detail`,
+          //   query: { tid: id }
+          // });
           break;
         case "xunzhen":
-          return "巡诊";
+          const router5 = this.$router.resolve({
+            path: `/xunzhen_detail`,
+            query: { tid: id }
+          });
+          window.open(router4.href, "_blank");
+          // this.$router.push({
+          //   path: `/xunzhen_detail`,
+          //   query: { tid: id }
+          // });
+          break;
+        case "mp":
+          // 去医院的网诊列表
+          // this.setLowerHospital("true");
+          const router3 = this.$router.resolve({
+            path: "/diagnosis/second_wang"
+          });
+          window.open(router3.href, "_blank");
           break;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

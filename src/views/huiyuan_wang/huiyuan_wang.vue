@@ -117,6 +117,7 @@ export default {
   .diagnosis-ul
     margin 0px 40px
     height 429px
+    padding 3px
     @media screen and (min-width:1900px) {
       height 741px
     }

@@ -64,7 +64,7 @@ export default {
     this.getExpertinfo(this.appId);
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital"])
+    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"])
   },
   mounted() {
     this.title =
@@ -101,7 +101,8 @@ export default {
     getExpertinfo(appId, purview, ordertag, page, limit) {
       this.$axios
         .fetchGet("/Home/Expert/GetMpExpertRank", {
-          appId: appId
+          appId: appId,
+          purview: this.purview == 46 && this.isLowerHospital == "false" ? 1 : 0
         })
         .then(res => {
           console.log(res);

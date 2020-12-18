@@ -77,7 +77,13 @@ export default {
     // this.getDetail(this.$route.query.uid);
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "hospitalIsstore"]),
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "hospitalIsstore",
+      "isLowerHospital"
+    ]),
     chufangCount() {
       const r =
         parseFloat(this.detail.cetucount) +
@@ -90,32 +96,36 @@ export default {
   watch: {},
   mounted() {
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "专家详情";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "专家详情";
     this.getDetail();
+    // this.getJoinHospital();
   },
   destroyed() {},
   methods: {
-    getJoinHospital(uid) {
-      // ta 加入的医院
-      this.$axios
-        .fetchPost("/Home/Expert/GetMpExpertDetail", {
-          appId: this.appId,
-          uId: this.uId,
-          purview: this.purview == 3 || this.purview == 4 ? 1 : 0
-        })
-        .then(res => {
-          if (res.data.code === "200") {
-            this.hospitalList = res.data.data.lists;
-          }
-        });
-    },
+    // getJoinHospital(uid) {
+    //   // ta 加入的医院
+    //   this.$axios
+    //     .fetchPost("/Home/Expert/GetMpExpertDetail", {
+    //       appId: this.appId,
+    //       uId: this.uId,
+    //       purview:
+    //         this.purview == 3 || this.purview == 4 || this.purview == 46 ? 1 : 0
+    //     })
+    //     .then(res => {
+    //       if (res.data.code === "200") {
+    //         this.hospitalList = res.data.data.lists;
+    //       }
+    //     });
+    // },
     getDetail() {
       // 获取专家的详细数据
       this.$axios
         .fetchPost("/Home/Expert/GetMpExpertDetail", {
           appId: this.appId,
-          uId: this.uId
-          // purview: this.purview == 3 || this.purview == 4 ? 1 : 0
+          uId: this.uId,
+          purview: this.purview == 46 && this.isLowerHospital == "false" ? 1 : 0
         })
         .then(res => {
           if (res.data.code === "200") {

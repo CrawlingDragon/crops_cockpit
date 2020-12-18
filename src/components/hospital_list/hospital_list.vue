@@ -1,26 +1,32 @@
 <template>
   <div class="hospital_list-wrap">
-    <div class="item" v-for="item in list" :key="item.id" @click="goTonNextHospital(item.appid)">
-      <div class="title">{{item.name}}</div>
+    <div
+      class="item"
+      v-for="item in list"
+      :key="item.id"
+      @click="goTonNextHospital(item.isstore, item.appid, item.istown)"
+    >
+      <div class="title">{{ item.name }}</div>
       <ul>
-        <li>专家<br />{{item.expert}}</li>
-        <li>网诊<br />{{item.wen}}</li>
-        <li>处方<br />{{item.chufang}}</li>
+        <li>专家<br />{{ item.expert }}</li>
+        <li>会员<br />{{ item.user }}</li>
+        <li>处方<br />{{ item.chufang }}</li>
       </ul>
     </div>
   </div>
 </template>
 <script>
+import { mapMutations } from "vuex";
 export default {
   name: "hospital_list",
   components: {},
   props: {
     list: {
       type: Array,
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   data() {
     return {};
@@ -30,46 +36,26 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
-    goTonNextHospital(appid) {
+    ...mapMutations(["setAppId", "setIsLowerHospital"]),
+    goTonNextHospital(isstore, appId, istown) {
       // 获取医院类型，路由到对应的首页
-      this.$axios
-        .fetchPost("/Home/Index/GetIndexMpData", { appId: appid })
-        .then((res) => {
-          if (res.data.code === "200") {
-            this.getHospitalType(res.data.data.purview, appid);
-          }
+      this.setAppId(appId);
+      this.setIsLowerHospital("true");
+      if (istown == 1) {
+        let route = this.$router.resolve({
+          path: "/village_me",
+          query: { from: "adminRoute", appId: appId }
         });
-      // this.$router.push({});
-    },
-    getHospitalType(purview, appid) {
-      switch (purview) {
-        case 1:
-          this.$router.push({
-            path: "/index_second",
-            query: { appid: appid },
-          });
-          break;
-        case 2:
-          this.$router.push({
-            path: "/index_third",
-            query: { appid: appid },
-          });
-          break;
-        case 3:
-          this.$router.push({
-            path: "/index",
-            query: { appid: appid },
-          });
-          break;
-        case 4:
-          this.$router.push({
-            path: "/",
-            query: { appid: appid },
-          });
-          break;
+        window.open(route.href, "_blank");
+      } else {
+        const router = this.$router.resolve({
+          path: "/index_second",
+          query: { appid: appId, from: "adminRoute" }
+        });
+        window.open(router.href, "_blank");
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
@@ -78,7 +64,7 @@ export default {
     width 100%
     height 190px
     margin-bottom 8px
-    background #2494DE
+    background #04757c
     text-align left
     padding-left 30px
     padding-top 34px

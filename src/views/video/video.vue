@@ -68,7 +68,9 @@ export default {
     // this.getVideoList();
     this.gerVideoMenu();
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "培训视频";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "培训视频";
   },
   destroyed() {},
   methods: {

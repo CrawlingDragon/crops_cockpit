@@ -39,7 +39,7 @@ export default {
     },
     alertText: {
       type: String,
-      default: "注销浙江省新型庄稼医院账号后，将退出监控平台"
+      default: "注销浙江省新型庄稼医院账号后，将退出登录"
     },
     btnLeft: {
       type: String,

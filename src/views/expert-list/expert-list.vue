@@ -54,7 +54,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["prevroute"])
+    ...mapState(["prevroute", "loginId", "purview"])
   },
   created() {
     this.userid = window.sessionStorage.getItem("curuserid");
@@ -62,6 +62,10 @@ export default {
   },
   beforeRouteEnter: (to, from, next) => {
     next(vm => {
+      if (vm.purview == 46) {
+        vm.returnpath = "/index_first";
+        return false;
+      }
       if (
         from.path == "/indexFour" ||
         from.path == "/findindex" ||
@@ -69,14 +73,20 @@ export default {
       ) {
         vm.returnpath = from.path;
         vm.getPrevroute(from.path);
-      } else if (from.path == "/expert_detail_four"||from.path=="/") {
+      } else if (from.path == "/expert_detail_four" || from.path == "/") {
         //加入from.path是因为 点击选择全部医院或者新型医院后vuex中记录的上级页面信息的路由消失了
         //将上一级的路由信息存成本地存储 如果vuex失效 访问本地缓存
-          if (vm.prevroute == "/indexFour"||localStorage.getItem("prevroute")=="/indexFour") {
-            vm.returnpath = "/indexFour";
-          } else if (vm.prevroute == "/data_analysis"||localStorage.getItem("prevroute")=="/data_analysis") {
-            vm.returnpath = "/data_analysis";
-          }
+        if (
+          vm.prevroute == "/indexFour" ||
+          localStorage.getItem("prevroute") == "/indexFour"
+        ) {
+          vm.returnpath = "/indexFour";
+        } else if (
+          vm.prevroute == "/data_analysis" ||
+          localStorage.getItem("prevroute") == "/data_analysis"
+        ) {
+          vm.returnpath = "/data_analysis";
+        }
       }
     });
   },
@@ -93,7 +103,7 @@ export default {
       const rLoading = this.openLoading();
       this.$axios
         .fetchPost("/Home/Expert/GetMpExpertList", {
-          appId: this.userid,
+          appId: this.loginId,
           purview: "1",
           page: curpage,
           isstore: window.sessionStorage.getItem("isstore")
@@ -142,7 +152,6 @@ export default {
         height 560px
         @media screen and (min-width:1900px) {
             height 741px
-            margin-top 123px
         }
         overflow scroll
         overflow-x hidden

@@ -8,7 +8,9 @@
           ? 'singlehospital'
           : 'singlehospital singlehospital1'
       ]"
-      @click="goToHospitalIndex(item.appid, item.isstore, item.istown)"
+      @click="
+        goToHospitalIndex(item.appid, item.isstore, item.istown, item.name)
+      "
     >
       <div class=" title">{{ item.name }}</div>
       <div class="num-item">
@@ -59,7 +61,7 @@ export default {
   created() {},
   destroyed() {},
   methods: {
-    ...mapMutations(["setAppId"]),
+    ...mapMutations(["setAppId", "setIsLowerHospital", "setLowerHospital"]),
     // getHospitalType(appId) {
     //   // 获取医院的类型
     //   this.$axios
@@ -78,8 +80,9 @@ export default {
         callback: action => {}
       });
     },
-    goToHospitalIndex(appid, isstore, istown) {
+    goToHospitalIndex(appid, isstore, istown, name) {
       this.setAppId(appid);
+      this.setIsLowerHospital("true");
       if (istown == 0) {
         if (isstore == 1) {
           let route = this.$router.resolve({
@@ -98,7 +101,13 @@ export default {
           // });
         }
       } else {
-        this.open();
+        // this.open();
+        this.setLowerHospital(name);
+        let route = this.$router.resolve({
+          path: "/village_me",
+          query: { from: "adminRoute", appId: appid }
+        });
+        window.open(route.href, "_blank");
       }
     }
   }

@@ -88,7 +88,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   name: "second_tu",
   components: {},
@@ -100,11 +100,12 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      noData: false
+      noData: false,
+      routerPath: this.$route.path
     };
   },
   computed: {
-    ...mapState(["appId", "purview"]),
+    ...mapState(["appId", "purview", "isLowerHospital"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -121,6 +122,7 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
+    ...mapMutations(["setIsLowerHospital"]),
     load() {
       this.page += 1;
       this.loading = true;
@@ -130,7 +132,11 @@ export default {
           .fetchGet("/Home/Treatment/GetTestingsoilList", {
             page: this.page,
             appId: this.appId,
-            purview: this.purview == (3 || 4) ? 1 : 0,
+            purview:
+              this.routerPath == "/diagnosis_general" ||
+              this.routerPath == "/diagnosis_general/second_tu"
+                ? 1
+                : 0,
             teststatus: this.chooseItem
           })
           .then(res => {
@@ -166,10 +172,19 @@ export default {
       }
     },
     goToDetail(id) {
-      this.$router.push({
-        path: "/cetu_detail",
-        query: { id: id }
-      });
+      if (this.purview == 46) {
+        this.setIsLowerHospital("true");
+        const route = this.$router.resolve({
+          path: "/cetu_detail",
+          query: { id: id, from: "adminRoute" }
+        });
+        window.open(route.href, "_blank");
+      } else {
+        this.$router.push({
+          path: "/cetu_detail",
+          query: { id: id }
+        });
+      }
     }
   }
 };
@@ -207,6 +222,7 @@ export default {
           box-shadow none
   .tu-ul
     margin 30px auto
+    max-height 768px
     scrollbar-arrow-color rgba(3, 5, 57, 1)
     scrollbar-base-color hsla(0, 0%, 53%, 0.4)
     scrollbar-track-color rgba(3, 5, 57, 1)
