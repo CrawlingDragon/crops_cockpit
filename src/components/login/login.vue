@@ -83,10 +83,11 @@ export default {
       "getSessionUsername",
       "getPicAddress",
       "getAccountName",
-      "getLoginId",
+      "setLoginId",
       "getBreadArr",
       "setAppId",
-      "getPurview"
+      "getPurview",
+      "setLoginHospitalName"
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -107,9 +108,10 @@ export default {
             if (res.data.code == 200) {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
+              const name = res.data.data.name;
               this.getPurview(purview);
-              // test 
               this.setAppId(appid);
+              this.setLoginId(appid);
               if (purview == 1) {
                 this.$router.push({
                   path: "/index_third"
@@ -118,6 +120,12 @@ export default {
                 this.$router.push({
                   path: "/index_second"
                 });
+              } else if (purview == 46) {
+                // purview == 46 是总院
+                this.$router.push({
+                  path: "index_first"
+                });
+                this.setLoginHospitalName(name);
               } else {
                 const userid = res.data.data.userid;
                 const level = res.data.data.level;
@@ -127,9 +135,6 @@ export default {
                 } else {
                   secondLevel = level;
                 }
-                // if (level <= 3) {
-                //   this.getPicAddress(res.data.data.address);
-                // }
                 const arr = res.data.data.area;
                 const areaname = res.data.data.areaname;
                 const isshaoxing = res.data.data.ishaoxing;
@@ -137,6 +142,7 @@ export default {
                 // store.commit('getGlobalFstusername', res.data.data.Fstusername); //获取益农通账号
                 // store.commit('getGlobalFstuserpw', res.data.data.Fstuserpw); //获取益农通密码
                 // store.commit('getGlobalFstRoomid', res.data.data.FstRoomid); //获取益农通id
+                this.setLoginHospitalName(name);
                 window.sessionStorage.setItem("name", name);
                 window.sessionStorage.setItem("curcity", areaname);
                 window.sessionStorage.setItem("isshaoxing", isshaoxing); // 判断是否是绍兴市或者是绍兴市所属县级管理院

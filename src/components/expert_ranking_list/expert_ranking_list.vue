@@ -27,29 +27,47 @@
 </template>
 <script>
 import Empty from "@/components/empty/empty";
+import { mapState } from "vuex";
 export default {
   name: "expert_ranking_list",
   components: { Empty },
-  props: ["list"],
+  props: ["list", "routerPath"],
   data() {
-    return {};
+    return {
+      // routerPath: this.$route.path
+    };
   },
-  computed: {},
+  computed: {
+    ...mapState(["isLowerHospital"])
+  },
   watch: {},
   mounted() {},
   destroyed() {},
   methods: {
     goToExpert(uid) {
       // 去到专家详情页
-      this.$router.push({
-        path: "/expert_detail",
-        query: { uid: uid }
-      });
+      if (this.isLowerHospital == "false") {
+        this.$router.push({
+          path: "expert_detail_four",
+          query: { uid: uid }
+        });
+      } else {
+        this.$router.push({
+          path: "/expert_detail",
+          query: { uid: uid }
+        });
+      }
     },
     goToExpertRanking() {
-      this.$router.push({
-        path: "/expert_paihang"
-      });
+      if (this.routerPath == "") {
+        this.$router.push({
+          path: "/expert_paihang"
+        });
+      } else {
+        this.$router.push({
+          path: this.routerPath
+        });
+      }
     }
   }
 };
@@ -65,7 +83,7 @@ export default {
     display flex
     // justify-content space-between
     li
-      width 33%
+      width 33.3333%
       height 306px
       position relative
       background url('./19.png') no-repeat
@@ -83,7 +101,7 @@ export default {
         position absolute
         left 0
         top 0px
-        z-index 22
+        z-index 2
         font-size 40px
         padding-left 5px
         line-height 1.2

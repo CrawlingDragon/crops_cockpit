@@ -1,6 +1,11 @@
 <template>
   <div class="jianjie">
-    <Header :title="title" :right_show_bar="false" midTitle="网诊详情"></Header>
+    <Header
+      :title="title"
+      :right_show_bar="false"
+      midTitle="网诊详情"
+      :isWangzhen="true"
+    ></Header>
     <div class="title">{{ zl_detail.title }}</div>
     <div class="content">
       <div class="con_left" @click="watchdetail('1')">
@@ -22,7 +27,7 @@
           <div class="pics">
             <img
               v-for="(item, index) in this.zl_detail.pic"
-              v-show="index<5"
+              v-show="index < 5"
               :key="index"
               :src="item"
               alt=""
@@ -74,7 +79,7 @@
             <p class="yao_name">{{ item.name }}</p>
           </div>
         </div>
-        <div class="swiper-scrollbar"></div>
+        <div class="swiper-scrollbar" v-if="this.yao_number != 0"></div>
       </div>
       <div class="no_yao" v-if="this.yao_number == 0">
         <img src="../../assets/65.png" alt="" />

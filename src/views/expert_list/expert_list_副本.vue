@@ -37,6 +37,7 @@
 <script>
 import Headnav from "../../components/head_nav/head_nav";
 import Nodata from "../../components/no-data/no-data";
+import { mapState } from "vuex";
 export default {
   components: {
     Headnav,
@@ -56,6 +57,9 @@ export default {
     this.userid = window.sessionStorage.getItem("curuserid");
     this.getexpert_list(this.page);
   },
+  computed: {
+    ...mapState(["loginId"])
+  },
   methods: {
     godetail(item, index) {
       window.sessionStorage.setItem("expert_uid", item.uid);
@@ -68,7 +72,7 @@ export default {
       const rLoading = this.openLoading();
       this.$axios
         .fetchPost("/Home/Expert/GetMpExpertList", {
-          appId: this.userid,
+          appId: this.loginId,
           purview: "1",
           page: curpage,
           isstore: window.sessionStorage.getItem("isstore")
@@ -112,12 +116,10 @@ export default {
     .expert_list
         margin 0 auto
         width 94%
-        margin-top 53px
         left 3%
         height 560px
         @media screen and (min-width:1900px) {
             height 741px
-            margin-top 123px
         }
         overflow scroll
         overflow-x hidden

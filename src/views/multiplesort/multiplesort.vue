@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -49,14 +49,16 @@ export default {
       userid: "" // 用户的id
     };
   },
+  computed: {
+    ...mapState(["loginId"])
+  },
   created() {
     const rLoading = this.openLoading();
     // 控制路由点击字体的样式
     this.$parent.cur_index = 2;
-    this.userid = window.sessionStorage.getItem("curuserid");
     this.$axios
       .fetchPost("/Home/Manage/GetManageMpDataList", {
-        appId: this.userid,
+        appId: this.loginId,
         type: "default",
         ordertag: "listorder",
         storetag: window.sessionStorage.getItem("isstore"),
@@ -70,6 +72,7 @@ export default {
       });
   },
   mounted() {
+    this.setIsLowerHospital("false");
     // 计算出滚动区域的高度
     var h = document.documentElement.clientHeight || document.body.clientHeight;
     if (h > 1080 || h == 1080) {
@@ -79,7 +82,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setAppId"]),
+    ...mapMutations(["setAppId", "setIsLowerHospital", "setLowerHospital"]),
     // 内容高度自适应,获取滚动区域高度
     getheight(top, bottomrate) {
       var h =
@@ -95,6 +98,7 @@ export default {
     },
     godetail(item) {
       this.setAppId(item.appid);
+      this.setIsLowerHospital("true");
       if (item.istown == 0) {
         if (item.isstore == 1) {
           let routeData = this.$router.resolve({
@@ -102,22 +106,20 @@ export default {
             query: { from: "adminRoute" }
           });
           window.open(routeData.href, "_blank");
-
-          // this.$router.push({
-          //   path: "/index_second"
-          // });
         } else if (item.isstore == 0) {
           let routeData = this.$router.resolve({
             path: "/index_third",
             query: { from: "adminRoute" }
           });
           window.open(routeData.href, "_blank");
-          // this.$router.push({
-          //   path: "/index_third"
-          // });
         }
       } else {
-        this.open();
+        this.setLowerHospital(item.name);
+        let route = this.$router.resolve({
+          path: "/village_me",
+          query: { from: "adminRoute", appId: item.appid }
+        });
+        window.open(route.href, "_blank");
       }
     }
   }

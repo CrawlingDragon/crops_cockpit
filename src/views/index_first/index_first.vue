@@ -1,11 +1,21 @@
 <template>
-  <div :style="{ overflow: 'showTableFlag' ? 'hidden' : '' }">
-    <Headers
-      logoSrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592223004241&di=e1ea4d4a1d3237e81b1ae84e5299a2b6&imgtype=0&src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201202%2F13%2F20120213114436_HxfS5.jpg"
-      :title="indexDate.name"
-    ></Headers>
+  <div
+    v-loading="loading"
+    element-loading-text="加载中..."
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(7, 47, 101, .4)"
+    style="width:100%;height:100%"
+  >
+    <!-- <div
+      v-loading="loading"
+      element-loading-text="加载中..."
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0,0,0, .7)"
+      style="width: 400px;height:400px;position:fixed;left:50%;top:50%;z-index:333;border-radios:50px;margin-left:-200px;margin-top:-200px;"
+    ></div> -->
     <div class="index-container">
-      <div class="left" @click="showTable">
+      <Header :title="title" :logoSrc="true"></Header>
+      <div class="left" @click="goToNextHospital">
         <ul>
           <li>
             <div class="titles">
@@ -13,15 +23,7 @@
               <div>医院</div>
             </div>
             <div class="text">
-              <p>
-                {{ count.isstore }}所
-                <br />
-                <span class="small">
-                  其中
-                  <span class="num">{{ count.isstore }}</span>
-                  所实体店
-                </span>
-              </p>
+              <p>{{ count.isstore }}所</p>
             </div>
             <div class="up" v-if="count.new_mpublic != 0">
               <span class="icon"></span>
@@ -57,162 +59,131 @@
           </li>
         </ul>
       </div>
-      <div class="mid">
-        <hospital :list="indexDate.mpublic"></hospital>
-      </div>
-      <div class="right">
-        <Message :list="message"></Message>
-        <div class="expert-box">
-          <expert :list="expertArr"></expert>
+      <div class="right-bar">
+        <div class="top">
+          <div class="mid">
+            <hospital :list="indexDate.mpublic"></hospital>
+          </div>
+          <div class="right">
+            <Message :list="message"></Message>
+            <div class="expert-box">
+              <expert
+                :list="expertArr"
+                routerPath="/expert_paihang_general"
+              ></expert>
+            </div>
+          </div>
+        </div>
+        <div class="nav-box">
+          <div class="item i3" @click="goToHospital">
+            <div class="icon icon03"></div>
+            <p>医院本级</p>
+          </div>
+          <div class="item i2" @click="goToExpert">
+            <div class="icon icon02"></div>
+            <p>专家</p>
+          </div>
+          <div class="item i4" @click="goToHospitalList">
+            <div class="icon icon04"></div>
+            <p>医院综合排序</p>
+          </div>
         </div>
       </div>
     </div>
-    <div class="nav-box">
-      <div class="item i1" @click="goToHistory">
-        <div class="icon icon01"></div>
-        <p>浏览历史</p>
-      </div>
-      <div class="item i2" @click="goToSearch">
-        <div class="icon icon02"></div>
-        <p>搜索</p>
-      </div>
-      <div class="item i3" @click="goToHospital">
-        <div class="icon icon03"></div>
-        <p>医院本级</p>
-      </div>
-      <div class="item i4" @click="goToHospitalList">
-        <div class="icon icon04"></div>
-        <p>医院综合排序</p>
-      </div>
-    </div>
     <Nav></Nav>
-    <layerBar
-      :showFlag="showTableFlag"
-      :countDate="count"
-      @changeShowFlag="changeLayerFlag"
-    ></layerBar>
   </div>
 </template>
 <script>
-import Header from "@/components/online_hospital_header/online_hospital_header";
+import Header from "@/components/general_hospital_header/general_hospital_header";
 import ExpertRankingList from "@/components/expert_ranking_list/expert_ranking_list";
 import HospitalList from "@/components/hospital_list/hospital_list";
-import Nav from "@/components/nav_list/nav_list";
-import layerBar from "@/components/layerDate/layerDate";
-import { getUrlQuery } from "@/common/js/util.js";
+import Nav from "@/components/nav_list_third/nav_list_third";
 import Message from "@/components/message_list/message_list";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "indexFirst",
   components: {
-    Headers,
+    Header,
     Expert: ExpertRankingList,
     hospital: HospitalList,
     Nav,
-    layerBar,
     Message
   },
   props: {},
   data() {
     return {
-      query: "",
+      title: "", //头部 医院名字
       indexDate: "",
       count: {},
       expertArr: [],
       message: [],
-      showTableFlag: false
+      loading: true
     };
   },
-  computed: {},
+  computed: {
+    ...mapState(["loginHospitalName", "appId", "loginId"])
+  },
   created() {
-    this.query = getUrlQuery("appid");
-    this.getAppId(getUrlQuery("appid"));
+    this.setAppId(this.loginId);
   },
-  watch: {
-    indexDate(newVal) {
-      this.expertArr = newVal.expert.slice(0, 3);
-    },
-    $route(newVal) {
-      this.getIndexDate(newVal.query.appid);
-      this.getMessageDate(newVal.query.appid);
-    }
-  },
+  watch: {},
   mounted() {
-    this.getIndexDate(this.query);
-    this.getMessageDate(this.query);
-    this.getPurviewFn();
+    this.setIsLowerHospital("false");
+    this.title = this.loginHospitalName;
+    this.getIndexDate();
+    this.getMessageDate();
   },
   destroyed() {},
   methods: {
-    ...mapMutations(["getAppId", "getPurview"]),
-    getIndexDate(query) {
+    ...mapMutations(["setAppId", "getPurview", "setIsLowerHospital"]),
+    getIndexDate() {
       // 获取首页数据
       this.$axios
-        .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: query })
+        .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: this.appId })
         .then(res => {
           if (res.data.code === "200") {
             this.indexDate = res.data.data;
             this.count = res.data.data.count;
+            this.expertArr = res.data.data.expert.splice(0, 3);
+            this.loading = false;
           }
         });
     },
-    getMessageDate(query) {
+    getMessageDate() {
       // 获取通知数据
       this.$axios
-        .fetchPost("/Home/Manage/GetManageMessageData", { appId: query })
+        .fetchPost("/Home/Manage/GetManageMessageData", { appId: this.appId })
         .then(res => {
           if (res.data.code === "200") {
             this.message = res.data.data;
           }
         });
     },
-    getPurviewFn() {
-      // 获取医院类型
-      this.$axios
-        .fetchPost("/Home/Index/GetIndexMpData", { appId: this.query })
-        .then(res => {
-          if (res.data.code == 200) {
-            this.getPurview(res.data.data.purview);
-            if (res.data.data.isview === 1) {
-              this.$router.push({
-                path: "/index_second"
-              });
-            } else if (res.data.data.isview === 2) {
-              this.$router.push({
-                path: "/index_third"
-              });
-            }
-          }
-        });
-    },
-    showTable() {
-      this.showTableFlag = true;
-    },
-    changeLayerFlag(boolean) {
-      this.showTableFlag = boolean;
-    },
-    goToHistory() {
-      // 去到 浏览历史
+    goToNextHospital() {
+      // 下级医院数据
       this.$router.push({
-        path: "/history"
+        path: "/nexthospital"
       });
     },
-    goToSearch() {
-      // 去到搜索页
+    goToExpert() {
+      // 去到 浏览历史
       this.$router.push({
-        path: "/search"
+        path: "/expertlist"
       });
     },
     goToHospital() {
       // 去到医院本级
-      this.$router.push({
-        path: "/me"
+      this.setIsLowerHospital("true");
+      const route = this.$router.resolve({
+        path: "/index_second",
+        query: { appId: this.appId, from: "adminRoute" }
       });
+      window.open(route.href, "_blank");
     },
     goToHospitalList() {
-      // 去到医院列表
+      // 去到医院综合排序
       this.$router.push({
-        path: "/hospital"
+        path: "/multiplesort"
       });
     }
   }
@@ -221,22 +192,27 @@ export default {
 <style lang="stylus" scoped>
 .index-container
   display flex
-  padding 0 90px
+  padding-top 101px
+  padding-bottom 151px
+  padding-left 40px
+  padding-right 40px
+  max-width 1900px
+  margin 0 auto
   .left
-    width 409px
+    width 440px
     margin-right 30px
     ul
       border 1px solid #eee
-      height 586px
       background rgba(9, 29, 68, 1)
       border 2px solid rgba(7, 47, 101, 1)
       li
         display flex
         border 2px solid #072F65
         position relative
+        height 160px
         .title, .titles
           width 140px
-          height 113px
+          height 100%
           display flex
           align-items center
           justify-content center
@@ -272,63 +248,74 @@ export default {
             font-size 28px
             font-family SimHei
             font-weight 400
-  .mid
-    width 409px
-    margin-right 30px
-  .right
+  .right-bar
     flex 1
-    min-width 0
-    overflow hidden
-.nav-box
-  width 100%
-  display flex
-  padding 0 90px
-  & > .item
-    flex 1
-    margin-right 30px
-    box-sizing border-box
-    height 198px
-    align-items center
-    display flex
-    justify-content space-around
-    cursor pointer
-    &.i1
-      background #2494DE
-    &.i2
-      background #DA3266
-    &.i3
-      background #EBB701
-    &.i4
-      background #7B70FA
-    &:last-child
-      margin-right 0
-    .icon01
-      width 92px
-      height 70px
-      background url('./5.png') no-repeat
-      background-position center
-      background-size 100%
-    .icon02
-      width 90px
-      height 91px
-      background url('./16.png') no-repeat
-      background-position center
-      background-size 100%
-    .icon03
-      width 75px
-      height 75px
-      background url('./15.png') no-repeat
-      background-position center
-      background-size 100%
-    .icon04
-      width 92px
-      height 71px
-      background url('./6.png') no-repeat
-      background-position center
-      background-size 100%
-    & > p
-      font-size 36px
-      font-family SimHei
-      font-weight 400
-      color rgba(255, 255, 255, 1)
+    .top
+      display flex
+      .mid
+        width 440px
+        margin-right 30px
+      .right
+        flex 1
+        min-width 0
+        overflow hidden
+        max-width 880px
+    .nav-box
+      width 100%
+      display flex
+      margin-top 9px
+      & > .item
+        margin-right 30px
+        box-sizing border-box
+        height 200px
+        align-items center
+        display flex
+        justify-content center
+        cursor pointer
+        &.i3
+          background #EBB701
+          width 440px
+        &.i2
+          background #DA3266
+          width 425px
+        &.i4
+          background #7B70FA
+          width 425px
+        &.i1
+          background #2494DE
+        &:last-child
+          margin-right 0
+        .icon01
+          width 92px
+          height 70px
+          background url('./5.png') no-repeat
+          background-position center
+          background-size 100%
+        .icon02
+          width 90px
+          height 91px
+          background url('../../assets/image/index_expert.png') no-repeat
+          background-position center
+          background-size 100%
+        .icon03
+          width 75px
+          height 75px
+          background url('./15.png') no-repeat
+          background-position center
+          background-size 100%
+        .icon04
+          width 92px
+          height 71px
+          background url('./6.png') no-repeat
+          background-position center
+          background-size 100%
+        & > p
+          font-size 33px
+          font-family SimHei
+          font-weight 400
+          color rgba(255, 255, 255, 1)
+          margin-left 50px
+  .hospital_list-wrap
+    .item
+      height:200px;
 </style>

@@ -34,19 +34,26 @@
         <router-view></router-view>
       </keep-alive>
     </div>
+    <NavThird :index="2" v-if="purview == 46"></NavThird>
   </div>
 </template>
 <script>
 import Headnav from "../../components/head_nav/head_nav";
+import NavThird from "@/components/nav_list_third/nav_list_third";
+import { mapState } from "vuex";
 export default {
   components: {
-    Headnav
+    Headnav,
+    NavThird
   },
   data() {
     return {
       cur_index: 2,
       lefttitle: "下级医院"
     };
+  },
+  computed: {
+    ...mapState(["purview"])
   },
   created() {
     this.$parent.app_loading = false;

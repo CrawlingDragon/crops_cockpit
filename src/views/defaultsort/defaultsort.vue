@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -56,7 +56,11 @@ export default {
     // 控制路由点击字体的样式，当点击默认排序时
     this.$parent.cur_index = 1;
   },
+  computed: {
+    ...mapState(["loginId"])
+  },
   mounted() {
+    this.setIsLowerHospital("false");
     // 计算出滚动区域的高度
     var h = document.documentElement.clientHeight || document.body.clientHeight;
     if (h > 1080 || h == 1080) {
@@ -64,11 +68,10 @@ export default {
     } else {
       this.$refs.hospitalinfo.style.height = `${this.getheight(70, 0.085)}px`;
     }
-    this.userid = window.sessionStorage.getItem("curuserid");
     const rLoading = this.openLoading();
     this.$axios
       .fetchPost("/Home/Manage/GetManageMpDataList", {
-        appId: this.userid,
+        appId: this.loginId,
         type: "default",
         ordertag: "default",
         storetag: window.sessionStorage.getItem("isstore"),
@@ -82,7 +85,7 @@ export default {
       });
   },
   methods: {
-    ...mapMutations(["setAppId"]),
+    ...mapMutations(["setAppId", "setIsLowerHospital", "setLowerHospital"]),
     // 内容高度自适应,获取滚动区域高度
     getheight(top, bottomrate) {
       var h =
@@ -99,11 +102,9 @@ export default {
     },
     godetail(item) {
       this.setAppId(item.appid);
+      this.setIsLowerHospital("true");
       if (item.istown == 0) {
         if (item.isstore == 1) {
-          // this.$router.push({
-          //   path: "/index_second"
-          // });
           let routeData = this.$router.resolve({
             path: "/index_second",
             query: { from: "adminRoute" }
@@ -115,12 +116,15 @@ export default {
             query: { from: "adminRoute" }
           });
           window.open(routeData.href, "_blank");
-          // this.$router.push({
-          //   path: "/index_third"
-          // });
         }
       } else {
-        this.open();
+        // this.open();
+        this.setLowerHospital(item.name);
+        let route = this.$router.resolve({
+          path: "/village_me",
+          query: { from: "adminRoute", appId: item.appid }
+        });
+        window.open(route.href, "_blank");
       }
     }
   },

@@ -4,6 +4,8 @@
       :title="title"
       midTitle="测土配方详情"
       :right_show_bar="false"
+      :istown="istown"
+      :aId="aId"
     ></Header>
     <div class="title">
       <span>{{ cetuinfo.title }}</span>
@@ -77,7 +79,7 @@
             <p class="yao_name">{{ item.name }}</p>
           </div>
         </div>
-        <div class="swiper-scrollbar"></div>
+        <div class="swiper-scrollbar" v-if="this.yao_number != 0"></div>
       </div>
       <div class="no_yao" v-if="this.yao_number == 0">
         <img src="../../assets/65.png" alt="" />
@@ -106,7 +108,9 @@ export default {
       godetail: "", // 判断是从何处打开了弹窗
       alert_title: "", // 弹窗title
       title: "",
-      queryAppId: this.$route.query.appId
+      queryAppId: this.$route.query.appId,
+      istown: 0,
+      aId: ""
     };
   },
   created() {
@@ -116,11 +120,6 @@ export default {
     console.log("this.queryAppId :>> ", this.queryAppId);
   },
   mounted() {
-    // this.title =
-    //   this.purview == 3 || this.purview == 4
-    //     ? this.lowerHospital
-    //     : "测土配方详情";
-    console.log("this.$route.query.appId  :>> ", this.$route.query.appId);
     if (this.$route.query.appId != undefined) {
       this.setAppId(this.queryAppId);
       this.getcetuinfo("testingsoil", this.$route.query.id);
@@ -186,9 +185,11 @@ export default {
           if (res.data.code == "200") {
             this.cetuinfo = res.data.data;
             this.setLowerHospital(res.data.data.mpublic);
-            console.log("res.data.data.mpublic :>> ", res.data.data.mpublic);
+            this.setAppId(res.data.data.appid);
+            this.aId = res.data.data.appid;
+            this.istown = res.data.data.istown;
             this.title =
-              this.purview == 3 || this.purview == 4
+              this.purview == 3 || this.purview == 4 || this.purview == 46
                 ? res.data.data.mpublic
                 : "测土配方详情";
             if (res.data.data.products == "") {

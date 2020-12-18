@@ -1,6 +1,10 @@
 <template>
   <div class="index_second-container">
-    <Header :title="headerTitle" :logoSrc="logoSrc" :returnPath="this.returnPath"></Header>
+    <Header
+      :title="headerTitle"
+      :returnPath="this.returnPath"
+      :logoSrc="true"
+    ></Header>
     <div class="second-container">
       <div class="left-bar">
         <div class="swiper-box">
@@ -91,7 +95,7 @@ export default {
       recommend_video: {},
       recommend_product: {},
       cetu: [],
-      returnPath: "",
+      returnPath: ""
     };
   },
   computed: {
@@ -116,7 +120,7 @@ export default {
             this.experts = data.rank_experts;
             this.answerlist = data.answerlists;
             this.headerTitle = data.title;
-            this.logoSrc = data.logo;
+            // this.logoSrc = data.logo;
             this.cetu = data.ceturecords;
             this.rank_experts = data.rank_experts;
             this.new_users = data.new_users.splice(0, 3);

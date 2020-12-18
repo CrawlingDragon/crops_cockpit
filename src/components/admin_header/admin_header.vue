@@ -168,15 +168,21 @@ export default {
       this.$router.go();
     },
     goToIndex() {
-      this.$router.push({
-        path: "/indexFour",
-        query: {
-          userid: window.sessionStorage.getItem("curuserid"),
-          areaname: window.sessionStorage.getItem("curcity"),
-          level: window.sessionStorage.getItem("curlevel"),
-          letter: window.sessionStorage.getItem("letter")
-        }
-      });
+      if (this.purview == 46) {
+        this.$router.push({
+          path: "/index_first"
+        });
+      } else {
+        this.$router.push({
+          path: "/indexFour",
+          query: {
+            userid: window.sessionStorage.getItem("curuserid"),
+            areaname: window.sessionStorage.getItem("curcity"),
+            level: window.sessionStorage.getItem("curlevel"),
+            letter: window.sessionStorage.getItem("letter")
+          }
+        });
+      }
     },
     goToSearch() {
       this.$router.push({

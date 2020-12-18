@@ -105,7 +105,9 @@ export default {
   mounted() {
     this.getVideoDetail();
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "视频详情";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "视频详情";
     // this.downloadfile(this.detail.videourl, "xxxx", "video/map4");
   },
   destroyed() {},

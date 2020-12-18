@@ -65,7 +65,7 @@ export default {
           if (res.data.code == 200) {
             this.detail = res.data.data;
             this.title =
-              this.purview == 3 || this.purview == 4
+              this.purview == 3 || this.purview == 4 || this.purview == 46
                 ? res.data.data.company
                 : "商品详情";
           } else if (res.data.code == 300) {

@@ -74,7 +74,9 @@ export default {
   mounted() {
     this.getMenu();
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "农资商品";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "农资商品";
   },
   destroyed() {},
   methods: {
@@ -88,7 +90,7 @@ export default {
             appId: this.appId,
             catId: this.catid,
             page: this.page,
-            purview: this.purview == (4 || 5) ? 1 : 0
+            purview: 0
           })
           .then(res => {
             if (res.data.code == 200) {

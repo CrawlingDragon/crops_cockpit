@@ -52,12 +52,10 @@
         v-show="countObj.level == 0 && countObj.pic"
       />
       <a
-        :href="
-          'http://wap.114nz.com/Web/Mpublic/detail.html?mId=' + countObj.linkid
-        "
-        target="_blank"
+        href="javascript:;"
         v-show="countObj.level == 0"
         class="getMore"
+        @click="goToVillageHospital(countObj.linkid)"
         >更多 ></a
       >
     </div>
@@ -158,6 +156,14 @@ export default {
     }
   },
   methods: {
+    goToVillageHospital(id) {
+      //进入乡镇医院
+      let router = this.$router.resolve({
+        path: "/village_me",
+        query: { from: "adminRoute", appId: id }
+      });
+      window.open(router.href, "_blank");
+    },
     colorArray() {
       let arr = colors.concat([]);
       if (!this.CurMp) {

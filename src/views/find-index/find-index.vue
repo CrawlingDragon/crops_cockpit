@@ -41,6 +41,7 @@
 </template>
 <script>
 import Headnav from "../../components/head_nav/head_nav";
+import { mapState } from "vuex";
 export default {
   name: "Find",
   data() {
@@ -49,7 +50,7 @@ export default {
       curcity: window.sessionStorage.getItem("curcity"),
       imgurl: "",
       title: "",
-      cur_cityname: window.sessionStorage.getItem("name"),
+      cur_cityname: "",
       tmp_alert_satus: "",
       changemoudle: "find", // 控制头部左侧导航样式
       middle_title: "新型庄稼医院管理驾驶舱" // 中部标题
@@ -58,7 +59,11 @@ export default {
   components: {
     Headnav
   },
+  computed: {
+    ...mapState(["loginHospitalName"])
+  },
   created() {
+    this.cur_cityname = this.loginHospitalName;
     const isshaoxing = window.sessionStorage.getItem("isshaoxing");
     if (isshaoxing == 1) {
       this.shaoxingprivate = true;

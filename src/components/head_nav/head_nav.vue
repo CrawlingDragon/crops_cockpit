@@ -57,8 +57,8 @@
     <div class="right_nav">
       <span class="icon-refresh" @click="refresh"></span>
       <div class="change-data">
-        <div class="change-icon"></div>
-        <div class="change-box">
+        <div class="login-out" @click="loignOutBtn"></div>
+        <!-- <div class="change-box">
           <div class="title">
             <span class="p1 active">医院数据源切换</span>
             <span class="p2">{{ this.cur_cityname }}</span>
@@ -91,21 +91,21 @@
             </div>
           </div>
           <div class="login-out" @click="loignOutBtn">退出登录</div>
-        </div>
+        </div> -->
       </div>
       <div class="time"><Date /></div>
     </div>
     <Confim
       ref="confimBox"
       @btnSure="clickSure"
-      :alertText="'注销' + cur_cityname + '账号后，将退出驾驶舱'"
+      :alertText="'注销' + loginName + '账号后，将退出登录'"
     ></Confim>
     <slot></slot>
   </div>
 </template>
 <script>
 import Confim from "../confim/confim";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 const Date = resolve => require(["../date/date"], resolve);
 export default {
   props: {
@@ -136,19 +136,29 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(["loginHospitalName"]),
+    loginName() {
+      if (this.loginHospitalName.indexOf("医院") >= 0) {
+        return this.loginHospitalName;
+      } else {
+        return this.loginHospitalName + "医院";
+      }
+    }
+  },
   data() {
     return {
-      chooseHospitalRadio: "1",
-      cur_cityname: window.sessionStorage.getItem("name"),
+      // chooseHospitalRadio: "1",
+      cur_cityname: this.loginHospitalName,
       isshaoxing: window.sessionStorage.getItem("isshaoxing")
     };
   },
   mounted() {
-    if (this.$store.state.isstore == "1" || this.$store.state.isstore == 1) {
-      this.chooseHospitalRadio = "1";
-    } else {
-      this.chooseHospitalRadio = "null";
-    }
+    // if (this.$store.state.isstore == "1" || this.$store.state.isstore == 1) {
+    //   this.chooseHospitalRadio = "1";
+    // } else {
+    //   this.chooseHospitalRadio = "null";
+    // }
   },
   components: {
     Date,
@@ -200,6 +210,13 @@ export default {
     refresh() {
       location.reload();
     },
+    // loignOutBtn() {
+    //   // 退出登陆按钮
+    //   this.$refs.confimBox.showFlag = true;
+    // },
+    // clickSure() {
+    //   this.$router.push({ path: "/" });
+    // },
     loignOutBtn() {
       // 退出登陆按钮
       this.$refs.confimBox.showFlag = true;
@@ -207,23 +224,20 @@ export default {
     clickSure() {
       this.$router.push({ path: "/" });
     },
-    chooseHospital(num) {
-      // 选择所有/或者新型医院
-      if (num == this.isstore) {
-        return;
-      }
-      this.chooseHospitalRadio = num;
-      if (num == 1) {
-        this.getIsstore(1);
-      } else {
-        this.getIsstore(null);
-      }
-      this.$emit("datatype", num);
-    },
-    ...mapMutations([
-      "getNoData", 
-      "getIsstore"
-      ])
+    // chooseHospital(num) {
+    //   // 选择所有/或者新型医院
+    //   if (num == this.isstore) {
+    //     return;
+    //   }
+    //   this.chooseHospitalRadio = num;
+    //   if (num == 1) {
+    //     this.getIsstore(1);
+    //   } else {
+    //     this.getIsstore(null);
+    //   }
+    //   this.$emit("datatype", num);
+    // },
+    ...mapMutations(["getNoData", "getIsstore"])
   }
 };
 </script>
@@ -349,11 +363,11 @@ export default {
     margin-right 40px
     .icon-refresh
       display inline-block
-      width 20px
-      height 20px
+      width 27px
+      height 27px
       margin-top 15px
-      background url('./refresh.png') no-repeat
-      background-size 100%
+      background url('../../assets/image/refresh.png') no-repeat
+      background-size 100% 100%
       @media screen and (min-width:1900px){
           height 28px
           width 28px
@@ -448,17 +462,10 @@ export default {
               vertical-align middle
               &.active
                 color #F79D1D
-        .login-out
-          position absolute
-          left 0
-          right 0
-          bottom 0
-          height 50px
-          border-top 1px solid #1B4E79
-          text-align center
-          font-size 16px
-          line-height 50px
-          color #fff
-          cursor pointer
-          user-select none
+.login-out
+  width 30px
+  height 28px
+  background url('../../assets/image/login_out_icon.png') no-repeat
+  margin-right 60px
+  cursor: pointer;
 </style>

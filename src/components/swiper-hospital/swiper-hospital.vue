@@ -13,19 +13,15 @@
               <span @click="gonexthospital(item)" class="detail">{{
                 item.name || "医院"
               }}</span>
-              <span class="sp"
-                ><router-link :to="{ path: '/hospitalsort' }"
-                  >&gt;</router-link
-                ></span
-              >
+              <span class="sp" @click="goToHospitalsort">&gt;</span>
             </div>
             <ul class="treat-number">
-              <li>
+              <li @click="gonexthospital(item)">
                 <div class="swiper-box">
                   <div class="swiper-container2 s2">
                     <div class="swiper-wrapper">
                       <div class="swiper-slide">
-                        <div @click="gonexthospital(item)" class="imgs-href">
+                        <div class="imgs-href">
                           <img :src="item.pic" alt="暂无图片" />
                         </div>
                         <!-- <div class="title">{{it}}</div> -->
@@ -113,12 +109,20 @@ export default {
 
   mounted() {
     this.sw_flag = true;
+    // this.$nextTick(() => {
+    //   this.initSwiper();
+    // });
     setTimeout(() => {
       this.initSwiper();
-    }, 0);
+    }, 100);
   },
 
   methods: {
+    goToHospitalsort() {
+      this.$router.push({
+        path: "/hospitalsort"
+      });
+    },
     ...mapMutations(["setAppId"]),
     gonexthospital(item) {
       this.setAppId(item.id);
@@ -144,21 +148,11 @@ export default {
       let that = this;
       this.$nextTick(function() {
         let s1 = new Swiper(".s1", {
-          // autoplay: {
-          //   delay: 2500,
-          //   stopOnLastSlide: false,
-          //   disableOnInteraction: true
-          // },
-          // loop: true,
-          // initialSlide: 0,
-          // observer: true,
-          // observeParents: true,
-          // observeSlideChildren: true
           autoplay: true,
-          speed: 300,
-          observer: true,
-          loop: true,
-          observeParents: false
+          speed: 300
+          // observer: true,
+          // loop: true
+          // observeParents: true
         });
         // console.log(s1)
       });
@@ -183,7 +177,7 @@ export default {
       setTimeout(() => {
         this.sw_flag = true;
         this.initSwiper();
-      }, 0);
+      }, 100);
     }
   },
   components: {
@@ -235,6 +229,7 @@ export default {
       right 0
       top 1px
       width 43px
+      cursor pointer
       @media screen and (min-width:1900px) {
         line-height 50px
         font-size 24px

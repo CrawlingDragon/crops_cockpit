@@ -42,7 +42,7 @@
   </div>
 </template>
 <script>
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   name: "second_zuo",
   components: {},
@@ -53,11 +53,12 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      noData: false
+      noData: false,
+      routerPath: this.$route.path
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "isLowerHospital", "purview"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -66,6 +67,7 @@ export default {
   mounted() {},
   destroyed() {},
   methods: {
+    ...mapMutations(["setIsLowerHospital"]),
     load() {
       this.page += 1;
       this.loading = true;
@@ -75,7 +77,7 @@ export default {
             page: this.page,
             appId: this.appId,
             type: "1",
-            purview: this.purview == (3 || 4) ? 1 : 0
+            purview: this.routerPath == "/diagnosis_general/second_zuo" ? 1 : 0
           })
           .then(res => {
             if (res.data.code == 200) {
@@ -95,10 +97,19 @@ export default {
       }, 1000);
     },
     goToDetail(id) {
-      this.$router.push({
-        path: "/zuozhen_detail",
-        query: { tid: id }
-      });
+      if (this.purview == 46) {
+        this.setIsLowerHospital("true");
+        const route3 = this.$router.resolve({
+          path: "/zuozhen_detail",
+          query: { tid: id, from: "adminRoute" }
+        });
+        window.open(route3.href, "_blank");
+      } else {
+        this.$router.push({
+          path: "/zuozhen_detail",
+          query: { tid: id }
+        });
+      }
     }
   }
 };

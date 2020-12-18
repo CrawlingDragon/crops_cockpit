@@ -1,6 +1,12 @@
 <template>
   <div class="jianjie">
-    <Header :title="title" midTitle="巡诊详情" :right_show_bar="false"></Header>
+    <Header
+      :title="title"
+      midTitle="巡诊详情"
+      :right_show_bar="false"
+      :istown="istown"
+      :aId="aId"
+    ></Header>
     <div class="title">{{ zl_detail.title }}</div>
     <div class="content">
       <div class="con_left" @click="watchdetail('1')">
@@ -14,7 +20,7 @@
           <div class="pics">
             <img
               v-for="(item, index) in this.zl_detail.pic"
-              v-show="index<5"
+              v-show="index < 5"
               :key="index"
               :src="item"
               alt=""
@@ -53,7 +59,7 @@
             <p class="yao_name">{{ item.name }}</p>
           </div>
         </div>
-        <div class="swiper-scrollbar"></div>
+        <!-- <div class="swiper-scrollbar" v-if="this.yao_number != 0"></div> -->
       </div>
       <div class="no_yao" v-if="this.yao_number == 0">
         <img src="../../assets/65.png" alt="" />
@@ -84,7 +90,9 @@ export default {
       alert_title: "", // 弹窗title
       title: "",
       imgLength: 0,
-      queryAppId: this.$route.query.appId
+      queryAppId: this.$route.query.appId,
+      istown: 0,
+      aId: ""
     };
   },
   computed: {
@@ -146,9 +154,13 @@ export default {
           if (res.data.code == 200) {
             this.zl_detail = res.data.data;
             this.setLowerHospital(res.data.data.mpublic);
-            console.log("res.data.data.mpublic :>> ", res.data.data.mpublic);
+            this.istown = res.data.data.istown;
+            this.aId = res.data.data.appid;
+            if (this.purview == 46) {
+              this.setAppId(res.data.data.appid);
+            }
             this.title =
-              this.purview == 3 || this.purview == 4
+              this.purview == 3 || this.purview == 4 || this.purview == 46
                 ? res.data.data.mpublic
                 : "巡诊详情";
             this.imgLength =

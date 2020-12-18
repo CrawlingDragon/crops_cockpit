@@ -66,11 +66,13 @@
     </ul>
     <Nav :index="4" v-if="purview == 1"></Nav>
     <NavSecond :index="4" v-if="purview == 2"></NavSecond>
+    <NavThird :index="4" v-if="purview == 46"></NavThird>
   </div>
 </template>
 <script>
 import Nav from "@/components/nav_list/nav_list";
 import NavSecond from "@/components/nav_list_second/nav_list_second";
+import NavThird from "@/components/nav_list_third/nav_list_third";
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import { mapState } from "vuex";
 import AdminHeader from "@/components/admin_header/admin_header";
@@ -79,7 +81,8 @@ export default {
   components: {
     Nav,
     Header,
-    NavSecond
+    NavSecond,
+    NavThird
   },
   props: {},
   data() {

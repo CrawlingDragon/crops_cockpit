@@ -51,7 +51,9 @@ export default {
   mounted() {
     this.gethuiyuan_list(1, 14);
     this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "我的会员";
+      this.purview == 3 || this.purview == 4 || this.purview == 46
+        ? this.lowerHospital
+        : "我的会员";
   },
   methods: {
     gethuiyuan_list(page, pagesize) {

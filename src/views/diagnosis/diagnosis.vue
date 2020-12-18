@@ -43,10 +43,11 @@
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import Nav from "@/components/nav_list_second/nav_list_second";
+import NavThird from "@/components/nav_list_third/nav_list_third";
 import { mapState } from "vuex";
 export default {
   name: "diagnosis",
-  components: { Nav, Header },
+  components: { Nav, Header, NavThird },
   props: {},
   data() {
     return {
@@ -57,12 +58,23 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital"])
+    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"])
   },
   watch: {},
   mounted() {
-    this.title =
-      this.purview == 3 || this.purview == 4 ? this.lowerHospital : "诊疗";
+    if (
+      this.purview == 3 ||
+      this.purview == 4 ||
+      (this.purview == "46" && this.isLowerHospital == "true")
+    ) {
+      this.title = this.lowerHospital;
+    } else {
+      this.title = "诊疗";
+    }
+    // this.title =
+    //   this.purview == 3 || this.purview == 4 || this.purview == 46
+    //     ? this.lowerHospital
+    //     : "诊疗";
     const name = this.$route.path;
     switch (name) {
       case "/diagnosis/second_tu":
@@ -111,7 +123,7 @@ export default {
       this.$axios
         .fetchPost("/Home/Treatment/GetTreamentCount", {
           appId: this.appId,
-          purview: this.purview == (3 || 4) ? 1 : 0
+          purview: this.purview == 46 && this.isLowerHospital == "false" ? 1 : 0
         })
         .then(res => {
           if (res.data.code == 200) {

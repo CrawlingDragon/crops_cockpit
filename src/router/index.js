@@ -53,12 +53,12 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "expertlist" */ "../views/expert-list/expert-list.vue")
   },
-  {
-    path: "/expertlist",
-    name: "expertlist",
-    component: () =>
-      import(/* webpackChunkName: "expertlist" */ "../views/expert_list/expert_list.vue")
-  },
+  // {
+  //   path: "/expertlist",
+  //   name: "expertlist",
+  //   component: () =>
+  //     import(/* webpackChunkName: "expertlist" */ "../views/expert_list/expert_list.vue")
+  // },
   {
     path: "/hospitalsort",
     name: "Hospitalsort",
@@ -217,6 +217,14 @@ const routes = [
       )
   },
   {
+    path: "/index_first",
+    name: "index_first",
+    component: () =>
+      import(
+        /* webpackChunkName: "index_first" */ "../views/index_first/index_first.vue"
+      )
+  },
+  {
     path: "/index_second",
     name: "index_second",
     component: () =>
@@ -249,6 +257,11 @@ const routes = [
     path: "/me",
     name: "me",
     component: () => import(/* webpackChunkName: "me" */ "../views/me/me.vue")
+  },
+  {
+    path: "/village_me",
+    name: "village_me",
+    component: () => import(/* webpackChunkName: "village_me" */ "../views/village_me/village_me.vue")
   },
   {
     path: "/online_detail",
@@ -372,6 +385,50 @@ const routes = [
     ]
   },
   {
+    path: "/diagnosis_general",
+    component: () =>
+      import(
+        /* webpackChunkName: "diagnosis_general" */ "../views/diagnosis_general/diagnosis_general.vue"
+      ),
+    children: [
+      {
+        path: "",
+        component: () =>
+          import(
+            /* webpackChunkName: "second_tu" */ "../views/second_tu/second_tu.vue"
+          )
+      },
+      {
+        path: "/diagnosis_general/second_tu",
+        component: () =>
+          import(
+            /* webpackChunkName: "second_tu" */ "../views/second_tu/second_tu.vue"
+          )
+      },
+      {
+        path: "/diagnosis_general/second_wang",
+        component: () =>
+          import(
+            /* webpackChunkName: "second_wang" */ "../views/second_wang/second_wang.vue"
+          )
+      },
+      {
+        path: "/diagnosis_general/second_zuo",
+        component: () =>
+          import(
+            /* webpackChunkName: "second_zuo" */ "../views/second_zuo/second_zuo.vue"
+          )
+      },
+      {
+        path: "/diagnosis_general/second_xun",
+        component: () =>
+          import(
+            /* webpackChunkName: "second_tu" */ "../views/second_xun/second_xun.vue"
+          )
+      }
+    ]
+  },
+  {
     path: "/second_huiyuan_list",
     component: () =>
       import(/* webpackChunkName: "second_huiyuan_list" */"../views/second_huiyuan_list/second_huiyuan_list.vue")
@@ -452,6 +509,11 @@ const routes = [
     path: "/expert_paihang",
     component: () =>
       import(/* webpackChunkName: "expert_paihang" */"../views/expert_paihang/expert_paihang.vue")
+  },
+  {
+    path: "/expert_paihang_general",
+    component: () =>
+      import(/* webpackChunkName: "expert_paihang_general" */"../views/expert_paihang_general/expert_paihang_general.vue")
   },
   {
     path: "/sao_yinongbao",

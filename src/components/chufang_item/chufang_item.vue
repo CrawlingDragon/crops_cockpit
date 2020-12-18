@@ -16,9 +16,10 @@
         <div class="p2">{{ item.name }}</div>
         <el-image
           fit="cover"
-          :src="item.thumb_pic"
+          :src="i"
           class="img"
-          v-if="item.thumb_pic"
+          v-for="i in item.thumb_pic"
+          :key="i"
           ><div slot="error" class="image_error"></div>
           <div class="image_error" slot="placeholder"></div
         ></el-image>
@@ -125,4 +126,5 @@ export default {
         width 110px
         height 110px
         float right
+        margin-left 10px
 </style>

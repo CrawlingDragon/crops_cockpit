@@ -178,7 +178,7 @@ export default {
       navHospitalArray: [], // 导航----县乡镇医院数组
       confimFlag: false,
       changemoudle: "index",
-      cur_cityname: window.sessionStorage.getItem("name"),
+      cur_cityname: "",
       showvideoflag: false, // 控制益农通视频点播
       curmoudle: "index", // 控制头部左侧导航样式,
       middle_title: "新型庄稼医院管理驾驶舱" // 中部标题,
@@ -280,7 +280,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(["isstore", "accountName", "defaultProvince", "globalLevel"]),
+    ...mapState([
+      "isstore",
+      "accountName",
+      "defaultProvince",
+      "globalLevel",
+      "loginHospitalName"
+    ]),
     accountName() {
       return this.$store.state.accountName;
     },
@@ -320,6 +326,7 @@ export default {
     }
   },
   mounted() {
+    this.cur_cityname = this.loginHospitalName;
     this.userid = this.$route.query.userid;
     this.letter = this.$route.query.letter;
     this.navList = this.$store.state.defaultAddressArr; // 导航的省市乡县列表

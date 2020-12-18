@@ -11,7 +11,7 @@
         {{ item.name }}
       </div>
     </div>
-    <div class="sel_type">
+    <!-- <div class="sel_type">
       <div
         class="kuang type"
         ref="cur_type"
@@ -21,7 +21,7 @@
       >
         {{ item }}
       </div>
-    </div>
+    </div> -->
     <div class="hospitalinfo" ref="hospitalinfo">
       <div
         @click="godetail(item)"
@@ -63,7 +63,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   data() {
     return {
@@ -81,6 +81,9 @@ export default {
       wangdian: false // 当为1的时候表示是当前是选择了只是新院
     };
   },
+  computed: {
+    ...mapState(["loginId"])
+  },
   created() {
     this.$parent.cur_index = 3;
     this.userid = window.sessionStorage.getItem("curuserid");
@@ -88,7 +91,7 @@ export default {
     // 刚开始默认获取全部的信息
     this.$axios
       .fetchPost("/Home/Manage/GetManageMpDataList", {
-        appId: this.userid,
+        appId: this.loginId,
         type: "default",
         ordertag: "default",
         storetag: window.sessionStorage.getItem("isstore"),
@@ -124,6 +127,7 @@ export default {
       });
   },
   mounted() {
+    this.setIsLowerHospital("false");
     if (
       window.sessionStorage.getItem("isstore") == null ||
       window.sessionStorage.getItem("isstore") == "null"
@@ -136,7 +140,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setAppId"]),
+    ...mapMutations(["setAppId", "setIsLowerHospital", "setLowerHospital"]),
     // 内容高度自适应,获取滚动区域高度
     getheight(top, bottomrate, leftrate) {
       var h =
@@ -154,7 +158,7 @@ export default {
     sousuo(userid, cur_type, cur_city) {
       this.$axios
         .fetchPost("/Home/Manage/GetManageMpDataList", {
-          appId: userid,
+          appId: this.loginId,
           type: "default",
           ordertag: "default",
           storetag: cur_type,
@@ -249,6 +253,7 @@ export default {
     },
     godetail(item) {
       this.setAppId(item.appid);
+      this.setIsLowerHospital("true");
       if (item.istown == 0) {
         if (item.isstore == 1) {
           let route = this.$router.resolve({
@@ -264,7 +269,16 @@ export default {
           window.open(route.href, "_blank");
         }
       } else {
-        this.open();
+        // this.open();
+        this.setLowerHospital(item.name);
+        let route = this.$router.resolve({
+          path: "/village_me",
+          query: { from: "adminRoute", appId: item.appid }
+        });
+        window.open(route.href, "_blank");
+        // this.$router.push({
+        //   path: "/village_me"
+        // });
       }
     }
   }
