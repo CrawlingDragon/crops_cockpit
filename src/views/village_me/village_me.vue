@@ -63,17 +63,6 @@ export default {
   watch: {},
   mounted() {
     this.getData();
-    if (
-      this.purview == 3 ||
-      this.purview == 4 ||
-      (this.purview == 46 && this.isLowerHospital == "true")
-    ) {
-      this.title = this.lowerHospital;
-    } else if (this.purview == 46 && this.isLowerHospital == "false") {
-      this.title = "我的";
-    } else {
-      this.title = "我的";
-    }
   },
   beforeDestroy() {
     // this.setIsLowerHospital("false");
@@ -96,6 +85,17 @@ export default {
             this.data = res.data.data;
             this.setLowerHospital(res.data.data.name);
             this.setIsLowerHospital("true");
+            if (
+              this.purview == 3 ||
+              this.purview == 4 ||
+              (this.purview == 46 && this.isLowerHospital == "true")
+            ) {
+              this.title = this.lowerHospital;
+            } else if (this.purview == 46 && this.isLowerHospital == "false") {
+              this.title = "我的";
+            } else {
+              this.title = "我的";
+            }
           }
         });
     }
@@ -126,6 +126,7 @@ export default {
           background url('../../assets/65.png') no-repeat
           background-position center center
           background-size 80%
+          height 100%
       .account
         font-size 28px
         color rgba(255, 255, 255, 0.5)

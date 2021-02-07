@@ -1,6 +1,6 @@
 <template>
   <!-- 网院网诊的单个li -->
-  <div class="online_item-container">
+  <div class="online_item-container" @click="goToWangzhenDetail(item)">
     <div class="wrap">
       <div class="icon"></div>
       <div class="text">
@@ -43,7 +43,14 @@ export default {
   watch: {},
   mounted() {},
   destroyed() {},
-  methods: {}
+  methods: {
+    goToWangzhenDetail(item) {
+      this.$router.push({
+        path: "/wangzhen_detail",
+        query: { tid: item.tid }
+      });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>

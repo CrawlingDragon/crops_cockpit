@@ -1,5 +1,5 @@
 <template>
-  <div class="header-container">
+  <div class="header-container container-wrap">
     <div class="head-wrap cf">
       <div class="left-bar">
         <div
@@ -22,7 +22,7 @@
         <div
           class="goBack-icon"
           v-show="!logoSrc && !isWangzhen"
-          v-if="purview == 1 || purview == 2 || purview == 46"
+          v-if="purview == 1 || purview == 2 || purview == 46 || purview == 4"
           @click="goBack"
         ></div>
         <h2
@@ -40,14 +40,15 @@
         {{ midTitle }}
       </div>
       <div class="right-bar" v-show="right_show_bar">
-        <div class="admin-index" @click="goToIndex" v-if="false">
+        <!-- <div class="admin-index" @click="goToIndex" v-if="false">
           <div class="icon"></div>
           <span>平台首页</span>
-        </div>
+        </div> -->
+        <div class="search" @click="goToSearchPage" v-if="!isSearchHref"></div>
         <div class="reload" @click="reload">
           <span class="icon"></span>
         </div>
-        <div class="login-out" @click="loignOutBtn" v-if="purview == 46"></div>
+        <div class="login-out" @click="loignOutBtn"></div>
         <div class="time">{{ time }}</div>
       </div>
     </div>
@@ -94,6 +95,10 @@ export default {
     returnPath: {
       type: String,
       default: ""
+    },
+    isSearchHref: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -172,11 +177,6 @@ export default {
       this.$refs.confimBox.showFlag = true;
     },
     clickSure() {
-      // if (this.isLowerHospital == "true") {
-      //   window.close();
-      // } else {
-
-      // }
       this.$router.push({ path: "/" });
     },
     goToLowerHospital() {
@@ -230,6 +230,13 @@ export default {
       }
       this.closeNumer += 1;
       this.$layer.msg("再按一次关闭该医院");
+    },
+    goToSearchPage() {
+      // 去搜索页面
+      this.$router.push({
+        path: "/search",
+        query: { from: "header" }
+      });
     },
     reload() {
       this.$router.go();
@@ -345,29 +352,22 @@ export default {
           margin-right 10px
           background url('./28.png') no-repeat
       .search
-        color #000000
         cursor pointer
         width 160px
         height 50px
-        background rgba(255, 255, 255, 1)
-        opacity 0.5
-        border-radius 25px
-        display flex
-        align-items center
-        justify-content center
         font-size 30px
-        .icon
-          display inline-block
-          width 27px
-          height 27px
-          background url('./4.png') no-repeat
-          margin-right 8px
+        margin-right 59px
+        display inline-block
+        vertical-align middle
+        width 29px
+        height 28px
+        background url('../../assets/image/search.png') no-repeat
       .reload
         color #B5B5B5
         font-size 30px
         display flex
         align-items center
-        margin-right 50px
+        margin-right 70px
         .icon
           display inline-block
           cursor pointer
@@ -375,7 +375,6 @@ export default {
           height 27px
           background url('../../assets/image/refresh.png') no-repeat
           background-size 100% 100%
-          margin-right 8px
       .login-out
           width 30px
           height 28px

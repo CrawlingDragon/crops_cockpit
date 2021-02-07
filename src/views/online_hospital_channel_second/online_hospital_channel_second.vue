@@ -100,7 +100,7 @@ import Headers from "@/components/online_hospital_header/online_hospital_header"
 import Nav from "@/components/nav_list_second/nav_list_second";
 import SaoYinongbao from "@/views/sao_yinongbao/sao_yinongbao";
 import { mapState } from "vuex";
-import img from "./channel_scan.png";
+import img from "../../assets/image/channel/channel_scan.png";
 export default {
   name: "online_hospital_channel",
   components: { Nav, Headers, SaoYinongbao },
@@ -238,13 +238,13 @@ export default {
       .video-icon
         width 96px
         height 72px
-        background url('./17.png') no-repeat
+        background url('../../assets/image/channel/17.png') no-repeat
         background-size 100%
         background-position center
       .down-icon
         width 94px
         height 63px
-        background url('./23.png') no-repeat
+        background url('../../assets/image/channel/23.png') no-repeat
         background-size 100%
         background-position center
         margin 0 auto 18px
@@ -264,7 +264,7 @@ export default {
         .icon
           width 80px
           height 95px
-          background url('./9.png') no-repeat
+          background url('../../assets/image/channel/9.png') no-repeat
           background-size 100%
           background-position center
       &.bin-li
@@ -272,7 +272,7 @@ export default {
         .bin-icon
           width 93px
           height 76px
-          background url('./22.png') no-repeat
+          background url('../../assets/image/channel/22.png') no-repeat
           background-size 100%
           background-position center
       &.li2
@@ -280,7 +280,7 @@ export default {
         .icon
           width 80px
           height 95px
-          background url('./10.png') no-repeat
+          background url('../../assets/image/channel/10.png') no-repeat
           background-size 100%
           background-position center
       &.li3
@@ -288,7 +288,7 @@ export default {
         .icon
           width 80px
           height 95px
-          background url('./11.png') no-repeat
+          background url('../../assets/image/channel/11.png') no-repeat
           background-size 100%
           background-position center
       &.message-li
@@ -296,7 +296,7 @@ export default {
         .message-icon
           width 71px
           height 83px
-          background url('./18.png') no-repeat
+          background url('../../assets/image/channel/18.png') no-repeat
           background-size 100%
           background-position center
       &.li5
@@ -304,7 +304,7 @@ export default {
         .icon
           width 96px
           height 96px
-          background url('./12.png') no-repeat
+          background url('../../assets/image/channel/12.png') no-repeat
           background-size 100%
           background-position center
       &.li6
@@ -312,7 +312,7 @@ export default {
         .icon
           width 80px
           height 95px
-          background url('./13.png') no-repeat
+          background url('../../assets/image/channel/13.png') no-repeat
           background-size 100%
           background-position center
       &.li7
@@ -320,14 +320,14 @@ export default {
         .icon
           width 75px
           height 75px
-          background url('./15.png') no-repeat
+          background url('../../assets/image/channel/15.png') no-repeat
           background-size 100%
           background-position center
        &.li4
         .icon
           width 80px
           height 95px
-          background url('./14.png') no-repeat
+          background url('../../assets/image/channel/14.png') no-repeat
           background-size 100%
           background-position center
       &.li8
@@ -336,7 +336,7 @@ export default {
         .icon
           width 90px
           height 90px
-          background url('./16.png') no-repeat
+          background url('../../assets/image/channel/16.png') no-repeat
           background-size 100%
           background-position center
 </style>

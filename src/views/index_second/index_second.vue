@@ -60,7 +60,7 @@
           ></IndexSecondImgList>
         </div>
         <div class="cetu-wrap">
-          <Cetu :list="cetu"></Cetu>
+          <Cetu :list="cetu" :zuowu="false"></Cetu>
         </div>
         <div class="online-wrap">
           <Online :list="answerlist"></Online>
@@ -95,23 +95,28 @@ export default {
       recommend_video: {},
       recommend_product: {},
       cetu: [],
-      returnPath: ""
+      returnPath: "",
+      routerAppid: this.$route.query.appid
     };
   },
   computed: {
-    ...mapState(["appId"])
+    ...mapState(["appId", "loginId"])
   },
   watch: {},
   mounted() {
     this.getIndexData();
+    if (this.$route.query.appid != undefined) {
+      this.setAppId(this.routerAppid);
+    }
   },
   destroyed() {},
   methods: {
-    ...mapMutations(["setHospitalIsstore", "setLowerHospital"]),
+    ...mapMutations(["setHospitalIsstore", "setLowerHospital", "setAppId"]),
     getIndexData() {
       this.$axios
         .fetchPost("/Home/Index/GetIndexMpData", {
-          appId: this.appId
+          appId:
+            this.$route.query.appid == undefined ? this.loginId : this.appId
         })
         .then(res => {
           if (res.data.code == 200) {

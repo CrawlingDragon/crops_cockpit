@@ -11,6 +11,7 @@
     <div class="logo">
       <span class="h5">新型庄稼医院管理驾驶舱</span>
     </div>
+    <div class="search" @click="goToSearch"></div>
     <div class="change-data">
       <div class="login-out" @click="loignOutBtn"></div>
     </div>
@@ -71,6 +72,12 @@ export default {
     },
     refresh() {
       location.reload();
+    },
+    goToSearch() {
+      this.$router.push({
+        path: "/search",
+        query: { from: "header" }
+      });
     }
   }
 };
@@ -258,4 +265,17 @@ bg-image($url)
   .video
       outline none
       width 80%
+.search
+  cursor pointer
+  width 160px
+  height 50px
+  font-size 30px
+  display inline-block
+  vertical-align middle
+  width 29px
+  height 28px
+  background url('../../assets/image/search.png') no-repeat
+  position absolute
+  top 46px
+  right 380px
 </style>

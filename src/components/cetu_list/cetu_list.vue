@@ -1,6 +1,8 @@
 <template>
   <div class="cetu_list-container">
-    <div class="title" @click="goToCetuList">测土配方记录 ></div>
+    <div class="title" @click="goToCetuList" v-if="zuowu == false">
+      测土配方记录 >
+    </div>
     <ul class="cetu-ul">
       <li v-for="item in list" :key="item.id" @click="goToCetuDetail(item.id)">
         <p class="p1">{{ item.title }}</p>
@@ -15,7 +17,7 @@
         <!-- teststatus:1检测中，2检测完成，3给处方 -->
       </li>
     </ul>
-    <Empty v-show="list.length == 0">
+    <Empty v-show="list.length == 0 && zuowu == false">
       <img src="./cetu_noData.png" alt="" />
     </Empty>
   </div>
@@ -25,7 +27,7 @@ import Empty from "@/components/empty/empty";
 export default {
   name: "cetu_list",
   components: { Empty },
-  props: ["list"],
+  props: ["list", "zuowu"],
   data() {
     return {};
   },

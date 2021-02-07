@@ -102,7 +102,6 @@ export default {
     if (this.$route.query.appId != undefined) {
       this.setAppId(this.queryAppId);
     }
-    console.log("this.queryAppId :>> ", this.queryAppId);
   },
   mounted() {
     if (this.$route.query.appId != undefined) {
@@ -150,7 +149,6 @@ export default {
           Id: Id
         })
         .then(res => {
-          console.log(res);
           if (res.data.code == 200) {
             this.zl_detail = res.data.data;
             this.setLowerHospital(res.data.data.mpublic);

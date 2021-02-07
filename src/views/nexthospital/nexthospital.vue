@@ -31,6 +31,13 @@
           </td>
         </tr>
         <tr class="hang">
+          <td class="leibie"><div class="text2">医院会员</div></td>
+          <td class="neirong">
+            <span class="num">{{ hospitalUser }}</span
+            >个
+          </td>
+        </tr>
+        <tr class="hang">
           <td class="leibie">诊疗</td>
           <td class="neirong">
             <span class="num">{{ this.wenzhen }}</span
@@ -74,6 +81,8 @@
             </el-table-column>
             <el-table-column label="会员" prop="member" align="center">
             </el-table-column>
+            <el-table-column label="医院会员" prop="hosmember" align="center">
+            </el-table-column>
             <el-table-column label="诊疗" prop="wenzhen" align="center">
             </el-table-column>
             <el-table-column label="测土配方" prop="cetu" align="center">
@@ -109,11 +118,12 @@ export default {
       curlevel: "",
       isshow: true,
       chartxianshi: "", //控制右边的柱状图和图表是否显示，
-      lefttitle: "下级医院"
+      lefttitle: "下级医院",
+      hospitalUser: "" //医院会员
     };
   },
   computed: {
-    ...mapState(["loginHospitalName", "appId"])
+    ...mapState(["loginHospitalName", "appId", "loginId"])
   },
   created() {
     this.openLoading();
@@ -123,7 +133,7 @@ export default {
     this.userid = window.sessionStorage.getItem("curuserid");
     this.$axios
       .fetchPost("/Home/Manage/GetShaoxingMpData", {
-        appId: this.appId
+        appId: this.loginId
         // areaname: this.curcity,
         // level: this.curlevel,
         // isstore: window.sessionStorage.getItem("isstore")
@@ -136,11 +146,12 @@ export default {
           this.isstore = res2.data.data.isstore;
           this.mpublic = res2.data.data.mpublic;
           this.expert = res2.data.data.expert;
+          this.hospitalUser = res2.data.data.hosuser;
         }
       });
     this.$axios
       .fetchPost("/Home/Manage/GetManageMpAreaData", {
-        appId: this.appId
+        appId: this.loginId
         // isstore: window.sessionStorage.getItem("isstore")
       })
       .then(res1 => {
@@ -149,6 +160,7 @@ export default {
           this.chartdata = res1.data.data.chart;
           this.chartxianshi = res1.data.data.chart.length;
           this.hospitaldata = res1.data.data.lists;
+
           for (let i = 0; i < this.chartdata.length; i++) {
             if (this.chartdata[i].num !== 0 && this.curcity == "全国") {
               this.chartname.push(this.chartdata[i].name);

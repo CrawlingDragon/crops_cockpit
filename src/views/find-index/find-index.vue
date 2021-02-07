@@ -109,6 +109,7 @@ export default {
     .head
         position fixed
         z-index 99999999
+        width 100%
     .contain
         width 1340px
         margin 0 auto

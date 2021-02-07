@@ -98,22 +98,22 @@ export default {
       this.activeIndex = index;
       switch (index) {
         case 1:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis/second_tu"
           });
           break;
         case 2:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis/second_wang"
           });
           break;
         case 3:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis/second_zuo"
           });
           break;
         case 4:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis/second_xun"
           });
           break;

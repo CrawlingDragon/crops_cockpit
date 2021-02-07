@@ -258,7 +258,7 @@ export default {
         if (item.isstore == 1) {
           let route = this.$router.resolve({
             path: "/index_second",
-            query: { from: "adminRoute" }
+            query: { from: "adminRoute", appid: item.appid }
           });
           window.open(route.href, "_blank");
         } else if (item.isstore == 0) {

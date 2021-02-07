@@ -62,6 +62,7 @@ export default {
   destroyed() {},
   methods: {
     getDetail() {
+      this.openLoading();
       this.$axios
         .fetchPost("/Home/News/GetPushMessageDetail", {
           catId: this.catId,
@@ -69,6 +70,7 @@ export default {
           appId: this.from == "ad" ? this.appId : ""
         })
         .then(res => {
+          this.openLoading().close();
           if (res.data.code == 200) {
             this.detail = res.data.data;
             this.title = res.data.data.title;
@@ -128,6 +130,7 @@ export default {
     right 40px
     top 40%
     cursor pointer
+    z-index 2
     .icon
       width 50px
       height 100px

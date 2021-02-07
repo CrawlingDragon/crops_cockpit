@@ -1,6 +1,10 @@
 <template>
   <div class="my-container">
-    <Header :title="title" midTitle="关于"></Header>
+    <GeneralHeaders
+      v-if="fromRoute === 'general'"
+      title="我的"
+    ></GeneralHeaders>
+    <Header :title="title" midTitle="关于" v-else></Header>
     <div class="my-box">
       <div class="left">
         <el-image class="img" :src="data.logo" fit="cover">
@@ -40,7 +44,11 @@
     <!-- <Nav :index="5" v-if="purview == 2"></Nav> -->
     <NavSecond
       :index="5"
-      v-if="(purview == 46 && isLowerHospital == 'true') || purview == 2"
+      v-if="
+        (purview == 46 && isLowerHospital == 'true') ||
+          purview == 2 ||
+          purview == 4
+      "
     ></NavSecond>
     <NavThird
       :index="5"
@@ -55,6 +63,7 @@
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import GeneralHeaders from "@/components/general_hospital_header/general_hospital_header";
 import Nav from "@/components/nav_list/nav_list";
 import NavSecond from "@/components/nav_list_second/nav_list_second";
 import NavThird from "@/components/nav_list_third/nav_list_third";
@@ -63,6 +72,7 @@ import { mapState } from "vuex";
 export default {
   name: "me",
   components: {
+    GeneralHeaders,
     Header,
     Nav,
     NavSecond,
@@ -73,7 +83,8 @@ export default {
   data() {
     return {
       data: "",
-      title: ""
+      title: "",
+      fromRoute: this.$route.query.fromRoute
     };
   },
   computed: {

@@ -1,6 +1,7 @@
 <template>
-  <div class="goods_list_container">
-    <Header :title="title" midTitle="农资商品"></Header>
+  <div class="goods_list_container container-wrap">
+    <Headers title="农资商品" v-if="from == 'general'"></Headers>
+    <Header :title="title" midTitle="农资商品" v-else></Header>
     <div class="nav-bar">
       <div
         class="item"
@@ -43,12 +44,14 @@
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import Headers from "@/components/general_hospital_header/general_hospital_header";
 import { mapState } from "vuex";
 
 export default {
   name: "goods_list",
   components: {
-    Header
+    Header,
+    Headers
   },
   props: {},
   data() {
@@ -61,14 +64,15 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      catid: 0
+      catid: 0,
+      from: this.$route.query.from
     };
   },
   computed: {
     disabled() {
       return this.loading || this.noMore;
     },
-    ...mapState(["appId", "purview", "lowerHospital"])
+    ...mapState(["appId", "purview", "lowerHospital", "loginId"])
   },
   watch: {},
   mounted() {
@@ -87,10 +91,11 @@ export default {
         this.noGoods = false;
         this.$axios
           .fetchGet("/Home/Products/GetMpProList", {
-            appId: this.appId,
+            appId:
+              this.$route.query.from == "general" ? this.loginId : this.appId,
             catId: this.catid,
             page: this.page,
-            purview: 0
+            purview: this.from == "general" ? 1 : 0
           })
           .then(res => {
             if (res.data.code == 200) {
@@ -118,33 +123,34 @@ export default {
         }
       });
     },
-    getGoodsList() {
-      // 获取商品列表
-      this.noGoods = false;
-      this.$axios
-        .fetchGet("/Home/Products/GetMpProList", {
-          appId: this.appId,
-          catId: this.catid,
-          page: this.page,
-          purview: this.purview == (4 || 5) ? 1 : 0
-        })
-        .then(res => {
-          if (res.data.code == 200) {
-            this.list = this.list.concat(res.data.data);
-            this.loading = false;
-            this.count = res.data.count;
-            console.log("this.page :>> ", this.page);
-            if (this.page == 1) {
-              this.noGoods = true;
-            }
-            if (res.data.data.length == 0) {
-              this.noMore = true;
-            }
-          } else {
-            this.noMore = true;
-          }
-        });
-    },
+    // getGoodsList() {
+    //   // 获取商品列表
+    //   this.noGoods = false;
+    //   this.$axios
+    //     .fetchGet("/Home/Products/GetMpProList", {
+    //       appId:
+    //         this.$route.query.from == "general" ? this.loginId : this.appId,
+    //       catId: this.catid,
+    //       page: this.page,
+    //       purview: this.purview == (4 || 5) ? 1 : 0
+    //     })
+    //     .then(res => {
+    //       if (res.data.code == 200) {
+    //         this.list = this.list.concat(res.data.data);
+    //         this.loading = false;
+    //         this.count = res.data.count;
+    //         console.log("this.page :>> ", this.page);
+    //         if (this.page == 1) {
+    //           this.noGoods = true;
+    //         }
+    //         if (res.data.data.length == 0) {
+    //           this.noMore = true;
+    //         }
+    //       } else {
+    //         this.noMore = true;
+    //       }
+    //     });
+    // },
     changeNenu(catid, index) {
       // 点击导航栏
       if (this.menuIndex != index) {
@@ -160,10 +166,22 @@ export default {
     },
     goToDetail(id) {
       // 去到商品详情
-      this.$router.push({
-        path: "/goods_detail",
-        query: { id: id }
-      });
+      if (this.from == "general") {
+        let route2 = this.$router.resolve({
+          path: "/goods_detail",
+          query: { id: id, from: "adminRoute", goodsFrom: "general" }
+        });
+        window.open(route2.href, "_blank");
+        // this.$router.push({
+        //   path: "/goods_detail",
+        //   query: { id: id, from: "adminRoute" }
+        // });
+      } else {
+        this.$router.push({
+          path: "/goods_detail",
+          query: { id: id }
+        });
+      }
     }
   }
 };
@@ -216,7 +234,7 @@ export default {
         background: hsla(0, 0%, 53%, 0.1);
     }
     & > li
-      margin-right 30px
+      margin-right 29px
       width 270px
       height 270px
       margin-bottom 55px

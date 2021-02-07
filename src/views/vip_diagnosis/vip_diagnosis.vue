@@ -1,59 +1,91 @@
 <template>
-  <div class="vip_diagnosis-container">
-    <Header title="会员：134*****7220"></Header>
+  <div class="vip_diagnosis-container container-wrap">
+    <GeneralHeader :title="title" v-if="from === 'general'"></GeneralHeader>
+    <Header :title="title" v-else></Header>
     <div class="nav">
-      <div class="item active">网诊</div>
-      <div class="item">TA加入的医院</div>
+      <div
+        class="item "
+        @click="routeName = 'wangZhen'"
+        :class="{ active: routeName == 'wangZhen' }"
+      >
+        网诊
+      </div>
+      <div
+        class="item"
+        @click="routeName = 'joinHopital'"
+        :class="{ active: routeName == 'joinHopital' }"
+      >
+        TA加入的医院
+      </div>
     </div>
-    <ul class="diagnosis-ul">
-      <li v-for="item in 4" :key="item">
-        <div class="icon"></div>
-        <div class="text">
-          <p class="p1">
-            范冰冰的水稻提问
-            <span>2017-05-27 12:00</span>
-          </p>
-          <p class="p2">
-            机插秧田，插秧后7天，追肥尿素15斤/亩，拌除草剂苄-乙，肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨肥尿素15斤/亩，拌除草剂苄-乙，昨昨天下过大雨，田间水位上升许多，今天发现水深的地方成片心叶滞长，拌除
-          </p>
-        </div>
-        <div class="answer">
-          <p class="p3">回复数：4</p>
-          <el-image
-            class="img"
-            src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1592471253187&di=2be437364bafe9496afca32965ee9e22&imgtype=0&src=http%3A%2F%2Ft7.baidu.com%2Fit%2Fu%3D3204887199%2C3790688592%26fm%3D79%26app%3D86%26f%3DJPEG%3Fw%3D4610%26h%3D2968"
-          ></el-image>
-        </div>
-      </li>
-    </ul>
-    <div class="result-num">共200个结果</div>
+    <div class="content-bar">
+      <div class="show-bar1" v-show="routeName === 'wangZhen'">
+        <VipWang from="general"></VipWang>
+      </div>
+      <div class="show-bar2" v-show="routeName === 'joinHopital'">
+        <Hospital :items="hospitalList"></Hospital>
+        <div v-if="hospitalList == 0">暂无符合条件的医院</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import GeneralHeader from "@/components/general_hospital_header/general_hospital_header";
+import Hospital from "@/components/hospital_list_item/hospital_list_item";
+import VipWang from "@/views/huiyuan_wang/huiyuan_wang";
+
 export default {
   name: "vip_diagnosis",
-  components: { Header },
+  components: { Header, Hospital, VipWang, GeneralHeader },
   props: {},
   data() {
-    return {};
+    return {
+      routeName: "wangZhen",
+      hospitalList: [],
+      userId: this.$route.query.userId,
+      title: "会员：" + this.$route.query.userName,
+      from: this.$route.query.from
+    };
   },
   computed: {},
   watch: {},
-  mounted() {},
+  mounted() {
+    this.get_info();
+  },
   destroyed() {},
-  methods: {}
+  methods: {
+    get_info() {
+      // ta 加入的医院
+      this.$axios
+        .fetchPost("/Home/Manage/GetManageMpDataList", {
+          appId: this.userId, //user id
+          storetag: 99,
+          ordertag: "default",
+          type: "user"
+        })
+        .then(res => {
+          if (res.data.code === "200") {
+            if (res.data.data == 0) {
+              this.hospitalList = 0;
+              return;
+            }
+            this.hospitalList = res.data.data.lists;
+          }
+        });
+    }
+  }
 };
 </script>
 <style lang="stylus" scoped>
 .vip_diagnosis-container
   .nav
-    border-bottom 2px solid rgba(255, 255, 255, 0.2)
-    margin 0 90px
+    margin-top 101px
     text-emphasis center
+    margin-bottom 87px
     .item
-      padding 0 35px 11px
-      font-size 40px
+      padding 0 35px 9px
+      font-size 30px
       color #C5C5C5
       display inline-block
       cursor pointer

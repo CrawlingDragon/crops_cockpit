@@ -38,7 +38,7 @@
           :class="[
             this.changemoudle == 'find' ? 'find-text' : 'find-text find-text1'
           ]"
-          >{{ isshaoxing == 1 ? "数据分析" : "数据分析" }}</span
+          >{{ dataV == 1 ? "数据分析" : "数据分析" }}</span
         >
       </div>
       <div
@@ -55,43 +55,10 @@
       <span class="h5">{{ this.middle_title }}</span>
     </div>
     <div class="right_nav">
+      <div class="search" @click="goToSearch"></div>
       <span class="icon-refresh" @click="refresh"></span>
       <div class="change-data">
         <div class="login-out" @click="loignOutBtn"></div>
-        <!-- <div class="change-box">
-          <div class="title">
-            <span class="p1 active">医院数据源切换</span>
-            <span class="p2">{{ this.cur_cityname }}</span>
-          </div>
-          <div class="choose">
-            <div class="item" @click="chooseHospital('null')">
-              <div
-                class="radio"
-                :class="{
-                  active:
-                    chooseHospitalRadio == 'null' || chooseHospitalRadio == 2
-                }"
-              ></div>
-              <span
-                :class="{
-                  active:
-                    chooseHospitalRadio == 'null' || chooseHospitalRadio == 2
-                }"
-                >显示所有医院</span
-              >
-            </div>
-            <div class="item" @click="chooseHospital(1)">
-              <div
-                class="radio"
-                :class="{ active: chooseHospitalRadio == 1 }"
-              ></div>
-              <span :class="{ active: chooseHospitalRadio == 1 }"
-                >仅显示新型</span
-              >
-            </div>
-          </div>
-          <div class="login-out" @click="loignOutBtn">退出登录</div>
-        </div> -->
       </div>
       <div class="time"><Date /></div>
     </div>
@@ -108,11 +75,8 @@ import Confim from "../confim/confim";
 import { mapMutations, mapState } from "vuex";
 const Date = resolve => require(["../date/date"], resolve);
 export default {
+  name: "header_nav",
   props: {
-    // cur_cityname: {
-    //   type: String,
-    //   default: function() {}
-    // },
     changemoudle: {
       type: String,
       default: function() {}
@@ -137,7 +101,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["loginHospitalName"]),
+    ...mapState(["loginHospitalName", "dataV"]),
     loginName() {
       if (this.loginHospitalName.indexOf("医院") >= 0) {
         return this.loginHospitalName;
@@ -148,18 +112,10 @@ export default {
   },
   data() {
     return {
-      // chooseHospitalRadio: "1",
-      cur_cityname: this.loginHospitalName,
-      isshaoxing: window.sessionStorage.getItem("isshaoxing")
+      cur_cityname: this.loginHospitalName
     };
   },
-  mounted() {
-    // if (this.$store.state.isstore == "1" || this.$store.state.isstore == 1) {
-    //   this.chooseHospitalRadio = "1";
-    // } else {
-    //   this.chooseHospitalRadio = "null";
-    // }
-  },
+  mounted() {},
   components: {
     Date,
     Confim
@@ -167,8 +123,8 @@ export default {
   methods: {
     tofind() {
       // console.log("tofind");
-      const isshaoxing = window.sessionStorage.getItem("isshaoxing");
-      if (isshaoxing == 1) {
+
+      if (this.dataV == 1) {
         this.$router.push({
           path: "/data_analysis"
         });
@@ -210,13 +166,6 @@ export default {
     refresh() {
       location.reload();
     },
-    // loignOutBtn() {
-    //   // 退出登陆按钮
-    //   this.$refs.confimBox.showFlag = true;
-    // },
-    // clickSure() {
-    //   this.$router.push({ path: "/" });
-    // },
     loignOutBtn() {
       // 退出登陆按钮
       this.$refs.confimBox.showFlag = true;
@@ -224,29 +173,24 @@ export default {
     clickSure() {
       this.$router.push({ path: "/" });
     },
-    // chooseHospital(num) {
-    //   // 选择所有/或者新型医院
-    //   if (num == this.isstore) {
-    //     return;
-    //   }
-    //   this.chooseHospitalRadio = num;
-    //   if (num == 1) {
-    //     this.getIsstore(1);
-    //   } else {
-    //     this.getIsstore(null);
-    //   }
-    //   this.$emit("datatype", num);
-    // },
+    goToSearch() {
+      this.$router.push({
+        path: "/search",
+        query: { from: "header" }
+      });
+    },
     ...mapMutations(["getNoData", "getIsstore"])
   }
 };
 </script>
 <style lang="stylus" scoped>
 .contain
-  height 50px
+  height 80px
   display flex
+  background: #080f3e;
+  padding-bottom 20px
   @media screen and (min-width:1900px) {
-    height 75px
+    height 85px
     padding-top 20px
   }
   width 100%
@@ -292,6 +236,7 @@ export default {
         text-align left
         height 18px
         width 20px
+        vertical-align middle
         @media screen and (min-width:1900px){
           height 28px
           width 28px
@@ -309,7 +254,7 @@ export default {
       .index-text
         margin 0px 0px 0px 14px
         display inline-block
-        vertical-align top
+        vertical-align middle
       .index-text1
         color #7FB5F1
     .find
@@ -322,6 +267,7 @@ export default {
         height 20px
         width 20px
         margin-right 13px
+        vertical-align middle
         @media screen and (min-width:1900px){
           height 28px
           width 28px
@@ -332,12 +278,13 @@ export default {
       .find-icon1
         background url('./find-icon.png') no-repeat
         bg-image('./find-icon')
+        vertical-align middle
         background-size 20px 20px
         @media screen and (min-width:1900px){
           background-size 28px 28px
         }
       .find-text
-        position relative
+        vertical-align middle
         @media screen and (min-width:1340px) and (max-width:1899px) {
           bottom 2px
         }
@@ -360,7 +307,6 @@ export default {
   .right_nav
     flex 3
     text-align right
-    margin-right 40px
     .icon-refresh
       display inline-block
       width 27px
@@ -368,31 +314,32 @@ export default {
       margin-top 15px
       background url('../../assets/image/refresh.png') no-repeat
       background-size 100% 100%
+      margin-right 40px
       @media screen and (min-width:1900px){
           height 28px
           width 28px
-          margin-right 50px
+          margin-right 70px
       }
     cursor pointer
     .time
       display inline-block
       font-size 18px
-      width 160px
+      width 155px
       font-family ArialMT
       font-weight 400
       color rgba(127, 181, 241, 1)
       position relative
       bottom 1px
+      text-align left
+      margin-right 30px
       @media screen and (min-width:1900px) {
         bottom 3px
       }
     .change-data
       display inline-block
-      margin-right 30px
-      margin-left 30px
+
       @media screen and (min-width:1900px){
         right 239px
-        margin-right 55px
       }
       &:hover .change-box
         display block
@@ -466,6 +413,22 @@ export default {
   width 30px
   height 28px
   background url('../../assets/image/login_out_icon.png') no-repeat
-  margin-right 60px
+  margin-right 40px
   cursor: pointer;
+  @media screen and (min-width:1900px) {
+    margin-right 60px
+   }
+.search
+  cursor pointer
+  width 160px
+  height 50px
+  font-size 30px
+  margin-right 40px
+  display inline-block
+  width 29px
+  height 28px
+  background url('../../assets/image/search.png') no-repeat
+  @media screen and (min-width:1900px) {
+    margin-right 60px
+   }
 </style>

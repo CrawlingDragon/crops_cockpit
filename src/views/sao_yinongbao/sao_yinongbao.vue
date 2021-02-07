@@ -2,20 +2,24 @@
   <div class="jianjie" v-show="codeboxFlaw">
     <div class="head" @click="topre()">
       <div class="closefn"></div>
-      <div class="head-title">扫一扫下载益农宝</div>
+      <div class="head-title">
+        {{ isShaoxing == 1 ? "绍兴市为农服务平台" : "扫一扫下载益农宝" }}
+      </div>
     </div>
-    <div class="er_wei_ma"></div>
+    <el-image :src="url" v-if="isShaoxing == 1" class="er_wei_ma"></el-image>
+    <div class="er_wei_ma" v-else></div>
   </div>
 </template>
 <script>
 export default {
-  props: ["codeboxFlaw"],
+  props: ["codeboxFlaw", "url"],
   data() {
     return {
       order_id: window.sessionStorage.getItem("orderid"), // 用户的订单id
       order_info: "", // 订单的信息
       coastInt: "", // 订单金额取整
-      coastFloat: "" // 订单金额取余
+      coastFloat: "", // 订单金额取余
+      isShaoxing: window.sessionStorage.getItem("isshaoxing")
     };
   },
   activated() {
@@ -62,6 +66,7 @@ export default {
     max-width 1900px
     min-width 1340px
     margin 0 auto
+    cursor pointer
     .closefn
       height 30px
       width 30px

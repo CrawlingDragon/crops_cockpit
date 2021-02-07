@@ -31,56 +31,64 @@
         </div>
       </li>
     </ul>
-    <div class="result-num">共{{ this.total }}个结果</div>
+    <div class="result-num" v-if="this.total != 0">
+      共{{ this.total }}个结果
+    </div>
     <div class="temporary" v-if="this.total == 0">
       暂无提问
     </div>
   </div>
 </template>
 <script>
-// import { mapMutations, mapState } from "vuex";
+import { mapState } from "vuex";
 import Nodata from "../../components/no-data/no-data";
 export default {
-  name: "vip_diagnosis",
-  props: {},
+  name: "huiyuan_wang",
+  props: {
+    from: {
+      type: String,
+      default: ""
+    },
+    userId: "",
+    uId: ""
+  },
   components: {
     Nodata
   },
   data() {
     return {
-      appId: window.localStorage.getItem("appId"), //当前登录账号的Id,
       wangzhenlist: "",
       total: "",
-      page: 1
+      page: 1,
+      userid: this.userId
     };
   },
-  // computed: {
-  //   ...mapState(["huiyuanId"]),
-  // },
+  computed: {
+    ...mapState(["loginId", "appId"])
+  },
   watch: {},
   created() {
-    this.getwanginfo(
-      this.appId,
-      window.sessionStorage.getItem("huiyuan_id"),
-      1,
-      12
-    );
+    this.getwanginfo(1, 10);
   },
   methods: {
-    getwanginfo(appId, Id, page, pagesize) {
+    getwanginfo(page, pagesize) {
       this.openLoading();
       this.$axios
         .fetchPost("/Home/Treatment/GetWenList", {
-          appId: appId,
-          Id: Id,
+          appId: this.from === "general" ? this.loginId : this.appId,
+          Id: this.userid,
           page: page,
           pagesize: pagesize,
-          purview: 1
+          purview: this.from === "general" ? 1 : 0,
+          idtype: this.from === "general" ? 2 : 1
         })
         .then(res => {
           this.openLoading().close();
           if (res.data.code == "200") {
-            this.total = res.data.count;
+            if (res.data.data.length != 0) {
+              this.total = res.data.count;
+            }
+
             if (this.page == 1) {
               this.wangzhenlist = res.data.data;
             } else {
@@ -98,15 +106,10 @@ export default {
     },
     load() {
       // 是否当前page不是最后一页
-      if (this.page < Math.ceil(this.total / 12)) {
+      if (this.page < Math.ceil(this.total / 10)) {
         // 页码+1
         this.page++;
-        this.getwanginfo(
-          this.appId,
-          window.sessionStorage.getItem("huiyuan_id"),
-          this.page,
-          12
-        );
+        this.getwanginfo(this.page, 10);
       }
     }
   }
@@ -149,6 +152,8 @@ export default {
       height 220px
       padding-top 22px
       margin-bottom 11px
+      overflow: hidden;
+      padding-bottom 20px
       &:hover
         outline 3px solid #FF6600
         box-shadow 0px 1px 26px #f60
@@ -173,6 +178,11 @@ export default {
           font-size 30px
           color #FFFFFF
           line-height 44px
+          overflow hidden
+          text-overflow ellipsis
+          display -webkit-box
+          -webkit-line-clamp 3
+          -webkit-box-orient vertical
       .answer
         width 140px
         margin 0 0 0 30px

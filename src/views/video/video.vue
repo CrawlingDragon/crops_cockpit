@@ -1,6 +1,8 @@
 <template>
   <div class="video-container">
-    <Header :title="title" midTitle="培训视频"></Header>
+    <Headers title="培训视频" v-if="from == 'general'"></Headers>
+    <Header :title="title" midTitle="培训视频" v-else></Header>
+
     <!-- <div class="tab-bar">
       <div
         class="item"
@@ -14,7 +16,7 @@
       </div>
     </div> -->
     <ul
-      class="video-ul infinite-list"
+      class="video-ul infinite-list container-wrap"
       v-infinite-scroll="load"
       style="overflow:auto;"
       infinite-scroll-disabled="disabled"
@@ -34,16 +36,19 @@
       <p v-if="loading" class="p1">加载中...</p>
       <p v-if="noMore" class="p1">没有更多了</p>
     </ul>
-    <div class="result-num">共{{ maxitem }}个结果</div>
+    <div class="result-num">
+      <div class="container-wrap">共{{ maxitem }}个结果</div>
+    </div>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import Headers from "@/components/general_hospital_header/general_hospital_header";
 import { mapState } from "vuex";
 
 export default {
   name: "videos",
-  components: { Header },
+  components: { Header, Headers },
   props: {},
   data() {
     return {
@@ -54,11 +59,12 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      title: ""
+      title: "",
+      from: this.$route.query.from
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital"]),
+    ...mapState(["appId", "purview", "lowerHospital", "loginId"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -81,7 +87,7 @@ export default {
         this.$axios
           .fetchGet("/Home/Video/GetVideoList", {
             page: this.page,
-            appId: this.appId,
+            appId: this.from == "general" ? this.loginId : this.appId,
             catId: "99999999"
           })
           .then(res => {
@@ -130,7 +136,7 @@ export default {
       // 点击进入视频详情页
       this.$router.push({
         path: "/video_detail",
-        query: { id: id, catid: catid }
+        query: { id: id, catid: catid, from: this.from }
       });
     }
   }
@@ -144,7 +150,7 @@ export default {
     text-align left
     max-width 1900px
     min-width 1340px
-    margin 60px auto 0
+    margin 0 auto 0
     max-height 800px
     padding-bottom 151px
     padding-top 3px
@@ -193,10 +199,17 @@ export default {
         text-overflow ellipsis
         white-space nowrap
   .result-num
-    padding 30px 90px 50px
     text-align left
     font-size 30px
     color #B5B5B5
+    position fixed
+    left 0
+    right 0
+    bottom 0
+    height 100px
+    background #080f3e
+    .container-wrap
+      padding 0 40px
 .tab-bar
   text-align center
   & > .item
@@ -212,4 +225,10 @@ export default {
 .p1
   text-align center
   width 100%
+@media screen and (max-width 1890px){
+  .video-container .video-ul > li{
+    width 236px
+    height 236px
+  }
+}
 </style>
