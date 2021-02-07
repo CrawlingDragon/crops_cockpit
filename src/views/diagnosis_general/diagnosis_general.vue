@@ -37,7 +37,7 @@
     </div>
     <div class="module-content"></div>
     <router-view></router-view>
-    <NavThird :index="3"></NavThird>
+    <NavThird :index="3" v-if="purview != 4"></NavThird>
   </div>
 </template>
 <script>
@@ -54,11 +54,18 @@ export default {
       activeIndex: 1,
       count: "",
       title: "",
-      midTitle: "诊疗"
+      midTitle: "诊疗",
+      from: this.$route.query.from //是否为index（也就是首页的最新网诊 导航）
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"])
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "isLowerHospital",
+      "loginId"
+    ])
   },
   watch: {},
   mounted() {
@@ -90,22 +97,22 @@ export default {
       this.activeIndex = index;
       switch (index) {
         case 1:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis_general/second_tu"
           });
           break;
         case 2:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis_general/second_wang"
           });
           break;
         case 3:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis_general/second_zuo"
           });
           break;
         case 4:
-          this.$router.push({
+          this.$router.replace({
             path: "/diagnosis_general/second_xun"
           });
           break;
@@ -114,7 +121,7 @@ export default {
     getTreamentCount() {
       this.$axios
         .fetchPost("/Home/Treatment/GetTreamentCount", {
-          appId: this.appId,
+          appId: this.loginId,
           purview:
             this.purview == 3 || this.purview == 4 || this.purview == 46 ? 1 : 0
         })

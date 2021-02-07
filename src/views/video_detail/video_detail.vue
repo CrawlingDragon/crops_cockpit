@@ -1,6 +1,13 @@
 <template>
   <div class="video-containers">
-    <Header :title="title" :right_show_bar="false" midTitle="视频详情"></Header>
+    <GeneralHeaders v-if="from === 'general'" title="视频详情"></GeneralHeaders>
+    <Header
+      :title="title"
+      :right_show_bar="false"
+      midTitle="视频详情"
+      v-else
+    ></Header>
+
     <div class="detail-conatiner">
       <div class="detail-box">
         <div class="left-bar">
@@ -25,21 +32,33 @@
               <span class="info-btn"></span>
               <span>简 介</span>
             </div>
-            <div class="btn" @click="playVideo">
+            <div class="btn" @click="playVideo(true)">
               <span class="play-icon"></span>
               <span>播 放</span>
             </div>
-            <div class="download btn" @click="downVideo" style="display:none;">
-              <!-- <input type="file" class="file" /> -->
-              下载视频
+            <div class="download btn">
+              <span class="el-icon-more" style="margin-right:20px"></span>
+              更多
+              <div class="more-box">
+                <input
+                  type="file"
+                  class="file"
+                  id="files"
+                  ref="filebox"
+                  @change="changeFile(this)"
+                />
+                <div class="small-title">已下载视频</div>
+                <div class="open-text">
+                  <div class="icon el-icon-folder-opened"></div>
+                  打开视频
+                </div>
+              </div>
             </div>
-            <video
-              :src="videoSrc"
-              width="200px"
-              height="200px"
-              style="display:none;border:1px solid #fff"
-              controls
-            ></video>
+            <div class="download btn" style="display:none">
+              <!-- @click="downVideo" -->
+
+              更多
+            </div>
           </div>
         </div>
       </div>
@@ -70,16 +89,23 @@
         </div>
       </div>
     </div>
+    <!-- <video
+      :src="videoSrc"
+      controls
+      class="location-video"
+      v-show="locationVideoFlag"
+    ></video> -->
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import GeneralHeaders from "@/components/general_hospital_header/general_hospital_header";
 import { mapState } from "vuex";
 import Swiper from "swiper";
 import download from "../../common/js/download";
 export default {
   name: "videos",
-  components: { Header },
+  components: { Header, GeneralHeaders },
   props: {},
   data() {
     return {
@@ -89,7 +115,9 @@ export default {
       id: this.$route.query.id,
       infowShowFlag: false,
       videoSrc: "",
-      title: ""
+      title: "",
+      locationVideoFlag: false,
+      from: this.$route.query.from
     };
   },
   computed: {
@@ -116,7 +144,18 @@ export default {
       // alert(1);
       // this.videoSrc = require("/Users/wuhelong/Documents/图片/cce50b4fd7e395d2379c28dc66c07368_1.mp4");
       // this.videoSrc = "file:///D:/video/cce50b4fd7a0d586dfe2d764pim.mp4";
+      // this.browseFolder();
     },
+    changeFile(ele) {
+      var video = this.$refs.filebox.files[0];
+      var url = URL.createObjectURL(video);
+      this.$refs.video.src = url;
+      this.playVideo();
+      setTimeout(() => {
+        this.$refs.filebox.value = "";
+      }, 100);
+    },
+
     init(pagesize) {
       var mySwiper = new Swiper(".swiper-container", {
         spaceBetween: 30,
@@ -132,7 +171,10 @@ export default {
       });
       // mySwiper
     },
-    playVideo() {
+    playVideo(boolean) {
+      if (boolean && boolean == true) {
+        this.$refs.video.src = this.detail.videourl;
+      }
       function FullScreen() {
         var ele = document.getElementById("video");
         if (ele.requestFullscreen) {
@@ -264,6 +306,55 @@ export default {
           .downed
             background url('./downed.png') no-repeat
             background-size 100% 100%
+          &.download
+            position relative
+            .more-box
+              position absolute
+              display none
+              bottom -121px
+              left 3px
+              right 0
+              width 197px
+              height 119px
+              background: #226DBF;
+              z-index 2
+              border-radius: 10px;
+              padding 20px
+              &:before
+                content ''
+                border 10px solid transparent
+                border-bottom 10px solid #226dbf
+                // border-left 10px solid #226dbf
+                // border-right 10px solid #226dbf
+                width 0
+                height 0
+                position absolute
+                top -20px
+                left 40px
+              .small-title
+                font-size 18px
+                color rgba(255, 255, 255, .5)
+                margin-bottom 10px
+              .open-text
+                font-size 22px
+                display flex
+                align-items center
+                .icon
+                  font-size 28px
+                  margin-right 5px
+            &:hover
+              .more-box
+                display block
+          .file
+            opacity 0
+            position absolute
+            left 0
+            top 0
+            right 0
+            bottom 0
+            z-index 2
+            cursor pointer
+
     .second-title
       font-size 36px
       color rgba(255, 255, 255, 0.5)
@@ -352,4 +443,13 @@ export default {
       color: #B5B5B5;
       line-height: 48px;
       text-align left
+.location-video
+  position fixed
+  left 0
+  right 0
+  bottom 0
+  top 0
+  z-index 222222
+  width 100%
+  height 100%
 </style>

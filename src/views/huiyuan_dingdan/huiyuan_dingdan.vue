@@ -55,7 +55,7 @@ import { mapState } from "vuex";
 export default {
   name: "second_dingdan",
   components: {},
-  props: {},
+  props: ["userId", "uId"],
   data() {
     return {
       appId: window.localStorage.getItem("appId"),
@@ -64,7 +64,7 @@ export default {
       orderinfo: "", // 订单的信息
       products: "", // 订单中的商品信息
       total: "",
-      uid: window.sessionStorage.getItem("huiyuan_uid")
+      uid: this.$route.query.uId
     };
   },
   computed: {

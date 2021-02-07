@@ -130,13 +130,13 @@ export default {
         // this.$router.push({ path: "/index_third" });
         let route = this.$router.resolve({
           path: "/index_third",
-          query: { from: "adminRoute" }
+          query: { from: "adminRoute", appid: item.id }
         });
         window.open(route.href, "_blank");
       } else if (item.isstore == "1") {
         let route = this.$router.resolve({
           path: "/index_second",
-          query: { from: "adminRoute" }
+          query: { from: "adminRoute", appid: item.id }
         });
         window.open(route.href, "_blank");
         // this.$router.push({

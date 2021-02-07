@@ -35,7 +35,7 @@
 <script>
 import { mapMutations } from "vuex";
 export default {
-  name: "component_name",
+  name: "hospital_list_item",
   components: {},
   props: {
     title: {
@@ -87,7 +87,7 @@ export default {
         if (isstore == 1) {
           let route = this.$router.resolve({
             path: "/index_second",
-            query: { from: "adminRoute" }
+            query: { from: "adminRoute", appid: appid }
           });
           window.open(route.href, "_blank");
         } else if (isstore == 0) {

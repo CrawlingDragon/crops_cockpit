@@ -10,7 +10,7 @@
         v-for="item in list"
         :key="item.id"
         class="infinite-list-item"
-        @click="goToDetail(item.id)"
+        @click="goToDetail(item.id, item.userid)"
       >
         <div class="icon"></div>
         <div class="text">
@@ -58,7 +58,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "isLowerHospital", "purview"]),
+    ...mapState(["appId", "isLowerHospital", "purview", "loginId"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -75,7 +75,11 @@ export default {
         this.$axios
           .fetchGet("/Home/Treatment/GetWenzhenList", {
             page: this.page,
-            appId: this.appId,
+            appId:
+              this.routerPath == "/diagnosis_general" ||
+              this.routerPath == "/diagnosis_general/second_zuo"
+                ? this.loginId
+                : this.appId,
             type: "1",
             purview: this.routerPath == "/diagnosis_general/second_zuo" ? 1 : 0
           })
@@ -96,18 +100,18 @@ export default {
           });
       }, 1000);
     },
-    goToDetail(id) {
-      if (this.purview == 46) {
+    goToDetail(id, appId) {
+      if (this.routerPath == "/diagnosis_general/second_zuo") {
         this.setIsLowerHospital("true");
         const route3 = this.$router.resolve({
           path: "/zuozhen_detail",
-          query: { tid: id, from: "adminRoute" }
+          query: { tid: id, from: "adminRoute", appId: appId }
         });
         window.open(route3.href, "_blank");
       } else {
         this.$router.push({
           path: "/zuozhen_detail",
-          query: { tid: id }
+          query: { tid: id, appId: appId }
         });
       }
     }

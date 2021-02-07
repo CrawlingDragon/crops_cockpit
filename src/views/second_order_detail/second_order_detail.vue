@@ -1,6 +1,6 @@
 <template>
   <div class="jianjie">
-    <Header title="订单详情" :right_show_bar="false"></Header>
+    <Header :title="title" midTitle="订单详情" :right_show_bar="false"></Header>
     <div class="left">
       <div class="name">{{ this.order_info.name }}</div>
       <div class="shop_num">{{ this.order_info.title }}</div>
@@ -37,18 +37,24 @@
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import { mapState } from "vuex";
 export default {
   data() {
     return {
       order_info: "", //订单的信息
       coastInt: "", //订单金额取整
-      coastFloat: "" //订单金额取余
+      coastFloat: "", //订单金额取余
+      title: this.lowerHospital
     };
   },
   components: {
     Header
   },
+  computed: {
+    ...mapState(["lowerHospital", "purview"])
+  },
   mounted() {
+    this.title = this.purview == 2 ? "订单详情" : this.lowerHospital;
     this.getOrederinfo(this.$route.query.Id);
   },
   methods: {

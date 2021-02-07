@@ -41,12 +41,14 @@
 <script>
 import { mapMutations, mapState } from "vuex";
 export default {
+  props: ["userId"],
   data() {
     return {
       appId: window.localStorage.getItem("appId"), // 当前登录账号的Id,
       huiyuaninfo: "",
       zuowu: "",
-      huiyuanid: window.sessionStorage.getItem("huiyuan_id")
+      huiyuanid: this.userId,
+      from: this.$route.query.from
     };
   },
   created() {

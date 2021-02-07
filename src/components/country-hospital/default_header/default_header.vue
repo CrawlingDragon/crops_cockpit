@@ -1,12 +1,14 @@
 <template>
-  <div class="default-header-container">
+  <div class="default-header-container container-wrap">
     <div class="icon icon01" v-if="indexBtn"></div>
-    <div class="text" v-if="indexBtn">{{indexBtn}}</div>
+    <div class="text" v-if="indexBtn">{{ indexBtn }}</div>
     <div class="icon icon02" v-if="themeBtn"></div>
-    <div class="text" v-if="themeBtn">{{themeBtn}}</div>
+    <div class="text" v-if="themeBtn">{{ themeBtn }}</div>
     <div class="goBack_icon" v-if="goBackBtn" @click="goBack"></div>
-    <div class="goBackBtn" v-if="goBackBtn" @click="goBack">{{goBackBtn}}</div>
-    <div class="h1">{{hi}}</div>
+    <div class="goBackBtn" v-if="goBackBtn" @click="goBack">
+      {{ goBackBtn }}
+    </div>
+    <div class="h1">{{ hi }}</div>
     <div class="icon icon03"></div>
     <div class="icon icon04"></div>
     <div class="time">2018-08-08 19:59</div>
@@ -34,14 +36,13 @@ export default {
       default: ""
     }
   },
-  data () {
-    return {
-    };
+  data() {
+    return {};
   },
   computed: {},
   watch: {},
-  mounted () {},
-  destroyed () {},
+  mounted() {},
+  destroyed() {},
   methods: {
     goBack() {
       this.$router.go(-1);

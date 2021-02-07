@@ -1,41 +1,53 @@
 <template>
   <div class="login-wrap">
-    <div class="title">
-      <h5>
-        新型庄稼医院管理系统
-        <h6>www.114nz.com</h6>
-      </h5>
+    <div class="container-wrap">
+      <div class="title">
+        <h5>
+          新型庄稼医院管理系统
+          <h6>www.114nz.com</h6>
+        </h5>
+      </div>
+      <LoginCode
+        v-if="loginOfCode"
+        @changeCodeLogin="changeCodeLogin"
+      ></LoginCode>
+      <template v-else>
+        <div class="login-box">
+          <h4>用户登录</h4>
+          <input
+            type="text"
+            placeholder="用户名"
+            class="username"
+            v-model="username"
+          />
+          <input
+            type="password"
+            placeholder="密码"
+            class="passworld"
+            v-model="password"
+          />
+          <input
+            type="button"
+            value="登录"
+            class="submit"
+            v-on:click="login($event)"
+            ref="sub"
+          />
+        </div>
+        <div class="account-login" @click="loginOfCode = true">
+          <div class="icon"></div>
+          <span>扫码登录</span>
+        </div>
+      </template>
+      <Alert :alertTitle="title" :alertText="text" ref="alertBox"></Alert>
     </div>
-    <div class="login-box">
-      <h4>用户登录</h4>
-      <input
-        type="text"
-        placeholder="用户名"
-        class="username"
-        v-model="username"
-      />
-      <input
-        type="password"
-        placeholder="密码"
-        class="passworld"
-        v-model="password"
-      />
-      <input
-        type="button"
-        value="登录"
-        class="submit"
-        v-on:click="login($event)"
-        ref="sub"
-      />
-    </div>
-    <Alert :alertTitle="title" :alertText="text" ref="alertBox"></Alert>
   </div>
 </template>
 <script>
-// import Alert from "../../ui-components/alert/alert";
+import LoginCode from "@/components/login_code/login_code";
 import md from "../../common/js/md5.js";
 import { mapMutations } from "vuex";
-const Alert = resolve => require(["../alert/alert"], resolve);
+const Alert = resolve => require(["@/components/alert/alert"], resolve);
 export default {
   name: "login",
   data() {
@@ -43,8 +55,13 @@ export default {
       username: "", // 13094810413
       password: "", // asdf1234
       title: "登录失败",
-      text: ""
+      text: "",
+      loginOfCode: false //true显示扫码登录框
     };
+  },
+  components: {
+    Alert,
+    LoginCode
   },
   mounted() {
     const that = this;
@@ -56,6 +73,10 @@ export default {
     };
   },
   methods: {
+    changeCodeLogin(boolean) {
+      // 切换成用户名登录
+      this.loginOfCode = false;
+    },
     isEmpty() {
       if (this.username == "") {
         this.$refs.alertBox.showFlag = true;
@@ -87,7 +108,8 @@ export default {
       "getBreadArr",
       "setAppId",
       "getPurview",
-      "setLoginHospitalName"
+      "setLoginHospitalName",
+      "setIsDataV"
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -109,9 +131,13 @@ export default {
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
               const name = res.data.data.name;
+              const isshaoxing = res.data.data.ishaoxing;
+              window.sessionStorage.setItem("isshaoxing", isshaoxing); // 判断是否是绍兴市或者是绍兴市所属县级管理院
+              this.setIsDataV(res.data.data.isdatav);
               this.getPurview(purview);
               this.setAppId(appid);
               this.setLoginId(appid);
+              this.setLoginHospitalName(name);
               if (purview == 1) {
                 this.$router.push({
                   path: "/index_third"
@@ -125,7 +151,6 @@ export default {
                 this.$router.push({
                   path: "index_first"
                 });
-                this.setLoginHospitalName(name);
               } else {
                 const userid = res.data.data.userid;
                 const level = res.data.data.level;
@@ -137,7 +162,7 @@ export default {
                 }
                 const arr = res.data.data.area;
                 const areaname = res.data.data.areaname;
-                const isshaoxing = res.data.data.ishaoxing;
+
                 const name = res.data.data.name;
                 // store.commit('getGlobalFstusername', res.data.data.Fstusername); //获取益农通账号
                 // store.commit('getGlobalFstuserpw', res.data.data.Fstuserpw); //获取益农通密码
@@ -145,7 +170,7 @@ export default {
                 this.setLoginHospitalName(name);
                 window.sessionStorage.setItem("name", name);
                 window.sessionStorage.setItem("curcity", areaname);
-                window.sessionStorage.setItem("isshaoxing", isshaoxing); // 判断是否是绍兴市或者是绍兴市所属县级管理院
+
                 // window.sessionStorage.setItem('shaoxingnextbvious',JSON.stringify(res.data.data.area[0].city[5].city))//存储绍兴市所属县级管理院的信息
                 window.sessionStorage.setItem("curlevel", level); // 存储当前登录的管理院等级
                 window.sessionStorage.setItem("curuserid", userid);
@@ -192,35 +217,34 @@ export default {
           });
       }
     }
-  },
-  components: {
-    Alert
   }
 };
 </script>
 <style lang="stylus" scoped>
 .login-wrap
-  position absolute
+  position fixed
   left 0
   right 0
   top 0
   bottom 0
   width 100%
-  height 100%
+  overflow auto
+  min-height 100%
   background url('./login-bj.jpg') no-repeat
   background-size 1340px 768px
   background-position bottom center
   background-color #040a2a
+  background-attachment fixed
   z-index 2
   .title
-    position absolute
-    left 4%
-    top 4%
+    text-align left
     color #fff
+    margin-top 3%
+    margin-left 3%
     h5
-      font-size 20px
+      font-size 28px
     h6
-      font-size 17px
+      font-size 24px
       display inline
       margin-left 40px
   .login-box
@@ -278,4 +302,27 @@ export default {
           cursor wait
       &:hover
         border 1px solid #2196f3
+  .account-login
+    width 516px
+    height 63px
+    margin 0 auto
+    background url('../../assets/image/login/login_where.png') no-repeat
+    background-size 100%
+    text-align center
+    margin-top 125px
+    cursor pointer
+    .icon
+      display inline-block
+      width 30px
+      height 30px
+      margin-top -2px
+      background url('./erweima.png') no-repeat
+      vertical-align middle
+    span
+      color rgba(255, 102, 0, 1)
+      display inline-block
+      line-height 63px
+      font-size: 30px;
+      vertical-align middle
+      margin-left 20px
 </style>

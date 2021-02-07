@@ -3,46 +3,88 @@
     <Header
       :title="title"
       :right_show_bar="false"
-      :returnPath="this.returnPath"
       :midTitle="huiyuan_name"
     ></Header>
+    <!-- :returnPath="this.returnPath" -->
     <div class="top-nav">
-      <router-link to="/second_huiyuan_itro/huiyuan_wang"
+      <router-link
+        :to="{
+          path: '/second_huiyuan_itro/huiyuan_wang',
+          query: {
+            uerId: userId,
+            name: this.$route.query.name,
+            uId: this.$route.query.uId
+          }
+        }"
+        replace
         ><span
           class="item"
           @click="content_show = 1"
-          :class="{ active: content_show == 1 }"
+          :class="{
+            active: content_show == '/second_huiyuan_itro/huiyuan_wang'
+          }"
           >网诊</span
         ></router-link
       >
-      <router-link to="/second_huiyuan_itro/huiyuan_jianjie"
+      <router-link
+        :to="{
+          path: '/second_huiyuan_itro/huiyuan_jianjie',
+          query: {
+            uerId: userId,
+            name: this.$route.query.name,
+            uId: this.$route.query.uId
+          }
+        }"
+        replace
         ><span
           class="item"
           @click="content_show = 2"
-          :class="{ active: content_show == 2 }"
+          :class="{
+            active: content_show == '/second_huiyuan_itro/huiyuan_jianjie'
+          }"
           >简介</span
         ></router-link
       >
-      <router-link to="/second_huiyuan_itro/huiyuan_tu"
+      <router-link
+        :to="{
+          path: '/second_huiyuan_itro/huiyuan_tu',
+          query: {
+            uerId: userId,
+            name: this.$route.query.name,
+            uId: this.$route.query.uId
+          }
+        }"
+        replace
         ><span
           class="item"
           @click="content_show = 3"
-          :class="{ active: content_show == 3 }"
+          :class="{ active: content_show == '/second_huiyuan_itro/huiyuan_tu' }"
           >测土配方</span
         ></router-link
       >
-      <router-link to="/second_huiyuan_itro/huiyuan_dingdan"
+      <router-link
+        :to="{
+          path: '/second_huiyuan_itro/huiyuan_dingdan',
+          query: {
+            uerId: userId,
+            name: this.$route.query.name,
+            uId: this.$route.query.uId
+          }
+        }"
+        replace
         ><span
           class="item"
           @click="content_show = 4"
-          :class="{ active: content_show == 4 }"
+          :class="{
+            active: content_show == '/second_huiyuan_itro/huiyuan_dingdan'
+          }"
           >订单</span
         ></router-link
       >
     </div>
     <div class="intro_content">
       <keep-alive v-if="$route.meta.keepAlive">
-        <router-view></router-view>
+        <router-view :userId="userId" :uId="uId"></router-view>
       </keep-alive>
     </div>
   </div>
@@ -58,45 +100,52 @@ export default {
   props: {},
   data() {
     return {
-      content_show: 2,
+      content_show: this.$route.path,
       huiyuan_name: "",
       huiyuanname: "",
       title: "",
-      returnPath: "/second_huiyuan_list",
+      from: this.$route.query.from,
+      userId: this.$route.query.uerId,
+      uId: this.$route.query.uId,
       count: 1 //控制第一次的时候不在路由栈中执行-1操作
     };
   },
-  beforeRouteEnter: (to, from, next) => {
-    console.log(from.path);
-    next(vm => {
-      switch (from.path) {
-        case "/wangzhen_detail":
-          vm.content_show = 1;
-          break;
-        case "/cetu_detail":
-          vm.content_show = 3;
-          break;
-        case "/huiyuan_dingdan/second_order_detail":
-          vm.content_show = 4;
-          break;
-        default:
-          vm.$nextTick(() => {
-            vm.content_show = 2;
-          });
-          break;
-      }
-    });
+  watch: {
+    $route() {
+      this.content_show = this.$route.path;
+    }
   },
+  // beforeRouteEnter: (to, from, next) => {
+  //   // console.log(from.path);
+  //   // next(vm => {
+  //   //   switch (from.path) {
+  //   //     case "/wangzhen_detail":
+  //   //       vm.content_show = 1;
+  //   //       break;
+  //   //     case "/cetu_detail":
+  //   //       vm.content_show = 3;
+  //   //       break;
+  //   //     case "/huiyuan_dingdan/second_order_detail":
+  //   //       vm.content_show = 4;
+  //   //       break;
+  //   //     default:
+  //   //       vm.$nextTick(() => {
+  //   //         vm.content_show = 2;
+  //   //       });
+  //   //       break;
+  //   //   }
+  //   // });
+  // },
   mounted() {
-    this.huiyuan_name = "会员:" + window.sessionStorage.getItem("huiyuan_name");
-    this.content_show = window.sessionStorage.getItem("content_show");
+    this.huiyuan_name = "会员:" + this.$route.query.name;
+    // this.content_show = window.sessionStorage.getItem("content_show");
     this.title =
       this.purview == 3 || this.purview == 4 || this.purview == 46
         ? this.lowerHospital
         : this.huiyuan_name;
   },
   destroyed() {
-    window.sessionStorage.setItem("content_show", this.content_show);
+    // window.sessionStorage.setItem("content_show", this.content_show);
   },
   computed: {
     ...mapState([
@@ -112,7 +161,7 @@ export default {
       // ta 加入的医院
       this.$axios
         .fetchPost("/Home/Manage/GetManageMpDataList", {
-          appId: this.appid,
+          appId: this.appId,
           type: "expert"
         })
         .then(res => {

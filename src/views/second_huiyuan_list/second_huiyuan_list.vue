@@ -3,14 +3,15 @@
     <div class="head">
       <Headers
         :title="title"
-        :returnPath="this.returnPath"
         midTitle="我的会员"
+        v-if="from !== 'general'"
       ></Headers>
+      <GeneralHeaders title="会员" v-else></GeneralHeaders>
     </div>
     <div class="my_huiyuan" v-infinite-scroll="load">
       <div
         class="single_huiyuan"
-        v-for="(item, index) in this.huiyuan_list"
+        v-for="(item, index) in huiyuan_list"
         :key="index"
         @click="watch_detail(item)"
       >
@@ -30,6 +31,7 @@
 </template>
 <script>
 import Headers from "../../components/online_hospital_header/online_hospital_header";
+import GeneralHeaders from "../../components/general_hospital_header/general_hospital_header";
 import { mapMutations, mapState } from "vuex";
 export default {
   data() {
@@ -38,15 +40,21 @@ export default {
       page: 1, // 当前页数
       total: "", // 当前会员总数
       title: "我的会员",
-      returnPath: "/index_second"
-      // from: this.$route.query.from
+      from: this.$route.query.from
     };
   },
   components: {
-    Headers
+    Headers,
+    GeneralHeaders
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital"])
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "isLowerHospital",
+      "loginId"
+    ])
   },
   mounted() {
     this.gethuiyuan_list(1, 14);
@@ -60,7 +68,7 @@ export default {
       this.openLoading();
       this.$axios
         .fetchPost("/Home/Member/GetMpUser", {
-          appId: this.appId,
+          appId: this.from == "general" ? this.loginId : this.appId,
           keyword: "",
           page: page,
           pagesize: pagesize
@@ -79,16 +87,18 @@ export default {
     },
     ...mapMutations(["getHuiyuanName", "getHuiyuanId"]),
     watch_detail(item) {
-      this.getHuiyuanName(item.name);
-      this.getHuiyuanId(item.id);
-      window.sessionStorage.setItem("huiyuan_id", item.id);
-      window.sessionStorage.setItem("huiyuan_name", item.name);
-      window.sessionStorage.setItem("huiyuan_uid", item.uid);
+      // this.getHuiyuanName(item.name);
+      // this.getHuiyuanId(item.id);
+      // window.sessionStorage.setItem("huiyuan_id", item.id);
+      // window.sessionStorage.setItem("huiyuan_name", item.name);
+      // window.sessionStorage.setItem("huiyuan_uid", item.uid);
       this.$router.push({
         path: "/second_huiyuan_itro/huiyuan_jianjie",
         query: {
           id: item.id,
-          name: item.name
+          name: item.name,
+          uId: item.uid,
+          uerId: item.id
         }
       });
     },

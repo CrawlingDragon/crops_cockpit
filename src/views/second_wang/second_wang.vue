@@ -1,6 +1,6 @@
 <template>
   <div class="second_wang-container">
-    <AdminHeader
+    <!-- <AdminHeader
       v-show="purview == 3 || purview == 4"
       :midTitle="
         routeFrom == '/diagnosis/second_wang' ? '诊疗' : '网诊' + count
@@ -12,7 +12,7 @@
       :titleNumber="count"
       v-if="routeFrom != '/diagnosis/second_wang'"
       v-show="purview == 1 || purview == 2"
-    ></Header>
+    ></Header> -->
     <ul
       class="wang-ul infinite-list"
       v-infinite-scroll="load"
@@ -47,17 +47,17 @@
       <p v-if="loading && !noData">加载中...</p>
       <p v-if="noMore && !noData">没有更多了</p>
     </ul>
-    <Nav :index="3" v-if="routeFrom != '/diagnosis/second_wang'"></Nav>
+    <Nav :index="3" v-if="purview != 4"></Nav>
   </div>
 </template>
 <script>
 import Nav from "@/components/nav_list/nav_list";
-import Header from "@/components/online_hospital_header/online_hospital_header";
-import AdminHeader from "@/components/admin_header/admin_header";
+// import Header from "@/components/online_hospital_header/online_hospital_header";
+// import AdminHeader from "@/components/admin_header/admin_header";
 import { mapState } from "vuex";
 export default {
   name: "second_wang",
-  components: { Nav, Header, AdminHeader },
+  components: { Nav },
   props: {},
   data() {
     return {
@@ -73,7 +73,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"]),
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "isLowerHospital",
+      "loginId"
+    ]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -92,7 +98,11 @@ export default {
         this.$axios
           .fetchPost("/Home/Treatment/GetWenList", {
             page: this.page,
-            appId: this.appId,
+            appId:
+              this.routerPath == "/diagnosis_general" ||
+              this.routerPath == "/diagnosis_general/second_wang"
+                ? this.loginId
+                : this.appId,
             purview: this.routerPath == "/diagnosis_general/second_wang" ? 1 : 0
           })
           .then(res => {

@@ -42,7 +42,6 @@
           <Disk :hoverActive="activeNumber"></Disk>
         </div>
         <div class="bottom-bar">
-          <div class="title">说明：示例数据</div>
           <ul>
             <li @click="bottomRouter('医院')">
               <div class="icon icon01"></div>
@@ -56,11 +55,11 @@
               <div class="icon icon03"></div>
               <div class="text">专家</div>
             </li>
-            <li @click="bottomRouter('专家网诊榜')">
+            <li @click="bottomRouter('专家网诊榜')" v-if="isshaoxing == 1">
               <div class="icon icon04"></div>
               <div class="text">专家网诊榜</div>
             </li>
-            <li @click="bottomRouter('评分')">
+            <li @click="bottomRouter('评分')" v-if="isshaoxing == 1">
               <div class="icon icon05"></div>
               <div class="text">评分</div>
             </li>
@@ -69,6 +68,7 @@
               effect="dark"
               content="绍兴市为农服务平台"
               placement="top"
+              v-if="isshaoxing == 1"
             >
               <el-image class="erweima" :src="erweimaSrc"></el-image>
             </el-tooltip>
@@ -130,7 +130,8 @@ export default {
       pieDataIndex: 0,
       zuowu: "",
       zuozhenEchart: "",
-      hospitalEchart: ""
+      hospitalEchart: "",
+      isshaoxing: window.sessionStorage.getItem("isshaoxing")
     };
   },
   computed: {
@@ -898,10 +899,12 @@ export default {
           background #fff
           border-radius: 5px;
         li
+          cursor pointer
           font-size: 16px;
           display flex
           align-items center
-          margin-right 37px
+          flex 1
+          justify-content center
           .icon
             width 60px
             height 60px

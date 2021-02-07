@@ -33,39 +33,46 @@ export default new Vuex.Store({
     huiyuanId: "", // 新院我的会员id
     lowerHospital: window.localStorage.getItem("lowerHospital"),
     prevroute: "", // 专家列表记录上一层返回的地址
-    hospitalIsstore: window.localStorage.getItem('hospitalIsstore'),
-    adminRoute:window.localStorage.getItem('adminRoute'),
-    ismapupdate: 0,//如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
-    loginHospitalName: window.localStorage.getItem('loginHospitalName'),
-    loginId: window.localStorage.getItem('loginId'), //记录登录的appid
-    isLowerHospital:window.sessionStorage.getItem('isLowerHospital') //是否是下级医院  true 为上级医院,  false 为下级医院
+    hospitalIsstore: window.localStorage.getItem("hospitalIsstore"),
+    adminRoute: window.localStorage.getItem("adminRoute"),
+    ismapupdate: 0, //如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
+    loginHospitalName: window.localStorage.getItem("loginHospitalName"),
+    loginId: window.localStorage.getItem("loginId"), //记录登录的appid
+    isLowerHospital: window.sessionStorage.getItem("isLowerHospital"), //是否是下级医院  true 为上级医院,  false 为下级医院
+    dataV: window.localStorage.getItem("dataV") || 0 // 是否是数据展示页
   },
   mutations: {
-    setIsLowerHospital (state, data) {
-      state.isLowerHospital = data
-      window.sessionStorage.setItem('isLowerHospital',data)
-     },
-    setLoginHospitalName (state, data) {
-      state.loginHospitalName = data
-      window.localStorage.setItem('loginHospitalName',data)
-     },
-    setIsMapUpdata(state,data){
-      state.ismapupdate = state.ismapupdate-data
+    setIsDataV(state, data) {
+      // 是否用数据展示页的加入数据
+      state.dataV = data;
+      window.localStorage.setItem("dataV", data);
     },
-    setAdminRoute (state, data) {
-      state.adminRoute = data
-      window.localStorage.setItem('adminRoute',data)
-     },
-    setHospitalIsstore (state, data) {
+    setIsLowerHospital(state, data) {
+      state.isLowerHospital = data;
+      window.sessionStorage.setItem("isLowerHospital", data);
+    },
+    setLoginHospitalName(state, data) {
+      state.loginHospitalName = data;
+      window.localStorage.setItem("loginHospitalName", data);
+    },
+    setIsMapUpdata(state, data) {
+      state.ismapupdate = state.ismapupdate - data;
+    },
+    setAdminRoute(state, data) {
+      state.adminRoute = data;
+      window.localStorage.setItem("adminRoute", data);
+    },
+    setHospitalIsstore(state, data) {
       //用于设置医院的isstore 属性，是否是网院还是新院
-      state.hospitalIsstore = data
-      window.localStorage.setItem('hospitalIsstore',data)
-     },
-    getPrevroute(state, data) { // 专家页面获取上一层返回的路由
-      state.prevroute = data;
-      localStorage.setItem("prevroute",data)
+      state.hospitalIsstore = data;
+      window.localStorage.setItem("hospitalIsstore", data);
     },
-    setLowerHospital (state, data) {
+    getPrevroute(state, data) {
+      // 专家页面获取上一层返回的路由
+      state.prevroute = data;
+      localStorage.setItem("prevroute", data);
+    },
+    setLowerHospital(state, data) {
       state.lowerHospital = data;
       window.localStorage.setItem("lowerHospital", data);
     },
@@ -125,16 +132,16 @@ export default new Vuex.Store({
     getGlobalFstusername(state, data) {
       // 益农通账号
       state.globalFstusername = data;
-      window.localStorage.setItem("globalFstusername",data)
+      window.localStorage.setItem("globalFstusername", data);
     },
     getGlobalFstuserpw(state, data) {
       // 益农通密码
       state.globalFstuserpw = data;
-      window.localStorage.setItem("globalFstuserpw",data)
+      window.localStorage.setItem("globalFstuserpw", data);
     },
     getGlobalFstRoomid(state, data) {
       state.globalFstRoomid = data;
-      window.localStorage.setItem("globalFstRoomid",data)
+      window.localStorage.setItem("globalFstRoomid", data);
     },
     getNoData(state, data) {
       state.noData = data;
@@ -150,17 +157,20 @@ export default new Vuex.Store({
     },
     setLoginId(state, data) {
       //登陆时，保存地图参数id
-      state.loginId = data
-      window.localStorage.setItem('loginId',data)
+      state.loginId = data;
+      window.localStorage.setItem("loginId", data);
     },
-    getBreadArr(state, data) { // 获取面包屑导航
+    getBreadArr(state, data) {
+      // 获取面包屑导航
       state.breadArr = data;
     },
-    getSessionUsername(state, data) { // 改变账号，和把账号保存在session中
+    getSessionUsername(state, data) {
+      // 改变账号，和把账号保存在session中
       state.sessionUsername = data;
       window.sessionStorage.setItem("userName", data);
     },
-    getSessionPassword(state, data) { // 改变密码，和把密码写入到session中
+    getSessionPassword(state, data) {
+      // 改变密码，和把密码写入到session中
       state.sessionPassword = data;
       window.sessionStorage.setItem("passWord", data);
     },
@@ -168,10 +178,12 @@ export default new Vuex.Store({
       state.isstore = data;
       window.sessionStorage.setItem("isstore", data);
     },
-    getHuiyuanName(state, data) { // 新院 获取我的会员的名字
+    getHuiyuanName(state, data) {
+      // 新院 获取我的会员的名字
       state.huiyuanName = data;
     },
-    getHuiyuanId(state, data) { // 新院 获取我的会员的ID
+    getHuiyuanId(state, data) {
+      // 新院 获取我的会员的ID
       state.huiyuanId = data;
     }
   },

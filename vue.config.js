@@ -5,7 +5,8 @@ module.exports = {
       warnings: false,
       errors: false
     },
-    hot: true,
+    compress: true,
+    disableHostCheck: true,
     port: 8009,
     proxy: {
       "/api": {

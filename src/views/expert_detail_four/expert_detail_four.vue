@@ -1,6 +1,6 @@
 <template>
-  <div class="expert_detail-container">
-    <div @click="topre">
+  <div class="expert_detail-container container-wrap">
+    <div @click="topre" style="position:relative">
       <div class="closefn"></div>
       <div class="head-title">专家：{{ detail.realname }}</div>
     </div>
@@ -146,12 +146,15 @@ export default {
     left 41px
     top 41px
     display inline-block
+    cursor pointer
   .head-title
     font-size 30px
     font-weight 400
     color #B5B5B5
     padding  35px 0 45px 90px
     text-align left
+    color #7fb5f1
+    cursor pointer
   .top-nav
     margin 0 90px
     text-align center

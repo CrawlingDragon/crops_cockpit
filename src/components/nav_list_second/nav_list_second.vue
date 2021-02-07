@@ -84,7 +84,8 @@ export default {
           break;
         case "首页":
           this.$router.push({
-            path: "/index_second"
+            path: "/index_second",
+            query: { appid: this.appId }
           });
           break;
         case "诊疗":

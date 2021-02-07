@@ -40,7 +40,7 @@
         v-for="item in list"
         :key="item.id"
         class="infinite-list-item"
-        @click="goToDetail(item.id)"
+        @click="goToDetail(item.id, item.userid)"
       >
         <div class="icon"></div>
         <div class="text">
@@ -105,7 +105,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId", "purview", "isLowerHospital"]),
+    ...mapState(["appId", "purview", "isLowerHospital", "loginId"]),
     disabled() {
       return this.loading || this.noMore;
     }
@@ -131,7 +131,11 @@ export default {
         this.$axios
           .fetchGet("/Home/Treatment/GetTestingsoilList", {
             page: this.page,
-            appId: this.appId,
+            appId:
+              this.routerPath == "/diagnosis_general" ||
+              this.routerPath == "/diagnosis_general/second_tu"
+                ? this.loginId
+                : this.appId,
             purview:
               this.routerPath == "/diagnosis_general" ||
               this.routerPath == "/diagnosis_general/second_tu"
@@ -171,18 +175,21 @@ export default {
           break;
       }
     },
-    goToDetail(id) {
-      if (this.purview == 46) {
+    goToDetail(id, appId) {
+      if (
+        this.routerPath == "/diagnosis_general" ||
+        this.routerPath == "/diagnosis_general/second_tu"
+      ) {
         this.setIsLowerHospital("true");
         const route = this.$router.resolve({
           path: "/cetu_detail",
-          query: { id: id, from: "adminRoute" }
+          query: { id: id, from: "adminRoute", appId: appId }
         });
         window.open(route.href, "_blank");
       } else {
         this.$router.push({
           path: "/cetu_detail",
-          query: { id: id }
+          query: { id: id, appId: appId }
         });
       }
     }

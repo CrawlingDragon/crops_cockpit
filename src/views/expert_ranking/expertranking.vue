@@ -111,6 +111,7 @@
 <script>
 import Headnav from "../../components/head_nav/head_nav";
 export default {
+  name: "expert_online_ranking",
   components: {
     Headnav
   },

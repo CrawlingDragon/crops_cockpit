@@ -1,7 +1,14 @@
 <template>
   <div class="foot-wrap">
-    <ul class="nav">
+    <ul class="nav container-wrap">
       <div class="number" v-if="number != 0">共 {{ number }} 条数据</div>
+      <li
+        :class="{ active: index == 0 }"
+        @click="changeRouter('频道')"
+        v-show="showNav"
+      >
+        <span>频道</span>
+      </li>
       <li
         :class="{ active: index == 1 }"
         @click="changeRouter('首页')"
@@ -65,7 +72,7 @@ export default {
   },
   watch: {},
   mounted() {
-    this.setAppId(this.loginId);
+    // this.setAppId(this.loginId);
   },
   destroyed() {},
   methods: {
@@ -73,6 +80,11 @@ export default {
     changeRouter(where) {
       this.setIsLowerHospital("false");
       switch (where) {
+        case "频道":
+          this.$router.push({
+            path: "/online_hospital_channel_gather"
+          });
+          break;
         case "医院":
           this.$router.push({
             path: "/hospitalsort"
@@ -90,12 +102,14 @@ export default {
           break;
         case "发现":
           this.$router.push({
-            path: "/find"
+            path: "/find",
+            query: { fromRoute: "general" }
           });
           break;
         case "我的":
           this.$router.push({
-            path: "/me"
+            path: "/me",
+            query: { fromRoute: "general" }
           });
           break;
       }
@@ -113,7 +127,6 @@ export default {
   right 0
   z-index 22
   .nav
-    width 1900px
     margin 0 auto
     text-align center
     position relative

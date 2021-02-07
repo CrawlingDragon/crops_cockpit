@@ -1,6 +1,6 @@
 <template>
   <div class="expert">
-    <div class="title" @click="goToExpertRanking">专家回复排行榜 ></div>
+    <div class="title" @click="goTo">专家回复排行榜 ></div>
     <ul>
       <li
         v-for="(item, index) in list"
@@ -35,18 +35,21 @@ export default {
   data() {
     return {
       // routerPath: this.$route.path
+      routeName: this.$route.name
     };
   },
   computed: {
     ...mapState(["isLowerHospital"])
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    // console.log("this.$route :>> ", this.$route.name);
+  },
   destroyed() {},
   methods: {
     goToExpert(uid) {
       // 去到专家详情页
-      if (this.isLowerHospital == "false") {
+      if (this.routeName === "index_first") {
         this.$router.push({
           path: "expert_detail_four",
           query: { uid: uid }
@@ -58,7 +61,7 @@ export default {
         });
       }
     },
-    goToExpertRanking() {
+    goTo() {
       if (this.routerPath == "") {
         this.$router.push({
           path: "/expert_paihang"

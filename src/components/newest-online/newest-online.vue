@@ -3,16 +3,8 @@
   <div>
     <div class="dia-box">
       <a
-        :href="
-          baseUrl +
-            'UserCenter/DataV/getQuestionlist.html?areaname=' +
-            name +
-            '&level=' +
-            level +
-            '&isstore=' +
-            isstore
-        "
-        target="_blank"
+        href="javascript:;"
+        @click="goToZhenliao"
         class="head-title"
         v-if="!noDatas"
         v-show="Replydatas.length != 0"
@@ -71,7 +63,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["isstore"]),
+    ...mapState(["isstore", "loginId"]),
     Replydatas() {
       return this.Replydata.splice(0, 5);
     },
@@ -85,15 +77,20 @@ export default {
       return this.$store.state.noData;
     }
   },
-
   mounted() {
     this.getWidth();
   },
-
   methods: {
     ...mapMutations(["setAppId", "setuserId"]),
+    goToZhenliao() {
+      this.setAppId(this.loginId);
+      this.$router.push({
+        path: "/diagnosis_general/second_wang",
+
+        query: { from: "index" }
+      });
+    },
     godetail(item) {
-      this.setAppId(item.appid);
       if (item.module == "wenzhen") {
         let route = this.$router.resolve({
           path: "/zuozhen_detail",

@@ -124,9 +124,16 @@ export default {
     ...mapState(["loginHospitalName", "appId", "loginId"])
   },
   created() {
-    this.setAppId(this.loginId);
+    // this.setAppId(this.loginId);
   },
-  watch: {},
+  watch: {
+    loginId() {
+      this.setIsLowerHospital("false");
+      this.title = this.loginHospitalName;
+      this.getIndexDate();
+      this.getMessageDate();
+    }
+  },
   mounted() {
     this.setIsLowerHospital("false");
     this.title = this.loginHospitalName;
@@ -139,7 +146,7 @@ export default {
     getIndexDate() {
       // 获取首页数据
       this.$axios
-        .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: this.appId })
+        .fetchPost("/Home/Manage/GetManageMPIndexData", { appId: this.loginId })
         .then(res => {
           if (res.data.code === "200") {
             this.indexDate = res.data.data;
@@ -152,7 +159,7 @@ export default {
     getMessageDate() {
       // 获取通知数据
       this.$axios
-        .fetchPost("/Home/Manage/GetManageMessageData", { appId: this.appId })
+        .fetchPost("/Home/Manage/GetManageMessageData", { appId: this.loginId })
         .then(res => {
           if (res.data.code === "200") {
             this.message = res.data.data;
@@ -166,7 +173,7 @@ export default {
       });
     },
     goToExpert() {
-      // 去到 浏览历史
+      // 去到 专家列表
       this.$router.push({
         path: "/expertlist"
       });
@@ -176,7 +183,7 @@ export default {
       this.setIsLowerHospital("true");
       const route = this.$router.resolve({
         path: "/index_second",
-        query: { appId: this.appId, from: "adminRoute" }
+        query: { appId: this.loginId, from: "adminRoute" }
       });
       window.open(route.href, "_blank");
     },

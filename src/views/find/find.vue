@@ -1,6 +1,7 @@
 <template>
   <div class="find-container">
-    <Header title="发现"></Header>
+    <Headers title="发现" v-if="fromRoute == 'general'"></Headers>
+    <Header title="发现" v-else></Header>
     <div class="nav-bar">
       <div
         class="item"
@@ -74,6 +75,7 @@ import Nav from "@/components/nav_list/nav_list";
 import NavSecond from "@/components/nav_list_second/nav_list_second";
 import NavThird from "@/components/nav_list_third/nav_list_third";
 import Header from "@/components/online_hospital_header/online_hospital_header";
+import Headers from "@/components/general_hospital_header/general_hospital_header";
 import { mapState } from "vuex";
 import AdminHeader from "@/components/admin_header/admin_header";
 export default {
@@ -82,7 +84,8 @@ export default {
     Nav,
     Header,
     NavSecond,
-    NavThird
+    NavThird,
+    Headers
   },
   props: {},
   data() {
@@ -97,6 +100,7 @@ export default {
       noMore: false,
       catid: 0,
       from: this.$route.query.from,
+      fromRoute: this.$route.query.fromRoute,
       iconImg: require("./44.png")
     };
   },

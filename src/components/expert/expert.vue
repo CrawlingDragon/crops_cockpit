@@ -37,26 +37,42 @@ export default {
       default: function() {
         return {};
       }
+    },
+    adminFrom: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {};
   },
   computed: {
-    ...mapState(["purview", "hospitalIsstore"])
+    ...mapState(["purview", "hospitalIsstore", "loginId"])
   },
   watch: {},
-  mounted() {},
+  mounted() {
+    console.log(this.$route.name);
+  },
   destroyed() {},
   methods: {
     goToExpertDetail(uid) {
       // 到专家详情页
-      this.$router.push({
-        path: "/expert_detail",
-        query: {
-          uid: uid
-        }
-      });
+      if (this.adminFrom == true) {
+        this.$router.push({
+          path: "/expert_detail_four",
+          query: {
+            uid: uid,
+            appId: this.loginId
+          }
+        });
+      } else {
+        this.$router.push({
+          path: "/expert_detail",
+          query: {
+            uid: uid
+          }
+        });
+      }
     }
   }
 };

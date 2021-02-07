@@ -1,5 +1,5 @@
 <template>
-  <div class="header-container">
+  <div class="header-container container-wrap">
     <div class="head-wrap cf">
       <div class="left-bar">
         <div class="logo" v-show="logoSrc" v-if="purview == 1 || purview == 2">
@@ -186,7 +186,8 @@ export default {
     },
     goToSearch() {
       this.$router.push({
-        path: "/search"
+        path: "/search",
+        query: { from: "header" }
       });
     }
   }

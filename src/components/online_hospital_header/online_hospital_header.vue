@@ -1,5 +1,5 @@
 <template>
-  <div class="header-container">
+  <div class="header-container container-wrap">
     <div class="head-wrap cf">
       <div class="left-bar">
         <div
@@ -39,10 +39,10 @@
         ></div>
         <h2
           class="h2"
-          @click="goToLowerHospital"
           :class="{ haveHospital: haveHospitalName && istown == 0 }"
         >
-          {{ title }}
+          <span @click="goToLowerHospital">{{ title }}</span>
+          <slot name="goods"></slot>
           <span class="title-number" v-show="titleNumber != 0">
             {{ titleNumber }}
           </span>
@@ -73,6 +73,7 @@
           <div class="icon"></div>
           <span>平台首页</span>
         </div>
+        <!-- <div class="search"></div> -->
         <div class="reload" @click="reload">
           <span class="icon"></span>
         </div>
@@ -251,7 +252,10 @@ export default {
             path: "/index_first"
           });
         } else {
-          this.$router.push({ path: "/index_second" });
+          this.$router.push({
+            path: "/index_second",
+            query: { appid: this.appId }
+          });
         }
       }
     },
@@ -402,24 +406,7 @@ export default {
           height 25px
           margin-right 10px
           background url('./28.png') no-repeat
-      .search
-        color #000000
-        cursor pointer
-        width 160px
-        height 50px
-        background rgba(255, 255, 255, 1)
-        opacity 0.5
-        border-radius 25px
-        display flex
-        align-items center
-        justify-content center
-        font-size 30px
-        .icon
-          display inline-block
-          width 27px
-          height 27px
-          background url('./4.png') no-repeat
-          margin-right 8px
+
       .reload
         color #B5B5B5
         font-size 30px
