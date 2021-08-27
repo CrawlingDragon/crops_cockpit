@@ -285,7 +285,7 @@ export default {
     bottom 0
     height 130px
     background #080f3e
-    /deep/.wrap
+    .wrap
       margin 0 auto
       height 100%
       position relative
@@ -295,7 +295,7 @@ export default {
         width: 1900px
       @media screen and (max-width 1890px)
         width: 1340px
-      /deep/.paginatin
+      .paginatin
         position absolute
         right 40px
         top 40%

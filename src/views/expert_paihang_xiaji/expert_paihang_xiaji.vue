@@ -1,9 +1,9 @@
 <template>
   <div class="paihang_content">
-    <Header :title="title" midTitle="专家排行榜"></Header>
+    <Header :title="lowerHospital" midTitle="专家排行榜"></Header>
     <ExpertRank
-      :appId="loginId"
-      :purview="purview == 4 || purview == 46 ? 1 : 0"
+      :appId="appId"
+      :purview="0"
       @goExpertDetail="goExpertDetail"
     ></ExpertRank>
   </div>
@@ -13,11 +13,9 @@ import Header from "@/components/online_hospital_header/online_hospital_header";
 import ExpertRank from "@/components/expert-rank/expert-rank";
 import { mapState } from "vuex";
 export default {
-  name: "expert_paihang_general",
+  name: "expert_paihang_xiaji",
   data() {
-    return {
-      title: ""
-    };
+    return {};
   },
   components: { Header, ExpertRank },
   created() {},

@@ -1,40 +1,151 @@
 <template>
   <div class="contain">
     <div class="header">
-      <Headnav :lefttitle="this.lefttitle"></Headnav>
+      <Headnav
+        :lefttitle="this.lefttitle"
+        :returnpath="this.returnpath"
+        @datatype="datachange"
+      ></Headnav>
     </div>
-    <ExpertRank
-      :appId="loginId"
-      :purview="purview == 4 || purview == 46 ? 1 : 0"
-      @goExpertDetail="goExpertDetail"
-    ></ExpertRank>
+    <div class="expert_list" ref="expert_list" v-infinite-scroll="load">
+      <div
+        class="expert_info"
+        v-for="(item, index) in expert_list"
+        :key="index"
+        @click="godetail(item, index)"
+      >
+        <img
+          class="photo"
+          v-lazy="item.avatar"
+          alt="图片好像不见了"
+          :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
+        />
+        <span
+          class="name"
+          :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
+        >
+          <i>NO.{{ index + 1 }}</i>
+          {{ item.realname }}
+        </span>
+        <div class="intro">
+          <p class="skills">擅长作物：{{ item.zuowu || "暂无" }}</p>
+          <p :class="[item.position.length == 1 ? 'company1' : 'company']">
+            {{ item.position }}
+          </p>
+        </div>
+        <div class="total-number">
+          总回复数<i class="">{{ item.replycounts }}</i>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
+    <div class="expert_num">共{{ this.total }}个结果</div>
+    <Nodata v-if="total == 0"></Nodata>
   </div>
 </template>
 <script>
 import Headnav from "../../components/head_nav/head_nav";
-import ExpertRank from "@/components/expert-rank/expert-rank";
-import { mapState } from "vuex";
+import Nodata from "../../components/no-data/no-data";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
     Headnav,
-    ExpertRank
+    Nodata
   },
   data() {
     return {
+      expert_list: [],
+      curuserid: "", // 当前的用户ID
+      total: 0,
+      page: 1, // 当前页数
       lefttitle: "专家排行榜",
       returnpath: "/findindex"
     };
   },
   computed: {
-    ...mapState(["loginId", "purview"])
+    ...mapState(["prevroute", "loginId", "purview"]),
+    no1Color(index) {
+      if (index === 1) {
+        return "border-color:#FF0000,color:#FF0000";
+      }
+    }
   },
-  created() {},
+  created() {
+    this.userid = window.sessionStorage.getItem("curuserid");
+    this.getexpert_list(this.page);
+  },
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => {
+      if (vm.purview == 46) {
+        vm.returnpath = "/index_first";
+        return false;
+      }
+      if (
+        from.path == "/indexFour" ||
+        from.path == "/findindex" ||
+        from.path == "/data_analysis"
+      ) {
+        vm.returnpath = from.path;
+        vm.getPrevroute(from.path);
+      } else if (from.path == "/expert_detail_four" || from.path == "/") {
+        //加入from.path是因为 点击选择全部医院或者新型医院后vuex中记录的上级页面信息的路由消失了
+        //将上一级的路由信息存成本地存储 如果vuex失效 访问本地缓存
+        if (
+          vm.prevroute == "/indexFour" ||
+          localStorage.getItem("prevroute") == "/indexFour"
+        ) {
+          vm.returnpath = "/indexFour";
+        } else if (
+          vm.prevroute == "/data_analysis" ||
+          localStorage.getItem("prevroute") == "/data_analysis"
+        ) {
+          vm.returnpath = "/data_analysis";
+        }
+      }
+    });
+  },
   methods: {
-    goExpertDetail(item) {
+    ...mapMutations(["getPrevroute"]),
+    godetail(item, index) {
+      window.sessionStorage.setItem("expert_uid", item.uid);
       this.$router.push({
         path: "/expert_detail_four",
-        query: { appId: this.loginId, uid: item.uid }
+        query: { appId: this.userid, uid: item.uid }
       });
+    },
+    getexpert_list(curpage) {
+      const rLoading = this.openLoading();
+      this.$axios
+        .fetchPost("/Home/Expert/GetMpExpertRank", {
+          appId: this.loginId,
+          purview: "1",
+          page: curpage,
+          isstore: window.sessionStorage.getItem("isstore")
+        })
+        .then(res => {
+          rLoading.close();
+          if (res.data.code == "200") {
+            this.total = res.data.total;
+            if (this.page == 1) {
+              this.expert_list = res.data.data;
+            } else {
+              this.expert_list.push(...res.data.data);
+            }
+          }
+        });
+    },
+    load() {
+      // 是否当前page不是最后一页
+      if (this.page <= Math.ceil(this.total / 12)) {
+        // 页码+1
+        this.page++;
+        this.getexpert_list(this.page);
+      }
+    },
+    datachange(value) {
+      if (value) {
+        location.reload();
+      }
     }
   }
 };

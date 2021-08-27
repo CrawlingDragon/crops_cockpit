@@ -224,7 +224,7 @@ export default {
         case "专家":
           // 去到 专家列表
           this.$router.push({
-            path: "/expertlist"
+            path: "/expert_all"
           });
           break;
         case "培训视频":

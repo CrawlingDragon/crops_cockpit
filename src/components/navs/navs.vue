@@ -66,7 +66,11 @@
               v-bind:class="[
                 pItem.isclick == 0 ? 'disable' : '',
                 pItem.name == activeProvinceComputed ? 'active' : '',
-                active_breadArr.length > 1 ? (pItem.name == active_breadArr[1].name ? 'active' : '') :''
+                active_breadArr.length > 1
+                  ? pItem.name == active_breadArr[1].name
+                    ? 'active'
+                    : ''
+                  : ''
               ]"
             >
               {{ pItem.name }}
@@ -101,7 +105,11 @@
                 activeCityArrItem.name == activeCity
                   ? 'active'
                   : '',
-                active_breadArr.length > 2 ? (activeCityArrItem.name == active_breadArr[2].name ? 'active' : '') :''
+                active_breadArr.length > 2
+                  ? activeCityArrItem.name == active_breadArr[2].name
+                    ? 'active'
+                    : ''
+                  : ''
               ]"
             >
               {{ activeCityArrItem.name }}
@@ -128,11 +136,15 @@
               "
               :class="[
                 bvious.name == activeProvinceComputed ||
-                bvious.name == bviousActiveClass 
+                bvious.name == bviousActiveClass
                   ? 'active'
                   : '',
                 bvious.isclick == 0 ? 'disable' : '',
-                active_breadArr.length > 3 ? (bvious.name == active_breadArr[3].name ? 'active' : '') :''
+                active_breadArr.length > 3
+                  ? bvious.name == active_breadArr[3].name
+                    ? 'active'
+                    : ''
+                  : ''
               ]"
             >
               {{ bvious.name }}
@@ -192,7 +204,7 @@ export default {
       LoginId: window.sessionStorage.getItem("LoginId"), // 登陆时，保存地图参数id
       picAddress: "", // 记录当前登录账号管理院的位置信息
       default_threeCity: "", // 获取默认的城市下属的默认县级城市
-      active_breadArr:this.$store.state.breadArr
+      active_breadArr: this.$store.state.breadArr
     };
   },
   props: {
@@ -284,7 +296,7 @@ export default {
       if (this.clickAdress == "全国") {
         this.clickAdress = "浙江省";
         //从其他省份点击回来的时候 直接点击县级地址会造成县级地区消失，此时需要指定为杭州市
-        this.safeThressAddress = "杭州市"
+        this.safeThressAddress = "杭州市";
       }
       this.provincial.forEach(item => {
         if (item.name == this.clickAdress) {
@@ -407,16 +419,16 @@ export default {
             this.getGlobalLevel(res.data.data.nav[nav.length - 1].level);
             this.getDefaultCity(res.data.data.default); // 获取二级方块地址
             this.default_threeCity = res.data.data.default;
-            var cur_level = window.sessionStorage.getItem("curlevel")
-            if ( cur_level- 0 <= 3) {
+            var cur_level = window.sessionStorage.getItem("curlevel");
+            if (cur_level - 0 <= 3) {
               this.picAddress = res.data.data.address;
             }
             //点击切换选择仅新型庄稼医院 或者全部医院的时候二级请求等级需要重置
-            if(cur_level>=3){
-              let secondlevel = cur_level - 1
-              this.getSecondGlobalLevel(secondlevel)
-            }else{
-              this.getSecondGlobalLevel(cur_level)
+            if (cur_level >= 3) {
+              let secondlevel = cur_level - 1;
+              this.getSecondGlobalLevel(secondlevel);
+            } else {
+              this.getSecondGlobalLevel(cur_level);
             }
           }
         });
@@ -433,7 +445,7 @@ export default {
     },
     getCountryDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
       // 点击全国获取数据
-      this.setIsMapUpdata(1)
+      this.setIsMapUpdata(1);
       if (this.LoginId != "5") {
         isClick = 0;
       }
@@ -450,7 +462,7 @@ export default {
     },
     getDatas(name, id, level, letter, isClick, dname, dlevel, dindex) {
       // 点击请求省级数据
-      this.setIsMapUpdata(1)
+      this.setIsMapUpdata(1);
       if (isClick != 0) {
         this.clickAdress = name;
         this.safeThressAddress = dname;
@@ -473,7 +485,7 @@ export default {
       dlevel,
       dindex
     ) {
-      this.setIsMapUpdata(1)
+      this.setIsMapUpdata(1);
       // 点击面包屑导航
       if (this.LoginId < 3) {
         isclick = 0;
@@ -488,7 +500,7 @@ export default {
           level,
           (letter = null),
           (isClick = 1),
-          name,//当点击面包屑的时候县级地址的时候 areaname 要是当前县级地址,因此要为name，而不是dname
+          name, //当点击面包屑的时候县级地址的时候 areaname 要是当前县级地址,因此要为name，而不是dname
           dlevel,
           dindex
         );
@@ -547,7 +559,7 @@ export default {
       realLevel,
       dindex
     ) {
-      this.setIsMapUpdata(1)
+      this.setIsMapUpdata(1);
       // 点击市级导航
       if (isClick != 0) {
         this.safeThressAddress = name;
@@ -559,6 +571,7 @@ export default {
         this.$emit("getName", obj);
         this.getSecondMapIndex(dindex);
       }
+      this.getBviousName("");
     }
   },
   watch: {
@@ -568,9 +581,9 @@ export default {
         this.safeThressAddress = this.picAddress.city;
       }
     },
-    breadArr(newVal,oldVal){
+    breadArr(newVal, oldVal) {
       //每次点击后更细面包屑数组
-      this.active_breadArr = newVal
+      this.active_breadArr = newVal;
     }
   }
 };

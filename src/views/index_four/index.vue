@@ -240,7 +240,7 @@ export default {
               this.loading = true;
               this.indexData = res.data.data;
               this.PercentArray = this.indexData.PercentArray;
-              this.CurMpArray = res.data.data.CurMpArray; // 三级地址数组
+              this.CurMpArray = res.data.data.CurMpArray || []; // 三级地址数组
               this.Mpubcount = this.indexData.Mpubcount;
               this.Usercount = this.indexData.Usercount;
               this.Expertcount = this.indexData.Expertcount;
@@ -401,7 +401,7 @@ bg-image($url)
     height calc(100vh)
     margin 0 auto
     position relative
-    padding-top 50px
+    padding-top 84px
     @media screen and (min-width:1900px){
       width 1900px
       padding-top 103px

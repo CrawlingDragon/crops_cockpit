@@ -25,26 +25,26 @@
             <div class="text">
               <p>{{ count.isstore }}所</p>
             </div>
-            <div class="up" v-if="count.new_mpublic != 0">
+            <!-- <div class="up" v-if="count.new_mpublic != 0">
               <span class="icon"></span>
               <span class="up-num">{{ count.new_mpublic }}</span>
-            </div>
+            </div> -->
           </li>
           <li>
             <div class="title">专家</div>
             <div class="text">{{ count.expert }}位</div>
-            <div class="up" v-if="count.new_expert != 0">
+            <!-- <div class="up" v-if="count.new_expert != 0">
               <span class="icon"></span>
               <span class="up-num">{{ count.new_expert }}</span>
-            </div>
+            </div> -->
           </li>
           <li>
             <div class="title">会员</div>
             <div class="text">{{ count.user }}个</div>
-            <div class="up" v-if="count.new_user != 0">
+            <!-- <div class="up" v-if="count.new_user != 0">
               <span class="icon"></span>
               <span class="up-num">{{ count.new_user }}</span>
-            </div>
+            </div> -->
           </li>
           <li>
             <div class="title">三诊</div>
@@ -67,10 +67,7 @@
           <div class="right">
             <Message :list="message"></Message>
             <div class="expert-box">
-              <expert
-                :list="expertArr"
-                routerPath="/expert_paihang_general"
-              ></expert>
+              <expert :list="expertArr" routerPath="/expertlist"></expert>
             </div>
           </div>
         </div>

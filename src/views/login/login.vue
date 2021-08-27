@@ -56,7 +56,7 @@ export default {
       password: "", // asdf1234
       title: "登录失败",
       text: "",
-      loginOfCode: false //true显示扫码登录框
+      loginOfCode: false // true显示扫码登录框
     };
   },
   components: {
@@ -252,7 +252,7 @@ export default {
     margin 145px auto
     h4
       font-size 30px
-      font-family MicrosoftYaHei
+      font-family: Microsoft YaHei;
       font-weight 400
       color #fff
       margin-bottom 50px

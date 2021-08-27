@@ -93,7 +93,8 @@ export default {
       "purview",
       "lowerHospital",
       "hospitalIsstore",
-      "isLowerHospital"
+      "isLowerHospital",
+      "loginId"
     ])
   },
   watch: {},
@@ -123,7 +124,9 @@ export default {
     getData() {
       // 获取我的医院
       this.$axios
-        .fetchPost("/Home/About/GetMpDesc", { appId: this.appId })
+        .fetchPost("/Home/About/GetMpDesc", {
+          appId: this.fromRoute == "general" ? this.loginId : this.appId
+        })
         .then(res => {
           if (res.data.code === "200") {
             this.data = res.data.data;

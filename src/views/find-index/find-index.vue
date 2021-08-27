@@ -87,7 +87,7 @@ export default {
     },
     toexpertlist() {
       this.$router.push({
-        path: "/expertlist"
+        path: "/expert_all"
       });
     },
     toexpertranking() {

@@ -142,4 +142,6 @@ export default {
     margin-left 90px
     font-size 30px
     padding 30px 0
+.show-bar2
+  padding 0 45px
 </style>

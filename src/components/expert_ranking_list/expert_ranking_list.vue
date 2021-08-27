@@ -7,7 +7,11 @@
         :key="item.uid"
         @click="goToExpert(item.uid)"
       >
-        <img :src="item.avatar" alt class="expert-avator" />
+        <el-image
+          :src="item.avatar"
+          class="expert-avator"
+          fit="cover"
+        ></el-image>
         <div class="icon">{{ index + 1 }}</div>
         <div class="bom-bar">
           <p class="p1">{{ item.realname }}</p>
@@ -92,6 +96,9 @@ export default {
       background url('./19.png') no-repeat
       background-size 70px
       background-position top left
+      padding-right 10px
+      &:nth-child(3)
+        padding-right 0
       .expert-avator
         display block
         height 100%

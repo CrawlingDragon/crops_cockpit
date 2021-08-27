@@ -62,6 +62,14 @@ const routes = [
         /* webpackChunkName: "expertlist" */ "../views/expert-list/expert-list.vue"
       )
   },
+  {
+    path: "/expert_all",
+    name: "expert_all",
+    component: () =>
+      import(
+        /* webpackChunkName: "expert_all" */ "../views/expert_all/expert_all.vue"
+      )
+  },
   // {
   //   path: "/expertlist",
   //   name: "expertlist",
@@ -728,6 +736,13 @@ const routes = [
       )
   },
   {
+    path: "/expert_paihang_xiaji",
+    component: () =>
+      import(
+        /* webpackChunkName: "expert_paihang_xiaji" */ "../views/expert_paihang_xiaji/expert_paihang_xiaji.vue"
+      )
+  },
+  {
     path: "/sao_yinongbao",
     component: () =>
       import(
@@ -739,6 +754,20 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "binchonghai_detail" */ "../views/binchonghai_detail/binchonghai_detail.vue"
+      )
+  },
+  {
+    path: "/base_list",
+    component: () =>
+      import(
+        /* webpackChunkName: "base_list" */ "../views/base_list/base_list.vue"
+      )
+  },
+  {
+    path: "/base_detail",
+    component: () =>
+      import(
+        /* webpackChunkName: "base_detail" */ "../views/base_detail/base_detail.vue"
       )
   }
 ];

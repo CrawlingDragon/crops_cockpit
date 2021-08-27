@@ -96,7 +96,8 @@ export default {
       recommend_product: {},
       cetu: [],
       returnPath: "",
-      routerAppid: this.$route.query.appid
+      routerAppid: this.$route.query.appid,
+      hospitalPurview: 0
     };
   },
   computed: {
@@ -134,6 +135,7 @@ export default {
             this.recommend_product = data.recommend_product;
             this.setHospitalIsstore(data.purview);
             this.setLowerHospital(data.title);
+            this.hospitalPurview = data.purview;
           }
         });
     },
@@ -144,7 +146,8 @@ export default {
         return;
       }
       this.$router.push({
-        path: "/expert_paihang"
+        path: "/expert_paihang_xiaji",
+        query: { hospitalPurview: this.hospitalPurview }
       });
     },
     goToViplist() {
