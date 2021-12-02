@@ -46,6 +46,7 @@
 <script>
 import LoginCode from "@/components/login_code/login_code";
 import md from "../../common/js/md5.js";
+// import goodStorage from "good-storage";
 import { mapMutations } from "vuex";
 const Alert = resolve => require(["@/components/alert/alert"], resolve);
 export default {
@@ -67,7 +68,7 @@ export default {
     const that = this;
     document.onkeydown = function() {
       const key = window.event.keyCode;
-      if (key == 13) {
+      if (key === 13) {
         that.login();
       }
     };
@@ -109,7 +110,8 @@ export default {
       "setAppId",
       "getPurview",
       "setLoginHospitalName",
-      "setIsDataV"
+      "setIsDataV",
+      "setUserInfo"
     ]),
     login(e) {
       if (this.isEmpty()) {
@@ -128,6 +130,7 @@ export default {
           })
           .then(res => {
             if (res.data.code == 200) {
+              this.setUserInfo(res.data.data);
               const purview = res.data.data.purview;
               const appid = res.data.data.appid;
               const name = res.data.data.name;

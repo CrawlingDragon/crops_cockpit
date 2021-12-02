@@ -229,6 +229,7 @@ export default {
           box-shadow none
   .tu-ul
     margin 30px auto
+    padding-bottom 135px
     max-height 768px
     scrollbar-arrow-color rgba(3, 5, 57, 1)
     scrollbar-base-color hsla(0, 0%, 53%, 0.4)

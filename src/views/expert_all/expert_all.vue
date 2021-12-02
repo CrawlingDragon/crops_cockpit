@@ -33,7 +33,7 @@
 <script>
 import Headnav from "../../components/head_nav/head_nav";
 import Nodata from "../../components/no-data/no-data";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 export default {
   components: {
     Headnav,
@@ -45,17 +45,49 @@ export default {
       curuserid: "", // 当前的用户ID
       total: 0,
       page: 1, // 当前页数
-      lefttitle: "所有专家"
+      lefttitle: "所有专家",
+      returnpath: "/findindex"
     };
+  },
+  computed: {
+    ...mapState(["prevroute", "loginId", "purview"])
   },
   created() {
     this.userid = window.sessionStorage.getItem("curuserid");
     this.getexpert_list(this.page);
   },
-  computed: {
-    ...mapState(["loginId"])
+  beforeRouteEnter: (to, from, next) => {
+    next(vm => {
+      if (vm.purview == 46) {
+        vm.returnpath = "/index_first";
+        return false;
+      }
+      if (
+        from.path == "/indexFour" ||
+        from.path == "/findindex" ||
+        from.path == "/data_analysis"
+      ) {
+        vm.returnpath = from.path;
+        vm.getPrevroute(from.path);
+      } else if (from.path == "/expert_detail_four" || from.path == "/") {
+        // 加入from.path是因为 点击选择全部医院或者新型医院后vuex中记录的上级页面信息的路由消失了
+        // 将上一级的路由信息存成本地存储 如果vuex失效 访问本地缓存
+        if (
+          vm.prevroute == "/indexFour" ||
+          localStorage.getItem("prevroute") == "/indexFour"
+        ) {
+          vm.returnpath = "/indexFour";
+        } else if (
+          vm.prevroute == "/data_analysis" ||
+          localStorage.getItem("prevroute") == "/data_analysis"
+        ) {
+          vm.returnpath = "/data_analysis";
+        }
+      }
+    });
   },
   methods: {
+    ...mapMutations(["getPrevroute"]),
     godetail(item, index) {
       window.sessionStorage.setItem("expert_uid", item.uid);
       this.$router.push({
@@ -107,36 +139,17 @@ export default {
     background-color: rgba(3, 5, 57, 1);
     margin 0 auto
     .header
-        width 100%
+      width 100%
     .expert_list
-        margin 0 auto
-        width 94%
-        left 3%
+        margin 0 40px
+        width 100%
+        margin-top 53px
         height 560px
         @media screen and (min-width:1900px) {
             height 741px
         }
         overflow scroll
         overflow-x hidden
-        scrollbar-arrow-color rgba(3, 5, 57, 1)
-        scrollbar-base-color hsla(0, 0%, 53%, 0.4)
-        scrollbar-track-color rgba(3, 5, 57, 1)
-        scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
-        &::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-            background: transparent;
-        }
-        &::-webkit-scrollbar-thumb {
-            background: transparent;
-            border-radius: 4px;
-        }
-        &:hover::-webkit-scrollbar-thumb {
-            background: hsla(0, 0%, 53%, 0.4);
-        }
-        &:hover::-webkit-scrollbar-track {
-            background: hsla(0, 0%, 53%, 0.1);
-        }
         .expert_info
             position relative
             height 180px

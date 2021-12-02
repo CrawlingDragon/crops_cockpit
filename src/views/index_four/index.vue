@@ -5,7 +5,7 @@
         <Headnav
           :cur_cityname="this.cur_cityname"
           :changemoudle="this.changemoudle"
-          :middle_title="this.middle_title"
+          :middle_title="userInfo.areaname + '新型庄稼医院管理驾驶舱'"
         >
         </Headnav>
       </div>
@@ -285,7 +285,7 @@ export default {
       "accountName",
       "defaultProvince",
       "globalLevel",
-      "loginHospitalName"
+      "userInfo"
     ]),
     accountName() {
       return this.$store.state.accountName;

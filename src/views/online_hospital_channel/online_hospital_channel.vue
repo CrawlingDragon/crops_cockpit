@@ -75,6 +75,7 @@
     <SaoYinongbao
       @changeFlaw="changeCode"
       :codeboxFlaw="codeboxFlaw"
+      v-show="codeboxFlaw"
     ></SaoYinongbao>
     <Nav></Nav>
   </div>
@@ -112,7 +113,7 @@ export default {
     },
     getErCode() {
       this.$axios.fetchPost("/Admin/Api/get_qr_code").then(res => {
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           if (this.purview == 1 || this.purview == 2) {
             this.code = img;
             return;
@@ -135,7 +136,8 @@ export default {
           break;
         case "培训视频":
           this.$router.push({
-            path: "/video"
+            path: "/video",
+            query: { axiosPurview: this.purview }
           });
           break;
         case "资讯":
@@ -151,7 +153,8 @@ export default {
           break;
         case "已下载的视频":
           this.$router.push({
-            path: "/video"
+            path: "/video",
+            query: { axiosPurview: this.purview }
           });
           break;
       }

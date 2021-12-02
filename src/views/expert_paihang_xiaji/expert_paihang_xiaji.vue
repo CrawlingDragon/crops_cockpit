@@ -34,7 +34,7 @@ export default {
   methods: {
     goExpertDetail(item) {
       this.$router.push({
-        path: "/expert_detail_four",
+        path: "/expert_detail",
         query: { uid: item.uid }
       });
     }

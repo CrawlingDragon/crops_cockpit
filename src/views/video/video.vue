@@ -59,12 +59,25 @@ export default {
       page: 0,
       loading: false,
       noMore: false,
-      title: "",
-      from: this.$route.query.from
+      title: ""
     };
   },
   computed: {
     ...mapState(["appId", "purview", "lowerHospital", "loginId"]),
+    from() {
+      return this.$route.query.from;
+    },
+    axiosPurview() {
+      if (this.purview === 4 || this.purview === 46) {
+        if (this.from === "general") {
+          return 1;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+      }
+    },
     disabled() {
       return this.loading || this.noMore;
     }
@@ -88,7 +101,8 @@ export default {
           .fetchGet("/Home/Video/GetVideoList", {
             page: this.page,
             appId: this.from == "general" ? this.loginId : this.appId,
-            catId: "99999999"
+            catId: "99999999",
+            purview: this.axiosPurview
           })
           .then(res => {
             if (res.data.code == 200) {

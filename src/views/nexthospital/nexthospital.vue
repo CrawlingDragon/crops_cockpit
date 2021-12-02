@@ -94,32 +94,32 @@
   </div>
 </template>
 <script>
-var echarts = require("echarts");
 import Headnav from "../../components/head_nav/head_nav";
 import { mapState } from "vuex";
+var echarts = require("echarts");
 export default {
   components: {
     Headnav
   },
   data() {
     return {
-      chartdata: [], //柱状图总数据
-      chartname: [], //柱状图x轴数据
-      chartnum: [], //柱状图y轴数据
+      chartdata: [], // 柱状图总数据
+      chartname: [], // 柱状图x轴数据
+      chartnum: [], // 柱状图y轴数据
       hospitaldata: [], //
       userid: "",
       cetu: "",
       expert: "",
-      isstore: "", //实体店数量
-      user: "", //会员数
-      wenzhen: "", //问诊数
-      mpublic: "", //医院总数
+      isstore: "", // 实体店数量
+      user: "", // 会员数
+      wenzhen: "", // 问诊数
+      mpublic: "", // 医院总数
       curcity: "",
       curlevel: "",
       isshow: true,
-      chartxianshi: "", //控制右边的柱状图和图表是否显示，
+      chartxianshi: "", // 控制右边的柱状图和图表是否显示，
       lefttitle: "下级医院",
-      hospitalUser: "" //医院会员
+      hospitalUser: "" // 医院会员
     };
   },
   computed: {
@@ -285,7 +285,7 @@ export default {
   methods: {
     initEchart() {
       var myChart = echarts.init(document.getElementById("echartContainer"));
-      let self = this;
+      const self = this;
       myChart.setOption(
         {
           title: {
@@ -299,7 +299,7 @@ export default {
             },
             padding: [20, 0, 0, 20]
           },
-          //空值echarts的上下左右位置
+          // 空值echarts的上下左右位置
           grid: {
             x: 50,
             y: 80,
@@ -325,7 +325,7 @@ export default {
             },
             axisLabel: {
               show: true,
-              interval: 0, //当数据过多时候重叠显示
+              interval: 0, // 当数据过多时候重叠显示
               // rotate:40,
               textStyle: {
                 fontFamily: "SimHei",
@@ -340,7 +340,7 @@ export default {
             axisLine: {
               lineStyle: {
                 color: "#FF6600",
-                width: 20 //这里是为了突出显示加上的
+                width: 20 // 这里是为了突出显示加上的
               }
             }
           },
@@ -348,7 +348,7 @@ export default {
             {
               name: "医院数量",
               type: "bar",
-              barWidth: 10, //柱图宽度
+              barWidth: 10, // 柱图宽度
               data: self.chartnum,
               barGap: "10%",
               barCategoryGap: "10%",
@@ -356,10 +356,10 @@ export default {
                 normal: {
                   color: "#FF6600",
                   label: {
-                    show: true, //开启显示
-                    position: "top", //在上方显示
+                    show: true, // 开启显示
+                    position: "top", // 在上方显示
                     textStyle: {
-                      //数值样式
+                      // 数值样式
                       fontFamily: "SimHei",
                       fontWeight: 400,
                       fontSize: 20,
@@ -424,9 +424,9 @@ export default {
         z-index 999
     .hospital_info
         position absolute
-        left 83px
+        left 40px
         top 90px
-        width 340px
+        width 370px
         height 499px
         background #091D44
         border 2px solid #072F65
@@ -457,7 +457,7 @@ export default {
             margin 0 auto
     .Visualized
         position absolute
-        right 83px
+        right 40px
         left 439px
         top 90px
         height 600px

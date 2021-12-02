@@ -89,8 +89,8 @@ export default {
   methods: {
     otherAddress(address, e) {
       this.pieIndex = 10000;
-      let x = e.currentTarget.offsetLeft;
-      let y = e.currentTarget.offsetTop;
+      const x = e.currentTarget.offsetLeft;
+      const y = e.currentTarget.offsetTop;
       this.$refs.mapData.style.left = x + 30 + "px";
       this.$refs.mapData.style.top = y + "px";
       this.$refs.mapData.style.display = "block";
@@ -113,7 +113,7 @@ export default {
         this.cityVal = this.otherCityVal.value;
       }
       this.obj = this.clickCityVal;
-      let midObj = {
+      const midObj = {
         name: this.clickCityVal.childName,
         level: this.clickCityVal.childLevel
       };
@@ -132,10 +132,10 @@ export default {
         this.hovershangcheng = true;
         this.hoverCity = "上城区";
       }
-      let x = e.currentTarget.offsetLeft;
-      let y = e.currentTarget.offsetTop;
-      let pageX = e.layerX;
-      let pageY = e.layerY;
+      const x = e.currentTarget.offsetLeft;
+      const y = e.currentTarget.offsetTop;
+      const pageX = e.layerX;
+      const pageY = e.layerY;
       this.$refs.hover.style.left = x + pageX + 20 + "px";
       this.$refs.hover.style.display = "block";
       this.$refs.hover.style.top = y + pageY + "px";
@@ -167,13 +167,13 @@ export default {
               tooltip: {
                 trigger: "item",
                 // formatter: "{b}:{c}所"
-                formatter: function(name) {
+                formatter: function(obj) {
                   // return "";
-                  const val = isNaN(name.data.value) ? 0 : name.data.value;
+                  const val = isNaN(obj.data.value) ? 0 : obj.data.value;
                   // if(isNaN(name.data.value)){
 
                   // }
-                  return name.data.name + ":" + val + "所";
+                  return obj.data.name + ":" + val + "所";
                 }
               },
               series: [
@@ -214,7 +214,7 @@ export default {
             true
           );
           mapEcharts.on("mouseover", function(params) {
-            let name = params.data.name;
+            const name = params.data.name;
             if (name == "上城区") {
               that.hovershangcheng = true;
             }
@@ -229,11 +229,11 @@ export default {
             that.pieIndex = params.dataIndex;
             that.cityName = params.name;
             that.cityVal = params.value;
-            ///
+            // /
             that.islinping = false;
             that.isqiantang = false;
             that.isshangcheng = false;
-            ///
+            // /
             that.obj = {
               name: params.name,
               level: params.data.level,

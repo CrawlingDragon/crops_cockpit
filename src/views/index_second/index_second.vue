@@ -129,7 +129,7 @@ export default {
             // this.logoSrc = data.logo;
             this.cetu = data.ceturecords;
             this.rank_experts = data.rank_experts;
-            this.new_users = data.new_users.splice(0, 3);
+            this.new_users = [].concat(data.new_users).splice(0, 3);
             this.recommend_expert = data.recommend_expert[0];
             this.recommend_video = data.recommend_video;
             this.recommend_product = data.recommend_product;
@@ -177,7 +177,8 @@ export default {
     },
     goToVideolist() {
       this.$router.push({
-        path: "/video"
+        path: "/video",
+        query: { axiosPurview: this.axiosPurview }
       });
     }
   }

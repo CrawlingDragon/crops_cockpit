@@ -75,7 +75,14 @@ export default {
     },
     // 获取当前导航的位置，判断是否取本级地区的数据,如果是从余杭区看 不包括市区在余杭区的数据
     navareaname() {
-      return this.$store.state.breadArr[this.$store.state.breadArr.length - 1].name;
+      const obj = this.$store.state.breadArr[
+        this.$store.state.breadArr.length - 1
+      ];
+      if (obj) {
+        return obj.name;
+      } else {
+        return "";
+      }
     },
     cityName() {
       const level = this.$store.state.globalLevel;
@@ -206,7 +213,7 @@ export default {
     }
   },
   watch: {
-    secondName(newVal,oldval) {
+    secondName(newVal, oldval) {
       if (this.loginId - 0 == 2) {
         this.getMapData(
           this.navareaname,

@@ -1,5 +1,12 @@
 module.exports = {
   publicPath: "./",
+  css: {
+    loaderOptions: {
+      stylus: {
+        import: "~@/common/css/theme.styl"
+      }
+    }
+  },
   devServer: {
     overlay: {
       warnings: false,

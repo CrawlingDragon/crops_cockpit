@@ -27,7 +27,7 @@
       </el-form-item>
       <el-form-item prop="question" class="ser_option3">
         <el-input
-          style="backgroundColor:#00002D;border:1px solid #1B4E79;"
+          style="background-color:#00002D;border:1px solid #1B4E79;"
           v-model="ruleForm.question"
           placeholder="搜索问题"
         ></el-input>
@@ -85,8 +85,11 @@
         <el-table-column label="解答">
           <template v-slot="scope">
             <p class="answer">{{ scope.row.answer }}</p>
-            <div class="expert_name">
+            <div class="expert_name" v-if="scope.row.comefrom === 1">
               专家：{{ scope.row.expert_name }}{{ scope.row.expert_mobile }}
+            </div>
+            <div class="expert_name" v-else>
+              {{ scope.row.mpublic_name }}
             </div>
           </template>
         </el-table-column>
@@ -157,6 +160,7 @@
 <script>
 import Headnav from "../../components/head_nav/head_nav";
 import Confim from "../../components/confim/confim";
+import { mapState } from "vuex";
 export default {
   components: {
     Headnav,
@@ -189,7 +193,7 @@ export default {
       currentPage: 1, // 初始页
       pagesize: 3, //    每页的数据
       userList: [],
-      userid: "",
+      // userid: "",
       level: "",
       curcity: "",
       title: "确定隐藏评分吗？",
@@ -203,6 +207,12 @@ export default {
       alldata: 0,
       lefttitle: "评分"
     };
+  },
+  computed: {
+    ...mapState(["loginId"]),
+    userid() {
+      return this.loginId;
+    }
   },
   created() {
     var h = document.documentElement.clientHeight || document.body.clientHeight;
@@ -220,7 +230,7 @@ export default {
     this.$parent.app_loading = false;
     this.curcity = window.sessionStorage.getItem("curcity");
     this.level = window.sessionStorage.getItem("level");
-    this.userid = window.sessionStorage.getItem("curuserid");
+    // this.userid = window.sessionStorage.getItem("curuserid");
     this.$axios
       .fetchPost("Admin/Api/get_appraises_list", {
         mId: this.userid,
@@ -679,7 +689,8 @@ export default {
         left 50%
         transform translate(-50%, 0%); /* 50%为自身尺寸的一半 */
         -webkit-transform: translate(-50%, 0%);
-        width 94%
+        width 100%
+        padding 0 40px
         @media screen and (min-width:1900px){
             top 231px
         }

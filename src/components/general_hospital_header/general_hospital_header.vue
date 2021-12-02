@@ -61,9 +61,9 @@
   </div>
 </template>
 <script>
-let timer;
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import Confim from "@/components/confim/confim";
+let timer;
 export default {
   name: "general_hospital_headers",
   components: { Confim },
@@ -135,7 +135,7 @@ export default {
       }
     },
     showMidTitle() {
-      let path = this.$route.path;
+      const path = this.$route.path;
       if (
         path == "/zuozhen_detail" ||
         path == "/xunzhen_detail" ||
@@ -266,6 +266,7 @@ export default {
   height 100px
   position fixed
   min-width 1340px
+  width 100%
   left 0
   right 0
   top 0

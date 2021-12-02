@@ -105,7 +105,7 @@ export default {
   right 0
   z-index 22
   .nav
-    width 1900px
+    width 100%
     margin 0 auto
     text-align center
     position relative

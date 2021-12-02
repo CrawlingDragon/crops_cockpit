@@ -78,14 +78,14 @@ export default {
         });
     },
     goToOther(other) {
-      if (other == "prev") {
+      if (other === "prev") {
         if (!this.detail.previous_page) {
           this.$layer.msg("已是第一篇");
           return;
         }
         this.catId = this.detail.previous_page.catid;
         this.Id = this.detail.previous_page.id;
-      } else if (other == "next") {
+      } else if (other === "next") {
         if (!this.detail.next_page) {
           this.$layer.msg("已是最后一篇");
           return;

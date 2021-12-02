@@ -1,38 +1,40 @@
 <template>
-  <div class="expert_list" ref="expert_list" v-infinite-scroll="load">
-    <div
-      class="expert_info"
-      v-for="(item, index) in expert_list"
-      :key="index"
-      @click="godetail(item, index)"
-    >
-      <img
-        class="photo"
-        v-lazy="item.avatar"
-        alt="图片好像不见了"
-        :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
-      />
-      <span
-        class="name"
-        :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
+  <div class="rank-wrap" ref="rankWrapRef">
+    <div class="expert_list" v-infinite-scroll="load" :style="listWrapH">
+      <div
+        class="expert_info"
+        v-for="(item, index) in expert_list"
+        :key="index"
+        @click="godetail(item, index)"
       >
-        <i>NO.{{ index + 1 }}</i>
-        {{ item.realname }}
-      </span>
-      <div class="intro">
-        <p class="skills">擅长作物：{{ item.zuowu || "暂无" }}</p>
-        <p :class="[item.position.length == 1 ? 'company1' : 'company']">
-          {{ item.position }}
-        </p>
+        <img
+          class="photo"
+          v-lazy="item.avatar"
+          alt="图片好像不见了"
+          :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
+        />
+        <span
+          class="name"
+          :class="{ no01: index === 0, no02: index === 1 || index === 2 }"
+        >
+          <i>NO.{{ index + 1 }}</i>
+          {{ item.realname }}
+        </span>
+        <div class="intro">
+          <p class="skills">擅长作物：{{ item.zuowu || "暂无" }}</p>
+          <p :class="[item.position.length == 1 ? 'company1' : 'company']">
+            {{ item.position }}
+          </p>
+        </div>
+        <div class="total-number">
+          总回复数<i class="">{{ item.replycounts }}</i>
+        </div>
       </div>
-      <div class="total-number">
-        总回复数<i class="">{{ item.replycounts }}</i>
-      </div>
+      <div class="expert_num">共{{ this.total }}个结果</div>
+      <Nodata v-if="total == 0"></Nodata>
     </div>
-    <div class="expert_num">共{{ this.total }}个结果</div>
-    <Nodata v-if="total == 0"></Nodata>
+    <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
   </div>
-  <!-- <div class="loading" v-show="loading">正在加载数据......</div> -->
 </template>
 <script>
 import Nodata from "../../components/no-data/no-data";
@@ -45,15 +47,31 @@ export default {
     return {
       expert_list: [],
       total: 0,
+      h: "",
       page: 1 // 当前页数
     };
   },
-  computed: {},
+  computed: {
+    listWrapH() {
+      return `height:${this.h}`;
+    }
+  },
   created() {
     this.getexpert_list(this.page);
   },
-
+  mounted() {
+    this.getWrapHeight();
+    window.addEventListener("resize", this.getWrapHeight);
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.getWrapHeight);
+  },
   methods: {
+    getWrapHeight() {
+      let wrap = this.$refs.rankWrapRef;
+      let h = getComputedStyle(wrap).height;
+      this.h = h;
+    },
     godetail(item) {
       this.$emit("goExpertDetail", item);
     },
@@ -81,7 +99,7 @@ export default {
     },
     load() {
       // 是否当前page不是最后一页
-      if (this.page <= Math.ceil(this.total / 12)) {
+      if (this.expert_list.length < this.total) {
         // 页码+1
         this.page++;
         this.getexpert_list(this.page);
@@ -91,14 +109,20 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+.rank-wrap
+    position fixed
+    top 134px
+    bottom 100px
+    left 0
+    right 0
 .expert_list
     margin 0 auto
     max-width 1790px
-    margin-top 53px
     margin 0 auto
     height 740px
     overflow scroll
     overflow-x hidden
+    padding-bottom 40px
     scrollbar-arrow-color rgba(3, 5, 57, 1)
     scrollbar-base-color hsla(0, 0%, 53%, 0.4)
     scrollbar-track-color rgba(3, 5, 57, 1)
@@ -120,10 +144,11 @@ export default {
     }
     .expert_info
         position relative
-        height 235px
+        height 33%
+        min-height 180px
         width 100%
         float left
-        margin-bottom 18px
+        margin-bottom 20px
         border 2px solid rgba(255, 255, 255, 0.15)
         display flex
         align-items center
@@ -209,10 +234,30 @@ export default {
             margin-left 15px
 .expert_num
     position fixed
-    left 44px
-    bottom 20px
+    left 0
+    right 0
+    text-align left
+    margin 0 auto
+    bottom 0
+    padding-top 30px
     font-size 24px
     font-family SimHei
-    font-weight Regular
     color #B5B5B5
+@media screen and (min-width 1900px)
+  .rank-wrap
+    top:170px
+  .expert_num
+    height 100px
+    padding-top 20px
+    max-width 1800px
+@media (max-width 1899px)
+  .rank-wrap
+    top:100px
+    bottom 60px
+  .expert_num
+    height 60px
+    padding-top 15px
+    max-width 1799px
+    font-size 20px
+    margin-left 40px
 </style>

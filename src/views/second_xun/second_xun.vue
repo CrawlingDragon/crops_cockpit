@@ -123,6 +123,7 @@ export default {
   height 100%
   max-height 100%
   overflow hidden
+  padding-bottom 135px
   .wang-ul
     margin 48px 90px 0
     scrollbar-arrow-color rgba(3, 5, 57, 1)

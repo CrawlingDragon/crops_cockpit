@@ -91,6 +91,7 @@
     <SaoYinongbao
       @changeFlaw="changeCode"
       :codeboxFlaw="codeboxFlaw"
+      v-if="codeboxFlaw"
     ></SaoYinongbao>
     <Nav></Nav>
   </div>
@@ -176,7 +177,8 @@ export default {
           break;
         case "培训视频":
           this.$router.push({
-            path: "/video"
+            path: "/video",
+            query: { axiosPurview: this.purview }
           });
           break;
         case "资讯":
@@ -192,7 +194,8 @@ export default {
           break;
         case "已下载的视频":
           this.$router.push({
-            path: "/video"
+            path: "/video",
+            query: { axiosPurview: this.purview }
           });
           break;
       }
