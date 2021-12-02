@@ -131,6 +131,7 @@ export default {
     text-align center
     position relative
     height 100%
+    width 100%
     .number
       position absolute
       padding-left 40px
