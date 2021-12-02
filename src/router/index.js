@@ -13,9 +13,9 @@ const routes = [
   //* 以下是驾驶舱新增的
   {
     path: "/",
-    name: "login",
-    component: () =>
-      import(/* webpackChunkName: "WebForCounty" */ "../views/login/login")
+    redirect: "/home"
+    // component: () =>
+    //   import(/* webpackChunkName: "WebForCounty" */ "../views/login/login")
   },
   {
     path: "/findindex",
@@ -33,6 +33,23 @@ const routes = [
       import(
         /* webpackChunkName: "find_detail" */ "../views/find_detail/find_detail"
       )
+  },
+  {
+    path: "/index_channel",
+    component: () =>
+      import(
+        /* webpackChunkName: "index_channel" */ "../views/index_channel/index_channel"
+      )
+  },
+  {
+    path: "/threeLogin",
+    component: () =>
+      import(
+        /* webpackChunkName: "threeLogin" */ "../views/threeLogin/threeLogin"
+      ),
+    meta: {
+      adminRoute: true
+    }
   },
   {
     path: "/home",
@@ -60,6 +77,14 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "expertlist" */ "../views/expert-list/expert-list.vue"
+      )
+  },
+  {
+    path: "/expert_all",
+    name: "expert_all",
+    component: () =>
+      import(
+        /* webpackChunkName: "expert_all" */ "../views/expert_all/expert_all.vue"
       )
   },
   // {
@@ -226,6 +251,13 @@ const routes = [
       import(/* webpackChunkName: "find" */ "../views/find/find.vue")
   },
   {
+    path: "/info_list",
+    component: () =>
+      import(
+        /* webpackChunkName: "info_list" */ "../views/info_list/info_list.vue"
+      )
+  },
+  {
     path: "/goods_detail",
     name: "goods_detail",
     component: () =>
@@ -340,7 +372,6 @@ const routes = [
       },
       {
         path: "/search/search_all",
-        name: "search_all",
         component: () =>
           import(
             /* webpackChunkName: "search_all" */ "../views/search_child/search_all/search_all.vue"
@@ -728,6 +759,13 @@ const routes = [
       )
   },
   {
+    path: "/expert_paihang_xiaji",
+    component: () =>
+      import(
+        /* webpackChunkName: "expert_paihang_xiaji" */ "../views/expert_paihang_xiaji/expert_paihang_xiaji.vue"
+      )
+  },
+  {
     path: "/sao_yinongbao",
     component: () =>
       import(
@@ -739,6 +777,20 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "binchonghai_detail" */ "../views/binchonghai_detail/binchonghai_detail.vue"
+      )
+  },
+  {
+    path: "/base_list",
+    component: () =>
+      import(
+        /* webpackChunkName: "base_list" */ "../views/base_list/base_list.vue"
+      )
+  },
+  {
+    path: "/base_detail",
+    component: () =>
+      import(
+        /* webpackChunkName: "base_detail" */ "../views/base_detail/base_detail.vue"
       )
   }
 ];

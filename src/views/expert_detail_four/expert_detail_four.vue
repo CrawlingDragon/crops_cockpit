@@ -62,6 +62,7 @@
     </div>
     <div class="content2 " v-show="content_show == 2">
       <Hospital :items="hospitalList"></Hospital>
+      <div v-show="!hospitalList.length">暂无TA加入的医院</div>
     </div>
   </div>
 </template>

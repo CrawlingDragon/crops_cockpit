@@ -1,6 +1,9 @@
 <template>
   <div class="data_analysis">
-    <Header></Header>
+    <Header
+      :changemoudle="'find'"
+      :middle_title="userInfo.areaname + '新型庄稼医院管理驾驶舱'"
+    ></Header>
     <div class="data_analysis-contaner">
       <div class="left">
         <div
@@ -41,7 +44,7 @@
           </div>
           <Disk :hoverActive="activeNumber"></Disk>
         </div>
-        <div class="bottom-bar">
+        <div class="bottom-bar" v-if="false">
           <ul>
             <li @click="bottomRouter('医院')">
               <div class="icon icon01"></div>
@@ -97,7 +100,7 @@
   </div>
 </template>
 <script>
-import Header from "@/components/init_header/init_header";
+import Header from "@/components/head_nav/head_nav";
 import Disk from "@/components/disk/disk";
 import { mapState, mapMutations } from "vuex";
 const echarts = require("echarts/lib/echarts");
@@ -135,7 +138,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appId"]),
+    ...mapState(["appId", "loginHospitalName", "userInfo"]),
     arrMainData() {
       // let arr = [
       //   { name: '庄稼医院', number: '26' },
@@ -429,8 +432,8 @@ export default {
                 "#546570",
                 "#c4ccd3"
               ],
-              data: this.zuowuData.number,
-              roseType: "radius"
+              data: this.zuowuData.number
+              // roseType: "radius"
             }
           ]
         },

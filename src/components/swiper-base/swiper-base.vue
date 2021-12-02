@@ -10,21 +10,10 @@
             class="swiper-slide"
           >
             <div class="treat-title1">
-              <a
-                :href="baseUrl + selfDetailUrl + item.id"
-                class="detail"
-                target="_blank"
-                >{{ item.name }}</a
-              >
-              <span class="sp"
-                ><a
-                  :href="
-                    baseUrl + selfUrl + '?areaname=' + name + '&level=' + level
-                  "
-                  target="_blank"
-                  >&gt;</a
-                ></span
-              >
+              <div class="detail" @click="goToBaseDetail(item)">
+                {{ item.name }}
+              </div>
+              <span class="sp" @click="goToBaseList(item)">&gt;</span>
             </div>
             <ul class="treat-number">
               <li v-if="item.pic">
@@ -32,13 +21,9 @@
                   <div class="swiper-container2 s4">
                     <div class="swiper-wrapper">
                       <div class="swiper-slide">
-                        <a
-                          :href="baseUrl + selfDetailUrl + item.id"
-                          class="imgs-href"
-                          target="_blank"
-                        >
+                        <div @click="goToBaseDetail(item)" class="imgs-href">
                           <img :src="item.pic" alt="暂无图片" />
-                        </a>
+                        </div>
                         <!-- <div class="title">{{it}}</div> -->
                       </div>
                     </div>
@@ -119,6 +104,12 @@ export default {
   },
 
   methods: {
+    goToBaseDetail(item) {
+      this.$router.push({
+        path: "/base_detail",
+        query: { appId: item.id }
+      });
+    },
     initSwiper() {
       const that = this;
       this.$nextTick(function() {
@@ -143,6 +134,13 @@ export default {
       //     observeParents: true
       //   });
       // });
+    },
+    goToBaseList(item) {
+      // 路由到基地列表
+      this.$router.push({
+        path: "/base_list",
+        query: { level: this.level, areaname: this.name }
+      });
     }
   },
   mounted() {
@@ -198,6 +196,7 @@ export default {
       height 40px
       text-overflow ellipsis
       white-space nowrap
+      cursor: pointer;
       @media screen and (min-width:1900px) {
         height 50px
         width 313px
@@ -209,6 +208,7 @@ export default {
       right 0
       top 1px
       width 43px
+      cursor: pointer;
       @media screen and (min-width:1900px) {
         line-height 50px
         font-size 24px
@@ -248,6 +248,7 @@ export default {
             width 232.5px
             height 150px
             margin-bottom 7px
+            cursor: pointer;
             @media screen and (min-width:1900px){
               width 359px
               height 190px

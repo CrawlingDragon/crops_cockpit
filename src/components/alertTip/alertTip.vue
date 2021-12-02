@@ -1,11 +1,8 @@
 <template>
-  <div
-    class="alert-wrap"
-    v-show="aletiTipShow"
-  >
+  <div class="alert-wrap" v-show="aletiTipShow">
     <div class="alertTip-box">
-      <p class="text1">{{text1}}</p>
-      <p class="text2">{{text2}}</p>
+      <p class="text1">{{ text1 }}</p>
+      <p class="text2">{{ text2 }}</p>
     </div>
   </div>
 </template>
@@ -44,7 +41,7 @@ export default {
   width 100%
   height 675px
   position absolute
-  top 90px
+  top 125px
   left 0
   @media screen and (min-width:1900px){
     height 930px

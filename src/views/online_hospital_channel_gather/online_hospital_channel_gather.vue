@@ -1,135 +1,143 @@
 <template>
   <div class="channel-container container-wrap">
     <headers title="频道"></headers>
-    <ul class="channel-ul">
-      <li class="langer li1 li_isshaoxing">
-        <div
-          class="is_not_shaoxing"
-          style="background:#2494DE"
-          v-if="isShaoxing == 0"
-          @click="channelRoute('网诊')"
-        >
-          <div class="icon i1"></div>
-          <p>网诊</p>
-        </div>
-        <div class="is_shaoxing clearfix" v-else>
-          <div class="bar bar1" @click="channelRoute('网诊')">
-            <div class="icon i1"></div>
+    <ul class="channel-ul clearfix">
+      <li class="li1 li_isshaoxing" :style="colorArray[0]">
+        <div class="is_shaoxing clearfix">
+          <div class="" @click="channelRoute('网诊')">
+            <!-- <div class="icon i1"></div> -->
             <p>网诊</p>
           </div>
-          <div class="bar left" @click="channelRoute('专家网诊榜')">
+          <div
+            class="bar left"
+            @click="channelRoute('专家网诊榜')"
+            v-if="false"
+          >
             专家网诊榜
           </div>
-          <div class="bar right" @click="channelRoute('评分')">评分</div>
+          <div class="bar right" @click="channelRoute('评分')" v-if="false">
+            评分
+          </div>
         </div>
       </li>
-      <li class="li2" @click="channelRoute('坐诊')" style="background:#DA3266">
-        <div class="icon i2"></div>
+      <li class="li2" @click="channelRoute('坐诊')" :style="colorArray[1]">
+        <!-- <div class="icon i2"></div> -->
         <p>坐诊</p>
       </li>
-      <li class="li3" @click="channelRoute('巡诊')" style="background:#7B70FA">
-        <div class="icon i3"></div>
+      <li class="li3" @click="channelRoute('巡诊')" :style="colorArray[2]">
+        <!-- <div class="icon i3"></div> -->
         <p>巡诊</p>
       </li>
       <li
         class="li4 video-li"
         @click="channelRoute('测土配方')"
-        style="background:#02D9AD"
+        :style="colorArray[3]"
       >
-        <div class="icon i4"></div>
-        <p>测土<br />配方</p>
+        <!-- <div class="icon i4"></div> -->
+        <p>测土配方</p>
       </li>
       <li
         class="li8 marginLeft0"
-        style="background:#016AD5"
+        :style="colorArray[4]"
         @click="channelRoute('搜索')"
       >
-        <div class="icon i8"></div>
+        <!-- <div class="icon i8"></div> -->
         <p>搜索</p>
       </li>
       <li
         class="langer hospital"
-        style="background:#016AD5"
+        :style="colorArray[5]"
         @click="channelRoute('医院数据概况')"
       >
-        <div class="icon"></div>
+        <!-- <div class="icon"></div> -->
         <p>医院数据概况</p>
       </li>
-      <li class="li5" @click="channelRoute('专家')" style="background:#FF6600">
-        <div class="icon i5"></div>
+      <li class="li5" @click="channelRoute('专家')" :style="colorArray[6]">
+        <!-- <div class="icon i5"></div> -->
         <p>专家</p>
       </li>
-      <li class="li6" @click="channelRoute('会员')" style="background:#EBB701">
-        <div class="icon i6"></div>
+      <li class="li6" @click="channelRoute('会员')" :style="colorArray[7]">
+        <!-- <div class="icon i6"></div> -->
         <p>会员</p>
       </li>
-      <li
-        class="langer marginLeft0 serve"
-        style="background:#016AD5"
-        @click="openCode"
-      >
-        <div class="left-text" v-if="isShaoxing == 1">
-          绍兴市为农<br />服务平台
-        </div>
-        <div v-else class="left-text">扫一扫<br />下载益农宝</div>
-        <el-image
-          :src="code"
-          style="width:242px;height:242px"
-          v-if="isShaoxing == 1"
-        ></el-image>
+      <li @click="channelRoute('病虫害')" :style="colorArray[8]">
+        <p>病虫害</p>
+      </li>
+      <li class="scan-codes" @click="openCode">
+        <div class="left-text">扫一扫<br />下载<br />益农宝</div>
         <el-image
           :src="require('../../assets/image/channel/channel_scan.png')"
-          style="width:242px;height:242px"
-          v-else
         ></el-image>
       </li>
-      <li class="no-icon" @click="channelRoute('医院本级')">
+      <li @click="channelRoute('医院本级')" :style="colorArray[9]">
         <p>医院本级</p>
       </li>
-      <li class="no-icon" @click="channelRoute('下级医院')">
+      <li @click="channelRoute('下级医院')" :style="colorArray[10]">
         <p>下级医院</p>
       </li>
-      <li class="no-icon" @click="channelRoute('农资商品')">
+      <li @click="channelRoute('农资商品')" :style="colorArray[11]">
         <p>农资商品</p>
       </li>
-      <li class="no-icon" @click="channelRoute('培训视频')">
+      <li @click="channelRoute('培训视频')" :style="colorArray[12]">
         <p>培训视频</p>
       </li>
-
-      <li class="no-icon" @click="channelRoute('资讯')">
+      <li @click="channelRoute('资讯')" :style="colorArray[13]">
         <p>资讯</p>
-      </li>
-      <li
-        class="no-icon"
-        @click="channelRoute('病虫害')"
-        style="margin-right:0;"
-      >
-        <p>病虫害</p>
       </li>
     </ul>
     <SaoYinongbao
       @changeFlaw="changeCode"
-      :codeboxFlaw="codeboxFlaw"
+      :codeboxFlaw="codeBoxFlaw"
+      v-show="codeBoxFlaw"
       :url="code"
     ></SaoYinongbao>
+    <ExtendedFunction
+      v-if="extendedFunction.length"
+      :dataArray="extendedFunction"
+      :smallTitle="'扩展功能'"
+    ></ExtendedFunction>
+    <ExtendedFunction
+      v-if="extendedColumn.length"
+      :dataArray="extendedColumn"
+      :smallTitle="'扩展栏目'"
+    ></ExtendedFunction>
     <Nav :index="0"></Nav>
   </div>
 </template>
 <script>
 import Headers from "@/components/general_hospital_header/general_hospital_header";
 import Nav from "@/components/nav_list_third/nav_list_third";
+import ExtendedFunction from "@/components/extended_function/extended_function";
 import SaoYinongbao from "@/views/sao_yinongbao/sao_yinongbao";
 import { mapState, mapMutations } from "vuex";
 import img from "../../assets/image/channel/channel_scan.png";
+const colorArr = [
+  "background:#2494DE",
+  "background:#DA3266",
+  "background:#7B70FA",
+  "background:#016AD5",
+  "background:#016AD5",
+  "background:#FF6600",
+  "background:#EBB701",
+  "background:#2494DE",
+  "background:#7B70FA",
+  "background:#7B70FA",
+  "background:#02D9AD",
+  "background:#016AD5",
+  "background:#FF6600",
+  "background:#DA3266"
+];
 export default {
   name: "online_hospital_channel_gather",
-  components: { Nav, Headers, SaoYinongbao },
+  components: { Nav, Headers, SaoYinongbao, ExtendedFunction },
   props: {},
   data() {
     return {
-      code: "",
-      codeboxFlaw: false,
-      isShaoxing: window.sessionStorage.getItem("isshaoxing")
+      colorArray: colorArr,
+      code: img,
+      codeBoxFlaw: false,
+      extendedColumn: [],
+      extendedFunction: []
     };
   },
   computed: {
@@ -137,27 +145,29 @@ export default {
   },
   watch: {},
   mounted() {
-    this.getErCode();
+    this.getChannelData();
   },
   destroyed() {},
   methods: {
     ...mapMutations(["setIsLowerHospital"]),
     openCode() {
-      this.codeboxFlaw = true;
+      this.codeBoxFlaw = true;
     },
     changeCode(boo) {
-      this.codeboxFlaw = boo;
+      this.codeBoxFlaw = boo;
     },
-    getErCode() {
-      this.$axios.fetchPost("/Admin/Api/get_qr_code").then(res => {
-        if (res.data.code == 200) {
-          if (this.purview == 1 || this.purview == 2) {
-            this.code = img;
-            return;
+    getChannelData() {
+      this.$axios
+        .fetchPost("/Home/NationwideDatav/getUserModule", {
+          userid: this.loginId
+        })
+        .then(res => {
+          const re = res.data;
+          if (re.code === "200") {
+            this.extendedFunction = re.data.extend_module;
+            this.extendedColumn = re.data.extend_category;
           }
-          this.code = res.data.data.qrcode;
-        }
-      });
+        });
     },
     channelRoute(where) {
       switch (where) {
@@ -204,11 +214,13 @@ export default {
           break;
         case "医院本级":
           this.setIsLowerHospital("true");
-          const route = this.$router.resolve({
-            path: "/index_second",
-            query: { appId: this.loginId, from: "adminRoute" }
-          });
-          window.open(route.href, "_blank");
+          window.open(
+            this.$router.resolve({
+              path: "/index_second",
+              query: { appId: this.loginId, from: "adminRoute" }
+            }).href,
+            "_blank"
+          );
           break;
         case "下级医院":
           this.$router.push({
@@ -224,13 +236,13 @@ export default {
         case "专家":
           // 去到 专家列表
           this.$router.push({
-            path: "/expertlist"
+            path: "/expert_all"
           });
           break;
         case "培训视频":
           this.$router.push({
             path: "/video",
-            query: { from: "general" }
+            query: { from: "general", axiosPurview: this.purview }
           });
           break;
         case "资讯":
@@ -259,24 +271,50 @@ export default {
 .channel-container
   max-width 1900px
   margin 0 auto
-  padding 100px 170px 151px
+  width 100%
+  padding 100px 40px 151px
   .channel-ul
     text-align left
     display flex
     flex-wrap wrap
     padding-top 3px
     li
-      height 270px
-      margin-bottom 12px
-      margin-right 20px
-      align-items center
-      justify-content center
-      width 240px
-      box-sizing border-box
-      display flex
-      font-size 36px
-      color #FFFFFF
+      float: left
+      width 18.4%
+      height: 150px
+      margin-right: 2%
+      text-align: center
+      line-height: 150px
+      font-size: 40px;
+      color #fff
       cursor pointer
+      margin-bottom: 20px
+      background: #0F3A96
+      @media screen and (max-width 1900px){
+        font-size 25px
+      }
+      &:nth-child(5n)
+        margin-right: 0
+      &.scan-codes
+        display: flex
+        align-items: center
+        .left-text
+          flex 1
+          text-align center
+          font-size 20px
+          color #fff
+          line-height: 1.2
+          @media screen and (min-width 1900px){
+            font-size 30px
+          }
+      .el-image
+        width 115px
+        height: 115px
+        margin 0 10px
+        @media screen and (min-width 1900px){
+          width 130px
+          height: 130px
+        }
       .is_not_shaoxing
         width 100%
         height 100%
@@ -304,12 +342,6 @@ export default {
         .right
           width 240px
           background #EBB701
-      .left-text
-        text-align center
-        display inline-block
-        font-size 32px
-        color #fff
-        margin-right 26px
       .icon
         margin-right 30px
       .video-icon
@@ -336,110 +368,9 @@ export default {
           box-shadow 0px 1px 26px #f60
       &:marginLeft0
         margin-right 0
-      &.langer
-        width 500px
       &.no-icon
         border 2px solid rgba(7, 47, 101, 1)
         color #fff
-      &.li1
-        .icon
-          width 80px
-          height 95px
-          background url('../../assets/image/channel/9.png') no-repeat
-          background-size 100%
-          background-position center
-      &.bin-li
-        background #EB942D
-        .bin-icon
-          width 93px
-          height 76px
-          background url('../../assets/image/channel/22.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li2
-        background #D93165
-        .icon
-          width 80px
-          height 95px
-          background url('../../assets/image/channel/10.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li3
-        background #7B6FF9
-        .icon
-          width 80px
-          height 95px
-          background url('../../assets/image/channel/11.png') no-repeat
-          background-size 100%
-          background-position center
-      &.message-li
-        background #47C303
-        .message-icon
-          width 71px
-          height 83px
-          background url('../../assets/image/channel/18.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li5
-        background #F2600C
-        .icon
-          width 96px
-          height 96px
-          background url('../../assets/image/channel/12.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li6
-        background #EB942D
-        .icon
-          width 80px
-          height 95px
-          background url('../../assets/image/channel/13.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li7
-        background #EBB701
-        .icon
-          width 75px
-          height 75px
-          background url('../../assets/image/channel/15.png') no-repeat
-          background-size 100%
-          background-position center
-       &.li4
-        .icon
-          width 80px
-          height 95px
-          background url('../../assets/image/channel/14.png') no-repeat
-          background-size 100%
-          background-position center
-      &.li8
-        background #D93165
-        width 240px
-        .icon
-          width 90px
-          height 90px
-          background url('../../assets/image/channel/16.png') no-repeat
-          background-size 100%
-          background-position center
-      &.hospital
-        .icon
-          width 92px
-          height 92px
-          background url('../../assets/image/channel/6.png') no-repeat
-          background-size 100%
-          background-position center
-@media screen and (max-width 1890px)
-  .channel-container
-    padding-left 0
-    padding-right 0
-    .channel-ul
-      & > li
-        width 230px
-        &.langer
-          width 300px
-        &.hospital
-          font-size 22px
-        &.serve
-          width 490px
-        &.no-icon
-          width 202px
+  /deep/.extended-function-box
+    padding 0
 </style>

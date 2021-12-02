@@ -27,7 +27,7 @@
       {{
         codeSuccess == true
           ? "请在手机上确认登录"
-          : "监管账号需联系中农在线运营创建子账号后才能扫码登录 "
+          : "监管账号不支持扫码登录,请通过用户名登录"
       }}
     </div>
     <div class="account-login" @click="goUserLogin">
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       codeError: false, // 二维码失败，或者失效
-      codeSuccess: false, //正确扫码成功，获取到用户图片
+      codeSuccess: false, // 正确扫码成功，获取到用户图片
       ws: "",
       erweimaValue: "w",
       user_img: "",
@@ -57,7 +57,7 @@ export default {
   watch: {},
   created() {},
   mounted() {
-    let wsUrl =
+    const wsUrl =
       process.env.NODE_ENV === "development"
         ? "ws://218.244.138.10:8989"
         : "ws://114.215.173.157:8989";
@@ -86,12 +86,12 @@ export default {
     ]),
     ws_message() {
       // ws 接受到数据后 处理数据
-      let that = this;
+      const that = this;
       if (this.$route.name != "login") {
         return;
       }
       this.ws.addEventListener("message", function(event) {
-        let data = JSON.parse(event.data);
+        const data = JSON.parse(event.data);
         console.log("data :>> ", data);
         console.log("that.ws :>> ", that.ws);
         if (data.type === "login") {
@@ -102,7 +102,7 @@ export default {
           that.user_name = data.data.name;
           that.codeSuccess = true;
         } else if (data.code === "200" && data.type === "success") {
-          //登录成功
+          // 登录成功
           const purview = data.purview;
           const appid = data.uid;
           const name = data.name;

@@ -53,7 +53,8 @@ export default {
       experts: [],
       answerlist: [],
       headerTitle: "",
-      logoSrc: ""
+      logoSrc: "",
+      axiosPurview: 0
     };
   },
   computed: {
@@ -79,6 +80,7 @@ export default {
             this.answerlist = data.answerlists;
             this.headerTitle = data.title;
             this.logoSrc = data.logo;
+            this.axiosPurview = data.purview;
             this.setHospitalIsstore(data.purview);
             this.setLowerHospital(data.title);
           }
@@ -96,7 +98,8 @@ export default {
     },
     goToVideo() {
       this.$router.push({
-        path: "/video"
+        path: "/video",
+        query: { axiosPurview: this.axiosPurview }
       });
     }
   }

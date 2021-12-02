@@ -2,7 +2,12 @@
   <div class="index_second_img_list">
     <ul>
       <li @click="goToExpert()">
-        <img v-if="expert" :src="expert.avatar" alt="" />
+        <el-image
+          v-if="expert"
+          :src="expert.avatar"
+          fit="cover"
+          class="img"
+        ></el-image>
         <div class="tip" v-if="expert"><span>专家</span></div>
         <div v-if="expert" class="text-bar">{{ expert.realname }}</div>
         <Empty v-if="!expert">
@@ -10,14 +15,26 @@
         </Empty>
       </li>
       <li @click="goToVideoDetail(video.catid, video.id)">
-        <img :src="video.thumb" alt="" v-if="video" />
+        <el-image
+          :src="video.thumb"
+          alt=""
+          v-if="video"
+          fit="cover"
+          class="img"
+        ></el-image>
         <div class="tip" v-if="video"><span>培训视频</span></div>
         <Empty v-if="!video">
           <img src="./noData.png" alt="" />
         </Empty>
       </li>
       <li @click="goToGoodsDetail(goods.id)">
-        <img v-if="goods" :src="goods.thumb" alt="" />
+        <el-image
+          v-if="goods"
+          :src="goods.thumb"
+          alt=""
+          fit="cover"
+          class="img"
+        ></el-image>
         <div class="tip" v-if="goods"><span>NEW</span></div>
         <Empty v-if="!goods">
           <img src="./noData.png" alt="" />
@@ -83,7 +100,7 @@ export default {
       &:last-child
         width 255px
         margin-right 0
-      img
+      .img
         display block
         width 100%
         height 100%

@@ -15,7 +15,7 @@
           class="input"
           style="background-color:#00002D;border:1px solid #1B4E79;"
           v-model="ruleForm.name"
-          placeholder="请输入专家姓名/手机号"
+          placeholder="搜索专家姓名/手机号"
         ></el-input>
       </el-form-item>
       <el-form-item label="日期" class="ser_option2">
@@ -56,7 +56,7 @@
           popper-class="select-down"
           :popper-append-to-body="false"
         >
-          <el-option label="累积绍兴市诊数" value="1"></el-option>
+          <el-option :label="`累积${area}诊数`" value="1"></el-option>
           <el-option label="平均分" value="2"></el-option>
           <el-option label="综合评分" value="3"></el-option>
         </el-select>
@@ -84,7 +84,7 @@
         </template>
         <el-table-column label="专家姓名" prop="realname"> </el-table-column>
         <el-table-column label="手机号" prop="mobile"> </el-table-column>
-        <el-table-column label="累积绍兴市网诊数" prop="tid_count">
+        <el-table-column :label="`累积${area}网诊数`" prop="tid_count">
         </el-table-column>
         <el-table-column label="评分次数" prop="score_times"> </el-table-column>
         <el-table-column label="平均分数" prop="score_avg"> </el-table-column>
@@ -110,6 +110,7 @@
 </template>
 <script>
 import Headnav from "../../components/head_nav/head_nav";
+import { mapState } from "vuex";
 export default {
   name: "expert_online_ranking",
   components: {
@@ -139,7 +140,7 @@ export default {
       pagesize: 8, //    每页的数据
       userList: [],
       screenwidth: document.body.clientWidth,
-      userid: "",
+      // userid: "",
       level: "",
       curcity: "",
       startDatePicker: this.beginDate(),
@@ -150,12 +151,24 @@ export default {
       lefttitle: "专家网诊榜"
     };
   },
-
+  computed: {
+    ...mapState(["userInfo", "loginId"]),
+    area() {
+      if (this.userInfo) {
+        return this.userInfo.areaname;
+      } else {
+        return "";
+      }
+    },
+    userid() {
+      return this.loginId;
+    }
+  },
   created() {
     this.$parent.app_loading = false;
     this.curcity = window.sessionStorage.getItem("curcity");
     this.level = window.sessionStorage.getItem("level");
-    this.userid = window.sessionStorage.getItem("curuserid");
+    // this.userid = window.sessionStorage.getItem("curuserid");
   },
   beforeMount() {
     // 根据屏幕高度计算出应该放多少行数据
@@ -238,34 +251,35 @@ export default {
     handleCurrentChange: function(currentPage) {
       this.currentPage = currentPage;
       this.openLoading();
-      if (
-        (this.ruleForm.name ||
-          this.ruleForm.startTime ||
-          this.ruleForm.endTime) &&
-        this.total < this.alldata
-      ) {
-        // 当搜索条件不为空并且点击 搜索以后请求返回的数据长度小于全部数据长度，表示进行了条件搜索，此时携带对应的参数条件进行页码跳转
-        this.sousuo(
-          this.userid,
-          this.currentPage,
-          this.pagesize,
-          this.ruleForm.name,
-          this.ruleForm.startTime,
-          this.ruleForm.endTime,
-          this.ruleForm.sorttype
-        );
-      } else {
-        // 在未点击搜索条件的时候进行搜索 默认是搜索全部，搜索条件置空,排序方式按照绍兴市累计网诊数（默认排序）
-        this.sousuo(
-          this.userid,
-          this.currentPage,
-          this.pagesize,
-          "",
-          "",
-          "",
-          1
-        );
-      }
+      // if (
+      //   (this.ruleForm.name ||
+      //     this.ruleForm.startTime ||
+      //     this.ruleForm.endTime) &&
+      //   this.total < this.alldata
+      // ) {
+      // 当搜索条件不为空并且点击 搜索以后请求返回的数据长度小于全部数据长度，表示进行了条件搜索，此时携带对应的参数条件进行页码跳转
+
+      this.sousuo(
+        this.userid,
+        this.currentPage,
+        this.pagesize,
+        this.ruleForm.name,
+        this.ruleForm.startTime,
+        this.ruleForm.endTime,
+        this.ruleForm.sorttype
+      );
+      // } else {
+      //   // 在未点击搜索条件的时候进行搜索 默认是搜索全部，搜索条件置空,排序方式按照绍兴市累计网诊数（默认排序）
+      //   this.sousuo(
+      //     this.userid,
+      //     this.currentPage,
+      //     this.pagesize,
+      //     "",
+      //     "",
+      //     "",
+      //     1
+      //   );
+      // }
     },
     // 开始时间限制
     beginDate() {

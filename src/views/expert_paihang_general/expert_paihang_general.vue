@@ -1,129 +1,44 @@
 <template>
   <div class="paihang_content">
-    <Header
-      :title="title"
-      :right_show_bar="false"
-      midTitle="专家回复排行榜"
-    ></Header>
-    <div class="swiper-container" v-if="this.total > 0">
-      <div class="swiper-wrapper" style="height :350px;">
-        <div
-          class="swiper-slide"
-          v-for="(item, index) in this.expert_info"
-          :key="index"
-          @click="goToExpertDetail(item.uid)"
-        >
-          <img :src="item.avatar" alt="" />
-        </div>
-      </div>
-      <div class="swiper-button-prev" ref="prev"></div>
-      <div class="swiper-button-next" ref="next"></div>
-    </div>
-    <div class="single_info" v-if="this.total > 0">
-      <div class="left">
-        <div class="mingci text1">NO.{{ this.activeIndex + 1 }}</div>
-        <p class="name text2">{{ this.realname }}</p>
-      </div>
-      <div class="right">
-        <div class="intros">
-          <div class="text2">擅长作物：{{ this.zuowu }}</div>
-          <div>{{ this.position }}</div>
-        </div>
-        <div class="huifu">
-          <span class="text3">总回复</span>
-          <span class="text4">{{ this.replycounts }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="temporary" v-if="this.total == 0">
-      暂无排行榜
-    </div>
+    <Header :title="title" midTitle="专家排行榜"></Header>
+    <ExpertRank
+      :appId="loginId"
+      :purview="purview == 4 || purview == 46 ? 1 : 0"
+      @goExpertDetail="goExpertDetail"
+    ></ExpertRank>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
-import Swiper from "swiper";
+import ExpertRank from "@/components/expert-rank/expert-rank";
 import { mapState } from "vuex";
 export default {
   name: "expert_paihang_general",
   data() {
     return {
-      expert_info: "",
-      cur_level: 0,
-      activeIndex: 0,
-      realname: "", // 专家姓名
-      paiming: "",
-      position: "",
-      zuowu: "",
-      replycounts: "",
-      total: "", //获取到的数据数量
       title: ""
     };
   },
-  components: { Header },
-  created() {
-    this.getExpertinfo(this.appId);
-  },
+  components: { Header, ExpertRank },
+  created() {},
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"])
+    ...mapState([
+      "appId",
+      "purview",
+      "lowerHospital",
+      "isLowerHospital",
+      "loginId"
+    ])
   },
   mounted() {
-    this.title = "专家回复排行榜";
+    this.title = "专家排行榜";
   },
   methods: {
-    goToExpertDetail(uid) {
+    goExpertDetail(item) {
       this.$router.push({
         path: "/expert_detail_four",
-        query: { uid: uid }
+        query: { uid: item.uid }
       });
-    },
-    init(pagesize) {
-      var self = this;
-      var mySwiper = new Swiper(".swiper-container", {
-        spaceBetween: 30,
-        slidesPerView: pagesize,
-        centeredSlides: true,
-        slidesPerView: 5, //可见个数2
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-        on: {
-          slideChangeTransitionEnd: function() {
-            console.log(this.activeIndex);
-            self.activeIndex = this.activeIndex;
-          }
-        }
-      });
-    },
-    getExpertinfo(appId, purview, ordertag, page, limit) {
-      this.$axios
-        .fetchGet("/Home/Expert/GetMpExpertRank", {
-          appId: appId,
-          purview: 1
-        })
-        .then(res => {
-          console.log(res);
-          if (res.data.code == "200") {
-            this.expert_info = res.data.data;
-            this.realname = this.expert_info[0].realname;
-            this.position = this.expert_info[0].position;
-            this.zuowu = this.expert_info[0].zuowu;
-            this.replycounts = this.expert_info[0].replycounts;
-            this.total = res.data.data.length - 0;
-            this.$nextTick(() => {
-              this.init(5);
-            });
-          }
-        });
-    }
-  },
-  watch: {
-    activeIndex(newVal) {
-      this.realname = this.expert_info[newVal].realname;
-      this.position = this.expert_info[newVal].position;
-      this.zuowu = this.expert_info[newVal].zuowu;
-      this.replycounts = this.expert_info[newVal].replycounts;
     }
   }
 };

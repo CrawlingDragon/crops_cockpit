@@ -178,6 +178,10 @@ export default {
         .p1
           color #B5B5B5
           font-size 24px
+          overflow hidden
+          text-overflow ellipsis
+          white-space nowrap
+          word-break break-all
       .answer
         font-size 24px
         color #B5B5B5

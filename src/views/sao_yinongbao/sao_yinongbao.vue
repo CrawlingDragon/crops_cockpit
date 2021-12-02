@@ -1,13 +1,13 @@
 <template>
-  <div class="jianjie" v-show="codeboxFlaw">
-    <div class="head" @click="topre()">
+  <div class="jianjie">
+    <div class="head" @click.stop="topre()">
       <div class="closefn"></div>
       <div class="head-title">
-        {{ isShaoxing == 1 ? "绍兴市为农服务平台" : "扫一扫下载益农宝" }}
+        扫一扫下载益农宝
       </div>
     </div>
-    <el-image :src="url" v-if="isShaoxing == 1" class="er_wei_ma"></el-image>
-    <div class="er_wei_ma" v-else></div>
+    <!-- <el-image :src="url" v-if="isShaoxing == 1" class="er_wei_ma"></el-image> -->
+    <div class="er_wei_ma"></div>
   </div>
 </template>
 <script>
@@ -51,7 +51,7 @@ export default {
 </script>
 <style lang="stylus" scoped>
 .jianjie
-  margin 0 40px
+  padding 0 40px
   position fixed
   left 0
   right 0

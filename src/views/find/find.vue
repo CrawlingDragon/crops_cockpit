@@ -77,7 +77,6 @@ import NavThird from "@/components/nav_list_third/nav_list_third";
 import Header from "@/components/online_hospital_header/online_hospital_header";
 import Headers from "@/components/general_hospital_header/general_hospital_header";
 import { mapState } from "vuex";
-import AdminHeader from "@/components/admin_header/admin_header";
 export default {
   name: "find",
   components: {
@@ -96,7 +95,7 @@ export default {
       initCatid: 0,
       list: [],
       page: 0,
-      loading: false,
+      loading: true,
       noMore: false,
       catid: 0,
       from: this.$route.query.from,
@@ -141,7 +140,7 @@ export default {
           });
       }, 1000);
     },
-    getNavList(catId) {
+    getNavList() {
       // 获取导航栏目
       this.$axios.fetchGet("/Home/News/GetPushMessageMenu").then(res => {
         if (res.data.code == 200) {
@@ -153,7 +152,7 @@ export default {
             this.initCatid = res.data.data[0].catid;
             this.catid = res.data.data[0].catid;
           }
-
+          this.load();
           // setTimeout(() => {
           //   this.getList();
           // }, 100);
@@ -218,7 +217,10 @@ export default {
       line-height 58px
       text-align left
       cursor pointer
-      font-size 30px
+      font-size 20px
+      @media screen and (min-width 1900px) {
+        font-size 30px
+      }
       &:hover
         span
           border-bottom 4px solid #FF6600
@@ -238,25 +240,6 @@ export default {
     max-width 1900px
     min-width 1340px
     margin 0 auto
-    scrollbar-arrow-color rgba(3, 5, 57, 1)
-    scrollbar-base-color hsla(0, 0%, 53%, 0.4)
-    scrollbar-track-color rgba(3, 5, 57, 1)
-    scrollbar-shadow-color hsla(0, 0%, 53%, 0.1)
-    &::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-        background: transparent;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: transparent;
-        border-radius: 4px;
-    }
-    &:hover::-webkit-scrollbar-thumb {
-        background: hsla(0, 0%, 53%, 0.4);
-    }
-    &:hover::-webkit-scrollbar-track {
-        background: hsla(0, 0%, 53%, 0.1);
-    }
     & > li
       display inline-block
       width 50%

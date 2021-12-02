@@ -1,24 +1,24 @@
 <template>
-  <div class="contain">
+  <div class="header-contain">
     <div class="left_nav">
       <div
         class="index"
         style="cursor:pointer"
-        v-if="this.changemoudle == 'index' || this.changemoudle == 'find'"
-        @click="toindex"
+        v-if="
+          changemoudle == 'index' ||
+            changemoudle == 'find' ||
+            changemoudle == 'channel'
+        "
+        @click="toIndex"
       >
         <span
           :class="[
-            this.changemoudle == 'index'
-              ? 'index-icon'
-              : 'index-icon index-icon1'
+            changemoudle == 'index' ? 'index-icon' : 'index-icon index-icon1'
           ]"
         ></span>
         <span
           :class="[
-            this.changemoudle == 'index'
-              ? 'index-text'
-              : 'index-text index-text1'
+            changemoudle == 'index' ? 'index-text' : 'index-text index-text1'
           ]"
           >首页</span
         >
@@ -26,8 +26,35 @@
       <div
         class="find"
         style="cursor:pointer"
-        v-if="this.changemoudle == 'index' || this.changemoudle == 'find'"
-        @click="tofind"
+        v-if="
+          changemoudle == 'index' ||
+            changemoudle == 'find' ||
+            changemoudle == 'channel'
+        "
+        @click="toChannel"
+      >
+        <span
+          :class="[
+            changemoudle === 'channel' ? 'channel-active-icon' : 'channel-icon'
+          ]"
+        ></span>
+        <span
+          :class="[
+            changemoudle === 'channel' ? 'channel-active-text' : 'channel-text'
+          ]"
+          >频道</span
+        >
+      </div>
+      <div
+        class="find"
+        style="cursor:pointer"
+        v-if="
+          dataV === '1' &&
+            (changemoudle == 'index' ||
+              changemoudle == 'find' ||
+              changemoudle == 'channel')
+        "
+        @click="toFind"
       >
         <span
           :class="[
@@ -43,9 +70,13 @@
       </div>
       <div
         class="close_btn"
-        v-if="this.changemoudle != 'index' && this.changemoudle != 'find'"
+        v-if="
+          this.changemoudle != 'index' &&
+            this.changemoudle != 'find' &&
+            this.changemoudle != 'channel'
+        "
         style="cursor:pointer"
-        @click="backto"
+        @click="backTo"
       >
         <span class="text1 jiantou"></span>
         <span class="text1 lefttitle">{{ this.lefttitle }}</span>
@@ -58,7 +89,7 @@
       <div class="search" @click="goToSearch"></div>
       <span class="icon-refresh" @click="refresh"></span>
       <div class="change-data">
-        <div class="login-out" @click="loignOutBtn"></div>
+        <div class="login-out" @click="loginOutBtn"></div>
       </div>
       <div class="time"><Date /></div>
     </div>
@@ -121,18 +152,15 @@ export default {
     Confim
   },
   methods: {
-    tofind() {
-      // console.log("tofind");
-
-      if (this.dataV == 1) {
-        this.$router.push({
-          path: "/data_analysis"
-        });
-        return;
-      }
-      this.$router.push({ path: "/findindex" });
+    toChannel() {
+      this.$router.push({ path: "/index_channel" });
     },
-    toindex() {
+    toFind() {
+      this.$router.push({
+        path: "/data_analysis"
+      });
+    },
+    toIndex() {
       this.$router.push({
         path: "/indexFour",
         query: {
@@ -143,13 +171,13 @@ export default {
         }
       });
     },
-    backto() {
+    backTo() {
       if (
-        this.$props.returnpath == "/findindex" ||
-        this.$props.returnpath == "/data_analysis"
+        this.$props.returnpath === "/findindex" ||
+        this.$props.returnpath === "/data_analysis"
       ) {
         this.$router.push({ path: this.$props.returnpath });
-      } else if (this.$props.returnpath == "/indexFour") {
+      } else if (this.$props.returnpath === "/indexFour") {
         this.$router.push({
           path: this.$props.returnpath,
           query: {
@@ -166,7 +194,7 @@ export default {
     refresh() {
       location.reload();
     },
-    loignOutBtn() {
+    loginOutBtn() {
       // 退出登陆按钮
       this.$refs.confimBox.showFlag = true;
     },
@@ -184,7 +212,7 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
-.contain
+.header-contain
   height 80px
   display flex
   background: #080f3e;
@@ -196,8 +224,8 @@ export default {
   width 100%
   .left_nav
     flex 3
-    margin-left 40px
     text-align left
+    padding-left 40px
     .text1
       font-size 20px
       @media screen and (min-width:1900px) {
@@ -272,12 +300,12 @@ export default {
           height 28px
           width 28px
         }
-        background url('./find-icon1.png') no-repeat
+        background url('./4.png') no-repeat
         background-size 100%
-        bg-image('./find-icon1')
+        bg-image('./4')
       .find-icon1
-        background url('./find-icon.png') no-repeat
-        bg-image('./find-icon')
+        background url('./2.png') no-repeat
+        bg-image('./2')
         vertical-align middle
         background-size 20px 20px
         @media screen and (min-width:1900px){
@@ -293,6 +321,40 @@ export default {
         }
       .find-text1
         color #7FB5F1
+  .channel-active-icon
+    display: inline-block
+    vertical-align: middle
+    width 20px
+    height: 20px
+    background:url('./3.png') no-repeat
+    background-size 100%
+    margin-right: 13px
+    @media screen and (min-width:1900px){
+      display: inline-block
+      width 28px
+      height: 28px
+    }
+  .channel-active-text
+    display: inline-block
+    vertical-align: middle
+    color #fff
+  .channel-icon
+    display: inline-block
+    vertical-align: middle
+    width 20px
+    height: 20px
+    background:url('./1.png') no-repeat
+    background-size 100%
+    margin-right: 13px
+    @media screen and (min-width:1900px){
+      display: inline-block
+      width 28px
+      height: 28px
+    }
+  .channel-text
+    display: inline-block
+    vertical-align: middle
+    color $theme-color
   .logo
     flex 3
     .h5
@@ -309,8 +371,8 @@ export default {
     text-align right
     .icon-refresh
       display inline-block
-      width 27px
-      height 27px
+      width 20px
+      height 20px
       margin-top 15px
       background url('../../assets/image/refresh.png') no-repeat
       background-size 100% 100%
@@ -331,7 +393,8 @@ export default {
       position relative
       bottom 1px
       text-align left
-      margin-right 30px
+      margin-right 40px
+      text-align: right
       @media screen and (min-width:1900px) {
         bottom 3px
       }
@@ -351,7 +414,7 @@ export default {
           width 28px
         }
         background url('./setting-icon.png') no-repeat
-        background-size 100%
+        background-size 100% 100%
         bg-image('./setting-icon')
         cursor pointer
         &:hover .change-box
@@ -410,25 +473,30 @@ export default {
               &.active
                 color #F79D1D
 .login-out
-  width 30px
-  height 28px
+  width 22px
+  height 20px
   background url('../../assets/image/login_out_icon.png') no-repeat
   margin-right 40px
   cursor: pointer;
+  background-size 100% 100%
   @media screen and (min-width:1900px) {
     margin-right 60px
-   }
+    width 30px
+    height 28px
+  }
 .search
   cursor pointer
-  width 160px
-  height 50px
   font-size 30px
   margin-right 40px
   display inline-block
-  width 29px
-  height 28px
+  width 20px
+  height 19px
   background url('../../assets/image/search.png') no-repeat
+  background-size 100% 100%
   @media screen and (min-width:1900px) {
     margin-right 60px
+    width 29px
+    height 28px
+
    }
 </style>

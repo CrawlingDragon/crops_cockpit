@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import goodStorage from "good-storage";
 
 Vue.use(Vuex);
 
@@ -7,6 +8,7 @@ export default new Vuex.Store({
   state: {
     appId: window.localStorage.getItem("appId"),
     purview: window.localStorage.getItem("purview"),
+    // accountHospitalTitle: window.localStorage.getItem("accountHospitalTitle"), // 登录账号的医院名称
     // 以下是管理驾驶舱加入的
     accountName: "", // 登陆账号（其实是地址）
     defaultProvince: "", // 全网请求地址
@@ -35,13 +37,22 @@ export default new Vuex.Store({
     prevroute: "", // 专家列表记录上一层返回的地址
     hospitalIsstore: window.localStorage.getItem("hospitalIsstore"),
     adminRoute: window.localStorage.getItem("adminRoute"),
-    ismapupdate: 0, //如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
+    ismapupdate: 0, // 如果变化，说明点击了面包屑或者侧边导航 这个时候要进行地图的初始化
     loginHospitalName: window.localStorage.getItem("loginHospitalName"),
-    loginId: window.localStorage.getItem("loginId"), //记录登录的appid
-    isLowerHospital: window.sessionStorage.getItem("isLowerHospital"), //是否是下级医院  true 为上级医院,  false 为下级医院
-    dataV: window.localStorage.getItem("dataV") || 0 // 是否是数据展示页
+    loginId: window.localStorage.getItem("loginId"), // 记录登录的appid
+    isLowerHospital: window.sessionStorage.getItem("isLowerHospital"), // 是否是下级医院  true 为上级医院,  false 为下级医院
+    dataV: window.localStorage.getItem("dataV") || 0, // 是否是数据展示页
+    userInfo: goodStorage.get("userInfo" || {})
   },
   mutations: {
+    // setAccountHospitalTitle(state, data) {
+    //   state.accountHospitalTitle = data;
+    //   window.localStorage.setItem("accountHospitalTitle", data);
+    // },
+    setUserInfo(state, data) {
+      state.userInfo = data;
+      goodStorage.set("userInfo", data);
+    },
     setIsDataV(state, data) {
       // 是否用数据展示页的加入数据
       state.dataV = data;
@@ -63,7 +74,7 @@ export default new Vuex.Store({
       window.localStorage.setItem("adminRoute", data);
     },
     setHospitalIsstore(state, data) {
-      //用于设置医院的isstore 属性，是否是网院还是新院
+      // 用于设置医院的isstore 属性，是否是网院还是新院
       state.hospitalIsstore = data;
       window.localStorage.setItem("hospitalIsstore", data);
     },
@@ -156,7 +167,7 @@ export default new Vuex.Store({
       state.secondMapIndex = data;
     },
     setLoginId(state, data) {
-      //登陆时，保存地图参数id
+      // 登陆时，保存地图参数id
       state.loginId = data;
       window.localStorage.setItem("loginId", data);
     },

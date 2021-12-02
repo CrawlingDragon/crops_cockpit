@@ -7,7 +7,7 @@
       :item="item"
     ></Hospital>
     <div class="noData" v-show="noData">暂无符合条件的结果</div>
-    <div class="page-box " v-if="amount >= 11">
+    <div class="page-box" v-if="amount >= 11">
       <div class="wrap">
         <el-pagination
           small

@@ -96,7 +96,8 @@ export default {
       recommend_product: {},
       cetu: [],
       returnPath: "",
-      routerAppid: this.$route.query.appid
+      routerAppid: this.$route.query.appid,
+      hospitalPurview: 0
     };
   },
   computed: {
@@ -128,12 +129,13 @@ export default {
             // this.logoSrc = data.logo;
             this.cetu = data.ceturecords;
             this.rank_experts = data.rank_experts;
-            this.new_users = data.new_users.splice(0, 3);
+            this.new_users = [].concat(data.new_users).splice(0, 3);
             this.recommend_expert = data.recommend_expert[0];
             this.recommend_video = data.recommend_video;
             this.recommend_product = data.recommend_product;
             this.setHospitalIsstore(data.purview);
             this.setLowerHospital(data.title);
+            this.hospitalPurview = data.purview;
           }
         });
     },
@@ -144,7 +146,8 @@ export default {
         return;
       }
       this.$router.push({
-        path: "/expert_paihang"
+        path: "/expert_paihang_xiaji",
+        query: { hospitalPurview: this.hospitalPurview }
       });
     },
     goToViplist() {
@@ -174,7 +177,8 @@ export default {
     },
     goToVideolist() {
       this.$router.push({
-        path: "/video"
+        path: "/video",
+        query: { axiosPurview: this.axiosPurview }
       });
     }
   }

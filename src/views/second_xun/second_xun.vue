@@ -123,6 +123,7 @@ export default {
   height 100%
   max-height 100%
   overflow hidden
+  padding-bottom 135px
   .wang-ul
     margin 48px 90px 0
     scrollbar-arrow-color rgba(3, 5, 57, 1)
@@ -175,6 +176,10 @@ export default {
         .p1
           color #B5B5B5
           font-size 24px
+          overflow hidden
+          text-overflow ellipsis
+          white-space nowrap
+          word-break break-all
       .answer
         font-size 24px
         color #B5B5B5

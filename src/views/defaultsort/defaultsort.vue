@@ -105,13 +105,13 @@ export default {
       this.setIsLowerHospital("true");
       if (item.istown == 0) {
         if (item.isstore == 1) {
-          let routeData = this.$router.resolve({
+          const routeData = this.$router.resolve({
             path: "/index_second",
             query: { from: "adminRoute", appid: item.appid }
           });
           window.open(routeData.href, "_blank");
         } else if (item.isstore == 0) {
-          let routeData = this.$router.resolve({
+          const routeData = this.$router.resolve({
             path: "/index_third",
             query: { from: "adminRoute" }
           });
@@ -120,7 +120,7 @@ export default {
       } else {
         // this.open();
         this.setLowerHospital(item.name);
-        let route = this.$router.resolve({
+        const route = this.$router.resolve({
           path: "/village_me",
           query: { from: "adminRoute", appId: item.appid }
         });
@@ -158,7 +158,7 @@ export default {
         top 205px
     }
     .hospitalinfo
-        padding-left 3%
+        padding-left 40px
         overflow scroll
         overflow-x hidden
         .singlehospital

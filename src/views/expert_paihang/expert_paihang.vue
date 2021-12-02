@@ -3,46 +3,19 @@
     <Header
       :title="title"
       :right_show_bar="false"
-      midTitle="专家回复排行榜"
+      midTitle="专家排行榜"
     ></Header>
-    <div class="swiper-container" v-if="this.total > 0">
-      <div class="swiper-wrapper" style="height :350px;">
-        <div
-          class="swiper-slide"
-          v-for="(item, index) in this.expert_info"
-          :key="index"
-          @click="goToExpertDetail(item.uid)"
-        >
-          <img :src="item.avatar" alt="" />
-        </div>
-      </div>
-      <div class="swiper-button-prev" ref="prev"></div>
-      <div class="swiper-button-next" ref="next"></div>
-    </div>
-    <div class="single_info" v-if="this.total > 0">
-      <div class="left">
-        <div class="mingci text1">NO.{{ this.activeIndex + 1 }}</div>
-        <p class="name text2">{{ this.realname }}</p>
-      </div>
-      <div class="right">
-        <div class="intros">
-          <div class="text2">擅长作物：{{ this.zuowu }}</div>
-          <div>{{ this.position }}</div>
-        </div>
-        <div class="huifu">
-          <span class="text3">总回复</span>
-          <span class="text4">{{ this.replycounts }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="temporary" v-if="this.total == 0">
-      暂无排行榜
-    </div>
+    <ExpertRank
+      :appId="appId"
+      :purview="hospitalPurview"
+      @goExpertDetail="goExpertDetail"
+    ></ExpertRank>
   </div>
 </template>
 <script>
 import Header from "@/components/online_hospital_header/online_hospital_header";
-import Swiper from "swiper";
+import ExpertRank from "@/components/expert-rank/expert-rank";
+
 import { mapState } from "vuex";
 export default {
   data() {
@@ -59,73 +32,38 @@ export default {
       title: ""
     };
   },
-  components: { Header },
+  components: { Header, ExpertRank },
   created() {
-    this.getExpertinfo(this.appId);
+    // let purview = this.$route.query.hospitalPurview;
+    // if (purview) {
+    //   this.hospitalPurview = purview == 4 || purview == 46 ? 1 : 0;
+    // } else {
+    //   this.hospitalPurview = this.purview == 4 || this.purview == 46 ? 1 : 0;
+    // }
   },
   computed: {
-    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"])
+    ...mapState(["appId", "purview", "lowerHospital", "isLowerHospital"]),
+    hospitalPurview() {
+      let purview = this.$route.query.hospitalPurview;
+      if (purview) {
+        return purview == 4 || purview == 46 ? 1 : 0;
+      } else {
+        return this.purview == 4 || this.purview == 46 ? 1 : 0;
+      }
+    }
   },
   mounted() {
     this.title =
       this.purview == 3 || this.purview == 4
         ? this.lowerHospital
-        : "专家回复排行榜";
+        : "专家排行榜";
   },
   methods: {
-    goToExpertDetail(uid) {
+    goExpertDetail(item) {
       this.$router.push({
         path: "/expert_detail",
-        query: { uid: uid }
+        query: { uid: item.uid }
       });
-    },
-    init(pagesize) {
-      var self = this;
-      var mySwiper = new Swiper(".swiper-container", {
-        spaceBetween: 30,
-        slidesPerView: pagesize,
-        centeredSlides: true,
-        slidesPerView: 5, //可见个数2
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev"
-        },
-        on: {
-          slideChangeTransitionEnd: function() {
-            console.log(this.activeIndex);
-            self.activeIndex = this.activeIndex;
-          }
-        }
-      });
-    },
-    getExpertinfo(appId, purview, ordertag, page, limit) {
-      this.$axios
-        .fetchGet("/Home/Expert/GetMpExpertRank", {
-          appId: appId,
-          purview: this.purview == 46 && this.isLowerHospital == "false" ? 1 : 0
-        })
-        .then(res => {
-          console.log(res);
-          if (res.data.code == "200") {
-            this.expert_info = res.data.data;
-            this.realname = this.expert_info[0].realname;
-            this.position = this.expert_info[0].position;
-            this.zuowu = this.expert_info[0].zuowu;
-            this.replycounts = this.expert_info[0].replycounts;
-            this.total = res.data.data.length - 0;
-            this.$nextTick(() => {
-              this.init(5);
-            });
-          }
-        });
-    }
-  },
-  watch: {
-    activeIndex(newVal) {
-      this.realname = this.expert_info[newVal].realname;
-      this.position = this.expert_info[newVal].position;
-      this.zuowu = this.expert_info[newVal].zuowu;
-      this.replycounts = this.expert_info[newVal].replycounts;
     }
   }
 };

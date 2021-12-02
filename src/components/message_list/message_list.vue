@@ -107,7 +107,8 @@ export default {
             path: `/xunzhen_detail`,
             query: { tid: id }
           });
-          window.open(router4.href, "_blank");
+
+          window.open(router5.href, "_blank");
           // this.$router.push({
           //   path: `/xunzhen_detail`,
           //   query: { tid: id }
